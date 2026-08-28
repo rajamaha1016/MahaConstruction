@@ -215,6 +215,11 @@
                 </a>
             </li>
             <li>
+                <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('videomanager', this)">
+                    <span>⚡ 2GB VIDEO UPLOADER</span>
+                </a>
+            </li>
+            <li>
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('intro', this)">
                     <span>INTRO VIDEO</span>
                 </a>
@@ -762,7 +767,110 @@
                 </div>
             </div>
 
-            <!-- 7. INTRO VIDEO TAB -->
+            <!-- 7. 2GB LARGE VIDEO UPLOADER & VAULT TAB -->
+            <div class="admin-tab-pane" id="tab-videomanager">
+                <div class="card-dark-panel">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+                        <div>
+                            <h2 class="panel-header-title">⚡ 2GB LARGE VIDEO UPLOADER & MEDIA VAULT</h2>
+                            <p class="panel-header-sub">Upload large 4K / 1080p videos up to 2GB with resilient chunking, auto-retry, and 100% lossless original quality.</p>
+                        </div>
+                        <span style="background:rgba(212,175,55,0.15);color:#D4AF37;border:1px solid rgba(212,175,55,0.35);padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:800;">
+                            <i class="fas fa-shield-halved" style="margin-right:4px;"></i> LOSSLESS CHUNKED ENGINE (MAX 2GB)
+                        </span>
+                    </div>
+
+                    <!-- Drag & Drop Zone -->
+                    <div id="vmDropZone" onclick="document.getElementById('vmFileInput').click()"
+                         style="border:2.5px dashed rgba(212,175,55,0.45);border-radius:18px;padding:42px 24px;text-align:center;cursor:pointer;transition:all 0.3s;background:rgba(212,175,55,0.03);"
+                         onmouseover="this.style.borderColor='#D4AF37';this.style.background='rgba(212,175,55,0.08)';"
+                         onmouseout="this.style.borderColor='rgba(212,175,55,0.45)';this.style.background='rgba(212,175,55,0.03)';">
+                        <i class="fas fa-cloud-arrow-up" style="font-size:2.8rem;color:#D4AF37;margin-bottom:12px;display:block;"></i>
+                        <div style="color:#FFFFFF;font-size:1.1rem;font-weight:800;letter-spacing:0.03em;margin-bottom:6px;">
+                            DRAG & DROP LARGE VIDEO HERE OR CLICK TO BROWSE
+                        </div>
+                        <div style="color:#94A3B8;font-size:0.85rem;margin-bottom:12px;">
+                            Supports MP4, MOV, WebM, MKV, AVI • Up to <strong>2.0 GB</strong> per video
+                        </div>
+                        <div style="display:inline-flex;align-items:center;gap:14px;background:rgba(5,11,20,0.6);padding:6px 16px;border-radius:20px;border:1px solid rgba(212,175,55,0.25);font-size:0.75rem;color:#D4AF37;">
+                            <span>✓ Zero Compression (Original Lossless Quality)</span>
+                            <span>•</span>
+                            <span>✓ Fast 5MB Chunk Streaming</span>
+                            <span>•</span>
+                            <span>✓ Auto-Resume & Retry</span>
+                        </div>
+                        <input type="file" id="vmFileInput" accept="video/mp4,video/quicktime,video/webm,video/x-matroska,video/avi,.mp4,.mov,.webm,.mkv,.avi" style="display:none;" onchange="handleVaultVideoSelected(event)">
+                    </div>
+
+                    <!-- Live Progress Panel -->
+                    <div id="vmProgressContainer" style="display:none;background:#050B14;border:1.5px solid rgba(212,175,55,0.4);border-radius:16px;padding:24px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,0.6);">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <span style="width:10px;height:10px;background:#D4AF37;border-radius:50%;display:inline-block;animation:pulse 1s infinite;"></span>
+                                <span id="vmProgressFilename" style="color:#FFFFFF;font-weight:800;font-size:0.92rem;word-break:break-all;">video_file.mp4</span>
+                            </div>
+                            <span id="vmProgressPercentText" style="color:#D4AF37;font-weight:900;font-size:1.1rem;">0%</span>
+                        </div>
+
+                        <!-- Progress Bar Track -->
+                        <div style="background:#0a1628;border-radius:10px;height:12px;overflow:hidden;border:1px solid rgba(212,175,55,0.2);position:relative;">
+                            <div id="vmProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg, #D4AF37, #FFD700, #F4C430);transition:width 0.25s ease;border-radius:10px;box-shadow:0 0 12px rgba(212,175,55,0.6);"></div>
+                        </div>
+
+                        <!-- Metrics Row (Speed, Transferred, ETA) -->
+                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:12px;font-size:0.8rem;color:#94A3B8;">
+                            <div style="display:flex;gap:16px;flex-wrap:wrap;">
+                                <span><i class="fas fa-gauge-high" style="color:#D4AF37;margin-right:5px;"></i> <span id="vmSpeedDisplay">0.0 MB/s</span></span>
+                                <span><i class="fas fa-database" style="color:#D4AF37;margin-right:5px;"></i> <span id="vmTransferredDisplay">0 MB / 0 MB</span></span>
+                                <span><i class="fas fa-hourglass-half" style="color:#D4AF37;margin-right:5px;"></i> <span id="vmEtaDisplay">Calculating...</span></span>
+                            </div>
+                            <button type="button" onclick="cancelCurrentUpload()" style="background:rgba(255,59,48,0.15);border:1px solid rgba(255,59,48,0.4);color:#FF3B30;padding:4px 12px;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;">
+                                <i class="fas fa-xmark" style="margin-right:4px;"></i> CANCEL UPLOAD
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Post-Upload Success Card with Live Player & Quick Actions -->
+                    <div id="vmSuccessCard" style="display:none;background:#050B14;border:1.5px solid #25D366;border-radius:18px;padding:24px;margin-top:20px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                            <div style="color:#25D366;font-weight:800;font-size:1rem;display:flex;align-items:center;gap:8px;">
+                                <i class="fas fa-circle-check" style="font-size:1.2rem;"></i> VIDEO UPLOADED SUCCESSFULLY (100% ORIGINAL QUALITY)
+                            </div>
+                            <button onclick="resetVaultUploader()" class="btn-whatsapp-outline" style="border-color:#D4AF37;color:#D4AF37;padding:4px 12px;font-size:0.75rem;">
+                                <i class="fas fa-plus" style="margin-right:4px;"></i> UPLOAD ANOTHER VIDEO
+                            </button>
+                        </div>
+
+                        <!-- Live Video Preview Player -->
+                        <div style="background:#000;border-radius:12px;overflow:hidden;margin-bottom:16px;max-height:360px;display:flex;justify-content:center;">
+                            <video id="vmPreviewPlayer" controls playsinline style="max-height:360px;width:100%;border-radius:12px;display:block;"></video>
+                        </div>
+
+                        <!-- Direct URL Bar -->
+                        <div style="display:flex;gap:8px;margin-bottom:16px;">
+                            <input type="text" id="vmUploadedUrl" readonly class="input-dark" style="flex:1;font-family:monospace;font-size:0.85rem;color:#D4AF37;">
+                            <button type="button" class="btn-gold-pill" onclick="copyUploadedUrl()">
+                                <i class="fas fa-copy" style="margin-right:6px;"></i> COPY URL
+                            </button>
+                        </div>
+
+                        <!-- Quick Assign Buttons -->
+                        <div style="display:flex;flex-wrap:wrap;gap:10px;padding-top:14px;border-top:1px solid rgba(212,175,55,0.2);">
+                            <button type="button" class="btn-gold-submit" style="width:auto;padding:8px 18px;font-size:0.8rem;" onclick="assignVaultVideoAsIntro()">
+                                <i class="fas fa-star" style="margin-right:6px;"></i> SET AS HERO INTRO VIDEO
+                            </button>
+                            <button type="button" class="btn-whatsapp-outline" style="border-color:#D4AF37;color:#D4AF37;padding:8px 18px;font-size:0.8rem;" onclick="openProjectWithUploadedVideo()">
+                                <i class="fas fa-building" style="margin-right:6px;"></i> CREATE COMPLETED PROJECT WITH THIS VIDEO
+                            </button>
+                            <button type="button" class="btn-whatsapp-outline" style="border-color:#D4AF37;color:#D4AF37;padding:8px 18px;font-size:0.8rem;" onclick="openReviewWithUploadedVideo()">
+                                <i class="fas fa-comments" style="margin-right:6px;"></i> CREATE CLIENT REVIEW WITH THIS VIDEO
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. INTRO VIDEO TAB -->
             <div class="admin-tab-pane" id="tab-intro">
                 <div class="card-dark-panel">
                     <h2 class="panel-header-title">WEBSITE INTRO VIDEO MANAGEMENT</h2>
@@ -784,25 +892,32 @@
                         </div>
                     </div>
 
-                    <!-- Upload New Video File -->
+                    <!-- Upload New Video File (Up to 2GB) -->
                     <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:24px;margin-top:16px;">
-                        <div style="font-size:0.8rem;color:#D4AF37;font-weight:700;margin-bottom:14px;"><i class="fas fa-upload" style="margin-right:6px;"></i> UPLOAD NEW VIDEO FILE</div>
+                        <div style="font-size:0.8rem;color:#D4AF37;font-weight:700;margin-bottom:14px;"><i class="fas fa-upload" style="margin-right:6px;"></i> UPLOAD NEW VIDEO FILE (MAX 2GB)</div>
 
                         <div id="videoDropZone" onclick="document.getElementById('introVideoFileInput').click()"
                              style="border:2px dashed rgba(212,175,55,0.4);border-radius:14px;padding:32px;text-align:center;cursor:pointer;transition:all 0.3s;background:rgba(212,175,55,0.03);"
                              onmouseover="this.style.borderColor='#D4AF37';this.style.background='rgba(212,175,55,0.07)';"
                              onmouseout="this.style.borderColor='rgba(212,175,55,0.4)';this.style.background='rgba(212,175,55,0.03)';">
                             <i class="fas fa-video" style="font-size:2rem;color:#D4AF37;margin-bottom:10px;display:block;"></i>
-                            <div style="color:#fff;font-weight:700;margin-bottom:4px;">Click to select MP4 video file</div>
-                            <div style="color:#64748b;font-size:0.8rem;">MP4, MOV, WebM • Max 20MB</div>
-                            <input type="file" id="introVideoFileInput" accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm" style="display:none;" onchange="handleIntroVideoUpload(event)">
+                            <div style="color:#fff;font-weight:700;margin-bottom:4px;">Click to select MP4 / MOV / WebM video file</div>
+                            <div style="color:#64748b;font-size:0.8rem;">MP4, MOV, WebM, MKV • Max 2.0 GB (Lossless Chunked Stream)</div>
+                            <input type="file" id="introVideoFileInput" accept="video/mp4,video/quicktime,video/webm,video/x-matroska,video/avi,.mp4,.mov,.webm,.mkv,.avi" style="display:none;" onchange="handleIntroVideoUpload(event)">
                         </div>
 
                         <div id="videoUploadProgress" style="display:none;margin-top:16px;">
-                            <div style="background:#0a1628;border-radius:8px;height:8px;overflow:hidden;">
-                                <div id="videoProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#D4AF37,#FFD700);transition:width 0.4s ease;border-radius:8px;"></div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.78rem;color:#94A3B8;">
+                                <span id="introUploadMetrics">0 MB / 0 MB • 0.0 MB/s</span>
+                                <span id="introUploadPercentText" style="color:#D4AF37;font-weight:800;">0%</span>
                             </div>
-                            <div id="videoUploadStatus" style="color:#D4AF37;font-size:0.85rem;margin-top:8px;text-align:center;">Uploading...</div>
+                            <div style="background:#0a1628;border-radius:8px;height:8px;overflow:hidden;">
+                                <div id="videoProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#D4AF37,#FFD700);transition:width 0.25s ease;border-radius:8px;"></div>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+                                <div id="videoUploadStatus" style="color:#D4AF37;font-size:0.82rem;">Uploading...</div>
+                                <button type="button" onclick="cancelCurrentUpload()" style="background:rgba(255,59,48,0.15);border:1px solid rgba(255,59,48,0.3);color:#FF3B30;padding:2px 8px;border-radius:6px;font-size:0.7rem;cursor:pointer;">Cancel</button>
+                            </div>
                         </div>
                     </div>
 
@@ -1074,23 +1189,42 @@
             </div>
         </form>
 
-        <!-- 5. VIDEO UPLOAD FORM -->
+        <!-- 5. VIDEO UPLOAD FORM (UP TO 2GB) -->
         <form id="formVideo" style="display:none;" onsubmit="submitLocalVideo(event)">
             <div style="display:flex;flex-direction:column;gap:14px;">
-                <div>
-                    <label style="font-size:0.75rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:6px;">SELECT VIDEO FILE *</label>
-                    <input id="v_file" type="file" accept="video/mp4,video/mov,video/webm" required class="input-dark" style="width:100%;box-sizing:border-box;padding:10px;">
+                <div id="modalVideoDropZone" onclick="document.getElementById('v_file').click()"
+                     style="border:2px dashed rgba(212,175,55,0.4);border-radius:14px;padding:28px 18px;text-align:center;cursor:pointer;transition:all 0.3s;background:rgba(212,175,55,0.03);"
+                     onmouseover="this.style.borderColor='#D4AF37';this.style.background='rgba(212,175,55,0.07)';"
+                     onmouseout="this.style.borderColor='rgba(212,175,55,0.4)';this.style.background='rgba(212,175,55,0.03)';">
+                    <i class="fas fa-video" style="font-size:2.2rem;color:#D4AF37;margin-bottom:8px;display:block;"></i>
+                    <div id="v_file_selected_text" style="color:#fff;font-weight:700;margin-bottom:4px;font-size:0.95rem;">Click or drag video file here</div>
+                    <div style="color:#64748b;font-size:0.78rem;">Supports MP4, MOV, WebM, MKV • Max <strong>2.0 GB</strong> (Lossless Chunked Stream)</div>
+                    <input id="v_file" type="file" accept="video/mp4,video/quicktime,video/webm,video/x-matroska,video/avi,.mp4,.mov,.webm,.mkv,.avi" style="display:none;" onchange="onModalVideoFileSelected(event)">
                 </div>
                 <div id="videoModalError" style="color:#FF3B30;font-size:0.8rem;display:none;"></div>
-                <button type="submit" class="btn-gold-submit" style="width:100%;padding:14px;">⬆ UPLOAD VIDEO</button>
+                <button type="submit" class="btn-gold-submit" style="width:100%;padding:14px;">⬆ UPLOAD VIDEO (MAX 2GB)</button>
             </div>
         </form>
 
-        <!-- Uploading Indicator -->
-        <div id="uploadingIndicator" style="display:none;text-align:center;padding:24px 0;">
-            <div style="font-size:2.2rem;margin-bottom:12px;animation:spin 1.5s linear infinite;">⏳</div>
-            <div style="color:#D4AF37;font-weight:800;letter-spacing:0.06em;">UPLOADING & PROCESSING...</div>
-            <div style="color:#94A3B8;font-size:0.8rem;margin-top:6px;">Please wait while media files are being saved to the server.</div>
+        <!-- Live Uploading Indicator with Real-Time Progress -->
+        <div id="uploadingIndicator" style="display:none;padding:16px 0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:1.4rem;animation:spin 1.5s linear infinite;display:inline-block;">⏳</span>
+                    <div style="color:#D4AF37;font-weight:800;letter-spacing:0.04em;font-size:0.88rem;" id="modalUploadTitle">UPLOADING & PROCESSING...</div>
+                </div>
+                <span id="modalUploadPercentText" style="color:#D4AF37;font-weight:900;font-size:1rem;">0%</span>
+            </div>
+
+            <div style="background:#0a1628;border-radius:8px;height:10px;overflow:hidden;border:1px solid rgba(212,175,55,0.25);">
+                <div id="modalUploadProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#D4AF37,#FFD700);transition:width 0.25s ease;border-radius:8px;"></div>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:0.76rem;color:#94A3B8;">
+                <span id="modalUploadMetrics">0 MB / 0 MB • 0.0 MB/s</span>
+                <span id="modalUploadEta">ETA: Calculating...</span>
+                <button type="button" onclick="cancelCurrentUpload()" style="background:rgba(255,59,48,0.15);border:1px solid rgba(255,59,48,0.35);color:#FF3B30;padding:3px 10px;border-radius:6px;font-size:0.72rem;cursor:pointer;">Cancel</button>
+            </div>
         </div>
     </div>
 </div>
@@ -1595,26 +1729,260 @@ function previewSelectedImage(event, targetImgId) {
     reader.readAsDataURL(file);
 }
 
-// ── UPLOAD FILE HELPER ───────────────────────────────────────────
-async function uploadFile(fileOrBlob, filename = 'cover_frame.jpg') {
+// ── FORMAT HELPERS & ABORT ENGINE ────────────────────────────────
+let currentUploadAbortController = null;
+let activeUploadId = null;
+
+function formatBytes(bytes, decimals = 2) {
+    if (!+bytes) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+}
+
+function formatDuration(seconds) {
+    if (!isFinite(seconds) || seconds < 0) return '--';
+    if (seconds < 60) return Math.round(seconds) + 's';
+    const m = Math.floor(seconds / 60);
+    const s = Math.round(seconds % 60);
+    return `${m}m ${s}s`;
+}
+
+function cancelCurrentUpload() {
+    if (currentUploadAbortController) {
+        currentUploadAbortController.abort();
+        currentUploadAbortController = null;
+    }
+    if (activeUploadId) {
+        fetch('/api/upload/abort', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF(), 'Accept': 'application/json' },
+            body: JSON.stringify({ upload_id: activeUploadId })
+        }).catch(() => {});
+        activeUploadId = null;
+    }
+    const ind = document.getElementById('uploadingIndicator');
+    if (ind) ind.style.display = 'none';
+    const vmProg = document.getElementById('vmProgressContainer');
+    if (vmProg) vmProg.style.display = 'none';
+    const vDrop = document.getElementById('vmDropZone');
+    if (vDrop) vDrop.style.display = 'block';
+    const vidProg = document.getElementById('videoUploadProgress');
+    if (vidProg) vidProg.style.display = 'none';
+    const pdfProg = document.getElementById('pdfUploadProgress');
+    if (pdfProg) pdfProg.style.display = 'none';
+    alert('Upload cancelled.');
+}
+
+// ── RESILIENT CHUNKED UPLOAD ENGINE (UP TO 2GB, LOSSLESS) ────────
+async function uploadFileWithChunks(file, options = {}) {
+    const chunkSize = options.chunkSize || (5 * 1024 * 1024); // 5MB chunks
+    const totalSize = file.size;
+    const totalChunks = Math.ceil(totalSize / chunkSize);
+    const filename = options.customFilename || file.name || ('upload_' + Date.now() + '.mp4');
+    const uploadId = 'up_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+    activeUploadId = uploadId;
+
+    currentUploadAbortController = new AbortController();
+    const signal = options.abortSignal || currentUploadAbortController.signal;
+
+    const startTime = Date.now();
+    let bytesUploaded = 0;
+
+    for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+        if (signal.aborted) {
+            await fetch('/api/upload/abort', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF(), 'Accept': 'application/json' },
+                body: JSON.stringify({ upload_id: uploadId })
+            }).catch(() => {});
+            throw new Error('Upload cancelled by user.');
+        }
+
+        const start = chunkIndex * chunkSize;
+        const end = Math.min(start + chunkSize, totalSize);
+        const chunkBlob = file.slice(start, end);
+        const chunkSizeBytes = end - start;
+
+        let chunkUploaded = false;
+        let lastError = null;
+
+        // Auto retry up to 3 times per chunk on network drops
+        for (let attempt = 1; attempt <= 3; attempt++) {
+            try {
+                const fd = new FormData();
+                fd.append('upload_id', uploadId);
+                fd.append('chunk_index', chunkIndex);
+                fd.append('total_chunks', totalChunks);
+                fd.append('chunk', chunkBlob, `part_${chunkIndex}`);
+
+                const res = await fetch('/api/upload/chunk', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'X-CSRF-TOKEN': CSRF(), 'Accept': 'application/json' },
+                    body: fd,
+                    signal
+                });
+
+                if (!res.ok) {
+                    const errJson = await res.json().catch(() => ({}));
+                    throw new Error(errJson.message || `Chunk ${chunkIndex + 1}/${totalChunks} failed (${res.status})`);
+                }
+
+                chunkUploaded = true;
+                bytesUploaded += chunkSizeBytes;
+
+                const elapsedSec = (Date.now() - startTime) / 1000;
+                const speedBps = elapsedSec > 0 ? (bytesUploaded / elapsedSec) : 0;
+                const remainingBytes = totalSize - bytesUploaded;
+                const etaSec = speedBps > 0 ? (remainingBytes / speedBps) : 0;
+                const pct = Math.min(99, Math.round((bytesUploaded / totalSize) * 100));
+
+                if (typeof options.onProgress === 'function') {
+                    options.onProgress({
+                        percent: pct,
+                        loaded: bytesUploaded,
+                        total: totalSize,
+                        loadedFormatted: formatBytes(bytesUploaded),
+                        totalFormatted: formatBytes(totalSize),
+                        speedFormatted: formatBytes(speedBps) + '/s',
+                        etaFormatted: formatDuration(etaSec),
+                        chunkIndex: chunkIndex + 1,
+                        totalChunks: totalChunks
+                    });
+                }
+                break;
+            } catch (err) {
+                lastError = err;
+                if (signal.aborted) throw err;
+                if (attempt < 3) {
+                    await new Promise(r => setTimeout(r, 1000 * attempt));
+                }
+            }
+        }
+
+        if (!chunkUploaded) {
+            throw lastError || new Error(`Failed to upload chunk ${chunkIndex + 1}/${totalChunks}`);
+        }
+    }
+
+    // Assembly notification
+    if (typeof options.onProgress === 'function') {
+        options.onProgress({
+            percent: 99,
+            loaded: totalSize,
+            total: totalSize,
+            loadedFormatted: formatBytes(totalSize),
+            totalFormatted: formatBytes(totalSize),
+            speedFormatted: 'Assembling...',
+            etaFormatted: 'Processing stream on disk...',
+            chunkIndex: totalChunks,
+            totalChunks: totalChunks,
+            status: 'assembling'
+        });
+    }
+
+    const finishRes = await fetch('/api/upload/finish', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF(), 'Accept': 'application/json' },
+        body: JSON.stringify({
+            upload_id: uploadId,
+            filename: filename,
+            total_chunks: totalChunks,
+            total_size: totalSize
+        }),
+        signal
+    });
+
+    if (!finishRes.ok) {
+        const errJson = await finishRes.json().catch(() => ({}));
+        throw new Error(errJson.message || `Failed to assemble file (${finishRes.status})`);
+    }
+
+    const finishData = await finishRes.json();
+    if (typeof options.onProgress === 'function') {
+        options.onProgress({
+            percent: 100,
+            loaded: totalSize,
+            total: totalSize,
+            loadedFormatted: formatBytes(totalSize),
+            totalFormatted: formatBytes(totalSize),
+            speedFormatted: 'Complete',
+            etaFormatted: '0s',
+            chunkIndex: totalChunks,
+            totalChunks: totalChunks,
+            status: 'done'
+        });
+    }
+
+    currentUploadAbortController = null;
+    activeUploadId = null;
+    return finishData;
+}
+
+// ── UNIVERSAL UPLOAD HELPER ──────────────────────────────────────
+async function uploadFile(fileOrBlob, filename = 'cover_frame.jpg', onProgress = null) {
+    if (fileOrBlob instanceof File && fileOrBlob.size > (5 * 1024 * 1024)) {
+        // Large file (> 5MB up to 2GB) -> use chunked uploader
+        const result = await uploadFileWithChunks(fileOrBlob, {
+            customFilename: filename !== 'cover_frame.jpg' ? filename : fileOrBlob.name,
+            onProgress: onProgress
+        });
+        return result.url;
+    }
+
     const fd = new FormData();
     if (fileOrBlob instanceof Blob && !(fileOrBlob instanceof File)) {
         fd.append('file', fileOrBlob, filename);
     } else {
         fd.append('file', fileOrBlob);
     }
+
+    if (typeof onProgress === 'function') {
+        onProgress({ percent: 40, loadedFormatted: '', totalFormatted: '', speedFormatted: 'Uploading...', etaFormatted: '' });
+    }
+
     const res = await fetch('/api/upload', {
         method: 'POST',
         credentials: 'include',
         headers: { 'X-CSRF-TOKEN': CSRF(), 'Accept': 'application/json' },
         body: fd
     });
+
     if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
         throw new Error(errData.message || 'File upload failed (' + res.status + ')');
     }
+
+    if (typeof onProgress === 'function') {
+        onProgress({ percent: 100, loadedFormatted: '', totalFormatted: '', speedFormatted: 'Done', etaFormatted: '0s' });
+    }
+
     const data = await res.json();
     return data.url;
+}
+
+function onModalVideoFileSelected(event) {
+    const file = event.target.files[0];
+    if (file) {
+        document.getElementById('v_file_selected_text').textContent = `✓ Selected: ${file.name} (${formatBytes(file.size)})`;
+    }
+}
+
+function updateModalProgress(p) {
+    const bar     = document.getElementById('modalUploadProgressBar');
+    const pctText = document.getElementById('modalUploadPercentText');
+    const metrics = document.getElementById('modalUploadMetrics');
+    const eta     = document.getElementById('modalUploadEta');
+    if (bar) bar.style.width = (p.percent || 0) + '%';
+    if (pctText) pctText.textContent = (p.percent || 0) + '%';
+    if (metrics) metrics.textContent = `${p.loadedFormatted || ''} / ${p.totalFormatted || ''} • ${p.speedFormatted || ''}`;
+    if (eta) eta.textContent = p.etaFormatted ? `ETA: ${p.etaFormatted}` : '';
 }
 
 // ── SUBMIT TESTIMONIAL (CREATE / UPDATE) ─────────────────────────
@@ -1634,21 +2002,24 @@ async function submitTestimonial(e) {
     const imageUrl    = document.getElementById('t_image_url').value.trim();
 
     if (!clientName) { errEl.textContent = 'Client name is required.'; errEl.style.display='block'; return; }
-    document.getElementById('uploadingIndicator').style.display = 'block';
+    
+    const indicator = document.getElementById('uploadingIndicator');
+    indicator.style.display = 'block';
+    document.getElementById('modalUploadTitle').textContent = videoFile ? 'UPLOADING REVIEW VIDEO (UP TO 2GB)...' : 'SAVING REVIEW...';
     document.getElementById('formTestimonial').style.display = 'none';
 
     try {
         let finalVideoUrl = videoUrl;
         let finalImageUrl = imageUrl;
 
-        if (videoFile) finalVideoUrl = await uploadFile(videoFile);
+        if (videoFile) {
+            finalVideoUrl = await uploadFile(videoFile, videoFile.name, updateModalProgress);
+        }
         if (imageFile) {
             finalImageUrl = await uploadFile(imageFile);
         } else if (!finalImageUrl && autoExtractedTestimonialBlob) {
-            // Auto upload video frame as cover image
             finalImageUrl = await uploadFile(autoExtractedTestimonialBlob, 'review_cover_' + Date.now() + '.jpg');
         } else if (!finalImageUrl && finalVideoUrl && (finalVideoUrl.includes('youtube.com') || finalVideoUrl.includes('youtu.be'))) {
-            // YouTube thumbnail fallback
             let ytId = '';
             if (finalVideoUrl.includes('watch?v=')) ytId = finalVideoUrl.split('watch?v=')[1]?.split('&')[0];
             else if (finalVideoUrl.includes('youtu.be/')) ytId = finalVideoUrl.split('youtu.be/')[1]?.split('?')[0];
@@ -1677,7 +2048,7 @@ async function submitTestimonial(e) {
         closeUploadModal();
         location.reload();
     } catch (err) {
-        document.getElementById('uploadingIndicator').style.display = 'none';
+        indicator.style.display = 'none';
         document.getElementById('formTestimonial').style.display = 'block';
         errEl.textContent = '❌ ' + err.message;
         errEl.style.display = 'block';
@@ -1703,14 +2074,19 @@ async function submitProject(e) {
     const videoUrl    = document.getElementById('p_video_url').value.trim();
 
     if (!name) { errEl.textContent = 'Project name is required.'; errEl.style.display='block'; return; }
-    document.getElementById('uploadingIndicator').style.display = 'block';
+    
+    const indicator = document.getElementById('uploadingIndicator');
+    indicator.style.display = 'block';
+    document.getElementById('modalUploadTitle').textContent = videoFile ? 'UPLOADING PROJECT WALKTHROUGH (UP TO 2GB)...' : 'SAVING PROJECT...';
     document.getElementById('formProject').style.display = 'none';
 
     try {
         let finalVideoUrl = videoUrl;
         let finalImageUrl = imageUrl;
 
-        if (videoFile) finalVideoUrl = await uploadFile(videoFile);
+        if (videoFile) {
+            finalVideoUrl = await uploadFile(videoFile, videoFile.name, updateModalProgress);
+        }
         if (imageFile) {
             finalImageUrl = await uploadFile(imageFile);
         } else if (!finalImageUrl && autoExtractedProjectBlob) {
@@ -1746,7 +2122,7 @@ async function submitProject(e) {
         closeUploadModal();
         location.reload();
     } catch (err) {
-        document.getElementById('uploadingIndicator').style.display = 'none';
+        indicator.style.display = 'none';
         document.getElementById('formProject').style.display = 'block';
         errEl.textContent = '❌ ' + err.message;
         errEl.style.display = 'block';
@@ -1824,6 +2200,7 @@ async function submitPartner(e) {
     if (!name) { errEl.textContent = 'Partner / Bank name is required.'; errEl.style.display='block'; return; }
 
     document.getElementById('uploadingIndicator').style.display = 'block';
+    document.getElementById('modalUploadTitle').textContent = 'SAVING PARTNER...';
     document.getElementById('formPartner').style.display = 'none';
 
     try {
@@ -1871,25 +2248,135 @@ async function submitPartner(e) {
     }
 }
 
-// ── SUBMIT LOCAL VIDEO ────────────────────────────────────────────
+// ── SUBMIT LOCAL VIDEO (UP TO 2GB) ────────────────────────────────
 async function submitLocalVideo(e) {
     e.preventDefault();
     const errEl = document.getElementById('videoModalError');
     errEl.style.display = 'none';
     const videoFile = document.getElementById('v_file').files[0];
     if (!videoFile) { errEl.textContent = 'Please select a video file.'; errEl.style.display='block'; return; }
-    document.getElementById('uploadingIndicator').style.display = 'block';
+    
+    const indicator = document.getElementById('uploadingIndicator');
+    indicator.style.display = 'block';
+    document.getElementById('modalUploadTitle').textContent = `UPLOADING VIDEO (${formatBytes(videoFile.size)})...`;
     document.getElementById('formVideo').style.display = 'none';
+
     try {
-        const url = await uploadFile(videoFile);
+        const url = await uploadFile(videoFile, videoFile.name, updateModalProgress);
         closeUploadModal();
-        alert('✅ Video uploaded successfully!\nURL: ' + url);
+        alert('✅ Video uploaded successfully with 100% original quality!\nURL: ' + url);
         location.reload();
     } catch (err) {
-        document.getElementById('uploadingIndicator').style.display = 'none';
+        indicator.style.display = 'none';
         document.getElementById('formVideo').style.display = 'block';
         errEl.textContent = '❌ ' + err.message;
         errEl.style.display = 'block';
+    }
+}
+
+// ── 2GB LARGE VIDEO VAULT UPLOADER ────────────────────────────────
+let lastVaultUploadedUrl = '';
+
+async function handleVaultVideoSelected(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const progressContainer = document.getElementById('vmProgressContainer');
+    const filenameEl        = document.getElementById('vmProgressFilename');
+    const pctText           = document.getElementById('vmProgressPercentText');
+    const bar               = document.getElementById('vmProgressBar');
+    const speedEl           = document.getElementById('vmSpeedDisplay');
+    const transferredEl     = document.getElementById('vmTransferredDisplay');
+    const etaEl             = document.getElementById('vmEtaDisplay');
+    const successCard       = document.getElementById('vmSuccessCard');
+    const dropZone          = document.getElementById('vmDropZone');
+
+    successCard.style.display = 'none';
+    progressContainer.style.display = 'block';
+    dropZone.style.display = 'none';
+    filenameEl.textContent = `${file.name} (${formatBytes(file.size)})`;
+
+    try {
+        const result = await uploadFileWithChunks(file, {
+            customFilename: file.name,
+            onProgress: (p) => {
+                bar.style.width = (p.percent || 0) + '%';
+                pctText.textContent = (p.percent || 0) + '%';
+                speedEl.textContent = p.speedFormatted || '0 MB/s';
+                transferredEl.textContent = `${p.loadedFormatted || '0 MB'} / ${p.totalFormatted || '0 MB'}`;
+                etaEl.textContent = p.status === 'assembling' ? 'Assembling stream...' : (p.etaFormatted ? `ETA: ${p.etaFormatted}` : '--');
+            }
+        });
+
+        lastVaultUploadedUrl = result.url;
+        progressContainer.style.display = 'none';
+        successCard.style.display = 'block';
+
+        const player = document.getElementById('vmPreviewPlayer');
+        player.src = result.url;
+        player.load();
+
+        document.getElementById('vmUploadedUrl').value = result.url;
+    } catch (err) {
+        progressContainer.style.display = 'none';
+        dropZone.style.display = 'block';
+        alert('❌ Upload failed: ' + err.message);
+    }
+}
+
+function resetVaultUploader() {
+    document.getElementById('vmSuccessCard').style.display = 'none';
+    document.getElementById('vmDropZone').style.display = 'block';
+    document.getElementById('vmFileInput').value = '';
+    const player = document.getElementById('vmPreviewPlayer');
+    player.pause();
+    player.removeAttribute('src');
+    player.load();
+}
+
+function copyUploadedUrl() {
+    const input = document.getElementById('vmUploadedUrl');
+    input.select();
+    input.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(input.value).then(() => {
+        alert('📋 Video URL copied to clipboard:\n' + input.value);
+    }).catch(() => {
+        document.execCommand('copy');
+        alert('📋 Video URL copied to clipboard:\n' + input.value);
+    });
+}
+
+async function assignVaultVideoAsIntro() {
+    if (!lastVaultUploadedUrl) return;
+    if (!confirm('Set this video as the website Hero / Engineer Intro video?')) return;
+    try {
+        await saveIntroVideoSetting(lastVaultUploadedUrl);
+        alert('✅ Video successfully set as the Website Intro Video!');
+        switchAdminTab('intro', document.querySelector('.sidebar-nav-link[onclick*="intro"]'));
+        const display = document.getElementById('activeVideoDisplay');
+        if (display) display.textContent = lastVaultUploadedUrl;
+    } catch (err) {
+        alert('❌ Failed to update intro video: ' + err.message);
+    }
+}
+
+function openProjectWithUploadedVideo() {
+    if (!lastVaultUploadedUrl) return;
+    openUploadModal('project');
+    const pVideoUrl = document.getElementById('p_video_url');
+    if (pVideoUrl) {
+        pVideoUrl.value = lastVaultUploadedUrl;
+        onProjectVideoUrlChanged(lastVaultUploadedUrl);
+    }
+}
+
+function openReviewWithUploadedVideo() {
+    if (!lastVaultUploadedUrl) return;
+    openUploadModal('testimonial');
+    const tVideoUrl = document.getElementById('t_video_url');
+    if (tVideoUrl) {
+        tVideoUrl.value = lastVaultUploadedUrl;
+        onTestimonialVideoUrlChanged(lastVaultUploadedUrl);
     }
 }
 
@@ -2070,8 +2557,8 @@ function escapeHtml(str) {
     if (!str) return '';
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
-// ── GUIDEBOOK PDF MANAGEMENT ──────────────────────────────────────
 
+// ── GUIDEBOOK PDF MANAGEMENT ──────────────────────────────────────
 async function handleGuidebookUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -2084,12 +2571,13 @@ async function handleGuidebookUpload(event) {
     const status   = document.getElementById('pdfUploadStatus');
     progress.style.display = 'block';
     status.textContent = '⏳ Uploading PDF...';
-    let pct = 0;
-    const ticker = setInterval(() => { pct = Math.min(pct + 3, 85); bar.style.width = pct + '%'; }, 120);
+
     try {
-        const pdfUrl = await uploadFile(file);
-        clearInterval(ticker);
-        bar.style.width = '95%';
+        const pdfUrl = await uploadFile(file, file.name, (p) => {
+            if (bar) bar.style.width = (p.percent || 0) + '%';
+            if (status) status.textContent = `Uploading PDF (${p.percent || 0}%)...`;
+        });
+        if (bar) bar.style.width = '95%';
         status.textContent = '💾 Saving settings...';
         const res = await fetch('/api/settings/guidebook', {
             method: 'POST',
@@ -2098,11 +2586,10 @@ async function handleGuidebookUpload(event) {
             body: JSON.stringify({ url: pdfUrl })
         });
         if (!res.ok) throw new Error('Failed to save setting (HTTP ' + res.status + ')');
-        bar.style.width = '100%';
+        if (bar) bar.style.width = '100%';
         status.textContent = '✅ Done! Reloading...';
         setTimeout(() => location.reload(), 800);
     } catch (err) {
-        clearInterval(ticker);
         progress.style.display = 'none';
         alert('❌ Upload failed: ' + err.message);
     }
@@ -2139,28 +2626,32 @@ async function deleteGuidebookPdf(event, btnEl) {
 }
 
 // ── INTRO VIDEO MANAGEMENT ────────────────────────────────────────
-
 async function handleIntroVideoUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
     const progress = document.getElementById('videoUploadProgress');
     const bar      = document.getElementById('videoProgressBar');
     const status   = document.getElementById('videoUploadStatus');
+    const metrics  = document.getElementById('introUploadMetrics');
+    const pctText  = document.getElementById('introUploadPercentText');
+
     progress.style.display = 'block';
-    status.textContent = '⏳ Uploading video...';
-    let pct = 0;
-    const ticker = setInterval(() => { pct = Math.min(pct + 2, 80); bar.style.width = pct + '%'; }, 200);
+    status.textContent = '⏳ Uploading video (lossless chunked stream)...';
+
     try {
-        const videoUrl = await uploadFile(file);
-        clearInterval(ticker);
-        bar.style.width = '90%';
-        status.textContent = '💾 Saving settings...';
+        const videoUrl = await uploadFile(file, file.name, (p) => {
+            if (bar) bar.style.width = (p.percent || 0) + '%';
+            if (pctText) pctText.textContent = (p.percent || 0) + '%';
+            if (metrics) metrics.textContent = `${p.loadedFormatted || ''} / ${p.totalFormatted || ''} • ${p.speedFormatted || ''}`;
+            if (status) status.textContent = p.status === 'assembling' ? '💾 Assembling video stream on disk...' : (p.etaFormatted ? `Uploading... ETA: ${p.etaFormatted}` : 'Uploading...');
+        });
+
+        status.textContent = '💾 Saving setting...';
         await saveIntroVideoSetting(videoUrl);
-        bar.style.width = '100%';
+        if (bar) bar.style.width = '100%';
         status.textContent = '✅ Done! Reloading...';
         setTimeout(() => location.reload(), 800);
     } catch (err) {
-        clearInterval(ticker);
         progress.style.display = 'none';
         alert('❌ Upload failed: ' + err.message);
     }

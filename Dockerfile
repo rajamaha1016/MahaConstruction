@@ -50,10 +50,11 @@ RUN { \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 RUN { \
-        echo 'upload_max_filesize = 50M'; \
-        echo 'post_max_size = 55M'; \
-        echo 'memory_limit = 256M'; \
-        echo 'max_execution_time = 120'; \
+        echo 'upload_max_filesize = 100M'; \
+        echo 'post_max_size = 110M'; \
+        echo 'memory_limit = 512M'; \
+        echo 'max_execution_time = 300'; \
+        echo 'max_input_time = 300'; \
         echo 'expose_php = Off'; \
     } > /usr/local/etc/php/conf.d/custom-php.ini
 
@@ -71,6 +72,7 @@ RUN dos2unix /var/www/html/docker-entrypoint.sh \
                 storage/framework/views \
                 storage/framework/testing \
                 storage/app/public \
+                storage/app/chunks \
                 storage/logs \
                 public/uploads \
                 bootstrap/cache \

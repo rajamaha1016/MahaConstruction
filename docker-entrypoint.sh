@@ -26,6 +26,7 @@ mkdir -p storage/framework/cache/data \
          storage/framework/views \
          storage/framework/testing \
          storage/app/public \
+         storage/app/chunks \
          storage/logs \
          public/uploads \
          bootstrap/cache \

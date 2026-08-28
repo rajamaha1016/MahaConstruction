@@ -117,9 +117,12 @@ Route::middleware(['admin.api.session', 'admin.auth'])->group(function () {
 
     Route::get('/newsletter/subscribers',   [ApiController::class, 'getNewsletterSubscribers']);
 
-    // Media upload
+    // Media upload (Direct & Resilient Chunked Upload for files up to 2GB)
     Route::post('/upload',               [MediaUploadController::class, 'upload']);
     Route::post('/media/upload',         [MediaUploadController::class, 'upload']);
+    Route::post('/upload/chunk',         [MediaUploadController::class, 'uploadChunk']);
+    Route::post('/upload/finish',        [MediaUploadController::class, 'finishChunkedUpload']);
+    Route::post('/upload/abort',         [MediaUploadController::class, 'abortChunkedUpload']);
 
     // Admin-only stats
     Route::get('/admin/stats',           [ApiController::class, 'getAdminStats']);
