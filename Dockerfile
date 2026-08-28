@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         opcache \
         gd \
         intl \
-    && a2dismod mpm_event mpm_worker || true \
+    && rm -f /etc/apache2/mods-enabled/mpm_*.load /etc/apache2/mods-enabled/mpm_*.conf \
     && a2enmod mpm_prefork rewrite headers expires \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && sed -ri 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf /etc/apache2/apache2.conf \
