@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Maha Construction | Premium Luxury Architectural Masterpieces</title>
     <meta name="description" content="Maha Construction is an enterprise-grade builder of bespoke luxury villas, organic residences, and iconic commercial towers designed with materials integrity." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     @if(file_exists(public_path('assets')))
       @foreach(scandir(public_path('assets')) as $file)
         @if(str_ends_with($file, '.css'))

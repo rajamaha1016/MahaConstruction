@@ -40,7 +40,7 @@
 
         @if($recent->count() > 0)
         <div style="margin-top:60px;">
-            <h3 style="font-family:var(--font-sans);font-size:1rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;">Recent Articles</h3>
+            <h3 style="font-family:var(--font-heading);font-size:1rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;">Recent Articles</h3>
             <div class="grid-3">
                 @foreach($recent as $r)
                 <a href="{{ route('blog.show', $r->slug) }}" class="blog-card" style="display:block;">

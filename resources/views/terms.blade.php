@@ -13,7 +13,7 @@
 ['title'=>'Changes to Terms','content'=>'We reserve the right to update these terms at any time. Continued use of our services after changes constitutes acceptance of the new terms.'],
 ] as $s)
 <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;">
-    <h3 style="font-family:var(--font-sans);font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:12px;">{{ $s['title'] }}</h3>
+    <h3 style="font-family:var(--font-heading);font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:12px;">{{ $s['title'] }}</h3>
     <p style="font-size:0.9rem;line-height:1.8;">{{ $s['content'] }}</p>
 </div>
 @endforeach

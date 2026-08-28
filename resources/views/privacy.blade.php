@@ -13,7 +13,7 @@
 ['title'=>'Contact Us','content'=>'If you have questions about this Privacy Policy, please contact us at Mahaconstructions2013@gmail.com or call +91 94430 08095.'],
 ] as $section)
 <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;">
-    <h3 style="font-family:var(--font-sans);font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:12px;">{{ $section['title'] }}</h3>
+    <h3 style="font-family:var(--font-heading);font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:12px;">{{ $section['title'] }}</h3>
     <p style="font-size:0.9rem;line-height:1.8;">{{ $section['content'] }}</p>
 </div>
 @endforeach

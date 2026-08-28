@@ -8,7 +8,7 @@
     <meta name="description" content="@yield('description', 'Maha Construction is Tamil Nadu\'s premier government-registered engineering firm delivering custom luxury villas, residential residences, and architectural homes.')"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     @stack('styles')
@@ -42,8 +42,8 @@
                          style="height:48px;width:auto;object-fit:contain;display:block;">
                 </div>
                 <div style="display:flex;flex-direction:column;justify-content:center;">
-                    <span style="font-size:1.1rem;font-weight:900;letter-spacing:0.06em;color:#FFFFFF;line-height:1.2;font-family:'Outfit',sans-serif;text-shadow:0 2px 10px rgba(0,0,0,0.5);">MAHA CONSTRUCTIONS</span>
-                    <span style="font-size:0.62rem;font-weight:700;letter-spacing:0.2em;color:#D4AF37;text-transform:uppercase;margin-top:3px;font-family:'Outfit',sans-serif;">WE BUILD YOUR DREAM HOME</span>
+                    <span style="font-size:1.1rem;font-weight:800;letter-spacing:0.06em;color:#FFFFFF;line-height:1.2;font-family:var(--font-heading);text-shadow:0 2px 10px rgba(0,0,0,0.5);">MAHA CONSTRUCTIONS</span>
+                    <span style="font-size:0.62rem;font-weight:700;letter-spacing:0.2em;color:#D4AF37;text-transform:uppercase;margin-top:3px;font-family:var(--font-heading);">WE BUILD YOUR DREAM HOME</span>
                 </div>
             </a>
 

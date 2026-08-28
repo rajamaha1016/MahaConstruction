@@ -27,7 +27,7 @@
                     <p class="service-overview" style="margin-bottom:24px;">{{ $service->overview }}</p>
                     @if($service->benefits)
                     <div style="margin-bottom:24px;">
-                        <h4 style="font-family:var(--font-sans);font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Key Benefits</h4>
+                        <h4 style="font-family:var(--font-heading);font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Key Benefits</h4>
                         <ul class="service-benefits">
                             @foreach($service->benefits as $b)
                             <li>{{ $b }}</li>
@@ -37,7 +37,7 @@
                     @endif
                     @if($service->process)
                     <div>
-                        <h4 style="font-family:var(--font-sans);font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Our Process</h4>
+                        <h4 style="font-family:var(--font-heading);font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Our Process</h4>
                         <div class="process-steps">
                             @foreach($service->process as $step)
                             <div class="process-step">

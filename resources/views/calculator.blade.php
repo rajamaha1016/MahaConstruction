@@ -13,7 +13,7 @@
     <div class="container" style="max-width:960px;">
         <div class="calculator-grid-2">
             <div class="calculator-card">
-                <h3 style="font-family:var(--font-sans);font-size:1rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;"><i class="fas fa-sliders" style="margin-right:6px;"></i> Configuration</h3>
+                <h3 style="font-family:var(--font-heading);font-size:1rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;"><i class="fas fa-sliders" style="margin-right:6px;"></i> Configuration</h3>
                 <!-- Division -->
                 <div class="calc-slider-group">
                     <div class="calc-slider-label">

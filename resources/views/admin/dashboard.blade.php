@@ -6,11 +6,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Maha Constructions Admin Panel</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        body { background: #050B14; color: #F0EBE0; font-family: 'Readex Pro', sans-serif; }
+        body { background: #050B14; color: #F0EBE0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         .admin-layout { display: flex; min-height: 100vh; }
         .admin-sidebar {
             width: 320px; flex-shrink: 0; background: #0B132B;
@@ -18,21 +19,23 @@
             position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; z-index: 100;
         }
         .admin-sidebar-logo { padding: 0 24px 20px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); margin-bottom: 20px; }
-        .admin-title-badge { font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: 0.05em; }
-        .admin-sub-badge { font-size: 0.65rem; color: #D4AF37; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+        .admin-title-badge { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: 0.05em; }
+        .admin-sub-badge { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; color: #D4AF37; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
         
         .sidebar-nav-list { list-style: none; display: flex; flex-direction: column; gap: 8px; padding: 0 16px; }
         .sidebar-nav-link {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 18px; border-radius: 12px; font-size: 0.85rem; font-weight: 800;
+            padding: 12px 18px; border-radius: 12px; font-size: 0.85rem; font-weight: 600;
             color: #94A3B8; transition: all 0.2s; border: 1px solid transparent; text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em;
         }
         .sidebar-nav-link:hover, .sidebar-nav-link.active {
             background: rgba(212, 175, 55, 0.12); color: #D4AF37; border-color: rgba(212, 175, 55, 0.3);
         }
         .badge-count {
             background: rgba(212, 175, 55, 0.2); color: #D4AF37;
-            padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 800;
+            padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .admin-main-view { margin-left: 320px; flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
@@ -41,8 +44,8 @@
             padding: 18px 36px; display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 90;
         }
-        .admin-panel-title { font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: 0.05em; }
-        .admin-panel-sub { font-size: 0.7rem; color: #94A3B8; font-weight: 600; text-transform: uppercase; }
+        .admin-panel-title { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: 0.05em; }
+        .admin-panel-sub { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; color: #94A3B8; font-weight: 600; text-transform: uppercase; }
 
         .admin-body-content { padding: 36px; flex: 1; }
         .admin-tab-pane { display: none; }
@@ -52,12 +55,12 @@
             background: #0B132B; border: 1px solid rgba(212, 175, 55, 0.25);
             border-radius: 20px; padding: 28px; margin-bottom: 28px;
         }
-        .panel-header-title { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 6px; text-transform: uppercase; }
-        .panel-header-sub { font-size: 0.85rem; color: #94A3B8; margin-bottom: 24px; }
+        .panel-header-title { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 6px; text-transform: uppercase; }
+        .panel-header-sub { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: #94A3B8; margin-bottom: 24px; }
 
         .table-custom-dark { width: 100%; border-collapse: collapse; margin-top: 16px; }
-        .table-custom-dark th { background: #050B14; color: #D4AF37; padding: 14px 18px; font-size: 0.8rem; font-weight: 800; text-align: left; border: 1px solid rgba(212, 175, 55, 0.2); }
-        .table-custom-dark td { padding: 14px 18px; border: 1px solid rgba(212, 175, 55, 0.15); color: #F0EBE0; font-size: 0.88rem; }
+        .table-custom-dark th { font-family: 'Montserrat', sans-serif; background: #050B14; color: #D4AF37; padding: 14px 18px; font-size: 0.8rem; font-weight: 700; text-align: left; border: 1px solid rgba(212, 175, 55, 0.2); }
+        .table-custom-dark td { font-family: 'Inter', sans-serif; padding: 14px 18px; border: 1px solid rgba(212, 175, 55, 0.15); color: #F0EBE0; font-size: 0.88rem; }
 
         .action-del-btn {
             background: rgba(255, 59, 48, 0.15); color: #FF3B30; border: 1px solid rgba(255, 59, 48, 0.3);
