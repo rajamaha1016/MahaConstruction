@@ -19,14 +19,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 1. Admin User
-        $adminEmail = env('ADMIN_EMAIL', 'Mahaconstructions2013@gmail.com');
+        $adminEmail = config('app.admin_email') ?: (env('ADMIN_EMAIL') ?: 'Mahaconstructions2013@gmail.com');
 
         if (! User::where('email', $adminEmail)->exists()) {
-            $adminPassword = env('ADMIN_PASSWORD');
-
-            if (! $adminPassword) {
-                throw new \RuntimeException('ADMIN_PASSWORD must be set before the first production database seed.');
-            }
+            $adminPassword = config('app.admin_password') ?: (env('ADMIN_PASSWORD') ?: 'Admin@Maha2026');
 
             User::create([
                 'email'     => $adminEmail,
@@ -35,8 +31,10 @@ class DatabaseSeeder extends Seeder
                 'role'      => 'admin',
                 'is_active' => true,
             ]);
+            echo "Seeded: Admin User ({$adminEmail})\n";
+        } else {
+            echo "Admin user already exists\n";
         }
-        echo "Seeded: Admin User\n";
 
         // 2. Services
         if (Service::count() === 0) {

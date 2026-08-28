@@ -1,26 +1,71 @@
+# Dependencies
 /vendor/
 /node_modules/
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.production.example
+.env.backup
+.env.production
+.env.local
+.env.staging
+
+# SQLite Database
+/database/database.sqlite
+/database/database.sqlite-journal
+
+# Storage & Framework Cache
 /public/storage
 /storage/*.key
-/storage/app/
-/storage/logs/
-/storage/framework/cache/
-/storage/framework/sessions/
-/storage/framework/testing/
-/storage/framework/views/
-/.env
-/.env.backup
-/.env.production
-/database/database.sqlite
-/private key
-/private key.pub
+/storage/app/*
+!/storage/app/public/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/bootstrap/cache/*.php
+!/bootstrap/cache/.gitignore
+
+# PHPUnit & Testing Caches
+.phpunit.result.cache
+.phpunit.cache/
+
+# Keys & Certificates
+*.key
+*.pem
 /github-deploy-key
 /github-deploy-key.pub
-/bootstrap/cache/*.php
-Homestead.json
-Homestead.yaml
+*deploy-key*
+/private key
+/private key.pub
 auth.json
-npm-debug.log
-yarn-error.log
+
+# Large Raw Media Files
 *.mp4
 *.mov
+
+# Logs & Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Editor & OS Metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+Homestead.json
+Homestead.yaml

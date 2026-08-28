@@ -53,7 +53,7 @@ class YouTubeSyncService
         if ($setting && !empty(trim($setting->value))) {
             return trim($setting->value);
         }
-        return env('YOUTUBE_API_KEY') ?: null;
+        return config('services.youtube.api_key') ?: (env('YOUTUBE_API_KEY') ?: null);
     }
 
     /**

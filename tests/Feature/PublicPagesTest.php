@@ -3,15 +3,14 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class PublicPagesTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @dataProvider publicRoutes
-     */
+    #[DataProvider('publicRoutes')]
     public function test_public_page_loads(string $uri): void
     {
         $this->get($uri)->assertOk();

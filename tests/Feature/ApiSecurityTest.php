@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class ApiSecurityTest extends TestCase
@@ -27,9 +28,7 @@ class ApiSecurityTest extends TestCase
         ])->assertCreated();
     }
 
-    /**
-     * @dataProvider mutatingEndpoints
-     */
+    #[DataProvider('mutatingEndpoints')]
     public function test_mutating_endpoints_reject_anonymous_requests(string $method, string $uri): void
     {
         $this->json($method, $uri, [])->assertStatus(401);

@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: maha-construction
+    env: docker
+    plan: standard
+    region: singapore # or oregon, frankfurt
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /up
+    envVars:
+      - key: APP_NAME
+        value: "Maha Construction"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        sync: false # Set to your custom domain or Render URL e.g. https://mahaconstruction.onrender.com
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: DB_DATABASE
+        value: /var/www/html/database/database.sqlite
+      - key: DB_SEED_ON_BOOT
+        value: "true"
+      - key: ADMIN_EMAIL
+        value: Mahaconstructions2013@gmail.com
+      - key: ADMIN_PASSWORD
+        sync: false
+    disk:
+      name: maha-data
+      mountPath: /var/www/html/public/uploads
+      sizeGB: 10

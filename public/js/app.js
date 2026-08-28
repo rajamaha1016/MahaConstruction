@@ -413,15 +413,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // --- Mobile Nav Toggle ---
-  const navMobileToggle = document.getElementById('navMobileToggle');
-  const navMenu = document.getElementById('navMenu');
-  if (navMobileToggle && navMenu) {
-    navMobileToggle.addEventListener('click', function () {
-      navMenu.classList.toggle('open');
-    });
-  }
-
   // --- Universal Auto Slideshow Engine (Stories & Homes) ---
   function setupAutoSlideshow(config) {
     const track = document.getElementById(config.trackId);
