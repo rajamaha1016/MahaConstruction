@@ -49,11 +49,15 @@ jobs:
       run: |
         mkdir -p bootstrap/cache
         mkdir -p storage/framework/{sessions,views,cache/data,testing}
-        mkdir -p storage/logs storage/app/public
-        chmod -R 777 bootstrap/cache storage
+        mkdir -p storage/logs storage/app/public database
+        touch database/database.sqlite
+        chmod -R 777 bootstrap/cache storage database
 
     - name: Generate Application Key
       run: php artisan key:generate
+
+    - name: Run Database Migrations
+      run: php artisan migrate --force
 
     - name: Verify Configuration Caching
       run: |
