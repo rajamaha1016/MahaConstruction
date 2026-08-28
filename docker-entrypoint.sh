@@ -7,7 +7,7 @@ if [ -n "${PORT:-}" ]; then
     sed -ri "s/<VirtualHost \\*:80>/<VirtualHost *:${PORT}>/" /etc/apache2/sites-available/000-default.conf
 fi
 
-# Ensure storage structure exists
+# Ensure storage structure and database folder exist
 mkdir -p storage/framework/cache/data \
          storage/framework/sessions \
          storage/framework/views \
@@ -15,20 +15,28 @@ mkdir -p storage/framework/cache/data \
          storage/app/public \
          storage/logs \
          public/uploads \
-         bootstrap/cache
+         bootstrap/cache \
+         database
 
-# If SQLite is configured, ensure SQLite file exists
-if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ] && [ -n "${DB_DATABASE:-}" ] && [ "${DB_DATABASE}" != ":memory:" ]; then
-    if [ ! -f "${DB_DATABASE}" ]; then
-        mkdir -p "$(dirname "${DB_DATABASE}")"
-        touch "${DB_DATABASE}"
-        chown -R www-data:www-data "$(dirname "${DB_DATABASE}")" 2>/dev/null || true
+# If SQLite is configured or default, ensure SQLite file exists
+DB_CONN="${DB_CONNECTION:-sqlite}"
+if [ "$DB_CONN" = "sqlite" ]; then
+    DB_FILE="${DB_DATABASE:-/var/www/html/database/database.sqlite}"
+    if [ "$DB_FILE" != ":memory:" ] && [ ! -f "$DB_FILE" ]; then
+        mkdir -p "$(dirname "$DB_FILE")"
+        touch "$DB_FILE"
+        chown -R www-data:www-data "$(dirname "$DB_FILE")" 2>/dev/null || true
     fi
 fi
 
-# Set permissions
-chown -R www-data:www-data storage bootstrap/cache public/uploads 2>/dev/null || true
-chmod -R 775 storage bootstrap/cache public/uploads 2>/dev/null || true
+# Set runtime permissions
+chown -R www-data:www-data storage bootstrap/cache public/uploads database 2>/dev/null || true
+chmod -R 775 storage bootstrap/cache public/uploads database 2>/dev/null || true
+
+# Auto-generate APP_KEY if missing in environment
+if [ -z "${APP_KEY:-}" ]; then
+    php artisan key:generate --force --no-interaction || true
+fi
 
 # Link public storage
 php artisan storage:link --no-interaction || true
@@ -36,7 +44,7 @@ php artisan storage:link --no-interaction || true
 # Run database migrations
 php artisan migrate --force --no-interaction || true
 
-# Seed database if explicitly requested or on fresh installation
+# Seed database if requested or initial boot
 if [ "${DB_SEED_ON_BOOT:-true}" = "true" ]; then
     php artisan db:seed --force --no-interaction || true
 fi

@@ -17,11 +17,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
     libicu-dev \
+    libsqlite3-dev \
+    zlib1g-dev \
+    dos2unix \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         pdo_mysql \
         pdo_pgsql \
-        pdo_sqlite \
         zip \
         bcmath \
         opcache \
@@ -59,17 +61,19 @@ WORKDIR /var/www/html
 COPY --from=vendor /app/vendor ./vendor
 COPY . .
 
-# Set up storage and bootstrap permissions
-RUN mkdir -p storage/framework/cache/data \
-             storage/framework/sessions \
-             storage/framework/views \
-             storage/framework/testing \
-             storage/app/public \
-             storage/logs \
-             public/uploads \
-             bootstrap/cache \
+# Convert line endings, set up storage and bootstrap permissions
+RUN dos2unix /var/www/html/docker-entrypoint.sh \
     && chmod +x /var/www/html/docker-entrypoint.sh \
-    && chown -R www-data:www-data storage bootstrap/cache public/uploads
+    && mkdir -p storage/framework/cache/data \
+                storage/framework/sessions \
+                storage/framework/views \
+                storage/framework/testing \
+                storage/app/public \
+                storage/logs \
+                public/uploads \
+                bootstrap/cache \
+                database \
+    && chown -R www-data:www-data storage bootstrap/cache public/uploads database
 
 EXPOSE 80
 
