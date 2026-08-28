@@ -29,7 +29,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         opcache \
         gd \
         intl \
-    && a2enmod rewrite headers expires \
+    && a2dismod mpm_event mpm_worker || true \
+    && a2enmod mpm_prefork rewrite headers expires \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && sed -ri 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf /etc/apache2/apache2.conf \
     && sed -ri 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \

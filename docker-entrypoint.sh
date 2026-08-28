@@ -7,6 +7,10 @@ if [ -n "${PORT:-}" ]; then
     sed -ri "s/<VirtualHost \\*:80>/<VirtualHost *:${PORT}>/" /etc/apache2/sites-available/000-default.conf
 fi
 
+# Ensure only mpm_prefork is enabled
+a2dismod mpm_event mpm_worker 2>/dev/null || true
+a2enmod mpm_prefork 2>/dev/null || true
+
 # Ensure storage structure and database folder exist
 mkdir -p storage/framework/cache/data \
          storage/framework/sessions \
