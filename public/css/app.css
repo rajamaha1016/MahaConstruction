@@ -53,19 +53,6 @@ input, select, textarea { font-family: var(--font-body); font-weight: 400; outli
 
 .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
 
-/* ─── CUSTOM CURSOR ───────────────────────────────── */
-.custom-cursor {
-  position: fixed; top: 0; left: 0; width: 32px; height: 32px;
-  border: 1.5px solid var(--gold); border-radius: 50%;
-  pointer-events: none; z-index: 9999;
-  transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s;
-}
-.custom-cursor-dot {
-  position: fixed; top: 0; left: 0; width: 6px; height: 6px;
-  background: var(--gold); border-radius: 50%;
-  pointer-events: none; z-index: 10000; transform: translate(-50%, -50%);
-}
-
 /* ─── TOP ANNOUNCEMENT BAR ────────────────────────── */
 .top-announcement-bar {
   background: #03070D;

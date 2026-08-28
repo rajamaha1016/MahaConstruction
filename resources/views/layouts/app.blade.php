@@ -14,10 +14,6 @@
     @stack('styles')
 </head>
 <body class="dark-theme">
-    <!-- Custom Cursor -->
-    <div class="custom-cursor" id="cursor"></div>
-    <div class="custom-cursor-dot" id="cursor-dot"></div>
-
     <!-- Top Announcement Header Bar -->
     <div class="top-announcement-bar">
         <div class="container top-bar-content">

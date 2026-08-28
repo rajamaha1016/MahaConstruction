@@ -4,18 +4,6 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // --- Custom Cursor ---
-  const cursor = document.getElementById('cursor');
-  const cursorDot = document.getElementById('cursor-dot');
-  if (cursor && cursorDot) {
-    document.addEventListener('mousemove', function (e) {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-      cursorDot.style.left = e.clientX + 'px';
-      cursorDot.style.top = e.clientY + 'px';
-    });
-  }
-
   // --- Mobile Navigation Drawer Toggle ---
   const navMobileToggle = document.getElementById('navMobileToggle');
   const navMenu = document.getElementById('navMenu');
