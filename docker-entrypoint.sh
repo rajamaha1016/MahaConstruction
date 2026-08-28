@@ -11,7 +11,16 @@ fi
 rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* 2>/dev/null || true
 a2enmod mpm_prefork 2>/dev/null || true
 
-# Ensure storage structure and database folder exist
+# Ensure .env file exists in container
+if [ ! -f /var/www/html/.env ]; then
+    if [ -f /var/www/html/.env.example ]; then
+        cp /var/www/html/.env.example /var/www/html/.env
+    else
+        touch /var/www/html/.env
+    fi
+fi
+
+# Ensure storage, database, and upload structures exist
 mkdir -p storage/framework/cache/data \
          storage/framework/sessions \
          storage/framework/views \
@@ -22,22 +31,22 @@ mkdir -p storage/framework/cache/data \
          bootstrap/cache \
          database
 
-# If SQLite is configured or default, ensure SQLite file exists
+# Ensure SQLite file exists with write permissions
 DB_CONN="${DB_CONNECTION:-sqlite}"
 if [ "$DB_CONN" = "sqlite" ]; then
     DB_FILE="${DB_DATABASE:-/var/www/html/database/database.sqlite}"
-    if [ "$DB_FILE" != ":memory:" ] && [ ! -f "$DB_FILE" ]; then
+    if [ "$DB_FILE" != ":memory:" ]; then
         mkdir -p "$(dirname "$DB_FILE")"
         touch "$DB_FILE"
-        chown -R www-data:www-data "$(dirname "$DB_FILE")" 2>/dev/null || true
+        chmod 666 "$DB_FILE" 2>/dev/null || true
     fi
 fi
 
-# Set runtime permissions
+# Set broad read/write permissions for web server
 chown -R www-data:www-data storage bootstrap/cache public/uploads database 2>/dev/null || true
-chmod -R 775 storage bootstrap/cache public/uploads database 2>/dev/null || true
+chmod -R 777 storage bootstrap/cache public/uploads database 2>/dev/null || true
 
-# Auto-generate APP_KEY if missing in environment
+# Auto-generate APP_KEY if missing in environment & .env
 if [ -z "${APP_KEY:-}" ]; then
     php artisan key:generate --force --no-interaction || true
 fi
@@ -53,7 +62,7 @@ if [ "${DB_SEED_ON_BOOT:-true}" = "true" ]; then
     php artisan db:seed --force --no-interaction || true
 fi
 
-# Optimize Laravel for production
+# Optimize Laravel caches
 if [ "${APP_ENV:-production}" = "production" ]; then
     php artisan config:cache --no-interaction || true
     php artisan route:cache --no-interaction || true
