@@ -159,10 +159,169 @@
             .sidebar-nav-link { padding: 8px 12px; font-size: 0.74rem; }
             .admin-sidebar-logo { margin-bottom: 12px; padding-bottom: 10px; }
         }
-        @media (max-width: 480px) {
-            .admin-header-bar { padding: 12px 14px; }
-            .table-custom-dark th, .table-custom-dark td { padding: 8px 10px; font-size: 0.75rem; }
-            .panel-header-title { font-size: 1rem; }
+        /* Custom Animated Delete Confirmation Modal */
+        .delete-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(3, 7, 18, 0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            padding: 18px;
+            opacity: 0;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .delete-modal-backdrop.show {
+            opacity: 1;
+        }
+
+        .delete-modal-card {
+            background: radial-gradient(130% 120% at 50% 0%, #172133 0%, #0A111E 65%, #050B14 100%);
+            border: 1.5px solid rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 50px rgba(239, 68, 68, 0.22), 0 25px 60px -12px rgba(0, 0, 0, 0.9);
+            border-radius: 24px;
+            padding: 34px 28px 26px;
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.8) translateY(24px);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .delete-modal-backdrop.show .delete-modal-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .delete-icon-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-icon-glow {
+            position: absolute;
+            inset: -6px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.55) 0%, rgba(239, 68, 68, 0) 70%);
+            border-radius: 50%;
+            animation: pulseRedGlow 2.2s infinite ease-in-out;
+        }
+
+        .delete-icon-circle {
+            position: relative;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, rgba(239, 68, 68, 0.22), rgba(153, 27, 27, 0.45));
+            border: 2px solid rgba(239, 68, 68, 0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 16px rgba(239, 68, 68, 0.35);
+            animation: bounceTrashIcon 2.6s infinite ease-in-out;
+        }
+
+        .delete-icon-symbol {
+            font-size: 2rem;
+            color: #EF4444;
+            filter: drop-shadow(0 2px 8px rgba(239, 68, 68, 0.6));
+        }
+
+        @keyframes pulseRedGlow {
+            0%, 100% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.18); opacity: 0.95; }
+        }
+
+        @keyframes bounceTrashIcon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .delete-modal-title {
+            font-family: 'Cinzel', serif, Georgia;
+            color: #FFFFFF;
+            font-size: 1.22rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .delete-modal-description {
+            color: #94A3B8;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            margin-bottom: 24px;
+            padding: 0 6px;
+        }
+
+        .delete-modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn-delete-cancel {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: #E2E8F0;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 12px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-delete-cancel:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #FFFFFF;
+            transform: translateY(-1px);
+        }
+
+        .btn-delete-confirm {
+            flex: 1.2;
+            background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+            border: 1px solid #EF4444;
+            box-shadow: 0 4px 18px rgba(220, 38, 38, 0.4);
+            color: #FFFFFF;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            padding: 12px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-delete-confirm:hover {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            box-shadow: 0 6px 24px rgba(239, 68, 68, 0.65);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .btn-delete-confirm:active {
+            transform: translateY(0) scale(0.98);
         }
     </style>
 </head>
@@ -215,11 +374,6 @@
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('guidebook', this)">
                     <span>GUIDEBOOK PDF</span>
                     <span class="badge-count">{{ \App\Models\GuidebookLead::count() }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('videomanager', this)">
-                    <span>⚡ 2GB VIDEO UPLOADER</span>
                 </a>
             </li>
             <li>
@@ -770,110 +924,7 @@
                 </div>
             </div>
 
-            <!-- 7. 2GB LARGE VIDEO UPLOADER & VAULT TAB -->
-            <div class="admin-tab-pane" id="tab-videomanager">
-                <div class="card-dark-panel">
-                    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
-                        <div>
-                            <h2 class="panel-header-title">⚡ 2GB LARGE VIDEO UPLOADER & MEDIA VAULT</h2>
-                            <p class="panel-header-sub">Upload large 4K / 1080p videos up to 2GB with resilient chunking, auto-retry, and 100% lossless original quality.</p>
-                        </div>
-                        <span style="background:rgba(212,175,55,0.15);color:#D4AF37;border:1px solid rgba(212,175,55,0.35);padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:800;">
-                            <i class="fas fa-shield-halved" style="margin-right:4px;"></i> LOSSLESS CHUNKED ENGINE (MAX 2GB)
-                        </span>
-                    </div>
-
-                    <!-- Drag & Drop Zone -->
-                    <div id="vmDropZone" onclick="document.getElementById('vmFileInput').click()"
-                         style="border:2.5px dashed rgba(212,175,55,0.45);border-radius:18px;padding:42px 24px;text-align:center;cursor:pointer;transition:all 0.3s;background:rgba(212,175,55,0.03);"
-                         onmouseover="this.style.borderColor='#D4AF37';this.style.background='rgba(212,175,55,0.08)';"
-                         onmouseout="this.style.borderColor='rgba(212,175,55,0.45)';this.style.background='rgba(212,175,55,0.03)';">
-                        <i class="fas fa-cloud-arrow-up" style="font-size:2.8rem;color:#D4AF37;margin-bottom:12px;display:block;"></i>
-                        <div style="color:#FFFFFF;font-size:1.1rem;font-weight:800;letter-spacing:0.03em;margin-bottom:6px;">
-                            DRAG & DROP LARGE VIDEO HERE OR CLICK TO BROWSE
-                        </div>
-                        <div style="color:#94A3B8;font-size:0.85rem;margin-bottom:12px;">
-                            Supports MP4, MOV, WebM, MKV, AVI • Up to <strong>2.0 GB</strong> per video
-                        </div>
-                        <div style="display:inline-flex;align-items:center;gap:14px;background:rgba(5,11,20,0.6);padding:6px 16px;border-radius:20px;border:1px solid rgba(212,175,55,0.25);font-size:0.75rem;color:#D4AF37;">
-                            <span>✓ Zero Compression (Original Lossless Quality)</span>
-                            <span>•</span>
-                            <span>✓ Fast 5MB Chunk Streaming</span>
-                            <span>•</span>
-                            <span>✓ Auto-Resume & Retry</span>
-                        </div>
-                        <input type="file" id="vmFileInput" accept="video/mp4,video/quicktime,video/webm,video/x-matroska,video/avi,.mp4,.mov,.webm,.mkv,.avi" style="display:none;" onchange="handleVaultVideoSelected(event)">
-                    </div>
-
-                    <!-- Live Progress Panel -->
-                    <div id="vmProgressContainer" style="display:none;background:#050B14;border:1.5px solid rgba(212,175,55,0.4);border-radius:16px;padding:24px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,0.6);">
-                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                            <div style="display:flex;align-items:center;gap:10px;">
-                                <span style="width:10px;height:10px;background:#D4AF37;border-radius:50%;display:inline-block;animation:pulse 1s infinite;"></span>
-                                <span id="vmProgressFilename" style="color:#FFFFFF;font-weight:800;font-size:0.92rem;word-break:break-all;">video_file.mp4</span>
-                            </div>
-                            <span id="vmProgressPercentText" style="color:#D4AF37;font-weight:900;font-size:1.1rem;">0%</span>
-                        </div>
-
-                        <!-- Progress Bar Track -->
-                        <div style="background:#0a1628;border-radius:10px;height:12px;overflow:hidden;border:1px solid rgba(212,175,55,0.2);position:relative;">
-                            <div id="vmProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg, #D4AF37, #FFD700, #F4C430);transition:width 0.25s ease;border-radius:10px;box-shadow:0 0 12px rgba(212,175,55,0.6);"></div>
-                        </div>
-
-                        <!-- Metrics Row (Speed, Transferred, ETA) -->
-                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:12px;font-size:0.8rem;color:#94A3B8;">
-                            <div style="display:flex;gap:16px;flex-wrap:wrap;">
-                                <span><i class="fas fa-gauge-high" style="color:#D4AF37;margin-right:5px;"></i> <span id="vmSpeedDisplay">0.0 MB/s</span></span>
-                                <span><i class="fas fa-database" style="color:#D4AF37;margin-right:5px;"></i> <span id="vmTransferredDisplay">0 MB / 0 MB</span></span>
-                                <span><i class="fas fa-hourglass-half" style="color:#D4AF37;margin-right:5px;"></i> <span id="vmEtaDisplay">Calculating...</span></span>
-                            </div>
-                            <button type="button" onclick="cancelCurrentUpload()" style="background:rgba(255,59,48,0.15);border:1px solid rgba(255,59,48,0.4);color:#FF3B30;padding:4px 12px;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;">
-                                <i class="fas fa-xmark" style="margin-right:4px;"></i> CANCEL UPLOAD
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Post-Upload Success Card with Live Player & Quick Actions -->
-                    <div id="vmSuccessCard" style="display:none;background:#050B14;border:1.5px solid #25D366;border-radius:18px;padding:24px;margin-top:20px;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-                            <div style="color:#25D366;font-weight:800;font-size:1rem;display:flex;align-items:center;gap:8px;">
-                                <i class="fas fa-circle-check" style="font-size:1.2rem;"></i> VIDEO UPLOADED SUCCESSFULLY (100% ORIGINAL QUALITY)
-                            </div>
-                            <button onclick="resetVaultUploader()" class="btn-whatsapp-outline" style="border-color:#D4AF37;color:#D4AF37;padding:4px 12px;font-size:0.75rem;">
-                                <i class="fas fa-plus" style="margin-right:4px;"></i> UPLOAD ANOTHER VIDEO
-                            </button>
-                        </div>
-
-                        <!-- Live Video Preview Player -->
-                        <div style="background:#000;border-radius:12px;overflow:hidden;margin-bottom:16px;max-height:360px;display:flex;justify-content:center;">
-                            <video id="vmPreviewPlayer" controls playsinline style="max-height:360px;width:100%;border-radius:12px;display:block;"></video>
-                        </div>
-
-                        <!-- Direct URL Bar -->
-                        <div style="display:flex;gap:8px;margin-bottom:16px;">
-                            <input type="text" id="vmUploadedUrl" readonly class="input-dark" style="flex:1;font-family:monospace;font-size:0.85rem;color:#D4AF37;">
-                            <button type="button" class="btn-gold-pill" onclick="copyUploadedUrl()">
-                                <i class="fas fa-copy" style="margin-right:6px;"></i> COPY URL
-                            </button>
-                        </div>
-
-                        <!-- Quick Assign Buttons -->
-                        <div style="display:flex;flex-wrap:wrap;gap:10px;padding-top:14px;border-top:1px solid rgba(212,175,55,0.2);">
-                            <button type="button" class="btn-gold-submit" style="width:auto;padding:8px 18px;font-size:0.8rem;" onclick="assignVaultVideoAsIntro()">
-                                <i class="fas fa-star" style="margin-right:6px;"></i> SET AS HERO INTRO VIDEO
-                            </button>
-                            <button type="button" class="btn-whatsapp-outline" style="border-color:#D4AF37;color:#D4AF37;padding:8px 18px;font-size:0.8rem;" onclick="openProjectWithUploadedVideo()">
-                                <i class="fas fa-building" style="margin-right:6px;"></i> CREATE COMPLETED PROJECT WITH THIS VIDEO
-                            </button>
-                            <button type="button" class="btn-whatsapp-outline" style="border-color:#D4AF37;color:#D4AF37;padding:8px 18px;font-size:0.8rem;" onclick="openReviewWithUploadedVideo()">
-                                <i class="fas fa-comments" style="margin-right:6px;"></i> CREATE CLIENT REVIEW WITH THIS VIDEO
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 8. INTRO VIDEO TAB -->
+            <!-- 7. INTRO VIDEO TAB -->
             <div class="admin-tab-pane" id="tab-intro">
                 <div class="card-dark-panel">
                     <h2 class="panel-header-title">WEBSITE INTRO VIDEO MANAGEMENT</h2>
@@ -1192,23 +1243,6 @@
             </div>
         </form>
 
-        <!-- 5. VIDEO UPLOAD FORM (UP TO 2GB) -->
-        <form id="formVideo" style="display:none;" onsubmit="submitLocalVideo(event)">
-            <div style="display:flex;flex-direction:column;gap:14px;">
-                <div id="modalVideoDropZone" onclick="document.getElementById('v_file').click()"
-                     style="border:2px dashed rgba(212,175,55,0.4);border-radius:14px;padding:28px 18px;text-align:center;cursor:pointer;transition:all 0.3s;background:rgba(212,175,55,0.03);"
-                     onmouseover="this.style.borderColor='#D4AF37';this.style.background='rgba(212,175,55,0.07)';"
-                     onmouseout="this.style.borderColor='rgba(212,175,55,0.4)';this.style.background='rgba(212,175,55,0.03)';">
-                    <i class="fas fa-video" style="font-size:2.2rem;color:#D4AF37;margin-bottom:8px;display:block;"></i>
-                    <div id="v_file_selected_text" style="color:#fff;font-weight:700;margin-bottom:4px;font-size:0.95rem;">Click or drag video file here</div>
-                    <div style="color:#64748b;font-size:0.78rem;">Supports MP4, MOV, WebM, MKV • Max <strong>2.0 GB</strong> (Lossless Chunked Stream)</div>
-                    <input id="v_file" type="file" accept="video/mp4,video/quicktime,video/webm,video/x-matroska,video/avi,.mp4,.mov,.webm,.mkv,.avi" style="display:none;" onchange="onModalVideoFileSelected(event)">
-                </div>
-                <div id="videoModalError" style="color:#FF3B30;font-size:0.8rem;display:none;"></div>
-                <button type="submit" class="btn-gold-submit" style="width:100%;padding:14px;">⬆ UPLOAD VIDEO (MAX 2GB)</button>
-            </div>
-        </form>
-
         <!-- Live Uploading Indicator with Real-Time Progress -->
         <div id="uploadingIndicator" style="display:none;padding:16px 0;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -1232,6 +1266,35 @@
     </div>
 </div>
 
+<!-- Custom Animated Delete Confirmation Modal -->
+<div id="customDeleteModal" class="delete-modal-backdrop" onclick="closeDeleteModalOnBackdrop(event)">
+    <div class="delete-modal-card" id="deleteModalCard">
+        <!-- Glowing Floating Trash Icon -->
+        <div class="delete-icon-wrapper">
+            <div class="delete-icon-glow"></div>
+            <div class="delete-icon-circle">
+                <i class="fas fa-trash-can delete-icon-symbol"></i>
+            </div>
+        </div>
+
+        <!-- Title & Description -->
+        <h3 class="delete-modal-title" id="deleteModalTitle">CONFIRM PERMANENT DELETE</h3>
+        <p class="delete-modal-description" id="deleteModalMessage">
+            Are you sure you want to permanently delete this item? This action is permanent and will remove all associated files and data.
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="delete-modal-actions">
+            <button type="button" class="btn-delete-cancel" onclick="closeDeleteModal(false)">
+                <i class="fas fa-xmark" style="margin-right:6px;"></i> Cancel
+            </button>
+            <button type="button" class="btn-delete-confirm" id="btnConfirmDelete">
+                <i class="fas fa-trash-arrow-up" style="margin-right:6px;"></i> Yes, Delete
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Hidden Background Video & Canvas Elements for Auto Frame Extraction -->
 <video id="hiddenVideoExtractor" crossOrigin="anonymous" muted playsinline style="display:none;"></video>
 <canvas id="hiddenCanvasExtractor" style="display:none;"></canvas>
@@ -1240,12 +1303,78 @@
 const CSRF = () => document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
 function switchAdminTab(tabKey, linkEl) {
+    if (!linkEl) {
+        linkEl = document.querySelector(`.sidebar-nav-link[onclick*="'${tabKey}'"]`) || 
+                 document.querySelector(`.sidebar-nav-link[onclick*='"${tabKey}"']`);
+    }
     document.querySelectorAll('.sidebar-nav-link').forEach(el => el.classList.remove('active'));
     if (linkEl) linkEl.classList.add('active');
     document.querySelectorAll('.admin-tab-pane').forEach(pane => pane.classList.remove('active'));
     const targetPane = document.getElementById('tab-' + tabKey);
     if (targetPane) targetPane.classList.add('active');
+
+    try {
+        localStorage.setItem('maha_admin_active_tab', tabKey);
+        history.replaceState(null, null, '#' + tabKey);
+    } catch(e) {}
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    let savedTab = window.location.hash ? window.location.hash.replace('#', '') : null;
+    if (!savedTab) {
+        savedTab = localStorage.getItem('maha_admin_active_tab');
+    }
+    if (savedTab && document.getElementById('tab-' + savedTab)) {
+        switchAdminTab(savedTab);
+    }
+});
+
+// ── CUSTOM ANIMATED DELETE CONFIRMATION MODAL ENGINE ──────────────
+let deleteModalResolve = null;
+
+function showDeleteConfirmModal(options = {}) {
+    const title = options.title || 'CONFIRM PERMANENT DELETE';
+    const message = options.message || 'Are you sure you want to permanently delete this item? This action is permanent and cannot be undone.';
+    const confirmText = options.confirmText || 'Yes, Delete';
+
+    document.getElementById('deleteModalTitle').textContent = title;
+    document.getElementById('deleteModalMessage').textContent = message;
+    const confirmBtn = document.getElementById('btnConfirmDelete');
+    confirmBtn.innerHTML = `<i class="fas fa-trash-arrow-up" style="margin-right:6px;"></i> ${confirmText}`;
+
+    const modal = document.getElementById('customDeleteModal');
+    modal.style.display = 'flex';
+    // Trigger CSS scale/fade animation
+    requestAnimationFrame(() => {
+        modal.classList.add('show');
+    });
+
+    return new Promise((resolve) => {
+        deleteModalResolve = resolve;
+    });
+}
+
+function closeDeleteModal(result = false) {
+    const modal = document.getElementById('customDeleteModal');
+    modal.classList.remove('show');
+    setTimeout(() => {
+        modal.style.display = 'none';
+        if (deleteModalResolve) {
+            deleteModalResolve(result);
+            deleteModalResolve = null;
+        }
+    }, 280);
+}
+
+function closeDeleteModalOnBackdrop(e) {
+    if (e.target.id === 'customDeleteModal') {
+        closeDeleteModal(false);
+    }
+}
+
+document.getElementById('btnConfirmDelete').addEventListener('click', function() {
+    closeDeleteModal(true);
+});
 
 // ── ROBUST DELETE ITEM ENGINE ─────────────────────────────────────
 async function deleteItem(event, endpoint, id, btnEl) {
@@ -1253,7 +1382,22 @@ async function deleteItem(event, endpoint, id, btnEl) {
         event.stopPropagation();
         event.preventDefault();
     }
-    if (!confirm('Are you sure you want to permanently delete this item?')) return;
+
+    const entityNames = {
+        'testimonials': 'Client Video Review',
+        'projects': 'Completed Project',
+        'packages': 'Construction Package',
+        'partners': 'Banking / Vendor Partner',
+        'leads': 'Lead Inquiry'
+    };
+    const entityName = entityNames[endpoint] || 'Item';
+
+    const confirmed = await showDeleteConfirmModal({
+        title: `DELETE ${entityName.toUpperCase()}?`,
+        message: `Are you sure you want to permanently delete this ${entityName}? This action is immediate and will remove all associated files and data.`,
+        confirmText: 'Yes, Delete Permanently'
+    });
+    if (!confirmed) return;
 
     const originalHtml = btnEl ? btnEl.innerHTML : '';
     if (btnEl) {
@@ -1284,15 +1428,16 @@ async function deleteItem(event, endpoint, id, btnEl) {
             throw new Error(errData.message || 'Server error (' + res.status + ')');
         }
 
-        // Instant smooth visual card removal
+        // Smooth visual card removal with shrink + blur animation
         const card = btnEl ? (btnEl.closest('.project-video-card') || btnEl.closest('.package-card') || btnEl.closest('tr')) : null;
         if (card) {
-            card.style.transition = 'all 0.35s ease';
-            card.style.transform = 'scale(0.85)';
+            card.style.transition = 'all 0.38s cubic-bezier(0.4, 0, 0.2, 1)';
+            card.style.transform = 'scale(0.85) translateY(-8px)';
             card.style.opacity = '0';
+            card.style.filter = 'blur(4px)';
             setTimeout(() => {
                 card.remove();
-            }, 350);
+            }, 380);
         } else {
             location.reload();
         }
@@ -1312,7 +1457,12 @@ async function deleteYouTubeVideoItem(event, ytId, btnEl) {
         event.stopPropagation();
         event.preventDefault();
     }
-    if (!confirm('Remove this YouTube video from the website slider?')) return;
+    const confirmed = await showDeleteConfirmModal({
+        title: 'REMOVE YOUTUBE VIDEO?',
+        message: 'Remove this YouTube video from the website homepage video carousel? The website will update immediately.',
+        confirmText: 'Yes, Remove Video'
+    });
+    if (!confirmed) return;
 
     const originalHtml = btnEl ? btnEl.innerHTML : '';
     if (btnEl) {
@@ -1345,9 +1495,10 @@ async function deleteYouTubeVideoItem(event, ytId, btnEl) {
 
         const card = btnEl ? btnEl.closest('.project-video-card') : null;
         if (card) {
-            card.style.transition = 'all 0.35s ease';
-            card.style.transform = 'scale(0.85)';
+            card.style.transition = 'all 0.38s cubic-bezier(0.4, 0, 0.2, 1)';
+            card.style.transform = 'scale(0.85) translateY(-8px)';
             card.style.opacity = '0';
+            card.style.filter = 'blur(4px)';
             setTimeout(() => {
                 card.remove();
                 const grid = document.getElementById('ytVideosGrid');
@@ -1356,7 +1507,7 @@ async function deleteYouTubeVideoItem(event, ytId, btnEl) {
                 if (gridCount) gridCount.textContent = remaining;
                 const sidebarCount = document.getElementById('sidebarYtCount');
                 if (sidebarCount) sidebarCount.textContent = remaining;
-            }, 350);
+            }, 380);
         } else {
             location.reload();
         }
@@ -1376,7 +1527,12 @@ async function deleteGuidebookLead(event, id, btnEl) {
         event.stopPropagation();
         event.preventDefault();
     }
-    if (!confirm('Delete this guidebook reader lead?')) return;
+    const confirmed = await showDeleteConfirmModal({
+        title: 'DELETE GUIDEBOOK INQUIRY?',
+        message: 'Are you sure you want to permanently delete this reader guidebook lead inquiry?',
+        confirmText: 'Yes, Delete Lead'
+    });
+    if (!confirmed) return;
 
     const originalHtml = btnEl ? btnEl.innerHTML : '';
     if (btnEl) {
@@ -1409,9 +1565,10 @@ async function deleteGuidebookLead(event, id, btnEl) {
 
         const row = btnEl ? btnEl.closest('tr') : null;
         if (row) {
-            row.style.transition = 'all 0.3s ease';
+            row.style.transition = 'all 0.35s ease';
             row.style.opacity = '0';
-            setTimeout(() => row.remove(), 300);
+            row.style.transform = 'scale(0.9)';
+            setTimeout(() => row.remove(), 350);
         }
     } catch (err) {
         console.error('Delete error:', err);
@@ -1429,11 +1586,11 @@ let autoExtractedTestimonialBlob = null;
 let autoExtractedProjectBlob     = null;
 
 function resetAllForms() {
-    ['formTestimonial','formProject','formPackage','formPartner','formVideo'].forEach(id => {
+    ['formTestimonial','formProject','formPackage','formPartner'].forEach(id => {
         const f = document.getElementById(id);
         if (f) { f.style.display = 'none'; f.reset(); }
     });
-    ['modalError','projectModalError','packageModalError','partnerModalError','videoModalError'].forEach(id => {
+    ['modalError','projectModalError','packageModalError','partnerModalError'].forEach(id => {
         const el = document.getElementById(id);
         if (el) { el.style.display = 'none'; el.textContent = ''; }
     });
@@ -1461,10 +1618,10 @@ function openUploadModal(type) {
         project:     ['UPLOAD COMPLETED PROJECT', 'Add a luxury project walkthrough video & cover image', 'formProject', 'btnSubmitProject', '💾 SAVE PROJECT'],
         package:     ['ADD NEW CONSTRUCTION PACKAGE', 'Create a per sq.ft construction package', 'formPackage', 'btnSubmitPackage', '💾 SAVE PACKAGE'],
         partner:     ['ADD NEW PARTNER / VENDOR', 'Add a banking partner for loans or a certified material vendor', 'formPartner', 'btnSubmitPartner', '💾 SAVE PARTNER'],
-        video:       ['UPLOAD LOCAL VIDEO', 'Upload a video file to the server', 'formVideo', null, '⬆ UPLOAD VIDEO'],
     };
 
     const cfg = titles[type];
+    if (!cfg) return;
     document.getElementById('modalTitle').textContent = cfg[0];
     document.getElementById('modalSub').textContent   = cfg[1];
     document.getElementById(cfg[2]).style.display      = 'block';
@@ -2049,6 +2206,7 @@ async function submitTestimonial(e) {
         });
         if (!res.ok) { const d = await res.json().catch(()=>{}); throw new Error(d?.message || 'Save failed'); }
         closeUploadModal();
+        switchAdminTab('reviews');
         location.reload();
     } catch (err) {
         indicator.style.display = 'none';
@@ -2123,6 +2281,7 @@ async function submitProject(e) {
         });
         if (!res.ok) { const d = await res.json().catch(()=>{}); throw new Error(d?.message || 'Save failed'); }
         closeUploadModal();
+        switchAdminTab('projects');
         location.reload();
     } catch (err) {
         indicator.style.display = 'none';
@@ -2169,6 +2328,7 @@ async function submitPackage(e) {
         });
         if (!res.ok) { const d = await res.json().catch(()=>{}); throw new Error(d?.message || 'Save failed'); }
         closeUploadModal();
+        switchAdminTab('packages');
         location.reload();
     } catch (err) {
         errEl.textContent = '❌ ' + err.message;
@@ -2242,144 +2402,13 @@ async function submitPartner(e) {
 
         if (!res.ok) { const d = await res.json().catch(()=>{}); throw new Error(d?.message || 'Save failed (' + res.status + ')'); }
         closeUploadModal();
+        switchAdminTab('partners');
         location.reload();
     } catch (err) {
         document.getElementById('uploadingIndicator').style.display = 'none';
         document.getElementById('formPartner').style.display = 'block';
         errEl.textContent = '❌ ' + err.message;
         errEl.style.display = 'block';
-    }
-}
-
-// ── SUBMIT LOCAL VIDEO (UP TO 2GB) ────────────────────────────────
-async function submitLocalVideo(e) {
-    e.preventDefault();
-    const errEl = document.getElementById('videoModalError');
-    errEl.style.display = 'none';
-    const videoFile = document.getElementById('v_file').files[0];
-    if (!videoFile) { errEl.textContent = 'Please select a video file.'; errEl.style.display='block'; return; }
-    
-    const indicator = document.getElementById('uploadingIndicator');
-    indicator.style.display = 'block';
-    document.getElementById('modalUploadTitle').textContent = `UPLOADING VIDEO (${formatBytes(videoFile.size)})...`;
-    document.getElementById('formVideo').style.display = 'none';
-
-    try {
-        const url = await uploadFile(videoFile, videoFile.name, updateModalProgress);
-        closeUploadModal();
-        alert('✅ Video uploaded successfully with 100% original quality!\nURL: ' + url);
-        location.reload();
-    } catch (err) {
-        indicator.style.display = 'none';
-        document.getElementById('formVideo').style.display = 'block';
-        errEl.textContent = '❌ ' + err.message;
-        errEl.style.display = 'block';
-    }
-}
-
-// ── 2GB LARGE VIDEO VAULT UPLOADER ────────────────────────────────
-let lastVaultUploadedUrl = '';
-
-async function handleVaultVideoSelected(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const progressContainer = document.getElementById('vmProgressContainer');
-    const filenameEl        = document.getElementById('vmProgressFilename');
-    const pctText           = document.getElementById('vmProgressPercentText');
-    const bar               = document.getElementById('vmProgressBar');
-    const speedEl           = document.getElementById('vmSpeedDisplay');
-    const transferredEl     = document.getElementById('vmTransferredDisplay');
-    const etaEl             = document.getElementById('vmEtaDisplay');
-    const successCard       = document.getElementById('vmSuccessCard');
-    const dropZone          = document.getElementById('vmDropZone');
-
-    successCard.style.display = 'none';
-    progressContainer.style.display = 'block';
-    dropZone.style.display = 'none';
-    filenameEl.textContent = `${file.name} (${formatBytes(file.size)})`;
-
-    try {
-        const result = await uploadFileWithChunks(file, {
-            customFilename: file.name,
-            onProgress: (p) => {
-                bar.style.width = (p.percent || 0) + '%';
-                pctText.textContent = (p.percent || 0) + '%';
-                speedEl.textContent = p.speedFormatted || '0 MB/s';
-                transferredEl.textContent = `${p.loadedFormatted || '0 MB'} / ${p.totalFormatted || '0 MB'}`;
-                etaEl.textContent = p.status === 'assembling' ? 'Assembling stream...' : (p.etaFormatted ? `ETA: ${p.etaFormatted}` : '--');
-            }
-        });
-
-        lastVaultUploadedUrl = result.url;
-        progressContainer.style.display = 'none';
-        successCard.style.display = 'block';
-
-        const player = document.getElementById('vmPreviewPlayer');
-        player.src = result.url;
-        player.load();
-
-        document.getElementById('vmUploadedUrl').value = result.url;
-    } catch (err) {
-        progressContainer.style.display = 'none';
-        dropZone.style.display = 'block';
-        alert('❌ Upload failed: ' + err.message);
-    }
-}
-
-function resetVaultUploader() {
-    document.getElementById('vmSuccessCard').style.display = 'none';
-    document.getElementById('vmDropZone').style.display = 'block';
-    document.getElementById('vmFileInput').value = '';
-    const player = document.getElementById('vmPreviewPlayer');
-    player.pause();
-    player.removeAttribute('src');
-    player.load();
-}
-
-function copyUploadedUrl() {
-    const input = document.getElementById('vmUploadedUrl');
-    input.select();
-    input.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(input.value).then(() => {
-        alert('📋 Video URL copied to clipboard:\n' + input.value);
-    }).catch(() => {
-        document.execCommand('copy');
-        alert('📋 Video URL copied to clipboard:\n' + input.value);
-    });
-}
-
-async function assignVaultVideoAsIntro() {
-    if (!lastVaultUploadedUrl) return;
-    if (!confirm('Set this video as the website Hero / Engineer Intro video?')) return;
-    try {
-        await saveIntroVideoSetting(lastVaultUploadedUrl);
-        alert('✅ Video successfully set as the Website Intro Video!');
-        switchAdminTab('intro', document.querySelector('.sidebar-nav-link[onclick*="intro"]'));
-        const display = document.getElementById('activeVideoDisplay');
-        if (display) display.textContent = lastVaultUploadedUrl;
-    } catch (err) {
-        alert('❌ Failed to update intro video: ' + err.message);
-    }
-}
-
-function openProjectWithUploadedVideo() {
-    if (!lastVaultUploadedUrl) return;
-    openUploadModal('project');
-    const pVideoUrl = document.getElementById('p_video_url');
-    if (pVideoUrl) {
-        pVideoUrl.value = lastVaultUploadedUrl;
-        onProjectVideoUrlChanged(lastVaultUploadedUrl);
-    }
-}
-
-function openReviewWithUploadedVideo() {
-    if (!lastVaultUploadedUrl) return;
-    openUploadModal('testimonial');
-    const tVideoUrl = document.getElementById('t_video_url');
-    if (tVideoUrl) {
-        tVideoUrl.value = lastVaultUploadedUrl;
-        onTestimonialVideoUrlChanged(lastVaultUploadedUrl);
     }
 }
 
@@ -2600,7 +2629,12 @@ async function handleGuidebookUpload(event) {
 
 async function deleteGuidebookPdf(event, btnEl) {
     if (event) { event.stopPropagation(); event.preventDefault(); }
-    if (!confirm('Delete the active Guidebook PDF? This will reset it to the default.')) return;
+    const confirmed = await showDeleteConfirmModal({
+        title: 'RESET GUIDEBOOK PDF?',
+        message: 'Delete the custom active Guidebook PDF? The system will revert back to the default bundled baseline PDF.',
+        confirmText: 'Yes, Reset PDF'
+    });
+    if (!confirmed) return;
 
     const originalHtml = btnEl ? btnEl.innerHTML : '';
     if (btnEl) {
@@ -2616,7 +2650,8 @@ async function deleteGuidebookPdf(event, btnEl) {
             headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF() }
         });
         if (!res.ok) throw new Error('HTTP ' + res.status);
-        alert('✅ Guidebook PDF removed successfully. Page will reload.');
+        switchAdminTab('guidebook');
+        alert('✅ Guidebook PDF reset successfully. Page will reload.');
         location.reload();
     } catch (err) {
         alert('❌ Delete failed: ' + err.message);
@@ -2652,8 +2687,17 @@ async function handleIntroVideoUpload(event) {
         status.textContent = '💾 Saving setting...';
         await saveIntroVideoSetting(videoUrl);
         if (bar) bar.style.width = '100%';
-        status.textContent = '✅ Done! Reloading...';
-        setTimeout(() => location.reload(), 800);
+        status.textContent = '✅ Intro video updated successfully!';
+        
+        // Update display directly in the intro tab without switching to reviews
+        const activeDisp = document.getElementById('activeVideoDisplay');
+        if (activeDisp) activeDisp.textContent = videoUrl;
+        switchAdminTab('intro');
+
+        setTimeout(() => {
+            progress.style.display = 'none';
+            alert('✅ Hero / Intro Video updated successfully!');
+        }, 600);
     } catch (err) {
         progress.style.display = 'none';
         alert('❌ Upload failed: ' + err.message);
@@ -2665,8 +2709,11 @@ async function saveIntroVideoUrl() {
     if (!url) { alert('Please enter a video URL.'); return; }
     try {
         await saveIntroVideoSetting(url);
-        alert('✅ Intro video URL saved! Page will reload.');
-        location.reload();
+        const activeDisp = document.getElementById('activeVideoDisplay');
+        if (activeDisp) activeDisp.textContent = url;
+        document.getElementById('introVideoUrlInput').value = '';
+        switchAdminTab('intro');
+        alert('✅ Intro video URL saved successfully!');
     } catch (err) {
         alert('❌ Save failed: ' + err.message);
     }
@@ -2685,7 +2732,12 @@ async function saveIntroVideoSetting(url) {
 
 async function deleteIntroVideo(event, btnEl) {
     if (event) { event.stopPropagation(); event.preventDefault(); }
-    if (!confirm('Remove the active Intro Video? This will reset it to the default.')) return;
+    const confirmed = await showDeleteConfirmModal({
+        title: 'RESET INTRO VIDEO?',
+        message: 'Remove the active Hero / Engineer Intro video? The website will revert back to the default intro video asset.',
+        confirmText: 'Yes, Reset Video'
+    });
+    if (!confirmed) return;
 
     const originalHtml = btnEl ? btnEl.innerHTML : '';
     if (btnEl) {
@@ -2701,8 +2753,10 @@ async function deleteIntroVideo(event, btnEl) {
             headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF() }
         });
         if (!res.ok) throw new Error('HTTP ' + res.status);
-        alert('✅ Intro video removed. Page will reload.');
-        location.reload();
+        const activeDisp = document.getElementById('activeVideoDisplay');
+        if (activeDisp) activeDisp.textContent = 'None (Using Default)';
+        switchAdminTab('intro');
+        alert('✅ Intro video reset successfully.');
     } catch (err) {
         alert('❌ Delete failed: ' + err.message);
         if (btnEl) {

@@ -12,15 +12,24 @@
 .env.local
 .env.staging
 
-# SQLite Database
+# SQLite Databases & Journals
 /database/database.sqlite
 /database/database.sqlite-journal
+/database/database.sqlite-wal
+/database/database.sqlite-shm
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+/public/uploads/.data/
 
 # Storage & Framework Cache
 /public/storage
 /storage/*.key
 /storage/app/*
 !/storage/app/public/.gitignore
+/storage/app/chunks/*
+!/storage/app/chunks/.gitkeep
 /storage/logs/*
 !/storage/logs/.gitignore
 /storage/framework/cache/*
@@ -33,6 +42,34 @@
 !/storage/framework/views/.gitignore
 /bootstrap/cache/*.php
 !/bootstrap/cache/.gitignore
+
+# Runtime Uploads (Ignore newly uploaded runtime media, keep tracked baseline assets)
+/public/uploads/*
+!/public/uploads/.gitkeep
+!/public/uploads/guidebook-cover.jpg
+!/public/uploads/1785792673_new book.pdf
+!/public/uploads/1785297043_new book.pdf
+!/public/uploads/1787728125_review_cover_1787728124835.jpg
+!/public/uploads/1787735521_STATE BANK OF INDIA.jpg
+!/public/uploads/1787735540_YES BANK.jpg
+!/public/uploads/1787735556_UCO BANK.jpg
+!/public/uploads/1787735574_INDIAN BANK.jpg
+!/public/uploads/1787735590_KOTAK MAHINDRA BANK.jpg
+!/public/uploads/1787735811_ICICI BANK.jpg
+!/public/uploads/1787735917_CANARA BANK.jpg
+!/public/uploads/1787736105_HDFC BANK.jpg
+!/public/uploads/1787736225_AXIS BANK.jpg
+!/public/uploads/1787736321_IDFC FIRST BANK.jpg
+!/public/uploads/1787736466_BANK OF INDIA.jpg
+!/public/uploads/1787736611_JSW STEEL.jpg
+!/public/uploads/1787736645_Asian Paint.jpg
+!/public/uploads/1787736662_KAJARIA TILES.jpg
+!/public/uploads/1787736679_RAMCO SUPERGRADE.jpg
+!/public/uploads/1787736833_PARRYWARE.jpg
+!/public/uploads/1787736849_NIPPON PAINT.jpg
+!/public/uploads/1787736869_JAQUAR.jpg
+!/public/uploads/1787737006_TATA TISCON.jpg
+!/public/uploads/1787737029_ULTRATECH CEMENT.jpg
 
 # PHPUnit & Testing Caches
 .phpunit.result.cache
@@ -51,6 +88,9 @@ auth.json
 # Large Raw Media Files
 *.mp4
 *.mov
+*.webm
+*.avi
+*.mkv
 
 # Logs & Debug
 npm-debug.log*

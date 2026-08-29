@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\MediaItem;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class MediaUploadController extends Controller
 {
@@ -27,19 +28,28 @@ class MediaUploadController extends Controller
         $originalName = $file->getClientOriginalName();
         $safeName     = preg_replace('/[^a-zA-Z0-9._-]/', '_', $originalName);
         $filename     = time() . '_' . $safeName;
+        $mimeType     = $file->getClientMimeType() ?: 'application/octet-stream';
 
-        $uploadDir = public_path('uploads');
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
+        $disk = config('filesystems.default', 'public');
+
+        if ($disk === 's3') {
+            $path = Storage::disk('s3')->putFileAs('uploads', $file, $filename, 'public');
+            $url  = Storage::disk('s3')->url($path);
+            $size = $file->getSize();
+        } else {
+            $uploadDir = public_path('uploads');
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+            $file->move($uploadDir, $filename);
+            $url  = '/uploads/' . $filename;
+            $size = file_exists($uploadDir . '/' . $filename) ? filesize($uploadDir . '/' . $filename) : 0;
         }
-        $file->move($uploadDir, $filename);
-
-        $url = '/uploads/' . $filename;
 
         $media = MediaItem::create([
             'filename' => $filename,
             'filepath' => $url,
-            'filetype' => $file->getClientMimeType() ?: 'application/octet-stream',
+            'filetype' => $mimeType,
         ]);
 
         return response()->json([
@@ -47,7 +57,7 @@ class MediaUploadController extends Controller
             'url'      => $url,
             'filename' => $filename,
             'media'    => $media,
-            'size'     => file_exists($uploadDir . '/' . $filename) ? filesize($uploadDir . '/' . $filename) : 0,
+            'size'     => $size,
         ], 201);
     }
 
@@ -136,7 +146,7 @@ class MediaUploadController extends Controller
         }
 
         // Sanitize final file name and preserve extension
-        $cleanName = preg_replace('/[^a-zA-Z0-9._-]/', '_', $rawFilename);
+        $cleanName     = preg_replace('/[^a-zA-Z0-9._-]/', '_', $rawFilename);
         $finalFilename = time() . '_' . $cleanName;
         $finalPath     = $uploadDir . DIRECTORY_SEPARATOR . $finalFilename;
 
@@ -178,7 +188,19 @@ class MediaUploadController extends Controller
 
         $finalSize = file_exists($finalPath) ? filesize($finalPath) : 0;
         $mimeType  = @mime_content_type($finalPath) ?: 'application/octet-stream';
-        $url       = '/uploads/' . $finalFilename;
+
+        $disk = config('filesystems.default', 'public');
+        if ($disk === 's3') {
+            $stream = fopen($finalPath, 'r');
+            Storage::disk('s3')->put('uploads/' . $finalFilename, $stream, 'public');
+            if (is_resource($stream)) {
+                fclose($stream);
+            }
+            $url = Storage::disk('s3')->url('uploads/' . $finalFilename);
+            @unlink($finalPath);
+        } else {
+            $url = '/uploads/' . $finalFilename;
+        }
 
         $media = MediaItem::create([
             'filename' => $finalFilename,
@@ -210,6 +232,35 @@ class MediaUploadController extends Controller
         }
 
         return response()->json(['success' => true, 'message' => 'Upload aborted and cleaned up']);
+    }
+
+    /**
+     * List all media items
+     */
+    public function listMedia()
+    {
+        return response()->json(MediaItem::orderBy('id', 'desc')->get());
+    }
+
+    /**
+     * Delete a media item and its physical file
+     */
+    public function deleteMedia($id)
+    {
+        $media = MediaItem::findOrFail($id);
+        
+        $localPath = public_path('uploads/' . $media->filename);
+        if (file_exists($localPath)) {
+            @unlink($localPath);
+        }
+
+        if (config('filesystems.default') === 's3') {
+            Storage::disk('s3')->delete('uploads/' . $media->filename);
+        }
+
+        $media->delete();
+
+        return response()->json(['success' => true, 'message' => 'Media item deleted successfully']);
     }
 
     /**

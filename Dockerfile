@@ -75,9 +75,11 @@ RUN dos2unix /var/www/html/docker-entrypoint.sh \
                 storage/app/chunks \
                 storage/logs \
                 public/uploads \
+                public/uploads_baseline \
                 bootstrap/cache \
                 database \
-    && chown -R www-data:www-data storage bootstrap/cache public/uploads database
+    && cp -rn public/uploads/* public/uploads_baseline/ 2>/dev/null || true \
+    && chown -R www-data:www-data storage bootstrap/cache public/uploads public/uploads_baseline database
 
 EXPOSE 80
 
