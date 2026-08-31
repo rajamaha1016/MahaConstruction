@@ -209,7 +209,7 @@
     <div class="container">
         <div style="text-align:center;">
             <span class="sec-tag">TURNKEY PACKAGES</span>
-            <h2 class="sec-title">CHOOSE THE RIGHT PACKAGE FOR YOUR CONSTRUCTION</h2>
+            <h2 class="sec-title">CHOOSE THE RIGHT PACKAGE FOR YOUR DREAM HOME</h2>
             <p class="sec-sub" style="margin:10px auto 0;">Clear turnkey pricing per sq.ft with 100% material transparency and registered engineer supervision.</p>
 
             <div class="tab-toggle-group">

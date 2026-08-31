@@ -57,6 +57,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
+  // --- Sticky Floating Navbar Scroll Effect ---
+  const navbar = document.getElementById('navbar');
+  if (navbar) {
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 20) {
+        navbar.classList.add('is-scrolled');
+      } else {
+        navbar.classList.remove('is-scrolled');
+      }
+    }, { passive: true });
+  }
+
   // --- Back to Top Floating Button ---
   const backToTopBtn = document.getElementById('backToTopBtn');
   if (backToTopBtn) {
