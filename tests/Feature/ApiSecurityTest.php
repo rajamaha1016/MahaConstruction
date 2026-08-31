@@ -43,8 +43,9 @@ class ApiSecurityTest extends TestCase
             'create gallery'    => ['POST', '/api/gallery'],
             'create blog'       => ['POST', '/api/blogs'],
             'create testimonial'=> ['POST', '/api/testimonials'],
-            'save setting'      => ['POST', '/api/settings'],
-            'read contact leads'=> ['GET', '/api/leads/contact'],
+            'save setting'          => ['POST', '/api/settings'],
+            'save contact settings' => ['POST', '/api/settings/contact'],
+            'read contact leads'    => ['GET', '/api/leads/contact'],
         ];
     }
 

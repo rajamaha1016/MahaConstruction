@@ -61,10 +61,10 @@
         <button class="float-btn chat-btn" data-open-quote title="Chat with Us">
             <i class="fas fa-comments" style="font-size:18px;"></i>
         </button>
-        <a href="https://wa.me/919488888758?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20luxury%20home." target="_blank" class="float-btn whatsapp-btn" title="WhatsApp Direct">
+        <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20luxury%20home." target="_blank" class="float-btn whatsapp-btn" title="WhatsApp Direct">
             <i class="fab fa-whatsapp" style="font-size:22px;"></i>
         </a>
-        <a href="tel:+919488888758" class="float-btn phone-btn" title="Call Us">
+        <a href="tel:+{{ $raw_phone }}" class="float-btn phone-btn" title="Call Us">
             <i class="fas fa-phone" style="font-size:18px;"></i>
         </a>
         <a href="{{ route('home') }}#home-builders-guide-section" class="float-btn quote-btn" title="The Home Builder's Guide">
@@ -130,11 +130,11 @@
                     <h4 class="footer-heading">CONTACT US</h4>
                     <div class="footer-contact-item">
                         <span class="contact-label">Office:</span>
-                        <span>+91 94888 88758 / Engr: +91 90959 29543</span>
+                        <span>{{ $company_phone }} @if(!empty($company_phone_sec)) / Engr: {{ $company_phone_sec }} @endif</span>
                     </div>
                     <div class="footer-contact-item">
                         <span class="contact-label">Email:</span>
-                        <span>Mahaconstructions2013@gmail.com</span>
+                        <span><a href="mailto:{{ $company_email }}" style="color:inherit;">{{ $company_email }}</a></span>
                     </div>
                     <div class="footer-contact-item">
                         <span class="contact-label">Web:</span>
@@ -142,7 +142,7 @@
                     </div>
                     <div class="footer-contact-item">
                         <span class="contact-label">Address:</span>
-                        <span>Tamilnomi complex, 1st floor, ICICI Bank Upstar, Near kottar police station, Nagercoil</span>
+                        <span>{{ $company_address }}</span>
                     </div>
                 </div>
             </div>

@@ -303,6 +303,35 @@ class ApiController extends Controller
         return response()->json($setting);
     }
 
+    public function saveContactSettings(Request $request)
+    {
+        $fields = [
+            'company_phone',
+            'company_phone_secondary',
+            'company_whatsapp',
+            'company_email',
+            'company_address',
+            'company_hours',
+            'company_branches',
+            'company_map_embed'
+        ];
+
+        foreach ($fields as $field) {
+            if ($request->has($field)) {
+                Setting::updateOrCreate(
+                    ['key' => $field],
+                    ['value' => $request->input($field, '')]
+                );
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Contact details & address saved successfully!',
+            'settings' => Setting::all()->keyBy('key')
+        ]);
+    }
+
     // --- CONTACT / LEADS ---
     public function submitContact(Request $request)
     {

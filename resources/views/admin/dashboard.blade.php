@@ -805,32 +805,49 @@
             <!-- 5. CONTACT DETAILS & ADDRESS TAB -->
             <div class="admin-tab-pane" id="tab-contact">
                 <div class="card-dark-panel">
-                    <h2 class="panel-header-title">HEAD OFFICE & CONTACT INFO</h2>
-                    <p class="panel-header-sub">Update phone numbers, Nagercoil office address, email & Google Maps link.</p>
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                        <div>
+                            <h2 class="panel-header-title">HEAD OFFICE & CONTACT INFO</h2>
+                            <p class="panel-header-sub">Update phone numbers, Nagercoil office address, email, branches & hours across the entire live website.</p>
+                        </div>
+                    </div>
 
-                    <form id="contactDetailsForm" class="quote-form-grid" style="margin-top:20px;">
+                    <form id="contactDetailsForm" onsubmit="saveContactSettings(event)" class="quote-form-grid" style="margin-top:24px;">
                         <div class="form-field">
                             <label>PRIMARY PHONE</label>
-                            <input type="text" value="+91 94888 88758" class="input-dark">
+                            <input type="text" id="cfg_company_phone" name="company_phone" value="{{ ($settings['company_phone'] ?? null)?->value ?? '+91 94888 88758' }}" placeholder="+91 94888 88758" class="input-dark" required>
                         </div>
                         <div class="form-field">
-                            <label>SECONDARY PHONE</label>
-                            <input type="text" value="+91 90959 29543" class="input-dark">
+                            <label>SECONDARY / ENGINEER PHONE</label>
+                            <input type="text" id="cfg_company_phone_secondary" name="company_phone_secondary" value="{{ ($settings['company_phone_secondary'] ?? null)?->value ?? '+91 90959 29543' }}" placeholder="+91 90959 29543" class="input-dark">
                         </div>
                         <div class="form-field">
                             <label>WHATSAPP NUMBER</label>
-                            <input type="text" value="+91 94888 88758" class="input-dark">
+                            <input type="text" id="cfg_company_whatsapp" name="company_whatsapp" value="{{ ($settings['company_whatsapp'] ?? null)?->value ?? '+91 94888 88758' }}" placeholder="+91 94888 88758" class="input-dark" required>
                         </div>
                         <div class="form-field">
                             <label>EMAIL ADDRESS</label>
-                            <input type="email" value="Mahaconstructions2013@gmail.com" class="input-dark">
+                            <input type="email" id="cfg_company_email" name="company_email" value="{{ ($settings['company_email'] ?? null)?->value ?? 'Mahaconstructions2013@gmail.com' }}" placeholder="Mahaconstructions2013@gmail.com" class="input-dark" required>
+                        </div>
+                        <div class="form-field">
+                            <label>WORKING / BUSINESS HOURS</label>
+                            <input type="text" id="cfg_company_hours" name="company_hours" value="{{ ($settings['company_hours'] ?? null)?->value ?? 'Monday - Saturday: 10:00 AM - 6:00 PM' }}" placeholder="Monday - Saturday: 10:00 AM - 6:00 PM" class="input-dark">
+                        </div>
+                        <div class="form-field">
+                            <label>BRANCH LOCATIONS (HERO BADGE)</label>
+                            <input type="text" id="cfg_company_branches" name="company_branches" value="{{ ($settings['company_branches'] ?? null)?->value ?? 'KANYAKUMARI, TIRUNELVELI, AND CHENNAI' }}" placeholder="KANYAKUMARI, TIRUNELVELI, AND CHENNAI" class="input-dark">
                         </div>
                         <div class="form-field full-width">
-                            <label>OFFICE ADDRESS</label>
-                            <input type="text" value="Tamilnomi complex, 1st floor, ICICI Bank Upstar, Near kottar police station, Nagercoil" class="input-dark">
+                            <label>HEAD OFFICE ADDRESS</label>
+                            <input type="text" id="cfg_company_address" name="company_address" value="{{ ($settings['company_address'] ?? null)?->value ?? 'Tamilnomi complex, 1st floor, ICICI Bank Upstar, Near kottar police station, Nagercoil' }}" placeholder="Head Office Address" class="input-dark" required>
                         </div>
+
+                        <div id="contactSettingsAlert" style="display:none;margin-top:14px;padding:12px 18px;border-radius:10px;font-size:0.85rem;font-weight:600;" class="full-width"></div>
+
                         <div class="form-field full-width" style="margin-top:12px;">
-                            <button type="button" class="btn-gold-submit" style="width:auto;padding:12px 28px;">SAVE CONTACT DETAILS</button>
+                            <button type="submit" id="btnSaveContactSettings" class="btn-gold-submit" style="width:auto;padding:12px 32px;display:inline-flex;align-items:center;gap:8px;">
+                                <i class="fas fa-floppy-disk"></i> SAVE CONTACT DETAILS
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -2588,6 +2605,70 @@ function renderYouTubeVideoGrid(videos) {
 function escapeHtml(str) {
     if (!str) return '';
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+// ── CONTACT DETAILS & ADDRESS SETTINGS ─────────────────────────────
+async function saveContactSettings(e) {
+    e.preventDefault();
+    const alertBox  = document.getElementById('contactSettingsAlert');
+    const saveBtn   = document.getElementById('btnSaveContactSettings');
+    const originalBtnHtml = saveBtn ? saveBtn.innerHTML : '';
+
+    const payload = {
+        company_phone:           document.getElementById('cfg_company_phone').value.trim(),
+        company_phone_secondary: document.getElementById('cfg_company_phone_secondary').value.trim(),
+        company_whatsapp:        document.getElementById('cfg_company_whatsapp').value.trim(),
+        company_email:           document.getElementById('cfg_company_email').value.trim(),
+        company_hours:           document.getElementById('cfg_company_hours').value.trim(),
+        company_branches:        document.getElementById('cfg_company_branches').value.trim(),
+        company_address:         document.getElementById('cfg_company_address').value.trim(),
+    };
+
+    if (alertBox) alertBox.style.display = 'none';
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SAVING CONTACT DETAILS...';
+        saveBtn.style.opacity = '0.75';
+    }
+
+    try {
+        const res = await fetch('/api/settings/contact', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'X-CSRF-TOKEN': CSRF(),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (!res.ok || !json.success) {
+            throw new Error(json.message || 'Failed to save contact details');
+        }
+
+        if (alertBox) {
+            alertBox.style.display = 'block';
+            alertBox.style.background = 'rgba(37,211,102,0.15)';
+            alertBox.style.border = '1px solid rgba(37,211,102,0.4)';
+            alertBox.style.color = '#25D366';
+            alertBox.innerHTML = '<i class="fas fa-circle-check" style="margin-right:6px;"></i> ' + json.message + ' (Reflected on live website)';
+        }
+    } catch (err) {
+        if (alertBox) {
+            alertBox.style.display = 'block';
+            alertBox.style.background = 'rgba(255,59,48,0.15)';
+            alertBox.style.border = '1px solid rgba(255,59,48,0.4)';
+            alertBox.style.color = '#FF3B30';
+            alertBox.innerHTML = '<i class="fas fa-triangle-exclamation" style="margin-right:6px;"></i> ' + err.message;
+        }
+    } finally {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalBtnHtml || '<i class="fas fa-floppy-disk"></i> SAVE CONTACT DETAILS';
+            saveBtn.style.opacity = '1';
+        }
+    }
 }
 
 // ── GUIDEBOOK PDF MANAGEMENT ──────────────────────────────────────

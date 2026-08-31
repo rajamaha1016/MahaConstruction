@@ -15,21 +15,27 @@
             <div>
                 <div style="margin-bottom:24px;">
                     <div style="font-size:0.75rem;font-weight:800;color:var(--gold);margin-bottom:4px;">OFFICE ADDRESS</div>
-                    <div style="font-size:0.95rem;color:#fff;line-height:1.6;">Tamilnomi complex, 1st floor, ICICI Bank Upstar, Near kottar police station, Nagercoil</div>
+                    <div style="font-size:0.95rem;color:#fff;line-height:1.6;">{{ $company_address }}</div>
                 </div>
                 <div style="margin-bottom:24px;">
                     <div style="font-size:0.75rem;font-weight:800;color:var(--gold);margin-bottom:4px;">DIAL PHONE</div>
-                    <div style="font-size:0.95rem;color:#fff;"><a href="tel:+919488888758" style="color:var(--gold);font-weight:800;">+91 94888 88758</a></div>
+                    <div style="font-size:0.95rem;color:#fff;">
+                        <a href="tel:+{{ $raw_phone }}" style="color:var(--gold);font-weight:800;">{{ $company_phone }}</a>
+                        @if(!empty($company_phone_sec))
+                            <span style="color:var(--text-muted);margin:0 6px;">|</span>
+                            <a href="tel:+{{ preg_replace('/[^0-9]/', '', $company_phone_sec) }}" style="color:var(--text-cream);font-size:0.88rem;">{{ $company_phone_sec }}</a>
+                        @endif
+                    </div>
                 </div>
                 <div style="margin-bottom:24px;">
                     <div style="font-size:0.75rem;font-weight:800;color:var(--gold);margin-bottom:4px;">EMAIL</div>
-                    <div style="font-size:0.95rem;color:#fff;">Mahaconstructions2013@gmail.com</div>
+                    <div style="font-size:0.95rem;color:#fff;"><a href="mailto:{{ $company_email }}" style="color:#fff;text-decoration:none;">{{ $company_email }}</a></div>
                 </div>
                 <div style="margin-bottom:24px;">
                     <div style="font-size:0.75rem;font-weight:800;color:var(--gold);margin-bottom:4px;">BUSINESS HOURS</div>
-                    <div style="font-size:0.95rem;color:#fff;">Monday - Saturday: 10:00 AM - 6:00 PM</div>
+                    <div style="font-size:0.95rem;color:#fff;">{{ $company_hours }}</div>
                 </div>
-                <a href="https://wa.me/919488888758?text=Hello%20Er.%20Maha%20Rajan" target="_blank" class="btn-whatsapp-outline">
+                <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan" target="_blank" class="btn-whatsapp-outline">
                     <i class="fab fa-whatsapp" style="margin-right:6px;font-size:18px;"></i> WHATSAPP DIRECT
                 </a>
             </div>
@@ -51,7 +57,7 @@
                     </div>
                     <div class="form-field">
                         <label>TELEPHONE</label>
-                        <input type="tel" name="phone" placeholder="+91 94888 88758" class="input-dark">
+                        <input type="tel" name="phone" placeholder="{{ $company_phone }}" class="input-dark">
                     </div>
                     <div class="form-field full-width">
                         <label>INQUIRY DETAIL</label>

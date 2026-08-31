@@ -93,6 +93,7 @@ Route::middleware(['admin.api.session', 'admin.auth'])->group(function () {
 
     // Settings
     Route::post('/settings',             [ApiController::class, 'saveSetting']);
+    Route::post('/settings/contact',     [ApiController::class, 'saveContactSettings']);
     Route::post('/settings/guidebook',   [ApiController::class, 'updateGuidebookPdf']);
     Route::delete('/settings/guidebook', [ApiController::class, 'deleteGuidebookPdf']);
     Route::post('/settings/intro-video', [ApiController::class, 'updateIntroVideo']);

@@ -11,7 +11,7 @@
             <div class="hero-text-col">
                 <div class="pill-badge">
                     <span class="pulse-dot"></span>
-                    <span>OUR BRANCHES ARE KANYAKUMARI, TIRUNELVELI, AND CHENNAI</span>
+                    <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
                 </div>
                 <h1 class="hero-title">
                     BUILDING LUXURY ARCHITECTURAL MASTERPIECES WITH UNCOMPROMISING EXCELLENCE
@@ -30,7 +30,7 @@
                     <button class="btn-gold-pill" data-open-quote>
                         BOOK FREE CONSULTATION
                     </button>
-                    <a href="https://wa.me/919488888758?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20luxury%20home." target="_blank" class="btn-whatsapp-outline">
+                    <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20luxury%20home." target="_blank" class="btn-whatsapp-outline">
                         <i class="fab fa-whatsapp" style="font-size:18px;"></i>
                         WHATSAPP DIRECT
                     </a>
@@ -454,7 +454,7 @@
                         <button class="btn-gold-pill" data-open-quote style="padding: 9px 20px; font-size: 0.78rem;">
                             <i class="fas fa-calendar-check" style="margin-right: 6px;"></i> DIRECT CONSULTATION
                         </button>
-                        <a href="https://wa.me/919488888758?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20luxury%20home." target="_blank" class="btn-whatsapp-outline" style="padding: 9px 18px; font-size: 0.78rem;">
+                        <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20luxury%20home." target="_blank" class="btn-whatsapp-outline" style="padding: 9px 18px; font-size: 0.78rem;">
                             <i class="fab fa-whatsapp" style="margin-right: 6px; color: #25D366;"></i> WHATSAPP ER. MAHA
                         </a>
                     </div>
