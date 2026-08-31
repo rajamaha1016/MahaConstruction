@@ -469,7 +469,7 @@
     <div class="container">
         <div style="text-align:center;">
             <span class="pill-badge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.75rem;padding:6px 16px;letter-spacing:0.15em;">
-                ● REAL CLIENT STORIES
+                WHAT OUR CLIENTS SAY
             </span>
             <h2 class="sec-title" style="margin-top:12px;">
                 Client <span class="gold" style="position:relative;display:inline-block;">Satisfaction<span style="position:absolute;bottom:-6px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#D4AF37,#FFD700,#D4AF37,transparent);"></span></span> Stories
@@ -488,7 +488,7 @@
             </div>
             <div class="stories-stat" style="padding:0 32px;text-align:center;border-right:1px solid rgba(212,175,55,0.25);">
                 <div class="stories-stat-num" style="font-size:1.8rem;font-weight:900;color:#25D366;">100%</div>
-                <div class="stories-stat-label" style="font-size:0.7rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Real Clients</div>
+                <div class="stories-stat-label" style="font-size:0.7rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Client Satisfaction</div>
             </div>
             <div class="stories-stat" style="padding:0 32px;text-align:center;">
                 <div class="stories-stat-num" style="font-size:1.8rem;font-weight:900;color:#FFD700;">{{ number_format($testimonials->avg('rating') ?: 5, 1) }}<i class="fas fa-star" style="font-size:1.4rem;"></i></div>
@@ -1146,7 +1146,7 @@
 </section>
 
 <!-- FREE HOME BUILDER'S GUIDE DOWNLOAD & LEAD FORM -->
-<section class="section-pad" style="background:var(--dark-surface);">
+<section class="section-pad" id="home-builders-guide-section" style="background:var(--dark-surface);scroll-margin-top:80px;">
     <div class="container">
         <div class="guidebook-card-box">
             <div style="display:flex;justify-content:center;align-items:center;">
@@ -1203,17 +1203,33 @@
         </div>
 
         <div class="social-cards-grid">
-            <div class="social-card-v2 social-card-instagram">
-                <div class="social-avatar-ring">
-                    <img src="{{ asset('logo.png') }}" alt="Maha Constructions on Instagram">
-                    <div class="social-avatar-badge"><i class="fab fa-instagram"></i></div>
+            <div class="social-card-v2 social-card-instagram" style="position:relative;background:var(--dark-card);border-radius:20px;padding:32px 24px;text-align:center;border:1.5px solid rgba(225,48,108,0.35);box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+                <!-- Glowing top border bar in full Instagram gradient -->
+                <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg, #FCAF45, #F77737, #FD1D1D, #E1306C, #833AB4, #405DE6);"></div>
+
+                <!-- Avatar with real Instagram Story Ring -->
+                <div class="social-avatar-ring" style="width:78px;height:78px;border-radius:50%;margin:0 auto 14px;position:relative;background:linear-gradient(45deg, #FFDC80 0%, #FCAF45 15%, #F77737 30%, #FD1D1D 50%, #E1306C 70%, #C13584 85%, #833AB4 100%);padding:3px;box-shadow:0 0 20px rgba(225,48,108,0.45);border:none;">
+                    <img src="{{ asset('logo.png') }}" alt="Maha Constructions on Instagram" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;border:2.5px solid var(--dark-card);">
+                    <div class="social-avatar-badge" style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;border-radius:50%;background:linear-gradient(45deg, #FCAF45 0%, #FD1D1D 50%, #833AB4 100%);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.85rem;border:2px solid var(--dark-card);box-shadow:0 2px 8px rgba(0,0,0,0.5);"><i class="fab fa-instagram"></i></div>
                 </div>
-                <span class="social-platform-label">Instagram</span>
-                <div class="social-handle">@mahaconstructions_2013</div>
-                <div class="social-underline"></div>
-                <div class="social-count">15K+</div>
-                <div class="social-count-label">Followers</div>
-                <a href="https://www.instagram.com/mahaconstructions_2013" target="_blank" class="social-cta-btn"><i class="fab fa-instagram" style="margin-right:6px;"></i> Follow Us</a>
+
+                <!-- Instagram Platform Label with exact gradient text -->
+                <span class="social-platform-label" style="font-family:var(--font-heading);font-size:0.75rem;font-weight:800;letter-spacing:0.18em;background:linear-gradient(90deg, #FCAF45 0%, #FD1D1D 40%, #E1306C 70%, #833AB4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase;display:inline-block;">INSTAGRAM</span>
+                
+                <div class="social-handle" style="font-family:var(--font-heading);font-size:1rem;font-weight:700;color:#fff;margin-top:4px;">@mahaconstructions_2013</div>
+                
+                <!-- Underline in real multi-color Instagram gradient -->
+                <div class="social-underline" style="width:44px;height:3px;background:linear-gradient(90deg, #FCAF45, #FD1D1D, #E1306C, #833AB4, #405DE6);border-radius:4px;margin:12px auto;box-shadow:0 0 10px rgba(225,48,108,0.5);"></div>
+                
+                <!-- Followers count in Instagram Gradient -->
+                <div class="social-count" style="font-family:var(--font-heading);font-size:2.1rem;font-weight:900;background:linear-gradient(135deg, #FFDC80 0%, #FCAF45 20%, #FD1D1D 50%, #E1306C 75%, #833AB4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 8px rgba(225,48,108,0.35));">15K+</div>
+                
+                <div class="social-count-label" style="font-family:var(--font-heading);font-size:0.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:20px;">Followers</div>
+                
+                <!-- Follow Us Button with exact official Instagram Gradient -->
+                <a href="https://www.instagram.com/mahaconstructions_2013" target="_blank" class="social-cta-btn" style="font-family:var(--font-heading);display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:30px;color:#fff;font-weight:700;font-size:0.85rem;background:linear-gradient(45deg, #FCAF45 0%, #F77737 20%, #FD1D1D 45%, #E1306C 70%, #833AB4 100%);border:none;box-shadow:0 4px 20px rgba(225,48,108,0.45);text-decoration:none;transition:all 0.3s ease;">
+                    <i class="fab fa-instagram" style="font-size:1.1rem;"></i> Follow Us
+                </a>
             </div>
 
             <div class="social-card-v2" style="--social-color:#1877F2;">

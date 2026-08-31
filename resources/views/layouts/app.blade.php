@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ file_exists(public_path('css/app.css')) ? filemtime(public_path('css/app.css')) : time() }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     @stack('styles')
 </head>
@@ -67,9 +67,9 @@
         <a href="tel:+919488888758" class="float-btn phone-btn" title="Call Us">
             <i class="fas fa-phone" style="font-size:18px;"></i>
         </a>
-        <button class="float-btn quote-btn" data-open-quote title="Get Free Estimate">
+        <a href="{{ route('home') }}#home-builders-guide-section" class="float-btn quote-btn" title="The Home Builder's Guide">
             <i class="fas fa-file-invoice" style="font-size:18px;"></i>
-        </button>
+        </a>
         <button class="float-btn back-top-btn" id="backToTopBtn" title="Back to Top">
             <i class="fas fa-chevron-up" style="font-size:16px;"></i>
         </button>
