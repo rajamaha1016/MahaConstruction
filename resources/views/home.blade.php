@@ -60,10 +60,10 @@
                         </div>
 
                         <!-- Role with highlight pill -->
-                        <div style="font-size:0.8rem;font-weight:700;color:#F0EBE0;letter-spacing:0.06em;text-transform:uppercase;">LEAD STRUCTURAL ENGINEER</div>
+                        <div style="font-size:0.8rem;font-weight:700;color:#F0EBE0;letter-spacing:0.06em;text-transform:uppercase;">CEO OF MAHA CONSTRUCTION</div>
                         <div style="margin-top:6px;display:inline-flex;align-items:center;gap:6px;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.35);border-radius:20px;padding:3px 12px;">
                             <span style="width:6px;height:6px;background:#D4AF37;border-radius:50%;display:inline-block;box-shadow:0 0 6px #D4AF37;"></span>
-                            <span style="font-size:0.65rem;font-weight:800;color:#D4AF37;letter-spacing:0.12em;">GOVT REGISTERED · TAMIL NADU</span>
+                            <span style="font-size:0.65rem;font-weight:800;color:#D4AF37;letter-spacing:0.12em;"></span>
                         </div>
 
                         <!-- Glow bottom line -->
