@@ -4,7 +4,7 @@
 
 <section class="section-pad" style="padding-bottom:0;">
     <div class="container" style="text-align:center;">
-        <span class="sec-tag">REAL CLIENT STORIES</span>
+        <span class="sec-tag">WHAT OUR CLIENTS SAY</span>
         <h1 class="sec-title">Client <span class="gold">Satisfaction</span> Stories</h1>
         <p class="sec-sub" style="margin:10px auto 0;">Hear directly from the families whose homes we've had the privilege to build.</p>
 
@@ -16,7 +16,7 @@
             </div>
             <div class="stories-stat">
                 <div class="stories-stat-num">100%</div>
-                <div class="stories-stat-label">Real Clients</div>
+                <div class="stories-stat-label">Clients Satisfaction</div>
             </div>
             <div class="stories-stat">
                 <div class="stories-stat-num">{{ number_format($testimonials->avg('rating') ?: 5, 1) }}<i class="fas fa-star" style="font-size:1.3rem;"></i></div>

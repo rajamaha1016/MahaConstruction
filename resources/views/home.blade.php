@@ -104,7 +104,7 @@
     <div class="container">
         <div style="text-align:center;">
             <span class="pill-badge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.75rem;padding:6px 16px;letter-spacing:0.15em;">
-                TAMIL NADU ● PORTFOLIO
+                OUR COMPLETED PROJECTS
             </span>
             <h2 class="sec-title" style="margin-top:12px;">
                 HOMES WE'VE PROUDLY DELIVERED
@@ -369,6 +369,10 @@
                 
                 <!-- Left: Compact 60-Second Video Preview Frame -->
                 <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                    <div style="width: 100%; max-width: 300px; margin-bottom: 10px; text-align: left;">
+                        <span class="sec-tag" style="margin-bottom: 0; font-size: 0.75rem; letter-spacing: 0.15em; color: #D4AF37; font-weight: 800; display: inline-block;">MEET YOUR ENGINEER</span>
+                    </div>
+
                     <div class="engineer-video-box"
                          onclick="window.playVideoModal('{{ $intro_video_url }}', 'Er. Maha Rajan - 60-Second Video Introduction')"
                          onmouseover="this.style.borderColor='#D4AF37';this.style.boxShadow='0 14px 30px rgba(212,175,55,0.2)';"
@@ -417,17 +421,12 @@
 
                 <!-- Right: Executive Info & Credentials -->
                 <div>
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
-                        <span class="sec-tag" style="margin-bottom: 0; font-size: 0.72rem; letter-spacing: 0.15em;">MEET YOUR ENGINEER</span>
-                        <span style="font-size: 0.65rem; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); color: #D4AF37; padding: 2px 8px; border-radius: 10px; font-weight: 700;">EST. 2013</span>
-                    </div>
-
                     <h2 style="font-size: 1.55rem; font-weight: 800; color: #fff; line-height: 1.3; margin: 0 0 6px 0;">
                         Er. MAHA RAJAN, <span style="font-size: 1rem; color: #D4AF37; font-weight: 700;">B.E. (CIVIL)</span>
                     </h2>
                     
                     <div style="font-size: 0.78rem; color: #94A3B8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; display: flex; align-items: center; gap: 6px;">
-                        <i class="fas fa-shield-halved" style="color: #D4AF37;"></i> Government Registered Engineer • Managing Director
+                        <i class="fas fa-shield-halved" style="color: #D4AF37;"></i> Government Registered Engineer • CEO
                     </div>
 
                     <blockquote style="font-size: 0.88rem; color: var(--text-cream); font-style: italic; line-height: 1.6; border-left: 3px solid var(--gold); padding: 6px 0 6px 14px; margin: 0 0 18px 0; background: rgba(5,11,20,0.3); border-radius: 0 8px 8px 0;">

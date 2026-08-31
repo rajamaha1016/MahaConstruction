@@ -19,15 +19,15 @@
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
             <!-- EXCLUSIVE ATTRACTIVE LOGO -->
-            <a href="{{ route('home') }}" class="nav-logo" style="display:inline-flex;align-items:center;gap:14px;text-decoration:none;">
-                <div style="background:#FFFFFF;padding:5px 12px;border-radius:12px;border:1.5px solid #D4AF37;box-shadow:0 4px 18px rgba(0,0,0,0.4),0 0 15px rgba(212,175,55,0.3);display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;" onmouseover="this.style.boxShadow='0 6px 22px rgba(212,175,55,0.5),0 0 20px rgba(212,175,55,0.4)';this.style.transform='scale(1.02)';" onmouseout="this.style.boxShadow='0 4px 18px rgba(0,0,0,0.4),0 0 15px rgba(212,175,55,0.3)';this.style.transform='scale(1)';">
+            <a href="{{ route('home') }}" class="nav-logo" style="display:inline-flex;align-items:center;gap:16px;text-decoration:none;">
+                <div style="background:#FFFFFF;padding:6px 14px;border-radius:14px;border:2px solid #D4AF37;box-shadow:0 4px 22px rgba(0,0,0,0.5),0 0 25px rgba(212,175,55,0.45);display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);" onmouseover="this.style.boxShadow='0 6px 28px rgba(212,175,55,0.7),0 0 30px rgba(212,175,55,0.6)';this.style.transform='scale(1.04)';" onmouseout="this.style.boxShadow='0 4px 22px rgba(0,0,0,0.5),0 0 25px rgba(212,175,55,0.45)';this.style.transform='scale(1)';">
                     <img src="{{ asset('logo.jpg') }}"
                          alt="Maha Constructions Logo"
-                         style="height:48px;width:auto;object-fit:contain;display:block;">
+                         style="height:54px;width:auto;object-fit:contain;display:block;">
                 </div>
                 <div style="display:flex;flex-direction:column;justify-content:center;">
-                    <span style="font-size:1.1rem;font-weight:800;letter-spacing:0.06em;color:#FFFFFF;line-height:1.2;font-family:var(--font-heading);text-shadow:0 2px 10px rgba(0,0,0,0.5);">MAHA CONSTRUCTIONS</span>
-                    <span style="font-size:0.62rem;font-weight:700;letter-spacing:0.2em;color:#D4AF37;text-transform:uppercase;margin-top:3px;font-family:var(--font-heading);">WE BUILD YOUR DREAM HOME</span>
+                    <span style="font-size:1.35rem;font-weight:900;letter-spacing:0.07em;line-height:1.15;font-family:var(--font-heading);background:linear-gradient(135deg,#FFFFFF 15%,#FFFDF0 45%,#FFD700 80%,#D4AF37 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 8px rgba(212,175,55,0.35));">MAHA CONSTRUCTIONS</span>
+                    <span style="font-size:0.68rem;font-weight:800;letter-spacing:0.24em;color:#D4AF37;text-transform:uppercase;margin-top:4px;font-family:var(--font-heading);text-shadow:0 0 10px rgba(212,175,55,0.4);">WE BUILD YOUR DREAM HOME</span>
                 </div>
             </a>
 
@@ -40,10 +40,6 @@
             <div class="nav-actions">
                 <button class="nav-search-btn" id="searchToggleBtn" title="Search">
                     <i class="fas fa-search" style="font-size:16px;"></i>
-                </button>
-                <button class="btn-gold-pill" data-open-quote>
-                    <i class="fas fa-calendar-check" style="margin-right:6px;"></i>
-                    BOOK FREE CONSULTATION
                 </button>
                 <button class="nav-mobile-toggle" id="navMobileToggle" aria-label="Toggle Menu">
                     <span></span><span></span><span></span>
