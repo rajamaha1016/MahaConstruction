@@ -1203,7 +1203,7 @@
         </div>
 
         <div class="social-cards-grid">
-            <div class="social-card-v2" style="--social-color:#C13584;">
+            <div class="social-card-v2 social-card-instagram">
                 <div class="social-avatar-ring">
                     <img src="{{ asset('logo.png') }}" alt="Maha Constructions on Instagram">
                     <div class="social-avatar-badge"><i class="fab fa-instagram"></i></div>

@@ -539,6 +539,67 @@ input, select, textarea { font-family: var(--font-body); font-weight: 400; outli
 }
 .social-cta-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
+/* ─── REAL INSTAGRAM COLOR STRUCTURE ─────────────── */
+.social-card-instagram {
+  position: relative;
+  overflow: hidden;
+  border-top: 3px solid transparent !important;
+  border-image: linear-gradient(90deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888) 1 !important;
+}
+.social-card-instagram:hover {
+  transform: translateY(-4px);
+  border-color: rgba(220, 39, 67, 0.6) !important;
+  box-shadow: 0 14px 34px rgba(220, 39, 67, 0.25), 0 0 20px rgba(240, 148, 51, 0.15);
+}
+.social-card-instagram .social-avatar-ring {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  padding: 3px;
+  border: none;
+  box-shadow: 0 0 18px rgba(225, 48, 108, 0.45);
+}
+.social-card-instagram .social-avatar-ring img {
+  border: 2.5px solid var(--dark-card);
+  border-radius: 50%;
+}
+.social-card-instagram .social-avatar-badge {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  border: 2px solid var(--dark-card);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+.social-card-instagram .social-platform-label {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 30%, #dc2743 60%, #bc1888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+.social-card-instagram .social-underline {
+  background: linear-gradient(90deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  height: 3px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(225, 48, 108, 0.4);
+}
+.social-card-instagram .social-count {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+  filter: drop-shadow(0 2px 8px rgba(220, 39, 67, 0.35));
+}
+.social-card-instagram .social-cta-btn {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 4px 18px rgba(220, 39, 67, 0.45);
+  transition: all 0.25s ease;
+}
+.social-card-instagram .social-cta-btn:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 6px 26px rgba(220, 39, 67, 0.7), 0 0 15px rgba(240, 148, 51, 0.4);
+  transform: translateY(-2px);
+}
+
 /* ─── PARTNER / VENDOR LOGO MARQUEE ───────────────── */
 .partner-marquee {
   overflow: hidden; margin-top: 28px; position: relative;
@@ -1169,18 +1230,19 @@ table {
   .navbar { padding: 10px 0; }
   .nav-logo { gap: 10px; }
   .nav-logo > div:first-child {
-    padding: 4px 8px !important;
-    border-radius: 10px !important;
+    padding: 5px 10px !important;
+    border-radius: 12px !important;
   }
   .nav-logo img {
-    height: 38px !important;
+    height: 44px !important;
   }
   .nav-logo span:first-child {
-    font-size: 0.92rem !important;
+    font-size: 1.05rem !important;
+    letter-spacing: 0.05em !important;
   }
   .nav-logo span:last-child {
-    font-size: 0.52rem !important;
-    letter-spacing: 0.12em !important;
+    font-size: 0.56rem !important;
+    letter-spacing: 0.16em !important;
   }
   .btn-gold-pill {
     padding: 8px 14px;
