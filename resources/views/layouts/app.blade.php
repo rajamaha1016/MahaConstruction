@@ -14,18 +14,6 @@
     @stack('styles')
 </head>
 <body class="dark-theme">
-    <!-- Top Announcement Header Bar -->
-    <div class="top-announcement-bar">
-        <div class="container top-bar-content">
-            <div class="top-bar-left">
-                <span class="pulse-dot"></span>
-                <span>FREE SITE VISIT INCLUDED</span>
-            </div>
-            <div class="top-bar-right">
-                <span>DIRECT CALL: <a href="tel:+919488888758" class="phone-link">+91 94888 88758</a></span>
-            </div>
-        </div>
-    </div>
 
     <!-- Main Navigation Bar -->
     <nav class="navbar" id="navbar">

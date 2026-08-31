@@ -11,7 +11,7 @@
             <div class="hero-text-col">
                 <div class="pill-badge">
                     <span class="pulse-dot"></span>
-                    <span>GOVERNMENT REGISTERED ENGINEER - EST. 2013</span>
+                    <span>OUR BRANCHES ARE KANYAKUMARI, TIRUNELVELI, AND CHENNAI</span>
                 </div>
                 <h1 class="hero-title">
                     BUILDING LUXURY ARCHITECTURAL MASTERPIECES WITH UNCOMPROMISING EXCELLENCE
@@ -50,7 +50,7 @@
                         <div style="font-size:0.68rem;font-weight:800;letter-spacing:0.25em;color:#D4AF37;text-transform:uppercase;margin-bottom:3px;opacity:0.9;">— GOVERNMENT REGISTERED ENGINEER —</div>
 
                         <!-- Name with gradient -->
-                        <div style="font-size:1.65rem;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;line-height:1.1;background:linear-gradient(135deg,#FFD700 0%,#D4AF37 40%,#FFF8DC 60%,#D4AF37 80%,#B8960C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(212,175,55,0.4));">ER. MAHA RAJAN</div>
+                        <div style="font-size:1.65rem;font-weight:900;letter-spacing:0.04em;line-height:1.1;background:linear-gradient(135deg,#FFD700 0%,#D4AF37 40%,#FFF8DC 60%,#D4AF37 80%,#B8960C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(212,175,55,0.4));">Er. MAHA RAJAN</div>
 
                         <!-- Decorative divider -->
                         <div style="display:flex;align-items:center;gap:8px;margin:8px 0 8px;">
@@ -59,12 +59,8 @@
                             <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,rgba(212,175,55,0.6));"></div>
                         </div>
 
-                        <!-- Role with highlight pill -->
-                        <div style="font-size:0.8rem;font-weight:700;color:#F0EBE0;letter-spacing:0.06em;text-transform:uppercase;">CEO OF MAHA CONSTRUCTION</div>
-                        <div style="margin-top:6px;display:inline-flex;align-items:center;gap:6px;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.35);border-radius:20px;padding:3px 12px;">
-                            <span style="width:6px;height:6px;background:#D4AF37;border-radius:50%;display:inline-block;box-shadow:0 0 6px #D4AF37;"></span>
-                            <span style="font-size:0.65rem;font-weight:800;color:#D4AF37;letter-spacing:0.12em;"></span>
-                        </div>
+                        <!-- Role -->
+                        <div style="font-size:0.85rem;font-weight:700;color:#F0EBE0;letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;">CEO OF MAHA CONSTRUCTIONS</div>
 
                         <!-- Glow bottom line -->
                         <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#D4AF37,#FFD700,#D4AF37,transparent);"></div>
@@ -426,8 +422,8 @@
                         <span style="font-size: 0.65rem; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); color: #D4AF37; padding: 2px 8px; border-radius: 10px; font-weight: 700;">EST. 2013</span>
                     </div>
 
-                    <h2 style="font-size: 1.55rem; font-weight: 800; color: #fff; line-height: 1.3; margin: 0 0 6px 0; text-transform: uppercase;">
-                        ER. MAHA RAJAN, <span style="font-size: 1rem; color: #D4AF37; font-weight: 700;">B.E. (CIVIL)</span>
+                    <h2 style="font-size: 1.55rem; font-weight: 800; color: #fff; line-height: 1.3; margin: 0 0 6px 0;">
+                        Er. MAHA RAJAN, <span style="font-size: 1rem; color: #D4AF37; font-weight: 700;">B.E. (CIVIL)</span>
                     </h2>
                     
                     <div style="font-size: 0.78rem; color: #94A3B8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; display: flex; align-items: center; gap: 6px;">
