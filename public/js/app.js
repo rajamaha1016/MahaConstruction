@@ -14,10 +14,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (isOpen) {
       navMenu.classList.remove('open');
       if (navMobileToggle) navMobileToggle.classList.remove('open');
+      document.body.classList.remove('menu-open');
       document.body.style.overflow = '';
     } else {
       navMenu.classList.add('open');
       if (navMobileToggle) navMobileToggle.classList.add('open');
+      document.body.classList.add('menu-open');
       document.body.style.overflow = 'hidden';
     }
   }
@@ -26,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (navMenu && navMenu.classList.contains('open')) {
       navMenu.classList.remove('open');
       if (navMobileToggle) navMobileToggle.classList.remove('open');
+      document.body.classList.remove('menu-open');
       document.body.style.overflow = '';
     }
   }
@@ -93,12 +96,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
   openQuoteBtns.forEach(btn => {
     btn.addEventListener('click', function () {
-      if (quoteModal) quoteModal.classList.add('open');
+      if (quoteModal) {
+        quoteModal.classList.add('open');
+        document.body.classList.add('modal-open');
+      }
     });
   });
   if (closeQuoteModal && quoteModal) {
     closeQuoteModal.addEventListener('click', function () {
       quoteModal.classList.remove('open');
+      document.body.classList.remove('modal-open');
     });
   }
 
