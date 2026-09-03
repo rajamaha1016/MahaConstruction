@@ -149,6 +149,54 @@ input, select, textarea { font-family: var(--font-body); font-weight: 400; outli
   color: var(--gold); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em;
   padding: 6px 16px; border-radius: 20px; text-transform: uppercase; margin-bottom: 24px;
 }
+.hero-marquee-badge {
+  max-width: 480px;
+  width: 100%;
+  padding: 6px 14px;
+  border-radius: 30px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 0 12px rgba(212, 175, 55, 0.15);
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+}
+.hero-marquee-track-container {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+.hero-marquee-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  white-space: nowrap;
+  animation: heroMarqueeScroll 18s linear infinite;
+  will-change: transform;
+}
+.hero-marquee-track:hover {
+  animation-play-state: paused;
+}
+.hero-marquee-track span {
+  font-family: var(--font-heading);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.hero-marquee-track .marquee-sep {
+  color: rgba(212, 175, 55, 0.5);
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+@keyframes heroMarqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 .hero-title {
   font-family: var(--font-heading);
   font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em;
@@ -1276,6 +1324,10 @@ table {
     padding: 5px 12px;
     letter-spacing: 0.08em;
     margin-bottom: 16px;
+  }
+  .hero-marquee-badge {
+    max-width: 100%;
+    margin-bottom: 18px;
   }
   .hero-title {
     font-size: clamp(1.6rem, 6.5vw, 2.25rem);

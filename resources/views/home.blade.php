@@ -9,9 +9,20 @@
     <div class="container">
         <div class="hero-grid">
             <div class="hero-text-col">
-                <div class="pill-badge">
-                    <span class="pulse-dot"></span>
-                    <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                <div class="pill-badge hero-marquee-badge">
+                    <span class="pulse-dot" style="flex-shrink:0;"></span>
+                    <div class="hero-marquee-track-container">
+                        <div class="hero-marquee-track">
+                            <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                            <span class="marquee-sep">•</span>
+                            <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                            <span class="marquee-sep">•</span>
+                            <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                            <span class="marquee-sep">•</span>
+                            <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                            <span class="marquee-sep">•</span>
+                        </div>
+                    </div>
                 </div>
                 <h1 class="hero-title">
                     BUILDING LUXURY ARCHITECTURAL MASTERPIECES WITH UNCOMPROMISING EXCELLENCE
@@ -690,7 +701,7 @@
                 LEARN BEFORE YOU BUILD — <span class="gold">SITE TOURS</span>
             </h2>
             <p class="sec-sub" style="margin:10px auto 0;max-width:680px;">
-                Real site walkthroughs, structural testing, and luxury villa showcases direct from our official channel.
+                ​"Expert tips, essential do's & don'ts, and real project showcases—built to guide your journey."
             </p>
         </div>
 
