@@ -31,18 +31,26 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $defaults = [
-                'company_phone'           => '+91 94888 88758',
-                'company_phone_secondary' => '+91 90959 29543',
-                'company_whatsapp'        => '+91 94888 88758',
+                'company_phone'           => '+91 90959 29543',
+                'company_phone_secondary' => '',
+                'company_whatsapp'        => '+91 90959 29543',
                 'company_email'           => 'Mahaconstructions2013@gmail.com',
                 'company_address'         => 'Tamilnomi complex, 1st floor, ICICI Bank Upstar, Near kottar police station, Nagercoil',
                 'company_hours'           => 'Monday - Saturday: 10:00 AM - 6:00 PM',
-                'company_branches'        => 'KANYAKUMARI, TIRUNELVELI, AND CHENNAI',
+                'company_branches'        => 'KANYAKUMARI, TIRUNELVELI AND CHENNAI EST-2013',
+                'hero_title'              => 'BUILDING LUXURY ARCHITECTURAL MASTERPIECES WITH UNCOMPROMISING EXCELLENCE',
+                'hero_subtitle'           => "Tamil Nadu's premier government-registered engineering firm delivering custom luxury villas, residential residences, and architectural homes with itemized material transparency and 15-year structural warranties.",
+                'hero_check1'             => 'Premium Materials',
+                'hero_check2'             => 'Transparent Pricing',
+                'hero_check3'             => 'On-Time Delivery',
+                'hero_check4'             => 'Expert Engineers',
+                'hero_check5'             => 'Lifetime Support',
+                'hero_cta_primary'        => 'BOOK FREE CONSULTATION',
             ];
 
             $mergedSettings = array_merge($defaults, $settingsList);
 
-            $rawPhone = preg_replace('/[^0-9]/', '', $mergedSettings['company_phone']);
+            $rawPhone    = preg_replace('/[^0-9]/', '', $mergedSettings['company_phone']);
             $rawWhatsapp = preg_replace('/[^0-9]/', '', $mergedSettings['company_whatsapp']);
 
             $view->with([
@@ -54,8 +62,16 @@ class AppServiceProvider extends ServiceProvider
                 'company_address'   => $mergedSettings['company_address'],
                 'company_hours'     => $mergedSettings['company_hours'],
                 'company_branches'  => $mergedSettings['company_branches'],
-                'raw_phone'         => $rawPhone ?: '919488888758',
-                'raw_whatsapp'      => $rawWhatsapp ?: '919488888758',
+                'raw_phone'         => $rawPhone    ?: '919095929543',
+                'raw_whatsapp'      => $rawWhatsapp ?: '919095929543',
+                'hero_title'        => $mergedSettings['hero_title'],
+                'hero_subtitle'     => $mergedSettings['hero_subtitle'],
+                'hero_check1'       => $mergedSettings['hero_check1'],
+                'hero_check2'       => $mergedSettings['hero_check2'],
+                'hero_check3'       => $mergedSettings['hero_check3'],
+                'hero_check4'       => $mergedSettings['hero_check4'],
+                'hero_check5'       => $mergedSettings['hero_check5'],
+                'hero_cta_primary'  => $mergedSettings['hero_cta_primary'],
                 'yt_channel_url'    => YouTubeSyncService::getActiveChannelUrl(),
                 'yt_channel_meta'   => YouTubeSyncService::getChannelMeta(),
                 'yt_channel_handle' => YouTubeSyncService::getChannelHandle(),

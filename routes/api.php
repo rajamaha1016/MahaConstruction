@@ -129,5 +129,8 @@ Route::middleware(['admin.api.session', 'admin.auth'])->group(function () {
 
     // Admin-only stats
     Route::get('/admin/stats',           [ApiController::class, 'getAdminStats']);
+
+    // Admin credentials update
+    Route::post('/admin/credentials',    [ApiController::class, 'updateAdminCredentials']);
 });
 

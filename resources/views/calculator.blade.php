@@ -130,8 +130,10 @@
 
 @push('scripts')
 <script>
-let selectedRate = 1999;
-let selectedPackage = 'Basic Plan';
+const initialActiveBtn = document.querySelector('.calc-tab.active');
+let selectedRate = initialActiveBtn && initialActiveBtn.dataset.rate ? parseInt(initialActiveBtn.dataset.rate) : 1999;
+let selectedPackage = initialActiveBtn && initialActiveBtn.dataset.title ? initialActiveBtn.dataset.title : 'Basic Plan';
+
 
 document.querySelectorAll('[data-division]').forEach(tab => {
     tab.addEventListener('click', () => {

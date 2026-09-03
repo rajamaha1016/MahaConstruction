@@ -102,12 +102,19 @@
                 <label class="field-label">Admin Email</label>
                 <input type="email" name="email" class="field-input" required
                        value="{{ old('email') }}"
-                       placeholder="Mahaconstructions2013@gmail.com">
+                       placeholder="Enter admin email">
             </div>
-            <div class="field-group" style="margin-bottom: 32px;">
+        <div class="field-group" style="margin-bottom: 32px;">
                 <label class="field-label">Password</label>
-                <input type="password" name="password" class="field-input" required
-                       placeholder="Enter admin password">
+                <div style="position:relative;">
+                    <input type="password" name="password" id="loginPassword" class="field-input" required
+                           placeholder="Enter admin password" style="padding-right:48px;">
+                    <button type="button" onclick="togglePwd('loginPassword','loginEyeIcon')"
+                            style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:#94A3B8;cursor:pointer;padding:4px;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:color 0.2s;"
+                            onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#94A3B8'">
+                        <i class="fas fa-eye" id="loginEyeIcon"></i>
+                    </button>
+                </div>
             </div>
             <button type="submit" class="btn-login">SIGN IN TO ADMIN PANEL <i class="fas fa-arrow-right" style="margin-left:6px;"></i></button>
         </form>
@@ -119,5 +126,20 @@
 
     <p class="footer-note">© {{ date('Y') }} Maha Constructions. Er. Maha Rajan (Govt. Registered Engineer). All rights reserved.</p>
 </div>
+
+<script>
+function togglePwd(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon  = document.getElementById(iconId);
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
 </body>
 </html>
+

@@ -52,7 +52,7 @@
     <div class="container">
         <div class="stats-grid">
             <div class="stat-card fade-in"><span class="stat-num">150+</span><span class="stat-lbl">Projects Built</span></div>
-            <div class="stat-card fade-in"><span class="stat-num">13+</span><span class="stat-lbl">Years Experience</span></div>
+            <div class="stat-card fade-in"><span class="stat-num">12+</span><span class="stat-lbl">Years Experience</span></div>
             <div class="stat-card fade-in"><span class="stat-num">₹500Cr+</span><span class="stat-lbl">Projects Value</span></div>
             <div class="stat-card fade-in"><span class="stat-num">98%</span><span class="stat-lbl">Client Satisfaction</span></div>
         </div>

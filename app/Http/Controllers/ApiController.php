@@ -313,7 +313,16 @@ class ApiController extends Controller
             'company_address',
             'company_hours',
             'company_branches',
-            'company_map_embed'
+            'company_map_embed',
+            // Hero section content
+            'hero_title',
+            'hero_subtitle',
+            'hero_check1',
+            'hero_check2',
+            'hero_check3',
+            'hero_check4',
+            'hero_check5',
+            'hero_cta_primary',
         ];
 
         foreach ($fields as $field) {
@@ -584,6 +593,54 @@ class ApiController extends Controller
         }
         return response()->json(['success' => false, 'message' => 'No synced videos found'], 404);
     }
+
+    // --- ADMIN CREDENTIALS ---
+    public function updateAdminCredentials(Request $request)
+    {
+        $currentEmail = session('admin_email');
+        $user = ($currentEmail ? \App\Models\User::where('email', $currentEmail)->first() : null)
+            ?? \App\Models\User::where('role', 'admin')->first()
+            ?? \App\Models\User::first();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Admin account not found in database.'], 404);
+        }
+
+        $request->validate([
+            'email'        => 'required|email|unique:users,email,' . $user->id,
+            'password'     => 'nullable|string|min:6',
+            'new_password' => 'nullable|string|min:6',
+        ], [
+            'email.required' => 'An admin email address is required.',
+            'email.email'    => 'Please provide a valid email address.',
+            'email.unique'   => 'This email address is already associated with another account.',
+            'password.min'   => 'New password must be at least 6 characters long.',
+            'new_password.min' => 'New password must be at least 6 characters long.',
+        ]);
+
+        $user->email = strtolower(trim($request->email));
+
+        $pwd = $request->input('password') ?: $request->input('new_password');
+        if (!empty($pwd)) {
+            $user->password = \Illuminate\Support\Facades\Hash::make($pwd);
+        }
+
+        $user->save();
+
+        // Refresh admin session with the new credentials
+        session([
+            'admin_authenticated' => true,
+            'admin_email'         => $user->email,
+            'admin_name'          => $user->full_name ?? 'Maha Admin',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Credentials updated successfully! You can now log in with your updated email and password.',
+            'email'   => $user->email,
+        ]);
+    }
 }
+
 
 

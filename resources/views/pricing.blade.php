@@ -118,38 +118,74 @@
 
         <!-- RESIDENTIAL PRICING CARDS -->
         <div class="pricing-grid-3 package-group" id="pricingResGroup">
+            @php
+                $resTiers = ['basic', 'standard', 'premium', 'luxury'];
+                $resFallbacks = [
+                    'basic'   => ['title'=>'BASIC PLAN',   'subtitle'=>'Solid & Affordable',     'price'=>1999,  'warranty'=>'10 Yrs', 'delivery'=>'12 Mo', 'features'=>['Fe-500 TMT steel','Coromandel / ACC cement','M-Sand blockwork','Vitrified floor tiles (2\'×2\')','Parryware CP fittings','Kundan / Anchor concealed wiring','Flush door entry system','Asian Paints Emulsion finish'], 'highlighted'=>false],
+                    'standard'=> ['title'=>'STANDARD PLAN','subtitle'=>'Value & Performance',     'price'=>2199,  'warranty'=>'12 Yrs', 'delivery'=>'13 Mo', 'features'=>['Fe-500D TMT steel','ACC / Ramco cement','Washed M-Sand','Vitrified tiles (2\'×4\')','Cera CP fittings','Finolex wiring','Flush door','Asian Paints Ace finish'], 'highlighted'=>false],
+                    'premium' => ['title'=>'PREMIUM PLAN', 'subtitle'=>'Quality & Elegance',     'price'=>2399,  'warranty'=>'15 Yrs', 'delivery'=>'14 Mo', 'features'=>['Fe-550 TMT (JSW / Vizag Steel)','Ultratech Premium / Dalmia cement','Double-washed M-Sand','Kajaria double charged tiles (4\'×2\')','Jaquar sanitary & CP sets','Polycab wires & Roma switches','Teak wood entry door','Asian Paints Apex Ultima'], 'highlighted'=>true],
+                    'luxury'  => ['title'=>'LUXURY PLAN',  'subtitle'=>'Elite Craftsmanship',    'price'=>2999,  'warranty'=>'20 Yrs', 'delivery'=>'18 Mo', 'features'=>['Fe-550 TMT (Tata Tiscon / JSPL)','Birla Super / ACC Gold cement','River sand / premium concrete sand','Italian Travertine / marble slabs','Kohler / Grohe collection','Finolex cables & Legrand switches','First-grade carved teak doors','Royale textured / custom panel finish'], 'highlighted'=>false],
+                ];
+                $shownRes = false;
+            @endphp
+            @foreach($resTiers as $tier)
+                @php
+                    $pkg = $residential[$tier] ?? null;
+                    $fb  = $resFallbacks[$tier] ?? null;
+                    if (!$pkg && !$fb) continue;
+                    $isHL = $pkg ? $pkg->is_highlighted : ($fb['highlighted'] ?? false);
+                    $shownRes = true;
+                @endphp
+                <div class="package-card {{ $isHL ? 'highlighted' : '' }}">
+                    @if($isHL)<div class="badge-popular"><i class="fas fa-star" style="margin-right:4px;"></i> MOST POPULAR</div>@endif
+                    <div>
+                        <span class="plan-tier-label">{{ strtoupper($pkg ? $pkg->division : 'RESIDENTIAL') }} • {{ strtoupper($tier) }}</span>
+                        <h3 class="plan-title">{{ $pkg ? strtoupper($pkg->title) : ($fb['title'] ?? strtoupper($tier).' PLAN') }}</h3>
+                        <p style="font-size:0.8rem;color:var(--text-muted);">{{ $pkg ? $pkg->subtitle : ($fb['subtitle'] ?? '') }}</p>
+                        <div class="plan-price">₹{{ number_format($pkg ? $pkg->price_per_sqft : ($fb['price'] ?? 0)) }} <span>/ sq.ft</span></div>
+
+                        @if($pkg && $pkg->description)
+                        <div style="font-size:0.8rem;color:var(--text-muted);margin:16px 0 12px;">{{ $pkg->description }}</div>
+                        @elseif(!$pkg)
+                        <div style="font-size:0.8rem;color:var(--text-muted);margin:16px 0 12px;">A {{ strtolower($tier) }} residential construction package with quality materials and proven structural systems.</div>
+                        @endif
+
+                        <div style="display:flex;gap:12px;margin-bottom:16px;">
+                            <div class="metric-card" style="flex:1;padding:8px;">
+                                <div style="font-size:0.9rem;font-weight:800;color:var(--gold);">{{ $pkg ? $pkg->warranty_years.' Yrs' : ($fb['warranty'] ?? '—') }}</div>
+                                <div style="font-size:0.6rem;color:var(--text-muted);">WARRANTY</div>
+                            </div>
+                            <div class="metric-card" style="flex:1;padding:8px;">
+                                <div style="font-size:0.9rem;font-weight:800;color:var(--gold);">{{ $pkg ? $pkg->delivery_months.' Mo' : ($fb['delivery'] ?? '—') }}</div>
+                                <div style="font-size:0.6rem;color:var(--text-muted);">DELIVERY</div>
+                            </div>
+                        </div>
+
+                        <h4 style="font-size:0.8rem;color:var(--gold);font-weight:800;margin-bottom:8px;">KEY MATERIALS & SPECS</h4>
+                        <ul class="plan-features-list">
+                            @if($pkg && $pkg->features && count($pkg->features))
+                                @foreach($pkg->features as $f)<li>{{ $f }}</li>@endforeach
+                            @elseif(!$pkg && !empty($fb['features']))
+                                @foreach($fb['features'] as $f)<li>{{ $f }}</li>@endforeach
+                            @endif
+                        </ul>
+                    </div>
+                    <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;">
+                        <button class="btn-gold-pill" style="justify-content:center;" data-open-quote>CALCULATE MY COST</button>
+                        <button class="btn-whatsapp-outline" style="justify-content:center;border-color:var(--border-gold);color:var(--text-cream);" data-open-quote>GET FREE QUOTE</button>
+                    </div>
+                </div>
+            @endforeach
+            @if(!$shownRes)
+            {{-- No packages in DB yet: show original static cards --}}
             <div class="package-card">
                 <div>
                     <span class="plan-tier-label">BASIC TIER</span>
                     <h3 class="plan-title">BASIC PLAN</h3>
                     <p style="font-size:0.8rem;color:var(--text-muted);">Solid & Affordable</p>
                     <div class="plan-price">₹1,999 <span>/ sq.ft</span></div>
-
-                    <div style="font-size:0.8rem;color:var(--text-muted);margin:16px 0 12px;">
-                        A solid, cost-effective residential build using quality materials, standard-grade finishes, and proven structural systems — ideal for budget-conscious homeowners.
-                    </div>
-
-                    <div style="display:flex;gap:12px;margin-bottom:16px;">
-                        <div class="metric-card" style="flex:1;padding:8px;">
-                            <div style="font-size:0.9rem;font-weight:800;color:var(--gold);">10 Yrs</div>
-                            <div style="font-size:0.6rem;color:var(--text-muted);">WARRANTY</div>
-                        </div>
-                        <div class="metric-card" style="flex:1;padding:8px;">
-                            <div style="font-size:0.9rem;font-weight:800;color:var(--gold);">12 Mo</div>
-                            <div style="font-size:0.6rem;color:var(--text-muted);">DELIVERY</div>
-                        </div>
-                    </div>
-
-                    <h4 style="font-size:0.8rem;color:var(--gold);font-weight:800;margin-bottom:8px;">KEY MATERIALS & SPECS</h4>
                     <ul class="plan-features-list">
-                        <li>Fe-500 TMT steel</li>
-                        <li>Coromandel / ACC cement</li>
-                        <li>M-Sand blockwork</li>
-                        <li>Vitrified floor tiles (2'×2')</li>
-                        <li>Parryware CP fittings</li>
-                        <li>Kundan / Anchor concealed wiring</li>
-                        <li>Flush door entry system</li>
-                        <li>Asian Paints Emulsion finish</li>
+                        <li>Fe-500 TMT steel</li><li>Coromandel / ACC cement</li><li>M-Sand blockwork</li><li>Vitrified floor tiles (2'×2')</li><li>Parryware CP fittings</li>
                     </ul>
                 </div>
                 <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;">
@@ -157,91 +193,74 @@
                     <button class="btn-whatsapp-outline" style="justify-content:center;border-color:var(--border-gold);color:var(--text-cream);" data-open-quote>GET FREE QUOTE</button>
                 </div>
             </div>
-
-            <div class="package-card highlighted">
-                <div class="badge-popular"><i class="fas fa-star" style="margin-right:4px;"></i> MOST POPULAR</div>
-                <div>
-                    <span class="plan-tier-label">PREMIUM TIER</span>
-                    <h3 class="plan-title">PREMIUM PLAN</h3>
-                    <p style="font-size:0.8rem;color:var(--text-muted);">Quality & Elegance</p>
-                    <div class="plan-price">₹2,399 <span>/ sq.ft</span></div>
-
-                    <div style="font-size:0.8rem;color:var(--text-muted);margin:16px 0 12px;">
-                        A premium residential construction package with superior materials, polished finishes, and enhanced structural systems — built for growing families seeking elevated quality.
-                    </div>
-
-                    <div style="display:flex;gap:12px;margin-bottom:16px;">
-                        <div class="metric-card" style="flex:1;padding:8px;">
-                            <div style="font-size:0.9rem;font-weight:800;color:var(--gold);">15 Yrs</div>
-                            <div style="font-size:0.6rem;color:var(--text-muted);">WARRANTY</div>
-                        </div>
-                        <div class="metric-card" style="flex:1;padding:8px;">
-                            <div style="font-size:0.9rem;font-weight:800;color:var(--gold);">14 Mo</div>
-                            <div style="font-size:0.6rem;color:var(--text-muted);">DELIVERY</div>
-                        </div>
-                    </div>
-
-                    <h4 style="font-size:0.8rem;color:var(--gold);font-weight:800;margin-bottom:8px;">KEY MATERIALS & SPECS</h4>
-                    <ul class="plan-features-list">
-                        <li>Fe-550 TMT (JSW / Vizag Steel)</li>
-                        <li>Ultratech Premium / Dalmia cement</li>
-                        <li>Double-washed M-Sand</li>
-                        <li>Kajaria double charged tiles (4'×2')</li>
-                        <li>Jaquar sanitary & CP sets</li>
-                        <li>Polycab wires & Roma switches</li>
-                        <li>Teak wood entry door</li>
-                        <li>Asian Paints Apex Ultima</li>
-                    </ul>
-                </div>
-                <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;">
-                    <button class="btn-gold-pill" style="justify-content:center;" data-open-quote>CALCULATE MY COST</button>
-                    <button class="btn-whatsapp-outline" style="justify-content:center;border-color:var(--border-gold);color:var(--text-cream);" data-open-quote>GET FREE QUOTE</button>
-                </div>
-            </div>
-
-            <div class="package-card">
-                <div>
-                    <span class="plan-tier-label">LUXURY TIER</span>
-                    <h3 class="plan-title">LUXURY PLAN</h3>
-                    <p style="font-size:0.8rem;color:var(--text-muted);">Elite Craftsmanship</p>
-                    <div class="plan-price">₹2,999 <span>/ sq.ft</span></div>
-
-                    <div style="font-size:0.8rem;color:var(--text-muted);margin:16px 0 12px;">
-                        A fully bespoke luxury residential build using world-class materials, custom architectural details, and premium brand fixtures — crafted for discerning homeowners.
-                    </div>
-
-                    <div style="display:flex;gap:12px;margin-bottom:16px;">
-                        <div class="metric-card" style="flex:1;padding:8px;">
-                            <div style="font-size:0.9rem;font-weight:800;color:var(--gold);">20 Yrs</div>
-                            <div style="font-size:0.6rem;color:var(--text-muted);">WARRANTY</div>
-                        </div>
-                        <div class="metric-card" style="flex:1;padding:8px;">
-                            <div style="font-size:0.9rem;font-weight:800;color:var(--gold);">18 Mo</div>
-                            <div style="font-size:0.6rem;color:var(--text-muted);">DELIVERY</div>
-                        </div>
-                    </div>
-
-                    <h4 style="font-size:0.8rem;color:var(--gold);font-weight:800;margin-bottom:8px;">KEY MATERIALS & SPECS</h4>
-                    <ul class="plan-features-list">
-                        <li>Fe-550 TMT (Tata Tiscon / JSPL)</li>
-                        <li>Birla Super / ACC Gold cement</li>
-                        <li>River sand / premium concrete sand</li>
-                        <li>Italian Travertine / marble slabs</li>
-                        <li>Kohler / Grohe collection</li>
-                        <li>Finolex cables & Legrand switches</li>
-                        <li>First-grade carved teak doors</li>
-                        <li>Royale textured / custom panel finish</li>
-                    </ul>
-                </div>
-                <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;">
-                    <button class="btn-gold-pill" style="justify-content:center;" data-open-quote>CALCULATE MY COST</button>
-                    <button class="btn-whatsapp-outline" style="justify-content:center;border-color:var(--border-gold);color:var(--text-cream);" data-open-quote>GET FREE QUOTE</button>
-                </div>
-            </div>
+            @endif
         </div>
 
         <!-- COMMERCIAL PRICING CARDS -->
         <div class="pricing-grid-3 package-group" id="pricingComGroup" style="display:none;">
+            @php
+                $comTiers = ['basic', 'standard', 'premium', 'luxury', 'elite'];
+                $comFallbacks = [
+                    'basic'   => ['title'=>'STANDARD SHELL',     'subtitle'=>'Functional & Efficient',  'price'=>2100, 'highlighted'=>false, 'features'=>['Fe-500 TMT structural steel','OPC 53 grade cement','RCC framed structure','Vitrified floor tiles']],
+                    'standard'=> ['title'=>'ENHANCED SHELL',     'subtitle'=>'Commercial Value',         'price'=>2400, 'highlighted'=>false, 'features'=>['Fe-500D TMT steel','Ultratech cement','RCC frame','Granito tiles']],
+                    'premium' => ['title'=>'PREMIUM CORPORATE',  'subtitle'=>'Professional & Polished',  'price'=>2799, 'highlighted'=>true,  'features'=>['Fe-550 TMT (JSW Steel)','Ultratech / Ambuja cement','RCC frame + shear walls','Granite / double charged vitrified']],
+                    'luxury'  => ['title'=>'LUXURY COMMERCIAL',  'subtitle'=>'Executive Grade',          'price'=>3200, 'highlighted'=>false, 'features'=>['Fe-550D TMT (SAIL)','Birla cement','Post-tensioned slabs','Marble / granite composite']],
+                    'elite'   => ['title'=>'ELITE COMMERCIAL',   'subtitle'=>'Iconic Architecture',      'price'=>3499, 'highlighted'=>false, 'features'=>['Fe-550D TMT (SAIL / JSPL)','Birla Aditya / ACC Gold cement','Post-tensioned slabs','Stone cladding / premium marble']],
+                ];
+                $shownCom = false;
+            @endphp
+            @foreach($comTiers as $tier)
+                @php
+                    $pkg = $commercial[$tier] ?? null;
+                    $fb  = $comFallbacks[$tier] ?? null;
+                    if (!$pkg && !$fb) continue;
+                    $isHL = $pkg ? $pkg->is_highlighted : ($fb['highlighted'] ?? false);
+                    $shownCom = true;
+                @endphp
+                <div class="package-card {{ $isHL ? 'highlighted' : '' }}">
+                    @if($isHL)<div class="badge-popular"><i class="fas fa-star" style="margin-right:4px;"></i> MOST POPULAR</div>@endif
+                    <div>
+                        <span class="plan-tier-label">{{ strtoupper($pkg ? $pkg->division : 'COMMERCIAL') }} • {{ strtoupper($tier) }}</span>
+                        <h3 class="plan-title">{{ $pkg ? strtoupper($pkg->title) : ($fb['title'] ?? strtoupper($tier)) }}</h3>
+                        <p style="font-size:0.8rem;color:var(--text-muted);">{{ $pkg ? $pkg->subtitle : ($fb['subtitle'] ?? '') }}</p>
+                        <div class="plan-price">₹{{ number_format($pkg ? $pkg->price_per_sqft : ($fb['price'] ?? 0)) }} <span>/ sq.ft</span></div>
+
+                        @if($pkg && $pkg->description)
+                        <div style="font-size:0.8rem;color:var(--text-muted);margin:16px 0 12px;">{{ $pkg->description }}</div>
+                        @endif
+
+                        @if($pkg && $pkg->warranty_years)
+                        <div style="display:flex;gap:12px;margin-bottom:16px;">
+                            <div class="metric-card" style="flex:1;padding:8px;">
+                                <div style="font-size:0.9rem;font-weight:800;color:var(--gold);">{{ $pkg->warranty_years }} Yrs</div>
+                                <div style="font-size:0.6rem;color:var(--text-muted);">WARRANTY</div>
+                            </div>
+                            @if($pkg->delivery_months)
+                            <div class="metric-card" style="flex:1;padding:8px;">
+                                <div style="font-size:0.9rem;font-weight:800;color:var(--gold);">{{ $pkg->delivery_months }} Mo</div>
+                                <div style="font-size:0.6rem;color:var(--text-muted);">DELIVERY</div>
+                            </div>
+                            @endif
+                        </div>
+                        @endif
+
+                        <h4 style="font-size:0.8rem;color:var(--gold);font-weight:800;margin-bottom:8px;">KEY MATERIALS & SPECS</h4>
+                        <ul class="plan-features-list">
+                            @if($pkg && $pkg->features && count($pkg->features))
+                                @foreach($pkg->features as $f)<li>{{ $f }}</li>@endforeach
+                            @elseif(!$pkg && !empty($fb['features']))
+                                @foreach($fb['features'] as $f)<li>{{ $f }}</li>@endforeach
+                            @endif
+                        </ul>
+                    </div>
+                    <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;">
+                        <button class="btn-gold-pill" style="justify-content:center;" data-open-quote>CALCULATE MY COST</button>
+                        <button class="btn-whatsapp-outline" style="justify-content:center;border-color:var(--border-gold);color:var(--text-cream);" data-open-quote>GET FREE QUOTE</button>
+                    </div>
+                </div>
+            @endforeach
+            @if(!$shownCom)
+            {{-- No packages in DB yet: show fallback static --}}
             <div class="package-card">
                 <div>
                     <span class="plan-tier-label">BASIC TIER</span>
@@ -249,10 +268,7 @@
                     <p style="font-size:0.8rem;color:var(--text-muted);">Functional & Efficient</p>
                     <div class="plan-price">₹2,100 <span>/ sq.ft</span></div>
                     <ul class="plan-features-list">
-                        <li>Fe-500 TMT structural steel</li>
-                        <li>OPC 53 grade cement</li>
-                        <li>RCC framed structure</li>
-                        <li>Vitrified floor tiles</li>
+                        <li>Fe-500 TMT structural steel</li><li>OPC 53 grade cement</li><li>RCC framed structure</li><li>Vitrified floor tiles</li>
                     </ul>
                 </div>
                 <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;">
@@ -260,45 +276,7 @@
                     <button class="btn-whatsapp-outline" style="justify-content:center;border-color:var(--border-gold);color:var(--text-cream);" data-open-quote>GET FREE QUOTE</button>
                 </div>
             </div>
-
-            <div class="package-card highlighted">
-                <div class="badge-popular"><i class="fas fa-star" style="margin-right:4px;"></i> MOST POPULAR</div>
-                <div>
-                    <span class="plan-tier-label">PREMIUM TIER</span>
-                    <h3 class="plan-title">PREMIUM CORPORATE</h3>
-                    <p style="font-size:0.8rem;color:var(--text-muted);">Professional & Polished</p>
-                    <div class="plan-price">₹2,799 <span>/ sq.ft</span></div>
-                    <ul class="plan-features-list">
-                        <li>Fe-550 TMT (JSW Steel)</li>
-                        <li>Ultratech / Ambuja cement</li>
-                        <li>RCC frame + shear walls</li>
-                        <li>Granite / double charged vitrified</li>
-                    </ul>
-                </div>
-                <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;">
-                    <button class="btn-gold-pill" style="justify-content:center;" data-open-quote>CALCULATE MY COST</button>
-                    <button class="btn-whatsapp-outline" style="justify-content:center;border-color:var(--border-gold);color:var(--text-cream);" data-open-quote>GET FREE QUOTE</button>
-                </div>
-            </div>
-
-            <div class="package-card">
-                <div>
-                    <span class="plan-tier-label">LUXURY TIER</span>
-                    <h3 class="plan-title">ELITE COMMERCIAL</h3>
-                    <p style="font-size:0.8rem;color:var(--text-muted);">Iconic Architecture</p>
-                    <div class="plan-price">₹3,499 <span>/ sq.ft</span></div>
-                    <ul class="plan-features-list">
-                        <li>Fe-550D TMT (SAIL / JSPL)</li>
-                        <li>Birla Aditya / ACC Gold cement</li>
-                        <li>Post-tensioned slabs</li>
-                        <li>Stone cladding / premium marble</li>
-                    </ul>
-                </div>
-                <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;">
-                    <button class="btn-gold-pill" style="justify-content:center;" data-open-quote>CALCULATE MY COST</button>
-                    <button class="btn-whatsapp-outline" style="justify-content:center;border-color:var(--border-gold);color:var(--text-cream);" data-open-quote>GET FREE QUOTE</button>
-                </div>
-            </div>
+            @endif
         </div>
     </div>
 </section>

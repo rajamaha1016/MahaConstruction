@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Maha Construction | Premium Luxury Architectural Masterpieces</title>
+    <title>Maha Constructions | Premium Luxury Architectural Masterpieces</title>
     <meta name="description" content="Maha Construction is an enterprise-grade builder of bespoke luxury villas, organic residences, and iconic commercial towers designed with materials integrity." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

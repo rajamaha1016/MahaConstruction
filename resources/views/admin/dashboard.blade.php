@@ -815,7 +815,7 @@
                     <form id="contactDetailsForm" onsubmit="saveContactSettings(event)" class="quote-form-grid" style="margin-top:24px;">
                         <div class="form-field">
                             <label>PRIMARY PHONE</label>
-                            <input type="text" id="cfg_company_phone" name="company_phone" value="{{ ($settings['company_phone'] ?? null)?->value ?? '+91 94888 88758' }}" placeholder="+91 94888 88758" class="input-dark" required>
+                            <input type="text" id="cfg_company_phone" name="company_phone" value="{{ ($settings['company_phone'] ?? null)?->value ?? '+91 90959 29543' }}" placeholder="+91 90959 29543" class="input-dark" required>
                         </div>
                         <div class="form-field">
                             <label>SECONDARY / ENGINEER PHONE</label>
@@ -823,7 +823,7 @@
                         </div>
                         <div class="form-field">
                             <label>WHATSAPP NUMBER</label>
-                            <input type="text" id="cfg_company_whatsapp" name="company_whatsapp" value="{{ ($settings['company_whatsapp'] ?? null)?->value ?? '+91 94888 88758' }}" placeholder="+91 94888 88758" class="input-dark" required>
+                            <input type="text" id="cfg_company_whatsapp" name="company_whatsapp" value="{{ ($settings['company_whatsapp'] ?? null)?->value ?? '+91 90959 29543' }}" placeholder="+91 90959 29543" class="input-dark" required>
                         </div>
                         <div class="form-field">
                             <label>EMAIL ADDRESS</label>
@@ -851,6 +851,58 @@
                         </div>
                     </form>
                 </div>
+            </div>
+
+            <!-- HERO SECTION CONTENT PANEL -->
+            <div class="card-dark-panel" style="margin-top:24px;" id="heroContentPanel">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                    <div>
+                        <h2 class="panel-header-title">HERO SECTION CONTENT</h2>
+                        <p class="panel-header-sub">Edit the homepage hero title, subtitle, checklist badges, and CTA button text.</p>
+                    </div>
+                </div>
+                <form id="heroContentForm" onsubmit="saveHeroContent(event)" class="quote-form-grid" style="margin-top:24px;">
+                    <div class="form-field full-width">
+                        <label>HERO MAIN TITLE</label>
+                        <input type="text" id="cfg_hero_title" name="hero_title" value="{{ ($settings['hero_title'] ?? null)?->value ?? 'BUILDING LUXURY ARCHITECTURAL MASTERPIECES WITH UNCOMPROMISING EXCELLENCE' }}" placeholder="Main headline" class="input-dark" required>
+                    </div>
+                    <div class="form-field full-width">
+                        <label>HERO SUBTITLE / DESCRIPTION</label>
+                        <textarea id="cfg_hero_subtitle" name="hero_subtitle" rows="3" class="input-dark" style="resize:vertical;" placeholder="Short description below the title">{{ ($settings['hero_subtitle'] ?? null)?->value ?? "Tamil Nadu's premier government-registered engineering firm..." }}</textarea>
+                    </div>
+                    <div class="form-field">
+                        <label>CHECKLIST BADGE 1</label>
+                        <input type="text" id="cfg_hero_check1" name="hero_check1" value="{{ ($settings['hero_check1'] ?? null)?->value ?? 'Premium Materials' }}" class="input-dark" placeholder="e.g. Premium Materials">
+                    </div>
+                    <div class="form-field">
+                        <label>CHECKLIST BADGE 2</label>
+                        <input type="text" id="cfg_hero_check2" name="hero_check2" value="{{ ($settings['hero_check2'] ?? null)?->value ?? 'Transparent Pricing' }}" class="input-dark" placeholder="e.g. Transparent Pricing">
+                    </div>
+                    <div class="form-field">
+                        <label>CHECKLIST BADGE 3</label>
+                        <input type="text" id="cfg_hero_check3" name="hero_check3" value="{{ ($settings['hero_check3'] ?? null)?->value ?? 'On-Time Delivery' }}" class="input-dark" placeholder="e.g. On-Time Delivery">
+                    </div>
+                    <div class="form-field">
+                        <label>CHECKLIST BADGE 4</label>
+                        <input type="text" id="cfg_hero_check4" name="hero_check4" value="{{ ($settings['hero_check4'] ?? null)?->value ?? 'Expert Engineers' }}" class="input-dark" placeholder="e.g. Expert Engineers">
+                    </div>
+                    <div class="form-field">
+                        <label>CHECKLIST BADGE 5</label>
+                        <input type="text" id="cfg_hero_check5" name="hero_check5" value="{{ ($settings['hero_check5'] ?? null)?->value ?? 'Lifetime Support' }}" class="input-dark" placeholder="e.g. Lifetime Support">
+                    </div>
+                    <div class="form-field">
+                        <label>PRIMARY CTA BUTTON TEXT</label>
+                        <input type="text" id="cfg_hero_cta_primary" name="hero_cta_primary" value="{{ ($settings['hero_cta_primary'] ?? null)?->value ?? 'BOOK FREE CONSULTATION' }}" class="input-dark" placeholder="e.g. BOOK FREE CONSULTATION">
+                    </div>
+
+                    <div id="heroContentAlert" style="display:none;margin-top:14px;padding:12px 18px;border-radius:10px;font-size:0.85rem;font-weight:600;" class="full-width"></div>
+
+                    <div class="form-field full-width" style="margin-top:12px;">
+                        <button type="submit" id="btnSaveHeroContent" class="btn-gold-submit" style="width:auto;padding:12px 32px;display:inline-flex;align-items:center;gap:8px;">
+                            <i class="fas fa-floppy-disk"></i> SAVE HERO CONTENT
+                        </button>
+                    </div>
+                </form>
             </div>
 
             <!-- 6. GUIDEBOOK PDF MANAGEMENT & READERS LOG TAB -->
@@ -1011,25 +1063,40 @@
 
             <!-- 8. ADMIN ACCOUNT & SECURITY TAB -->
             <div class="admin-tab-pane" id="tab-security">
-                <div class="card-dark-panel">
+                <div class="card-dark-panel" style="max-width:680px;">
                     <h2 class="panel-header-title">ADMIN ACCOUNT & LOGIN CREDENTIALS</h2>
-                    <p class="panel-header-sub">Manage the email address and password required to access this Admin Panel.</p>
+                    <p class="panel-header-sub">Manage the email address and password required to access this Admin Panel. Changes take effect immediately.</p>
 
-                    <form id="adminAccountForm" class="quote-form-grid" style="margin-top:20px;">
+                    <div id="securityAlert" style="display:none;padding:14px 18px;border-radius:10px;margin-bottom:22px;font-size:0.9rem;font-weight:600;line-height:1.5;"></div>
+
+                    <form id="adminAccountForm" class="quote-form-grid" style="margin-top:20px;" onsubmit="event.preventDefault(); saveAdminCredentials(document.getElementById('btnSaveCredentials'));">
                         <div class="form-field full-width">
                             <label>ADMIN LOGIN EMAIL *</label>
-                            <input type="email" value="Mahaconstructions2013@gmail.com" class="input-dark">
+                            <input type="email" id="adminEmail" value="{{ $adminUser->email ?? session('admin_email', 'Mahaconstructions2013@gmail.com') }}" class="input-dark" required autocomplete="username" placeholder="admin@example.com">
                         </div>
                         <div class="form-field full-width">
-                            <label>ADMIN LOGIN PASSWORD *</label>
-                            <input type="password" value="Maharajan@2013" class="input-dark">
+                            <label>NEW ADMIN LOGIN PASSWORD <span style="color:#94A3B8;font-size:0.8rem;text-transform:none;font-weight:normal;">(Leave blank to keep current password)</span></label>
+                            <div style="position:relative;">
+                                <input type="password" id="adminPassword" placeholder="Enter new password (min. 6 characters)" class="input-dark" style="width:100%;padding-right:48px;box-sizing:border-box;" autocomplete="new-password">
+                                <button type="button" onclick="togglePwdAdmin('adminPassword','adminEyeIcon')"
+                                        style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:#94A3B8;cursor:pointer;padding:4px;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:color 0.2s;"
+                                        onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#94A3B8'"
+                                        title="Toggle password visibility">
+                                    <i class="fas fa-eye" id="adminEyeIcon"></i>
+                                </button>
+                            </div>
+                            <small style="color:#64748B;font-size:0.75rem;margin-top:6px;display:block;">If you do not want to change your password, simply leave this field empty and click Save.</small>
                         </div>
-                        <div class="form-field full-width" style="margin-top:16px;">
-                            <button type="button" class="btn-gold-submit" style="width:auto;padding:12px 28px;">💾 SAVE CREDENTIALS</button>
+                        <div class="form-field full-width" style="margin-top:20px;">
+                            <button type="button" id="btnSaveCredentials" onclick="saveAdminCredentials(this)" class="btn-gold-submit" style="width:auto;padding:12px 32px;display:inline-flex;align-items:center;gap:8px;">
+                                <i class="fas fa-floppy-disk"></i> SAVE CREDENTIALS
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
+
+
 
         </div>
     </main>
@@ -1207,6 +1274,30 @@
                     <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">DESCRIPTION / SPECS HIGHLIGHTS</label>
                     <textarea id="pk_description" rows="2" placeholder="Key materials, structural specifications, warranty..." class="input-dark" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
                 </div>
+                <div>
+                    <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">MATERIAL FEATURES <span style="color:#94A3B8;font-weight:400;text-transform:none;">(one per line — shown as checklist on pricing cards)</span></label>
+                    <textarea id="pk_features" rows="8" placeholder="Fe-500 TMT steel
+Coromandel / ACC cement
+M-Sand blockwork
+Vitrified floor tiles (2'×2')
+Parryware CP fittings
+Kundan / Anchor concealed wiring
+Flush door entry system
+Asian Paints Emulsion finish" class="input-dark" style="width:100%;box-sizing:border-box;resize:vertical;font-size:0.82rem;line-height:1.6;"></textarea>
+                    <div style="font-size:0.72rem;color:#64748b;margin-top:4px;">💡 Each line becomes one ✓ feature on the pricing card. Leave blank lines to skip.</div>
+                </div>
+                <div>
+                    <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">INCLUSIONS <span style="color:#94A3B8;font-weight:400;text-transform:none;">(one per line)</span></label>
+                    <textarea id="pk_inclusions" rows="5" placeholder="Site supervision
+Civil structural work
+Plastering & waterproofing" class="input-dark" style="width:100%;box-sizing:border-box;resize:vertical;font-size:0.82rem;line-height:1.6;"></textarea>
+                </div>
+                <div>
+                    <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">EXCLUSIONS <span style="color:#94A3B8;font-weight:400;text-transform:none;">(one per line)</span></label>
+                    <textarea id="pk_exclusions" rows="4" placeholder="Interior design
+Modular kitchen
+Landscaping" class="input-dark" style="width:100%;box-sizing:border-box;resize:vertical;font-size:0.82rem;line-height:1.6;"></textarea>
+                </div>
                 <div id="packageModalError" style="color:#FF3B30;font-size:0.8rem;display:none;"></div>
                 <button type="submit" id="btnSubmitPackage" class="btn-gold-submit" style="width:100%;padding:13px;margin-top:4px;">💾 SAVE PACKAGE</button>
             </div>
@@ -1319,7 +1410,112 @@
 <script>
 const CSRF = () => document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
+function togglePwdAdmin(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon  = document.getElementById(iconId);
+    if (!input || !icon) return;
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+
+async function saveAdminCredentials(btn) {
+    const emailInput = document.getElementById('adminEmail');
+    const passwordInput = document.getElementById('adminPassword');
+
+    const email = emailInput ? emailInput.value.trim() : '';
+    const password = passwordInput ? passwordInput.value : '';
+
+    if (!email) {
+        showSecurityAlert('❌ Please enter an admin email address.', 'error');
+        if (emailInput) emailInput.focus();
+        return;
+    }
+
+    if (password && password.length < 6) {
+        showSecurityAlert('❌ New password must be at least 6 characters long.', 'error');
+        if (passwordInput) passwordInput.focus();
+        return;
+    }
+
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i> SAVING...';
+    btn.style.opacity = '0.7';
+
+    try {
+        const response = await fetch('/api/admin/credentials', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'X-CSRF-TOKEN': CSRF(),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (response.status === 401) {
+            alert('Your admin session has expired. Redirecting to login...');
+            window.location.href = '/admin/login';
+            return;
+        }
+
+        if (!response.ok) {
+            const msg = data.message || (data.errors ? Object.values(data.errors).flat().join('<br>') : 'Failed to update credentials.');
+            showSecurityAlert('❌ ' + msg, 'error');
+            return;
+        }
+
+        showSecurityAlert('✅ ' + (data.message || 'Credentials updated successfully!'), 'success');
+
+        if (passwordInput) {
+            passwordInput.value = '';
+            const icon = document.getElementById('adminEyeIcon');
+            if (icon && passwordInput.type === 'text') {
+                passwordInput.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+    } catch (err) {
+        console.error('Error updating credentials:', err);
+        showSecurityAlert('❌ Network error: ' + err.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        btn.style.opacity = '1';
+    }
+}
+
+function showSecurityAlert(message, type) {
+    const box = document.getElementById('securityAlert');
+    if (!box) return;
+    box.style.display = 'flex';
+    if (type === 'success') {
+        box.style.background = 'rgba(34, 197, 94, 0.15)';
+        box.style.border = '1px solid #22c55e';
+        box.style.color = '#86efac';
+    } else {
+        box.style.background = 'rgba(239, 68, 68, 0.15)';
+        box.style.border = '1px solid #ef4444';
+        box.style.color = '#fca5a5';
+    }
+    box.innerHTML = message;
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
 function switchAdminTab(tabKey, linkEl) {
+
+
     if (!linkEl) {
         linkEl = document.querySelector(`.sidebar-nav-link[onclick*="'${tabKey}'"]`) || 
                  document.querySelector(`.sidebar-nav-link[onclick*='"${tabKey}"']`);
@@ -1711,6 +1907,12 @@ function openEditModal(type, item) {
         document.getElementById('pk_price').value        = item.price_per_sqft || '';
         document.getElementById('pk_subtitle').value     = item.subtitle || '';
         document.getElementById('pk_description').value  = item.description || '';
+
+        // Populate multi-line feature fields
+        const toLines = (arr) => Array.isArray(arr) ? arr.join('\n') : (arr || '');
+        document.getElementById('pk_features').value    = toLines(item.features);
+        document.getElementById('pk_inclusions').value  = toLines(item.inclusions);
+        document.getElementById('pk_exclusions').value  = toLines(item.exclusions);
     } else if (type === 'partner') {
         document.getElementById('modalTitle').textContent = 'EDIT PARTNER / VENDOR';
         document.getElementById('modalSub').textContent   = 'Update partner name, category, website URL, or logo image';
@@ -2322,6 +2524,16 @@ async function submitPackage(e) {
     const subtitle = document.getElementById('pk_subtitle').value.trim();
     const desc     = document.getElementById('pk_description').value.trim();
 
+    // Parse multiline textareas into arrays (filter empty lines)
+    const toArray = (id) => document.getElementById(id).value
+        .split('\n')
+        .map(s => s.trim())
+        .filter(s => s.length > 0);
+
+    const features   = toArray('pk_features');
+    const inclusions = toArray('pk_inclusions');
+    const exclusions = toArray('pk_exclusions');
+
     if (!title || !price) { errEl.textContent = 'Title and price are required.'; errEl.style.display='block'; return; }
 
     try {
@@ -2330,8 +2542,11 @@ async function submitPackage(e) {
             tier,
             title,
             price_per_sqft: parseFloat(price),
-            subtitle: subtitle || null,
-            description: desc || null
+            subtitle:   subtitle   || null,
+            description: desc      || null,
+            features:   features.length   ? features   : null,
+            inclusions: inclusions.length ? inclusions : null,
+            exclusions: exclusions.length ? exclusions : null,
         };
 
         const url    = editId ? `/api/packages/${editId}` : '/api/packages';
@@ -2666,6 +2881,70 @@ async function saveContactSettings(e) {
         if (saveBtn) {
             saveBtn.disabled = false;
             saveBtn.innerHTML = originalBtnHtml || '<i class="fas fa-floppy-disk"></i> SAVE CONTACT DETAILS';
+            saveBtn.style.opacity = '1';
+        }
+    }
+}
+
+// ── HERO CONTENT SETTINGS ─────────────────────────────────────────
+async function saveHeroContent(e) {
+    e.preventDefault();
+    const alertBox       = document.getElementById('heroContentAlert');
+    const saveBtn        = document.getElementById('btnSaveHeroContent');
+    const originalBtnHtml = saveBtn ? saveBtn.innerHTML : '';
+
+    const payload = {
+        hero_title:       document.getElementById('cfg_hero_title').value.trim(),
+        hero_subtitle:    document.getElementById('cfg_hero_subtitle').value.trim(),
+        hero_check1:      document.getElementById('cfg_hero_check1').value.trim(),
+        hero_check2:      document.getElementById('cfg_hero_check2').value.trim(),
+        hero_check3:      document.getElementById('cfg_hero_check3').value.trim(),
+        hero_check4:      document.getElementById('cfg_hero_check4').value.trim(),
+        hero_check5:      document.getElementById('cfg_hero_check5').value.trim(),
+        hero_cta_primary: document.getElementById('cfg_hero_cta_primary').value.trim(),
+    };
+
+    if (alertBox) alertBox.style.display = 'none';
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SAVING HERO CONTENT...';
+        saveBtn.style.opacity = '0.75';
+    }
+
+    try {
+        const res = await fetch('/api/settings/contact', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'X-CSRF-TOKEN': CSRF(),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (!res.ok || !json.success) {
+            throw new Error(json.message || 'Failed to save hero content');
+        }
+        if (alertBox) {
+            alertBox.style.display = 'block';
+            alertBox.style.background = 'rgba(37,211,102,0.15)';
+            alertBox.style.border = '1px solid rgba(37,211,102,0.4)';
+            alertBox.style.color = '#25D366';
+            alertBox.innerHTML = '<i class="fas fa-circle-check" style="margin-right:6px;"></i> Hero content saved! Reflected live on the website.';
+        }
+    } catch (err) {
+        if (alertBox) {
+            alertBox.style.display = 'block';
+            alertBox.style.background = 'rgba(255,59,48,0.15)';
+            alertBox.style.border = '1px solid rgba(255,59,48,0.4)';
+            alertBox.style.color = '#FF3B30';
+            alertBox.innerHTML = '<i class="fas fa-triangle-exclamation" style="margin-right:6px;"></i> ' + err.message;
+        }
+    } finally {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalBtnHtml || '<i class="fas fa-floppy-disk"></i> SAVE HERO CONTENT';
             saveBtn.style.opacity = '1';
         }
     }

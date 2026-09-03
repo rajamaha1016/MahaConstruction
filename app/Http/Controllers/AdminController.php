@@ -15,6 +15,7 @@ use App\Models\PackageDetail;
 use App\Models\Partner;
 use App\Models\NewsletterSubscriber;
 use App\Models\Setting;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -47,10 +48,15 @@ class AdminController extends Controller
         $newsletter   = NewsletterSubscriber::orderBy('id', 'desc')->get();
         $settings     = Setting::all()->keyBy('key');
 
+        $adminUser    = User::where('email', session('admin_email'))->first()
+            ?? User::where('role', 'admin')->first()
+            ?? User::first();
+
         return view('admin.dashboard', compact(
             'stats', 'projects', 'services', 'gallery', 'blogs',
             'testimonials', 'faqs', 'contacts', 'quotes',
-            'packages', 'partners', 'newsletter', 'settings'
+            'packages', 'partners', 'newsletter', 'settings', 'adminUser'
         ));
     }
 }
+

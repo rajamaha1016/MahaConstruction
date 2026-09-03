@@ -4,7 +4,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Maha Construction | Premium Luxury Architectural Masterpieces')</title>
+    <title>@yield('title', 'Maha Constructions | Premium Luxury Architectural Masterpieces')</title>
     <meta name="description" content="@yield('description', 'Maha Construction is Tamil Nadu\'s premier government-registered engineering firm delivering custom luxury villas, residential residences, and architectural homes.')"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,7 +61,7 @@
         <button class="float-btn chat-btn" data-open-quote title="Chat with Us">
             <i class="fas fa-comments" style="font-size:18px;"></i>
         </button>
-        <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20luxury%20home." target="_blank" class="float-btn whatsapp-btn" title="WhatsApp Direct">
+        <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20Dream%20home." target="_blank" class="float-btn whatsapp-btn" title="WhatsApp Direct">
             <i class="fab fa-whatsapp" style="font-size:22px;"></i>
         </a>
         <a href="tel:+{{ $raw_phone }}" class="float-btn phone-btn" title="Call Us">
@@ -95,7 +95,7 @@
                         </div>
                     </div>
                     <p class="footer-desc">
-                        Building luxury homes with quality, itemized transparency, and structural trust. Er. Maha Rajan (Government Registered Engineer) leading 10+ years of structural engineering excellence across Tamil Nadu.
+                        Building luxury homes with quality, itemized transparency, and structural trust. Er. Maha Rajan (Government Registered Engineer) leading 12+ years of structural engineering excellence across Tamil Nadu.
                     </p>
                     <div class="footer-social-row">
                         <a href="https://www.instagram.com/mahaconstructions_2013" target="_blank" class="social-icon-btn" title="Instagram"><i class="fab fa-instagram"></i></a>
@@ -209,7 +209,7 @@
                 </div>
                 <div class="form-field">
                     <label>TELEPHONE *</label>
-                    <input type="tel" name="phone" required placeholder="+91 94888 88758">
+                    <input type="tel" name="phone" required placeholder="+91 90959 29543">
                 </div>
                 <div class="form-field">
                     <label>PROJECT TYPE</label>
@@ -254,15 +254,23 @@
             </div>
             <div class="table-responsive">
                 <table class="comparison-table">
+                    @php
+                        $modalRes = \App\Models\PackageDetail::where('division', 'residential')->get()->keyBy('tier');
+                        $bRate = $modalRes['basic']->price_per_sqft ?? 1999;
+                        $sRate = $modalRes['standard']->price_per_sqft ?? 2199;
+                        $pRate = $modalRes['premium']->price_per_sqft ?? 2399;
+                        $lRate = $modalRes['luxury']->price_per_sqft ?? 2999;
+                    @endphp
                     <thead>
                         <tr>
                             <th>FEATURE</th>
-                            <th>BASIC (₹1,999)</th>
-                            <th>STANDARD (₹2,100)</th>
-                            <th>PREMIUM (₹2,799)</th>
-                            <th>LUXURY (₹3,499)</th>
+                            <th>BASIC (₹{{ number_format($bRate) }})</th>
+                            <th>STANDARD (₹{{ number_format($sRate) }})</th>
+                            <th>PREMIUM (₹{{ number_format($pRate) }})</th>
+                            <th>LUXURY (₹{{ number_format($lRate) }})</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         <tr>
                             <td class="feature-title">Steel Grade</td>

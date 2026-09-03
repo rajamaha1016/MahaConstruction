@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Maha Construction | Premium Luxury Architectural Masterpieces')
+@section('title', 'Maha Constructions | Premium Luxury Architectural Masterpieces')
 
 @section('content')
 
@@ -25,21 +25,21 @@
                     </div>
                 </div>
                 <h1 class="hero-title">
-                    BUILDING LUXURY ARCHITECTURAL MASTERPIECES WITH UNCOMPROMISING EXCELLENCE
+                    {{ $hero_title }}
                 </h1>
                 <p class="hero-subtitle">
-                    Tamil Nadu's premier government-registered engineering firm delivering custom luxury villas, residential residences, and architectural homes with itemized material transparency and 15-year structural warranties.
+                    {{ $hero_subtitle }}
                 </p>
                 <div class="hero-checklist">
-                    <span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> Premium Materials</span>
-                    <span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> Transparent Pricing</span>
-                    <span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> On-Time Delivery</span>
-                    <span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> Expert Engineers</span>
-                    <span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> Lifetime Support</span>
+                    @if($hero_check1)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check1 }}</span>@endif
+                    @if($hero_check2)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check2 }}</span>@endif
+                    @if($hero_check3)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check3 }}</span>@endif
+                    @if($hero_check4)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check4 }}</span>@endif
+                    @if($hero_check5)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check5 }}</span>@endif
                 </div>
                 <div class="hero-cta-group">
                     <button class="btn-gold-pill" data-open-quote>
-                        BOOK FREE CONSULTATION
+                        {{ $hero_cta_primary }}
                     </button>
                     <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20luxury%20home." target="_blank" class="btn-whatsapp-outline">
                         <i class="fab fa-whatsapp" style="font-size:18px;"></i>
@@ -87,7 +87,7 @@
     <div class="container">
         <div class="stats-grid-5">
             <div class="metric-card">
-                <div class="metric-number">10+</div>
+                <div class="metric-number">12+</div>
                 <div class="metric-label">Years Experience</div>
             </div>
             <div class="metric-card">
@@ -231,131 +231,86 @@
 
         <!-- Residential Group -->
         <div class="pricing-grid-3 package-group" id="residentialGroup">
-            <div class="package-card">
-                <div>
-                    <span class="plan-tier-label">BASIC TIER • 10 Yrs Warranty</span>
-                    <h3 class="plan-title">BASIC PLAN</h3>
-                    <p style="font-size:0.8rem;color:var(--text-muted);">Solid & Affordable</p>
-                    <div class="plan-price">₹1,999 <span>/ sq.ft</span></div>
-                    <ul class="plan-features-list">
-                        <li>Fe-500 TMT steel</li>
-                        <li>Coromandel / ACC cement</li>
-                        <li>M-Sand blockwork</li>
-                        <li>Vitrified floor tiles (2'×2')</li>
-                        <li>Parryware CP fittings</li>
-                        <li>Kundan / Anchor concealed wiring</li>
-                        <li>Flush door entry system</li>
-                        <li>Asian Paints Emulsion finish</li>
-                    </ul>
+            @php
+                $resTiers = ['basic', 'premium', 'luxury'];
+                $resFallbacks = [
+                    'basic'   => ['title'=>'BASIC PLAN',   'subtitle'=>'Solid & Affordable',  'price'=>1999, 'warranty'=>10, 'highlighted'=>false, 'features'=>['Fe-500 TMT steel','Coromandel / ACC cement','M-Sand blockwork','Vitrified floor tiles (2\'×2\')','Parryware CP fittings','Kundan / Anchor concealed wiring','Flush door entry system','Asian Paints Emulsion finish']],
+                    'premium' => ['title'=>'PREMIUM PLAN', 'subtitle'=>'Quality & Elegance',  'price'=>2399, 'warranty'=>15, 'highlighted'=>true,  'features'=>['Fe-550 TMT (JSW / Vizag Steel)','Ultratech Premium / Dalmia cement','Double-washed M-Sand','Kajaria double charged tiles (4\'×2\')','Jaquar sanitary & CP sets','Polycab wires & Roma switches','Teak wood entry door','Asian Paints Apex Ultima']],
+                    'luxury'  => ['title'=>'LUXURY PLAN',  'subtitle'=>'Elite Craftsmanship', 'price'=>2999, 'warranty'=>20, 'highlighted'=>false, 'features'=>['Fe-550 TMT (Tata Tiscon / JSPL)','Birla Super / ACC Gold cement','River sand / premium concrete sand','Italian Travertine / marble slabs','Kohler / Grohe collection','Finolex cables & Legrand switches','First-grade carved teak doors','Royale textured / custom panel finish']],
+                ];
+                $residentialPkgs = $residential ?? \App\Models\PackageDetail::where('division', 'residential')->get()->keyBy('tier');
+            @endphp
+            @foreach($resTiers as $tier)
+                @php
+                    $pkg = $residentialPkgs[$tier] ?? null;
+                    $fb  = $resFallbacks[$tier];
+                    $isHL = $pkg ? $pkg->is_highlighted : $fb['highlighted'];
+                    $title = $pkg ? strtoupper($pkg->title) : $fb['title'];
+                    $subtitle = $pkg ? $pkg->subtitle : $fb['subtitle'];
+                    $price = $pkg ? $pkg->price_per_sqft : $fb['price'];
+                    $warranty = $pkg && $pkg->warranty_years ? $pkg->warranty_years : $fb['warranty'];
+                    $tierLabel = strtoupper($pkg ? $pkg->tier : $tier) . ' TIER • ' . $warranty . ' Yrs Warranty';
+                    $features = ($pkg && is_array($pkg->features) && count($pkg->features)) ? $pkg->features : $fb['features'];
+                @endphp
+                <div class="package-card {{ $isHL ? 'highlighted' : '' }}">
+                    @if($isHL)<div class="badge-popular">★ MOST POPULAR</div>@endif
+                    <div>
+                        <span class="plan-tier-label">{{ $tierLabel }}</span>
+                        <h3 class="plan-title">{{ $title }}</h3>
+                        <p style="font-size:0.8rem;color:var(--text-muted);">{{ $subtitle }}</p>
+                        <div class="plan-price">₹{{ number_format($price) }} <span>/ sq.ft</span></div>
+                        <ul class="plan-features-list">
+                            @foreach($features as $feat)
+                                <li>{{ $feat }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <button class="btn-gold-pill" style="width:100%;justify-content:center;margin-top:20px;" data-open-quote>VIEW DETAILS</button>
                 </div>
-                <button class="btn-gold-pill" style="width:100%;justify-content:center;margin-top:20px;" data-open-quote>VIEW DETAILS</button>
-            </div>
-
-            <div class="package-card highlighted">
-                <div class="badge-popular">★ MOST POPULAR</div>
-                <div>
-                    <span class="plan-tier-label">PREMIUM TIER • 15 Yrs Warranty</span>
-                    <h3 class="plan-title">PREMIUM PLAN</h3>
-                    <p style="font-size:0.8rem;color:var(--text-muted);">Quality & Elegance</p>
-                    <div class="plan-price">₹2,399 <span>/ sq.ft</span></div>
-                    <ul class="plan-features-list">
-                        <li>Fe-550 TMT (JSW / Vizag Steel)</li>
-                        <li>Ultratech Premium / Dalmia cement</li>
-                        <li>Double-washed M-Sand</li>
-                        <li>Kajaria double charged tiles (4'×2')</li>
-                        <li>Jaquar sanitary & CP sets</li>
-                        <li>Polycab wires & Roma switches</li>
-                        <li>Teak wood entry door</li>
-                        <li>Asian Paints Apex Ultima</li>
-                    </ul>
-                </div>
-                <button class="btn-gold-pill" style="width:100%;justify-content:center;margin-top:20px;" data-open-quote>VIEW DETAILS</button>
-            </div>
-
-            <div class="package-card">
-                <div>
-                    <span class="plan-tier-label">LUXURY TIER • 20 Yrs Warranty</span>
-                    <h3 class="plan-title">LUXURY PLAN</h3>
-                    <p style="font-size:0.8rem;color:var(--text-muted);">Elite Craftsmanship</p>
-                    <div class="plan-price">₹2,999 <span>/ sq.ft</span></div>
-                    <ul class="plan-features-list">
-                        <li>Fe-550 TMT (Tata Tiscon / JSPL)</li>
-                        <li>Birla Super / ACC Gold cement</li>
-                        <li>River sand / premium concrete sand</li>
-                        <li>Italian Travertine / marble slabs</li>
-                        <li>Kohler / Grohe collection</li>
-                        <li>Finolex cables & Legrand switches</li>
-                        <li>First-grade carved teak doors</li>
-                        <li>Royale textured / custom panel finish</li>
-                    </ul>
-                </div>
-                <button class="btn-gold-pill" style="width:100%;justify-content:center;margin-top:20px;" data-open-quote>VIEW DETAILS</button>
-            </div>
+            @endforeach
         </div>
 
         <!-- Commercial Group -->
         <div class="pricing-grid-3 package-group" id="commercialGroup" style="display:none;">
-            <div class="package-card">
-                <div>
-                    <span class="plan-tier-label">BASIC TIER • 10 Yrs Warranty</span>
-                    <h3 class="plan-title">STANDARD SHELL</h3>
-                    <p style="font-size:0.8rem;color:var(--text-muted);">Functional & Efficient</p>
-                    <div class="plan-price">₹2,100 <span>/ sq.ft</span></div>
-                    <ul class="plan-features-list">
-                        <li>Fe-500 TMT structural steel</li>
-                        <li>OPC 53 grade cement</li>
-                        <li>RCC framed structure</li>
-                        <li>Vitrified floor tiles</li>
-                        <li>Standard plumbing systems</li>
-                        <li>Industrial-grade electrical wiring</li>
-                        <li>Aluminium doors & windows</li>
-                        <li>Exterior cement texture paint</li>
-                    </ul>
+            @php
+                $comTiers = ['basic', 'premium', 'luxury'];
+                $comFallbacks = [
+                    'basic'   => ['title'=>'STANDARD SHELL',    'subtitle'=>'Functional & Efficient',  'price'=>2100, 'warranty'=>10, 'highlighted'=>false, 'features'=>['Fe-500 TMT structural steel','OPC 53 grade cement','RCC framed structure','Vitrified floor tiles','Standard plumbing systems','Industrial-grade electrical wiring','Aluminium doors & windows','Exterior cement texture paint']],
+                    'premium' => ['title'=>'PREMIUM CORPORATE', 'subtitle'=>'Professional & Polished', 'price'=>2799, 'warranty'=>15, 'highlighted'=>true,  'features'=>['Fe-550 TMT (JSW Steel)','Ultratech / Ambuja cement','RCC frame + shear walls','Granite / double charged vitrified','Jaquar / Hindware fixtures','Polycab wires + RCCB MCB panel','Anodized aluminium UPVC systems','Texture + reflective glass curtain']],
+                    'luxury'  => ['title'=>'ELITE COMMERCIAL',  'subtitle'=>'Iconic Architecture',     'price'=>3499, 'warranty'=>20, 'highlighted'=>false, 'features'=>['Fe-550D TMT (SAIL / JSPL)','Birla Aditya / ACC Gold cement','Post-tensioned slabs','Stone cladding / premium marble','Geberit / TOTO commercial fixtures','Legrand Mosaic / Schneider systems','Structural glazing curtain wall','EIFS / metal composite facade']],
+                ];
+                $commercialPkgs = $commercial ?? \App\Models\PackageDetail::where('division', 'commercial')->get()->keyBy('tier');
+            @endphp
+            @foreach($comTiers as $tier)
+                @php
+                    $pkg = $commercialPkgs[$tier] ?? null;
+                    $fb  = $comFallbacks[$tier];
+                    $isHL = $pkg ? $pkg->is_highlighted : $fb['highlighted'];
+                    $title = $pkg ? strtoupper($pkg->title) : $fb['title'];
+                    $subtitle = $pkg ? $pkg->subtitle : $fb['subtitle'];
+                    $price = $pkg ? $pkg->price_per_sqft : $fb['price'];
+                    $warranty = $pkg && $pkg->warranty_years ? $pkg->warranty_years : $fb['warranty'];
+                    $tierLabel = strtoupper($pkg ? $pkg->tier : $tier) . ' TIER • ' . $warranty . ' Yrs Warranty';
+                    $features = ($pkg && is_array($pkg->features) && count($pkg->features)) ? $pkg->features : $fb['features'];
+                @endphp
+                <div class="package-card {{ $isHL ? 'highlighted' : '' }}">
+                    @if($isHL)<div class="badge-popular">★ MOST POPULAR</div>@endif
+                    <div>
+                        <span class="plan-tier-label">{{ $tierLabel }}</span>
+                        <h3 class="plan-title">{{ $title }}</h3>
+                        <p style="font-size:0.8rem;color:var(--text-muted);">{{ $subtitle }}</p>
+                        <div class="plan-price">₹{{ number_format($price) }} <span>/ sq.ft</span></div>
+                        <ul class="plan-features-list">
+                            @foreach($features as $feat)
+                                <li>{{ $feat }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <button class="btn-gold-pill" style="width:100%;justify-content:center;margin-top:20px;" data-open-quote>VIEW DETAILS</button>
                 </div>
-                <button class="btn-gold-pill" style="width:100%;justify-content:center;margin-top:20px;" data-open-quote>VIEW DETAILS</button>
-            </div>
-
-            <div class="package-card highlighted">
-                <div class="badge-popular">★ MOST POPULAR</div>
-                <div>
-                    <span class="plan-tier-label">PREMIUM TIER • 15 Yrs Warranty</span>
-                    <h3 class="plan-title">PREMIUM CORPORATE</h3>
-                    <p style="font-size:0.8rem;color:var(--text-muted);">Professional & Polished</p>
-                    <div class="plan-price">₹2,799 <span>/ sq.ft</span></div>
-                    <ul class="plan-features-list">
-                        <li>Fe-550 TMT (JSW Steel)</li>
-                        <li>Ultratech / Ambuja cement</li>
-                        <li>RCC frame + shear walls</li>
-                        <li>Granite / double charged vitrified</li>
-                        <li>Jaquar / Hindware fixtures</li>
-                        <li>Polycab wires + RCCB MCB panel</li>
-                        <li>Anodized aluminium UPVC systems</li>
-                        <li>Texture + reflective glass curtain</li>
-                    </ul>
-                </div>
-                <button class="btn-gold-pill" style="width:100%;justify-content:center;margin-top:20px;" data-open-quote>VIEW DETAILS</button>
-            </div>
-
-            <div class="package-card">
-                <div>
-                    <span class="plan-tier-label">LUXURY TIER • 20 Yrs Warranty</span>
-                    <h3 class="plan-title">ELITE COMMERCIAL</h3>
-                    <p style="font-size:0.8rem;color:var(--text-muted);">Iconic Architecture</p>
-                    <div class="plan-price">₹3,499 <span>/ sq.ft</span></div>
-                    <ul class="plan-features-list">
-                        <li>Fe-550D TMT (SAIL / JSPL)</li>
-                        <li>Birla Aditya / ACC Gold cement</li>
-                        <li>Post-tensioned slabs</li>
-                        <li>Stone cladding / premium marble</li>
-                        <li>Geberit / TOTO commercial fixtures</li>
-                        <li>Legrand Mosaic / Schneider systems</li>
-                        <li>Structural glazing curtain wall</li>
-                        <li>EIFS / metal composite facade</li>
-                    </ul>
-                </div>
-                <button class="btn-gold-pill" style="width:100%;justify-content:center;margin-top:20px;" data-open-quote>VIEW DETAILS</button>
-            </div>
+            @endforeach
         </div>
+
 
         <div class="package-action-row">
             <button class="btn-whatsapp-outline" data-open-matrix style="border-color:var(--gold);color:var(--gold);">
