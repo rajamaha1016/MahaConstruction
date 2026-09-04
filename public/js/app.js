@@ -318,6 +318,199 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // Modal matrix division switcher (Residential / Commercial)
+  document.querySelectorAll('.modal-mat-toggle').forEach(btn => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.modal-mat-toggle').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const targetId = this.getAttribute('data-target-matrix');
+      const resWrap = document.getElementById('modalMatResWrap');
+      const comWrap = document.getElementById('modalMatComWrap');
+      if (resWrap && comWrap) {
+        if (targetId === 'modalMatComWrap') {
+          resWrap.style.display = 'none';
+          comWrap.style.display = 'block';
+        } else {
+          resWrap.style.display = 'block';
+          comWrap.style.display = 'none';
+        }
+      }
+    });
+  });
+
+  // --- Package Details Modal (Inclusions & Exclusions) ---
+  const packageDetailsModal = document.getElementById('packageDetailsModal');
+  const closePackageDetailsModal = document.getElementById('closePackageDetailsModal');
+  let currentActivePackage = null;
+
+  window.openPackageDetailsModal = function (pkg) {
+    if (!pkg || !packageDetailsModal) return;
+    currentActivePackage = pkg;
+
+    const division = (pkg.division || 'residential').toUpperCase();
+    const rawTier = (pkg.tier || 'standard').toUpperCase();
+    const cleanTier = rawTier.replace(/\bTIER\b/i, '').trim();
+    const tier = cleanTier ? cleanTier + ' TIER' : 'STANDARD TIER';
+    const title = (pkg.title || 'PACKAGE').toUpperCase();
+    const subtitle = pkg.subtitle || '';
+    const rawPrice = pkg.price_per_sqft;
+    const hasPrice = rawPrice !== null && rawPrice !== undefined && rawPrice !== '' && Number(rawPrice) > 0;
+    const price = hasPrice ? Number(rawPrice).toLocaleString('en-IN') : null;
+    const warranty = pkg.warranty_years ? `${pkg.warranty_years} Yrs Structural Warranty` : '10 Yrs Structural Warranty';
+    const delivery = pkg.delivery_months ? `${pkg.delivery_months} Months Delivery` : '12 Months Delivery';
+    const desc = pkg.description || `A complete ${cleanTier || 'standard'} construction package engineered for durability, premium craftsmanship, and full material transparency.`;
+
+    const elTier = document.getElementById('modalPkgTierLabel');
+    if (elTier) elTier.textContent = `${division} • ${tier}`;
+
+    const elTitle = document.getElementById('modalPkgTitle');
+    if (elTitle) elTitle.textContent = title;
+
+    const elSub = document.getElementById('modalPkgSubtitle');
+    if (elSub) elSub.textContent = subtitle;
+
+    const elPrice = document.getElementById('modalPkgPrice');
+    if (elPrice) {
+      if (price) {
+        elPrice.innerHTML = `₹${price} <span>/ sq.ft</span>`;
+      } else {
+        elPrice.innerHTML = `<span style="font-size:1.35rem;letter-spacing:0.02em;">CUSTOM ESTIMATE</span>`;
+      }
+    }
+
+    const elWarranty = document.getElementById('modalPkgWarranty');
+    if (elWarranty) elWarranty.innerHTML = `<i class="fas fa-shield-halved" style="color:var(--gold);"></i> ${warranty}`;
+
+    const elDelivery = document.getElementById('modalPkgDelivery');
+    if (elDelivery) elDelivery.innerHTML = `<i class="fas fa-calendar-check" style="color:var(--gold);"></i> ${delivery}`;
+
+    const elDesc = document.getElementById('modalPkgDescription');
+    if (elDesc) elDesc.textContent = desc;
+
+    // Render Inclusions
+    const elInc = document.getElementById('modalPkgInclusions');
+    if (elInc) {
+      elInc.innerHTML = '';
+      const inclusions = Array.isArray(pkg.inclusions) ? pkg.inclusions : [];
+      if (inclusions.length) {
+        inclusions.forEach(item => {
+          const li = document.createElement('li');
+          li.innerHTML = `<i class="fas fa-circle-check" style="color:#10B981;"></i> <span>${item}</span>`;
+          elInc.appendChild(li);
+        });
+      } else {
+        elInc.innerHTML = `<li style="color:#94A3B8;font-style:italic;">Standard civil structural, masonry & MEP works included.</li>`;
+      }
+    }
+
+    // Render Exclusions
+    const elExc = document.getElementById('modalPkgExclusions');
+    if (elExc) {
+      elExc.innerHTML = '';
+      const exclusions = Array.isArray(pkg.exclusions) ? pkg.exclusions : [];
+      if (exclusions.length) {
+        exclusions.forEach(item => {
+          const li = document.createElement('li');
+          li.innerHTML = `<i class="fas fa-circle-xmark" style="color:#EF4444;"></i> <span>${item}</span>`;
+          elExc.appendChild(li);
+        });
+      } else {
+        elExc.innerHTML = `<li style="color:#94A3B8;font-style:italic;">All listed standard specifications included. Premium upgrades available on request.</li>`;
+      }
+    }
+
+    // Render Material Features & Specifications
+    const elFeat = document.getElementById('modalPkgFeatures');
+    if (elFeat) {
+      elFeat.innerHTML = '';
+      const features = Array.isArray(pkg.features) ? pkg.features : [];
+      if (features.length) {
+        features.forEach(item => {
+          const li = document.createElement('li');
+          li.innerHTML = `<i class="fas fa-check" style="color:var(--gold);font-size:0.75rem;"></i> <span>${item}</span>`;
+          elFeat.appendChild(li);
+        });
+      } else {
+        elFeat.innerHTML = `<li style="color:#94A3B8;font-style:italic;">Brand-grade materials adhering to IS specifications.</li>`;
+      }
+    }
+
+    // Update WhatsApp link
+    const elWA = document.getElementById('btnPkgWhatsApp');
+    if (elWA) {
+      const priceText = price ? `₹${price}/sq.ft` : 'Custom Estimate';
+      const waMsg = encodeURIComponent(`Hello Er. Maha Rajan, I would like to inquire about the ${pkg.title || 'Package'} (${priceText}, ${division} • ${tier}). Please share more details.`);
+      const rawWA = (window.companyWhatsappRaw || '919095929543').toString().replace(/[^0-9]/g, '');
+      const targetWA = rawWA.length === 10 ? ('91' + rawWA) : (rawWA || '919095929543');
+      elWA.href = `https://wa.me/${targetWA}?text=${waMsg}`;
+    }
+
+    packageDetailsModal.classList.add('open');
+    document.body.classList.add('modal-open');
+  };
+
+  if (closePackageDetailsModal && packageDetailsModal) {
+    closePackageDetailsModal.addEventListener('click', function () {
+      packageDetailsModal.classList.remove('open');
+      document.body.classList.remove('modal-open');
+    });
+  }
+
+  // Click outside backdrop to close
+  if (packageDetailsModal) {
+    packageDetailsModal.addEventListener('click', function (e) {
+      if (e.target === packageDetailsModal) {
+        packageDetailsModal.classList.remove('open');
+        document.body.classList.remove('modal-open');
+      }
+    });
+  }
+
+  // Listen on [data-open-package-details]
+  document.querySelectorAll('[data-open-package-details]').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const raw = this.getAttribute('data-package');
+      if (raw) {
+        try {
+          const pkg = JSON.parse(raw);
+          window.openPackageDetailsModal(pkg);
+        } catch (err) {
+          console.error('Failed to parse package data', err);
+        }
+      }
+    });
+  });
+
+  // Action button: REQUEST ESTIMATE FOR THIS PACKAGE
+  const btnPkgRequestQuote = document.getElementById('btnPkgRequestQuote');
+  if (btnPkgRequestQuote) {
+    btnPkgRequestQuote.addEventListener('click', function () {
+      if (packageDetailsModal) packageDetailsModal.classList.remove('open');
+      if (quoteModal) {
+        quoteModal.classList.add('open');
+        document.body.classList.add('modal-open');
+
+        if (currentActivePackage) {
+          const div = (currentActivePackage.division || '').toLowerCase();
+          const projTypeSelect = quoteModal.querySelector('select[name="project_type"]');
+          if (projTypeSelect) {
+            if (div === 'commercial') {
+              projTypeSelect.value = 'Commercial Building';
+            } else {
+              projTypeSelect.value = 'Residential Villa';
+            }
+          }
+          const messageInput = quoteModal.querySelector('textarea[name="message"]');
+          if (messageInput) {
+            messageInput.value = `Interested in: ${currentActivePackage.title} (${currentActivePackage.division ? currentActivePackage.division.toUpperCase() : ''} • ${currentActivePackage.tier ? currentActivePackage.tier.toUpperCase() : ''}) — ₹${Number(currentActivePackage.price_per_sqft || 0).toLocaleString('en-IN')}/sq.ft turnkey package.`;
+          }
+        }
+      }
+    });
+  }
+
   // --- Residential / Commercial Package Tab Toggles ---
   const packageTabs = document.querySelectorAll('.package-tab-btn');
   packageTabs.forEach(tab => {

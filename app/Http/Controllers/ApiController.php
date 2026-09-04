@@ -17,6 +17,7 @@ use App\Models\Partner;
 use App\Models\NewsletterSubscriber;
 use App\Models\GuidebookLead;
 use App\Services\YouTubeSyncService;
+use App\Services\PackageMatrixService;
 
 class ApiController extends Controller
 {
@@ -301,6 +302,40 @@ class ApiController extends Controller
         $request->validate(['key' => 'required|string', 'value' => 'nullable|string']);
         $setting = Setting::updateOrCreate(['key' => $request->key], ['value' => $request->value]);
         return response()->json($setting);
+    }
+
+    // --- PACKAGE COMPARISON MATRIX ---
+    public function getPackageMatrix($division = 'residential')
+    {
+        $matrix = PackageMatrixService::getMatrix($division);
+        return response()->json([
+            'success'  => true,
+            'division' => strtolower($division),
+            'matrix'   => $matrix
+        ]);
+    }
+
+    public function savePackageMatrix(Request $request)
+    {
+        $request->validate([
+            'division' => 'required|string',
+            'matrix'   => 'required',
+        ]);
+
+        $division = strtolower($request->division);
+        $matrixData = is_string($request->matrix) ? json_decode($request->matrix, true) : $request->matrix;
+
+        if (!is_array($matrixData)) {
+            return response()->json(['success' => false, 'message' => 'Invalid matrix format'], 422);
+        }
+
+        $saved = PackageMatrixService::saveMatrix($division, $matrixData);
+
+        return response()->json([
+            'success' => true,
+            'message' => ucfirst($division) . ' comparison matrix saved successfully!',
+            'matrix'  => $saved
+        ]);
     }
 
     public function saveContactSettings(Request $request)

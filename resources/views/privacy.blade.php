@@ -10,7 +10,7 @@
 ['title'=>'Information Sharing','content'=>'We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except when required by law or to trusted partners who assist in operating our business and services.'],
 ['title'=>'Data Security','content'=>'We implement appropriate security measures to protect your information. However, no method of internet transmission is 100% secure, and we cannot guarantee absolute security.'],
 ['title'=>'Cookies','content'=>'We use cookies to enhance your experience on our website. You can choose to disable cookies through your browser settings, though this may affect some features of our site.'],
-['title'=>'Contact Us','content'=>'If you have questions about this Privacy Policy, please contact us at Mahaconstructions2013@gmail.com or call +91 94430 08095.'],
+['title'=>'Contact Us','content'=>'If you have questions about this Privacy Policy, please contact us at ' . $company_email . ' or call ' . $company_phone . '.'],
 ] as $section)
 <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;">
     <h3 style="font-family:var(--font-heading);font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:12px;">{{ $section['title'] }}</h3>

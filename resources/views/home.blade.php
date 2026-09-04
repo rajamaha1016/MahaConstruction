@@ -41,7 +41,7 @@
                     <button class="btn-gold-pill" data-open-quote>
                         {{ $hero_cta_primary }}
                     </button>
-                    <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20luxury%20home." target="_blank" class="btn-whatsapp-outline">
+                    <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20Dream%20home." target="_blank" class="btn-whatsapp-outline">
                         <i class="fab fa-whatsapp" style="font-size:18px;"></i>
                         WHATSAPP DIRECT
                     </a>
@@ -232,25 +232,61 @@
         <!-- Residential Group -->
         <div class="pricing-grid-3 package-group" id="residentialGroup">
             @php
-                $resTiers = ['basic', 'premium', 'luxury'];
+                $resDbPackages = \App\Models\PackageDetail::where('division', 'residential')->get();
                 $resFallbacks = [
-                    'basic'   => ['title'=>'BASIC PLAN',   'subtitle'=>'Solid & Affordable',  'price'=>1999, 'warranty'=>10, 'highlighted'=>false, 'features'=>['Fe-500 TMT steel','Coromandel / ACC cement','M-Sand blockwork','Vitrified floor tiles (2\'×2\')','Parryware CP fittings','Kundan / Anchor concealed wiring','Flush door entry system','Asian Paints Emulsion finish']],
-                    'premium' => ['title'=>'PREMIUM PLAN', 'subtitle'=>'Quality & Elegance',  'price'=>2399, 'warranty'=>15, 'highlighted'=>true,  'features'=>['Fe-550 TMT (JSW / Vizag Steel)','Ultratech Premium / Dalmia cement','Double-washed M-Sand','Kajaria double charged tiles (4\'×2\')','Jaquar sanitary & CP sets','Polycab wires & Roma switches','Teak wood entry door','Asian Paints Apex Ultima']],
-                    'luxury'  => ['title'=>'LUXURY PLAN',  'subtitle'=>'Elite Craftsmanship', 'price'=>2999, 'warranty'=>20, 'highlighted'=>false, 'features'=>['Fe-550 TMT (Tata Tiscon / JSPL)','Birla Super / ACC Gold cement','River sand / premium concrete sand','Italian Travertine / marble slabs','Kohler / Grohe collection','Finolex cables & Legrand switches','First-grade carved teak doors','Royale textured / custom panel finish']],
+                    [
+                        'tier'=>'basic', 'title'=>'BASIC PLAN', 'subtitle'=>'Solid & Affordable', 'price'=>1999, 'warranty'=>10, 'delivery'=>12, 'highlighted'=>false,
+                        'description'=>'A solid, cost-effective residential build using quality materials, standard-grade finishes, and proven structural systems — ideal for budget-conscious homeowners.',
+                        'features'=>['Fe-500 TMT steel','Coromandel / ACC cement','M-Sand blockwork','Vitrified floor tiles (2\'×2\')','Parryware CP fittings','Kundan / Anchor concealed wiring','Flush door entry system','Asian Paints Emulsion finish'],
+                        'inclusions'=>['Site supervision','Civil structural work','Plastering & waterproofing','Electrical wiring (concealed)','Plumbing works','Toilet sanitary fixtures','Main door with frame'],
+                        'exclusions'=>['Interior design','Modular kitchen','Landscaping','Smart home systems']
+                    ],
+                    [
+                        'tier'=>'premium', 'title'=>'PREMIUM PLAN', 'subtitle'=>'Quality & Elegance', 'price'=>2399, 'warranty'=>15, 'delivery'=>14, 'highlighted'=>true,
+                        'description'=>'A premium residential construction package with superior materials, polished finishes, and enhanced structural systems — built for growing families seeking elevated quality.',
+                        'features'=>['Fe-550 TMT (JSW / Vizag Steel)','Ultratech Premium / Dalmia cement','Double-washed M-Sand','Kajaria double charged tiles (4\'×2\')','Jaquar sanitary & CP sets','Polycab wires & Roma switches','Teak wood entry door','Asian Paints Apex Ultima'],
+                        'inclusions'=>['All Basic inclusions','Modular kitchen carcass','Premium tile work','CCTV provision','Power backup provision','Gypsum ceiling in living areas'],
+                        'exclusions'=>['Interior furniture','Landscaping','Smart automation']
+                    ],
+                    [
+                        'tier'=>'luxury', 'title'=>'LUXURY PLAN', 'subtitle'=>'Elite Craftsmanship', 'price'=>2999, 'warranty'=>20, 'delivery'=>18, 'highlighted'=>false,
+                        'description'=>'A fully bespoke luxury residential build using world-class materials, custom architectural details, and premium brand fixtures — crafted for discerning homeowners.',
+                        'features'=>['Fe-550 TMT (Tata Tiscon / JSPL)','Birla Super / ACC Gold cement','River sand / premium concrete sand','Italian Travertine / marble slabs','Kohler / Grohe collection','Finolex cables & Legrand switches','First-grade carved teak doors','Royale textured / custom panel finish'],
+                        'inclusions'=>['All Premium inclusions','Full modular kitchen','Smart home pre-wiring','Home theatre provision','Landscape design (basic)','Custom ceiling designs','Premium bathroom accessories'],
+                        'exclusions'=>['Smart home devices','Furniture & furnishings']
+                    ],
                 ];
-                $residentialPkgs = $residential ?? \App\Models\PackageDetail::where('division', 'residential')->get()->keyBy('tier');
+                $activeResPackages = $resDbPackages->isNotEmpty() ? $resDbPackages : collect($resFallbacks);
             @endphp
-            @foreach($resTiers as $tier)
+            @foreach($activeResPackages as $pkgItem)
                 @php
-                    $pkg = $residentialPkgs[$tier] ?? null;
-                    $fb  = $resFallbacks[$tier];
-                    $isHL = $pkg ? $pkg->is_highlighted : $fb['highlighted'];
-                    $title = $pkg ? strtoupper($pkg->title) : $fb['title'];
-                    $subtitle = $pkg ? $pkg->subtitle : $fb['subtitle'];
-                    $price = $pkg ? $pkg->price_per_sqft : $fb['price'];
-                    $warranty = $pkg && $pkg->warranty_years ? $pkg->warranty_years : $fb['warranty'];
-                    $tierLabel = strtoupper($pkg ? $pkg->tier : $tier) . ' TIER • ' . $warranty . ' Yrs Warranty';
-                    $features = ($pkg && is_array($pkg->features) && count($pkg->features)) ? $pkg->features : $fb['features'];
+                    $isModel = $pkgItem instanceof \App\Models\PackageDetail;
+                    $isHL = $isModel ? $pkgItem->is_highlighted : ($pkgItem['highlighted'] ?? false);
+                    $title = strtoupper($isModel ? $pkgItem->title : $pkgItem['title']);
+                    $subtitle = $isModel ? $pkgItem->subtitle : ($pkgItem['subtitle'] ?? '');
+                    $price = $isModel ? $pkgItem->price_per_sqft : ($pkgItem['price'] ?? null);
+                    $warranty = $isModel ? ($pkgItem->warranty_years ?? 10) : ($pkgItem['warranty'] ?? 10);
+                    $delivery = $isModel ? ($pkgItem->delivery_months ?? 12) : ($pkgItem['delivery'] ?? 12);
+                    $rawTier = $isModel ? ($pkgItem->tier ?? 'Standard') : ($pkgItem['tier'] ?? 'Standard');
+                    $tierClean = strtoupper(trim(preg_replace('/\btier\b/i', '', $rawTier)));
+                    $tierLabel = ($tierClean ? $tierClean . ' TIER' : 'STANDARD TIER') . ($warranty ? ' • ' . $warranty . ' Yrs Warranty' : '');
+                    $features = $isModel ? ((is_array($pkgItem->features) && count($pkgItem->features)) ? $pkgItem->features : ['Brand-grade structural materials', 'Concealed electrical & plumbing', 'Quality vitrified flooring', 'Standard CP fittings']) : ($pkgItem['features'] ?? []);
+                    $inclusions = $isModel ? ((is_array($pkgItem->inclusions) && count($pkgItem->inclusions)) ? $pkgItem->inclusions : ['Site supervision', 'Civil structural work', 'Plastering & waterproofing']) : ($pkgItem['inclusions'] ?? []);
+                    $exclusions = $isModel ? ((is_array($pkgItem->exclusions) && count($pkgItem->exclusions)) ? $pkgItem->exclusions : ['Interior design', 'Modular kitchen']) : ($pkgItem['exclusions'] ?? []);
+                    $description = $isModel ? ($pkgItem->description ?? 'Turnkey residential construction package engineered with registered engineer supervision.') : ($pkgItem['description'] ?? '');
+                    $pkgPayload = [
+                        'division'       => 'residential',
+                        'tier'           => $rawTier,
+                        'title'          => $title,
+                        'subtitle'       => $subtitle,
+                        'price_per_sqft' => $price,
+                        'warranty_years' => $warranty,
+                        'delivery_months'=> $delivery,
+                        'description'    => $description,
+                        'features'       => $features,
+                        'inclusions'     => $inclusions,
+                        'exclusions'     => $exclusions,
+                    ];
                 @endphp
                 <div class="package-card {{ $isHL ? 'highlighted' : '' }}">
                     @if($isHL)<div class="badge-popular">★ MOST POPULAR</div>@endif
@@ -258,14 +294,18 @@
                         <span class="plan-tier-label">{{ $tierLabel }}</span>
                         <h3 class="plan-title">{{ $title }}</h3>
                         <p style="font-size:0.8rem;color:var(--text-muted);">{{ $subtitle }}</p>
-                        <div class="plan-price">₹{{ number_format($price) }} <span>/ sq.ft</span></div>
+                        @if($price && $price > 0)
+                            <div class="plan-price">₹{{ number_format($price) }} <span>/ sq.ft</span></div>
+                        @else
+                            <div class="plan-price" style="font-size:1.35rem;letter-spacing:0.02em;">CUSTOM ESTIMATE <span style="font-size:0.75rem;display:block;color:var(--text-muted);font-weight:400;margin-top:2px;">Rate upon site consultation</span></div>
+                        @endif
                         <ul class="plan-features-list">
                             @foreach($features as $feat)
                                 <li>{{ $feat }}</li>
                             @endforeach
                         </ul>
                     </div>
-                    <button class="btn-gold-pill" style="width:100%;justify-content:center;margin-top:20px;" data-open-quote>VIEW DETAILS</button>
+                    <button type="button" class="btn-gold-pill" style="width:100%;justify-content:center;margin-top:20px;" data-open-package-details data-package="{{ json_encode($pkgPayload) }}">VIEW DETAILS</button>
                 </div>
             @endforeach
         </div>
@@ -273,25 +313,61 @@
         <!-- Commercial Group -->
         <div class="pricing-grid-3 package-group" id="commercialGroup" style="display:none;">
             @php
-                $comTiers = ['basic', 'premium', 'luxury'];
+                $comDbPackages = \App\Models\PackageDetail::where('division', 'commercial')->get();
                 $comFallbacks = [
-                    'basic'   => ['title'=>'STANDARD SHELL',    'subtitle'=>'Functional & Efficient',  'price'=>2100, 'warranty'=>10, 'highlighted'=>false, 'features'=>['Fe-500 TMT structural steel','OPC 53 grade cement','RCC framed structure','Vitrified floor tiles','Standard plumbing systems','Industrial-grade electrical wiring','Aluminium doors & windows','Exterior cement texture paint']],
-                    'premium' => ['title'=>'PREMIUM CORPORATE', 'subtitle'=>'Professional & Polished', 'price'=>2799, 'warranty'=>15, 'highlighted'=>true,  'features'=>['Fe-550 TMT (JSW Steel)','Ultratech / Ambuja cement','RCC frame + shear walls','Granite / double charged vitrified','Jaquar / Hindware fixtures','Polycab wires + RCCB MCB panel','Anodized aluminium UPVC systems','Texture + reflective glass curtain']],
-                    'luxury'  => ['title'=>'ELITE COMMERCIAL',  'subtitle'=>'Iconic Architecture',     'price'=>3499, 'warranty'=>20, 'highlighted'=>false, 'features'=>['Fe-550D TMT (SAIL / JSPL)','Birla Aditya / ACC Gold cement','Post-tensioned slabs','Stone cladding / premium marble','Geberit / TOTO commercial fixtures','Legrand Mosaic / Schneider systems','Structural glazing curtain wall','EIFS / metal composite facade']],
+                    [
+                        'tier'=>'basic', 'title'=>'STANDARD SHELL', 'subtitle'=>'Functional & Efficient', 'price'=>2199, 'warranty'=>10, 'delivery'=>14, 'highlighted'=>false,
+                        'description'=>'A functional, code-compliant commercial shell ideal for office spaces, retail outlets, and light commercial use — efficient and cost-effective at scale.',
+                        'features'=>['Fe-500 TMT structural steel','OPC 53 grade cement','RCC framed structure','Vitrified floor tiles','Standard plumbing systems','Industrial-grade electrical wiring','Aluminium doors & windows','Exterior cement texture paint'],
+                        'inclusions'=>['Core structural work','Basic MEP (electrical & plumbing)','Slab & column concrete','External plastering','Staircase with MS railing','Commercial-grade flooring','Waterproofing of terrace'],
+                        'exclusions'=>['Interior partitions','HVAC systems','False ceiling','Fire safety systems']
+                    ],
+                    [
+                        'tier'=>'premium', 'title'=>'PREMIUM CORPORATE', 'subtitle'=>'Professional & Polished', 'price'=>2799, 'warranty'=>15, 'delivery'=>18, 'highlighted'=>true,
+                        'description'=>'A professional-grade commercial building with premium structural detailing, enhanced MEP systems, and modern facade finishes — suited for corporate offices and retail centers.',
+                        'features'=>['Fe-550 TMT (JSW Steel)','Ultratech / Ambuja cement','RCC frame + shear walls','Granite / double charged vitrified','Jaquar / Hindware fixtures','Polycab wires + RCCB MCB panel','Anodized aluminium UPVC systems','Texture + reflective glass curtain'],
+                        'inclusions'=>['All Shell inclusions','False ceiling provision','Lift pit & motor room','HVAC duct provision','Fire hydrant system','CCTV & access control provision','DG set provision'],
+                        'exclusions'=>['Fit-out interiors','IT infrastructure','Furniture']
+                    ],
+                    [
+                        'tier'=>'luxury', 'title'=>'ELITE COMMERCIAL', 'subtitle'=>'Iconic Architecture', 'price'=>3499, 'warranty'=>20, 'delivery'=>24, 'highlighted'=>false,
+                        'description'=>'An iconic high-end commercial tower built to global standards — with curtain wall facades, high-capacity MEP systems, and architectural features that define city skylines.',
+                        'features'=>['Fe-550D TMT (SAIL / JSPL)','Birla Aditya / ACC Gold cement','Post-tensioned slabs','Stone cladding / premium marble','Geberit / TOTO commercial fixtures','Legrand Mosaic / Schneider systems','Structural glazing curtain wall','EIFS / metal composite facade'],
+                        'inclusions'=>['All Premium inclusions','Intelligent BMS system','Full fire suppression system','VRF HVAC system','High-speed elevator system','Basement parking structure','Green building LEED compliance','Architectural lighting design'],
+                        'exclusions'=>['Tenant fit-out works','IT & AV systems']
+                    ],
                 ];
-                $commercialPkgs = $commercial ?? \App\Models\PackageDetail::where('division', 'commercial')->get()->keyBy('tier');
+                $activeComPackages = $comDbPackages->isNotEmpty() ? $comDbPackages : collect($comFallbacks);
             @endphp
-            @foreach($comTiers as $tier)
+            @foreach($activeComPackages as $pkgItem)
                 @php
-                    $pkg = $commercialPkgs[$tier] ?? null;
-                    $fb  = $comFallbacks[$tier];
-                    $isHL = $pkg ? $pkg->is_highlighted : $fb['highlighted'];
-                    $title = $pkg ? strtoupper($pkg->title) : $fb['title'];
-                    $subtitle = $pkg ? $pkg->subtitle : $fb['subtitle'];
-                    $price = $pkg ? $pkg->price_per_sqft : $fb['price'];
-                    $warranty = $pkg && $pkg->warranty_years ? $pkg->warranty_years : $fb['warranty'];
-                    $tierLabel = strtoupper($pkg ? $pkg->tier : $tier) . ' TIER • ' . $warranty . ' Yrs Warranty';
-                    $features = ($pkg && is_array($pkg->features) && count($pkg->features)) ? $pkg->features : $fb['features'];
+                    $isModel = $pkgItem instanceof \App\Models\PackageDetail;
+                    $isHL = $isModel ? $pkgItem->is_highlighted : ($pkgItem['highlighted'] ?? false);
+                    $title = strtoupper($isModel ? $pkgItem->title : $pkgItem['title']);
+                    $subtitle = $isModel ? $pkgItem->subtitle : ($pkgItem['subtitle'] ?? '');
+                    $price = $isModel ? $pkgItem->price_per_sqft : ($pkgItem['price'] ?? null);
+                    $warranty = $isModel ? ($pkgItem->warranty_years ?? 10) : ($pkgItem['warranty'] ?? 10);
+                    $delivery = $isModel ? ($pkgItem->delivery_months ?? 12) : ($pkgItem['delivery'] ?? 12);
+                    $rawTier = $isModel ? ($pkgItem->tier ?? 'Standard') : ($pkgItem['tier'] ?? 'Standard');
+                    $tierClean = strtoupper(trim(preg_replace('/\btier\b/i', '', $rawTier)));
+                    $tierLabel = ($tierClean ? $tierClean . ' TIER' : 'STANDARD TIER') . ($warranty ? ' • ' . $warranty . ' Yrs Warranty' : '');
+                    $features = $isModel ? ((is_array($pkgItem->features) && count($pkgItem->features)) ? $pkgItem->features : ['Core structural frame', 'Basic MEP works', 'Industrial grade electrical', 'Aluminium doors & windows']) : ($pkgItem['features'] ?? []);
+                    $inclusions = $isModel ? ((is_array($pkgItem->inclusions) && count($pkgItem->inclusions)) ? $pkgItem->inclusions : ['Core structural work', 'External plastering', 'Terrace waterproofing']) : ($pkgItem['inclusions'] ?? []);
+                    $exclusions = $isModel ? ((is_array($pkgItem->exclusions) && count($pkgItem->exclusions)) ? $pkgItem->exclusions : ['Interior partitions', 'HVAC systems']) : ($pkgItem['exclusions'] ?? []);
+                    $description = $isModel ? ($pkgItem->description ?? 'Turnkey commercial construction package built to code and structural specifications.') : ($pkgItem['description'] ?? '');
+                    $pkgPayload = [
+                        'division'       => 'commercial',
+                        'tier'           => $rawTier,
+                        'title'          => $title,
+                        'subtitle'       => $subtitle,
+                        'price_per_sqft' => $price,
+                        'warranty_years' => $warranty,
+                        'delivery_months'=> $delivery,
+                        'description'    => $description,
+                        'features'       => $features,
+                        'inclusions'     => $inclusions,
+                        'exclusions'     => $exclusions,
+                    ];
                 @endphp
                 <div class="package-card {{ $isHL ? 'highlighted' : '' }}">
                     @if($isHL)<div class="badge-popular">★ MOST POPULAR</div>@endif
@@ -299,14 +375,18 @@
                         <span class="plan-tier-label">{{ $tierLabel }}</span>
                         <h3 class="plan-title">{{ $title }}</h3>
                         <p style="font-size:0.8rem;color:var(--text-muted);">{{ $subtitle }}</p>
-                        <div class="plan-price">₹{{ number_format($price) }} <span>/ sq.ft</span></div>
+                        @if($price && $price > 0)
+                            <div class="plan-price">₹{{ number_format($price) }} <span>/ sq.ft</span></div>
+                        @else
+                            <div class="plan-price" style="font-size:1.35rem;letter-spacing:0.02em;">CUSTOM ESTIMATE <span style="font-size:0.75rem;display:block;color:var(--text-muted);font-weight:400;margin-top:2px;">Rate upon site consultation</span></div>
+                        @endif
                         <ul class="plan-features-list">
                             @foreach($features as $feat)
                                 <li>{{ $feat }}</li>
                             @endforeach
                         </ul>
                     </div>
-                    <button class="btn-gold-pill" style="width:100%;justify-content:center;margin-top:20px;" data-open-quote>VIEW DETAILS</button>
+                    <button type="button" class="btn-gold-pill" style="width:100%;justify-content:center;margin-top:20px;" data-open-package-details data-package="{{ json_encode($pkgPayload) }}">VIEW DETAILS</button>
                 </div>
             @endforeach
         </div>

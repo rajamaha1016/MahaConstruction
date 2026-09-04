@@ -17,8 +17,8 @@ Route::get('/services',       [PageController::class, 'services'])->name('servic
 Route::get('/projects',       [PageController::class, 'projects'])->name('projects');
 Route::get('/gallery',        [PageController::class, 'gallery'])->name('gallery');
 Route::get('/testimonials',   [PageController::class, 'testimonials'])->name('testimonials');
-Route::get('/calculator',     [PageController::class, 'calculator'])->name('calculator');
-Route::redirect('/cost-calculator', '/calculator');
+Route::redirect('/calculator', '/pricing')->name('calculator');
+Route::redirect('/cost-calculator', '/pricing');
 Route::get('/faq',            [PageController::class, 'faq'])->name('faq');
 Route::get('/contact',        [PageController::class, 'contact'])->name('contact');
 Route::get('/blog',           [PageController::class, 'blogIndex'])->name('blog');

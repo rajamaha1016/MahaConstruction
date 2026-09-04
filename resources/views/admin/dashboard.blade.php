@@ -501,15 +501,93 @@
                     <div class="pricing-grid-3">
                         @foreach(\App\Models\PackageDetail::all() as $package)
                         <div class="package-card" style="padding:20px;">
-                            <span class="plan-tier-label">{{ strtoupper($package->division) }} • {{ strtoupper($package->tier) }}</span>
+                            <div style="display:flex;justify-content:space-between;align-items:center;">
+                                <span class="plan-tier-label">{{ strtoupper($package->division) }} • {{ strtoupper($package->tier) }}</span>
+                                @if($package->is_highlighted)<span style="font-size:0.65rem;color:#D4AF37;font-weight:700;">★ POPULAR</span>@endif
+                            </div>
                             <h3 class="plan-title" style="font-size:1.2rem;">{{ $package->title }}</h3>
-                            <div class="plan-price" style="font-size:1.5rem;margin:8px 0;">₹{{ number_format($package->price_per_sqft) }} <span>/ sq.ft</span></div>
+                            <div class="plan-price" style="font-size:1.5rem;margin:8px 0;">
+                                @if($package->price_per_sqft && $package->price_per_sqft > 0)
+                                    ₹{{ number_format($package->price_per_sqft) }} <span>/ sq.ft</span>
+                                @else
+                                    <span style="font-size:1.1rem;color:var(--gold);font-weight:700;">CUSTOM / ON REQUEST</span>
+                                @endif
+                            </div>
+                            <div style="font-size:0.75rem;color:#94A3B8;margin-bottom:8px;">
+                                🛡️ {{ $package->warranty_years ?? 10 }} Yrs Warranty • ⏱️ {{ $package->delivery_months ?? 12 }} Mo Delivery
+                            </div>
                             <div style="display:flex;gap:8px;margin-top:12px;">
                                 <button type="button" class="action-edit-btn" style="width:auto;padding:6px 14px;gap:6px;" onclick='openEditModal("package", @json($package))' title="Edit Package"><i class="fas fa-pen-to-square"></i> EDIT</button>
                                 <button type="button" class="action-del-btn" onclick="deleteItem(event, 'packages', {{ $package->id }}, this)" title="Delete Package"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
                         @endforeach
+                    </div>
+                </div>
+
+                <!-- 3B. CONSTRUCTION PACKAGES COMPARISON MATRIX / SPEC TABLE EDITOR -->
+                <div class="card-dark-panel" style="margin-top:28px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+                        <div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <span style="font-size:1.3rem;">📊</span>
+                                <h2 class="panel-header-title" style="margin:0;">CONSTRUCTION PACKAGES COMPARISON MATRIX</h2>
+                            </div>
+                            <p class="panel-header-sub" style="margin-top:4px;">
+                                Edit the live specification benchmark matrix shown on the pricing page ("VIEW SPEC TABLE") and the home page ("COMPARE PACKAGES" modal). Live site immediately updates with what you enter here — no dummy data!
+                            </p>
+                        </div>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <button type="button" class="btn-gold-pill" onclick="saveActiveMatrix()" style="padding:9px 22px;font-size:0.85rem;">
+                                <i class="fas fa-floppy-disk" style="margin-right:6px;"></i> SAVE MATRIX
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Division Toggle Tabs & Toolbar -->
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin:20px 0 16px;padding:12px 16px;background:rgba(5,11,20,0.6);border:1px solid rgba(212,175,55,0.25);border-radius:12px;">
+                        <div style="display:flex;gap:8px;">
+                            <button type="button" id="btnMatDivRes" class="btn-gold-pill" onclick="switchMatrixDivision('residential')" style="padding:6px 16px;font-size:0.8rem;border-radius:8px;color:#000;">
+                                <i class="fas fa-house" style="margin-right:6px;"></i> RESIDENTIAL MATRIX
+                            </button>
+                            <button type="button" id="btnMatDivCom" class="btn-whatsapp-outline" onclick="switchMatrixDivision('commercial')" style="padding:6px 16px;font-size:0.8rem;border-radius:8px;border-color:rgba(212,175,55,0.4);color:#D4AF37;">
+                                <i class="fas fa-building" style="margin-right:6px;"></i> COMMERCIAL MATRIX
+                            </button>
+                        </div>
+
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                            <button type="button" class="btn-whatsapp-outline" onclick="addMatrixRow()" style="padding:6px 14px;font-size:0.75rem;border-color:rgba(212,175,55,0.4);color:#D4AF37;">
+                                <i class="fas fa-plus" style="margin-right:4px;"></i> ADD SPEC ROW
+                            </button>
+                            <button type="button" class="btn-whatsapp-outline" onclick="addMatrixColumn()" style="padding:6px 14px;font-size:0.75rem;border-color:rgba(212,175,55,0.4);color:#D4AF37;">
+                                <i class="fas fa-table-columns" style="margin-right:4px;"></i> ADD TIER COLUMN
+                            </button>
+                            <button type="button" class="btn-whatsapp-outline" onclick="syncMatrixColumnsFromPackages()" title="Auto-fill column headers from active packages in database" style="padding:6px 14px;font-size:0.75rem;border-color:rgba(212,175,55,0.4);color:#D4AF37;">
+                                <i class="fas fa-arrows-rotate" style="margin-right:4px;"></i> SYNC FROM PACKAGES
+                            </button>
+                            <button type="button" class="btn-whatsapp-outline" onclick="resetMatrixToDefaults()" style="padding:6px 14px;font-size:0.75rem;border-color:rgba(255,255,255,0.2);color:#94A3B8;">
+                                <i class="fas fa-rotate-left" style="margin-right:4px;"></i> RESET DEFAULTS
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Alert message container -->
+                    <div id="matrixAlertBox" style="display:none;margin-bottom:16px;padding:12px 18px;border-radius:10px;font-size:0.85rem;font-weight:600;"></div>
+
+                    <!-- Table Container -->
+                    <div class="table-responsive" style="overflow-x:auto;border:1px solid rgba(212,175,55,0.25);border-radius:12px;background:#050B14;">
+                        <table id="matrixEditorTable" style="width:100%;border-collapse:collapse;font-size:0.85rem;min-width:750px;">
+                            <!-- Populated dynamically via JS -->
+                        </table>
+                    </div>
+
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;flex-wrap:wrap;gap:10px;">
+                        <span style="font-size:0.75rem;color:#64748B;">
+                            💡 Click on any specification or cell text to edit directly. Click <strong>SAVE MATRIX</strong> to push changes live instantly.
+                        </span>
+                        <button type="button" class="btn-gold-pill" onclick="saveActiveMatrix()" style="padding:9px 24px;font-size:0.85rem;">
+                            <i class="fas fa-floppy-disk" style="margin-right:6px;"></i> SAVE MATRIX
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1248,23 +1326,42 @@
                         </select>
                     </div>
                     <div>
-                        <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">TIER *</label>
-                        <select id="pk_tier" class="input-dark" style="width:100%;" required>
-                            <option value="basic">Basic</option>
-                            <option value="standard">Standard</option>
-                            <option value="premium">Premium</option>
-                            <option value="luxury">Luxury</option>
-                            <option value="elite">Elite</option>
-                        </select>
+                        <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">TIER CATEGORY * <span style="color:#94A3B8;font-weight:400;text-transform:none;">(Select or type custom)</span></label>
+                        <input id="pk_tier" type="text" list="pk_tier_presets" required placeholder="e.g. Basic, Standard, Premium, Luxury, Elite or Custom" class="input-dark" style="width:100%;box-sizing:border-box;">
+                        <datalist id="pk_tier_presets">
+                            <option value="basic">Basic Tier</option>
+                            <option value="standard">Standard Tier</option>
+                            <option value="premium">Premium Tier</option>
+                            <option value="luxury">Luxury Tier</option>
+                            <option value="elite">Elite Tier</option>
+                        </datalist>
                     </div>
                 </div>
                 <div>
                     <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">PACKAGE TITLE *</label>
                     <input id="pk_title" type="text" required placeholder="e.g. Premium Residential Package" class="input-dark" style="width:100%;box-sizing:border-box;">
                 </div>
-                <div>
-                    <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">PRICE PER SQ.FT (₹) *</label>
-                    <input id="pk_price" type="number" required placeholder="e.g. 1850" class="input-dark" style="width:100%;box-sizing:border-box;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div>
+                        <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">PRICE PER SQ.FT (₹) <span style="color:#94A3B8;font-weight:400;text-transform:none;">(Optional)</span></label>
+                        <input id="pk_price" type="number" placeholder="e.g. 1850 (Optional)" class="input-dark" style="width:100%;box-sizing:border-box;">
+                    </div>
+                    <div>
+                        <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">WARRANTY (YEARS) *</label>
+                        <input id="pk_warranty" type="number" min="0" max="100" required placeholder="e.g. 10, 15, 20" class="input-dark" style="width:100%;box-sizing:border-box;" value="10">
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div>
+                        <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">DELIVERY TIMELINE (MONTHS)</label>
+                        <input id="pk_delivery" type="number" min="1" max="60" placeholder="e.g. 12, 14, 18" class="input-dark" style="width:100%;box-sizing:border-box;" value="12">
+                    </div>
+                    <div style="display:flex;align-items:center;padding-top:18px;">
+                        <label style="display:inline-flex;align-items:center;gap:8px;font-size:0.75rem;color:#E2E8F0;font-weight:700;cursor:pointer;">
+                            <input type="checkbox" id="pk_highlighted" style="accent-color:#D4AF37;width:18px;height:18px;cursor:pointer;">
+                            <span>★ MOST POPULAR / HIGHLIGHTED</span>
+                        </label>
+                    </div>
                 </div>
                 <div>
                     <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">SUBTITLE / TAGLINE</label>
@@ -1817,6 +1914,9 @@ function resetAllForms() {
     document.getElementById('p_editing_id').value = '';
     document.getElementById('pk_editing_id').value = '';
     document.getElementById('pt_editing_id').value = '';
+    if (document.getElementById('pk_warranty')) document.getElementById('pk_warranty').value = '10';
+    if (document.getElementById('pk_delivery')) document.getElementById('pk_delivery').value = '12';
+    if (document.getElementById('pk_highlighted')) document.getElementById('pk_highlighted').checked = false;
     autoExtractedTestimonialBlob = null;
     autoExtractedProjectBlob     = null;
 }
@@ -1904,7 +2004,10 @@ function openEditModal(type, item) {
         document.getElementById('pk_division').value     = item.division || 'residential';
         document.getElementById('pk_tier').value         = item.tier || 'standard';
         document.getElementById('pk_title').value        = item.title || '';
-        document.getElementById('pk_price').value        = item.price_per_sqft || '';
+        document.getElementById('pk_price').value        = (item.price_per_sqft && item.price_per_sqft > 0) ? item.price_per_sqft : '';
+        document.getElementById('pk_warranty').value     = (item.warranty_years !== null && item.warranty_years !== undefined) ? item.warranty_years : 10;
+        document.getElementById('pk_delivery').value     = item.delivery_months || 12;
+        document.getElementById('pk_highlighted').checked = !!item.is_highlighted;
         document.getElementById('pk_subtitle').value     = item.subtitle || '';
         document.getElementById('pk_description').value  = item.description || '';
 
@@ -2516,13 +2619,16 @@ async function submitPackage(e) {
     const errEl = document.getElementById('packageModalError');
     errEl.style.display = 'none';
 
-    const editId   = document.getElementById('pk_editing_id').value;
-    const division = document.getElementById('pk_division').value;
-    const tier     = document.getElementById('pk_tier').value;
-    const title    = document.getElementById('pk_title').value.trim();
-    const price    = document.getElementById('pk_price').value;
-    const subtitle = document.getElementById('pk_subtitle').value.trim();
-    const desc     = document.getElementById('pk_description').value.trim();
+    const editId        = document.getElementById('pk_editing_id').value;
+    const division      = document.getElementById('pk_division').value;
+    const tier          = document.getElementById('pk_tier').value.trim();
+    const title         = document.getElementById('pk_title').value.trim();
+    const price         = document.getElementById('pk_price').value;
+    const warranty      = document.getElementById('pk_warranty').value;
+    const delivery      = document.getElementById('pk_delivery').value;
+    const isHighlighted = document.getElementById('pk_highlighted').checked;
+    const subtitle      = document.getElementById('pk_subtitle').value.trim();
+    const desc          = document.getElementById('pk_description').value.trim();
 
     // Parse multiline textareas into arrays (filter empty lines)
     const toArray = (id) => document.getElementById(id).value
@@ -2534,19 +2640,22 @@ async function submitPackage(e) {
     const inclusions = toArray('pk_inclusions');
     const exclusions = toArray('pk_exclusions');
 
-    if (!title || !price) { errEl.textContent = 'Title and price are required.'; errEl.style.display='block'; return; }
+    if (!title || !tier) { errEl.textContent = 'Title and tier category are required.'; errEl.style.display='block'; return; }
 
     try {
         const payload = {
             division,
-            tier,
+            tier:            tier.toLowerCase(),
             title,
-            price_per_sqft: parseFloat(price),
-            subtitle:   subtitle   || null,
-            description: desc      || null,
-            features:   features.length   ? features   : null,
-            inclusions: inclusions.length ? inclusions : null,
-            exclusions: exclusions.length ? exclusions : null,
+            price_per_sqft:  (price !== '' && price !== null && !isNaN(parseFloat(price)) && parseFloat(price) > 0) ? parseFloat(price) : null,
+            warranty_years:  (warranty !== '' && !isNaN(parseInt(warranty))) ? parseInt(warranty) : 10,
+            delivery_months: (delivery !== '' && !isNaN(parseInt(delivery))) ? parseInt(delivery) : 12,
+            is_highlighted:  isHighlighted,
+            subtitle:        subtitle   || null,
+            description:     desc      || null,
+            features:        features.length   ? features   : null,
+            inclusions:      inclusions.length ? inclusions : null,
+            exclusions:      exclusions.length ? exclusions : null,
         };
 
         const url    = editId ? `/api/packages/${editId}` : '/api/packages';
@@ -3135,6 +3244,378 @@ function previewIntroVideo() {
         window.open(url, '_blank');
     }
 }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ── CONSTRUCTION PACKAGES COMPARISON MATRIX EDITOR ───────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+const matrixStore = {
+    residential: @json($package_spec_matrix_res),
+    commercial:  @json($package_spec_matrix_com)
+};
+const rawDbPackageTitles = {
+    residential: @json(\App\Models\PackageDetail::where('division', 'residential')->pluck('title')),
+    commercial:  @json(\App\Models\PackageDetail::where('division', 'commercial')->pluck('title'))
+};
+const dbPackageTiers = {
+    residential: (rawDbPackageTitles.residential || []).map(t => t.replace(/\bplan\b|\bpackage\b/ig, '').trim().toUpperCase()).filter(Boolean),
+    commercial:  (rawDbPackageTitles.commercial || []).map(t => t.replace(/\bplan\b|\bpackage\b/ig, '').trim().toUpperCase()).filter(Boolean)
+};
+let activeMatrixDivision = 'residential';
+
+function switchMatrixDivision(division) {
+    syncMatrixInputsToStore();
+    activeMatrixDivision = division;
+
+    const resBtn = document.getElementById('btnMatDivRes');
+    const comBtn = document.getElementById('btnMatDivCom');
+    if (division === 'residential') {
+        resBtn.className = 'btn-gold-pill';
+        resBtn.style.color = '#000';
+        comBtn.className = 'btn-whatsapp-outline';
+        comBtn.style.color = '#D4AF37';
+        comBtn.style.borderColor = 'rgba(212,175,55,0.4)';
+    } else {
+        comBtn.className = 'btn-gold-pill';
+        comBtn.style.color = '#000';
+        resBtn.className = 'btn-whatsapp-outline';
+        resBtn.style.color = '#D4AF37';
+        resBtn.style.borderColor = 'rgba(212,175,55,0.4)';
+    }
+
+    renderMatrixEditorTable();
+    hideMatrixAlert();
+}
+
+function syncMatrixInputsToStore() {
+    const table = document.getElementById('matrixEditorTable');
+    if (!table) return;
+
+    const current = matrixStore[activeMatrixDivision];
+    if (!current) return;
+
+    // Sync header inputs
+    const headerInputs = table.querySelectorAll('thead th input.matrix-col-input');
+    headerInputs.forEach((inp, idx) => {
+        if (inp && idx < current.headers.length) {
+            const val = inp.value.trim();
+            if (val) current.headers[idx] = val.toUpperCase();
+        }
+    });
+
+    // Sync row inputs
+    const rowEls = table.querySelectorAll('tbody tr.matrix-row-item');
+    rowEls.forEach((tr, rIdx) => {
+        if (rIdx < current.rows.length) {
+            const featureInp = tr.querySelector('input.matrix-feature-input');
+            if (featureInp) {
+                current.rows[rIdx].feature = featureInp.value.trim() || current.rows[rIdx].feature;
+            }
+            const valInps = tr.querySelectorAll('input.matrix-val-input');
+            valInps.forEach((vInp, cIdx) => {
+                if (cIdx < current.headers.length) {
+                    current.rows[rIdx].values[cIdx] = vInp.value;
+                }
+            });
+        }
+    });
+}
+
+function renderMatrixEditorTable() {
+    const table = document.getElementById('matrixEditorTable');
+    if (!table) return;
+
+    const data = matrixStore[activeMatrixDivision];
+    if (!data || !data.headers || !data.rows) return;
+
+    let theadHtml = `<thead>
+        <tr style="background:#0F172A;border-bottom:2px solid rgba(212,175,55,0.35);">
+            <th style="padding:12px 14px;text-align:left;color:#D4AF37;font-weight:700;font-size:0.75rem;letter-spacing:0.05em;width:240px;">
+                SPECIFICATION / MATERIAL
+            </th>`;
+
+    data.headers.forEach((headerName, idx) => {
+        theadHtml += `
+            <th style="padding:10px 12px;text-align:left;color:#D4AF37;font-weight:700;font-size:0.75rem;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                    <input type="text" class="input-dark matrix-col-input" value="${escapeMatrixHtml(headerName)}"
+                           style="padding:5px 8px;font-size:0.75rem;font-weight:700;color:#D4AF37;width:100%;border-color:rgba(212,175,55,0.3);text-transform:uppercase;"
+                           onchange="onMatrixColNameChange(${idx}, this.value)" title="Click to rename tier column">
+                    ${data.headers.length > 1 ? `
+                    <button type="button" class="action-del-btn" onclick="deleteMatrixColumn(${idx})" title="Delete tier column" style="width:26px;height:26px;font-size:0.7rem;">
+                        <i class="fas fa-times"></i>
+                    </button>` : ''}
+                </div>
+            </th>`;
+    });
+
+    theadHtml += `
+            <th style="padding:12px 14px;text-align:center;color:#94A3B8;font-weight:700;font-size:0.72rem;width:90px;">
+                ACTIONS
+            </th>
+        </tr>
+    </thead>`;
+
+    let tbodyHtml = `<tbody>`;
+    data.rows.forEach((row, rIdx) => {
+        tbodyHtml += `
+        <tr class="matrix-row-item" style="border-bottom:1px solid rgba(212,175,55,0.15);background:${rIdx % 2 === 0 ? 'rgba(15,23,42,0.4)' : 'rgba(5,11,20,0.3)'};">
+            <td style="padding:8px 10px;vertical-align:middle;">
+                <input type="text" class="input-dark matrix-feature-input" value="${escapeMatrixHtml(row.feature)}"
+                       placeholder="Specification label..."
+                       style="padding:6px 10px;font-size:0.8rem;font-weight:700;color:#fff;width:100%;border-color:rgba(212,175,55,0.25);"
+                       onchange="onMatrixFeatureChange(${rIdx}, this.value)">
+            </td>`;
+
+        data.headers.forEach((_, cIdx) => {
+            const cellVal = row.values && row.values[cIdx] !== undefined ? row.values[cIdx] : '';
+            tbodyHtml += `
+            <td style="padding:8px 10px;vertical-align:middle;">
+                <input type="text" class="input-dark matrix-val-input" value="${escapeMatrixHtml(cellVal)}"
+                       placeholder="Enter spec..."
+                       style="padding:6px 10px;font-size:0.8rem;color:#E2E8F0;width:100%;border-color:rgba(255,255,255,0.1);"
+                       onchange="onMatrixCellChange(${rIdx}, ${cIdx}, this.value)">
+            </td>`;
+        });
+
+        tbodyHtml += `
+            <td style="padding:8px 10px;text-align:center;vertical-align:middle;white-space:nowrap;">
+                <div style="display:inline-flex;gap:4px;">
+                    <button type="button" class="action-edit-btn" onclick="moveMatrixRow(${rIdx}, -1)" title="Move Up" ${rIdx === 0 ? 'disabled style="opacity:0.3;cursor:not-allowed;width:26px;height:26px;"' : 'style="width:26px;height:26px;padding:0;"'}>
+                        <i class="fas fa-chevron-up" style="font-size:0.7rem;"></i>
+                    </button>
+                    <button type="button" class="action-edit-btn" onclick="moveMatrixRow(${rIdx}, 1)" title="Move Down" ${rIdx === data.rows.length - 1 ? 'disabled style="opacity:0.3;cursor:not-allowed;width:26px;height:26px;"' : 'style="width:26px;height:26px;padding:0;"'}>
+                        <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                    </button>
+                    <button type="button" class="action-del-btn" onclick="deleteMatrixRow(${rIdx})" title="Delete row" style="width:26px;height:26px;">
+                        <i class="fas fa-trash" style="font-size:0.7rem;"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>`;
+    });
+
+    tbodyHtml += `</tbody>`;
+
+    table.innerHTML = theadHtml + tbodyHtml;
+}
+
+function escapeMatrixHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function onMatrixColNameChange(colIdx, newName) {
+    const val = newName.trim();
+    if (val) {
+        matrixStore[activeMatrixDivision].headers[colIdx] = val.toUpperCase();
+    }
+}
+
+function onMatrixFeatureChange(rowIdx, newFeature) {
+    const val = newFeature.trim();
+    if (val) {
+        matrixStore[activeMatrixDivision].rows[rowIdx].feature = val;
+    }
+}
+
+function onMatrixCellChange(rowIdx, colIdx, newVal) {
+    if (matrixStore[activeMatrixDivision].rows[rowIdx]) {
+        matrixStore[activeMatrixDivision].rows[rowIdx].values[colIdx] = newVal;
+    }
+}
+
+function addMatrixRow() {
+    syncMatrixInputsToStore();
+    const data = matrixStore[activeMatrixDivision];
+    const emptyVals = new Array(data.headers.length).fill('');
+    data.rows.push({
+        feature: 'NEW SPECIFICATION',
+        values: emptyVals
+    });
+    renderMatrixEditorTable();
+    showMatrixAlert('Added a new row. Remember to click "SAVE MATRIX" when done.', 'info');
+}
+
+function deleteMatrixRow(index) {
+    syncMatrixInputsToStore();
+    const data = matrixStore[activeMatrixDivision];
+    if (data.rows.length <= 1) {
+        alert('At least one specification row must remain.');
+        return;
+    }
+    const item = data.rows[index];
+    if (confirm(`Delete specification "${item.feature}"?`)) {
+        data.rows.splice(index, 1);
+        renderMatrixEditorTable();
+        showMatrixAlert(`Row "${item.feature}" removed. Click "SAVE MATRIX" to apply.`, 'info');
+    }
+}
+
+function moveMatrixRow(index, direction) {
+    syncMatrixInputsToStore();
+    const rows = matrixStore[activeMatrixDivision].rows;
+    const target = index + direction;
+    if (target < 0 || target >= rows.length) return;
+    const temp = rows[index];
+    rows[index] = rows[target];
+    rows[target] = temp;
+    renderMatrixEditorTable();
+}
+
+function addMatrixColumn() {
+    syncMatrixInputsToStore();
+    const colName = prompt('Enter new tier / package column name:', 'NEW TIER');
+    if (!colName || !colName.trim()) return;
+
+    const formatted = colName.trim().toUpperCase();
+    const data = matrixStore[activeMatrixDivision];
+    data.headers.push(formatted);
+    data.rows.forEach(r => {
+        if (!Array.isArray(r.values)) r.values = [];
+        r.values.push('');
+    });
+
+    renderMatrixEditorTable();
+    showMatrixAlert(`Column "${formatted}" added. Click "SAVE MATRIX" to apply.`, 'info');
+}
+
+function deleteMatrixColumn(colIdx) {
+    syncMatrixInputsToStore();
+    const data = matrixStore[activeMatrixDivision];
+    if (data.headers.length <= 1) {
+        alert('At least one column is required.');
+        return;
+    }
+    const colName = data.headers[colIdx];
+    if (confirm(`Are you sure you want to delete column "${colName}" and all its values?`)) {
+        data.headers.splice(colIdx, 1);
+        data.rows.forEach(r => {
+            if (Array.isArray(r.values) && r.values.length > colIdx) {
+                r.values.splice(colIdx, 1);
+            }
+        });
+        renderMatrixEditorTable();
+        showMatrixAlert(`Column "${colName}" removed. Click "SAVE MATRIX" to apply.`, 'info');
+    }
+}
+
+function syncMatrixColumnsFromPackages() {
+    syncMatrixInputsToStore();
+    const tiers = dbPackageTiers[activeMatrixDivision] || [];
+    if (!tiers.length) {
+        alert('No active packages found in database for ' + activeMatrixDivision);
+        return;
+    }
+
+    if (confirm(`Sync columns with active packages (${tiers.join(', ')})? Existing cell values will align to the new column order.`)) {
+        const data = matrixStore[activeMatrixDivision];
+        data.headers = tiers.map(t => t.toUpperCase());
+        data.rows.forEach(r => {
+            while (r.values.length < data.headers.length) {
+                r.values.push('');
+            }
+            if (r.values.length > data.headers.length) {
+                r.values = r.values.slice(0, data.headers.length);
+            }
+        });
+        renderMatrixEditorTable();
+        showMatrixAlert(`Columns synchronized with active ${activeMatrixDivision} packages. Click "SAVE MATRIX" to commit.`, 'info');
+    }
+}
+
+async function resetMatrixToDefaults() {
+    if (!confirm(`Reset ${activeMatrixDivision.toUpperCase()} matrix back to standard default specifications? Any unsaved custom rows will be overwritten.`)) {
+        return;
+    }
+
+    try {
+        const res = await fetch(`/api/matrix/${activeMatrixDivision}`);
+        const json = await res.json();
+        if (json && json.matrix) {
+            matrixStore[activeMatrixDivision] = json.matrix;
+            renderMatrixEditorTable();
+            showMatrixAlert('Reset to standard specifications. Click "SAVE MATRIX" if you want to commit this to live site.', 'info');
+        }
+    } catch (e) {
+        alert('Failed to load defaults: ' + e.message);
+    }
+}
+
+async function saveActiveMatrix() {
+    syncMatrixInputsToStore();
+    const data = matrixStore[activeMatrixDivision];
+    hideMatrixAlert();
+
+    const saveButtons = document.querySelectorAll('button[onclick="saveActiveMatrix()"]');
+    saveButtons.forEach(btn => {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i> SAVING...';
+    });
+
+    try {
+        const res = await fetch('/api/settings/matrix', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': CSRF()
+            },
+            body: JSON.stringify({
+                division: activeMatrixDivision,
+                matrix: data
+            })
+        });
+
+        const json = await res.json();
+        if (!res.ok || !json.success) {
+            throw new Error(json?.message || 'Save failed');
+        }
+
+        showMatrixAlert(`✅ ${activeMatrixDivision.toUpperCase()} Comparison Matrix saved successfully! Live website (Pricing page & Home modal) now shows your updated data.`, 'success');
+    } catch (err) {
+        showMatrixAlert('❌ Error saving matrix: ' + err.message, 'error');
+    } finally {
+        saveButtons.forEach(btn => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-floppy-disk" style="margin-right:6px;"></i> SAVE MATRIX';
+        });
+    }
+}
+
+function showMatrixAlert(msg, type) {
+    const box = document.getElementById('matrixAlertBox');
+    if (!box) return;
+    box.style.display = 'block';
+    if (type === 'success') {
+        box.style.background = 'rgba(46, 204, 113, 0.2)';
+        box.style.color = '#2ecc71';
+        box.style.border = '1px solid #2ecc71';
+    } else if (type === 'error') {
+        box.style.background = 'rgba(231, 76, 60, 0.2)';
+        box.style.color = '#e74c3c';
+        box.style.border = '1px solid #e74c3c';
+    } else {
+        box.style.background = 'rgba(212, 175, 55, 0.15)';
+        box.style.color = '#D4AF37';
+        box.style.border = '1px solid rgba(212, 175, 55, 0.35)';
+    }
+    box.textContent = msg;
+}
+
+function hideMatrixAlert() {
+    const box = document.getElementById('matrixAlertBox');
+    if (box) box.style.display = 'none';
+}
+
+// Initial render of matrix editor when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    renderMatrixEditorTable();
+});
 </script>
 
 </body>

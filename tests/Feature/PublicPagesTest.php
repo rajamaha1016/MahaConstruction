@@ -24,7 +24,6 @@ class PublicPagesTest extends TestCase
             'projects'     => ['/projects'],
             'gallery'      => ['/gallery'],
             'testimonials' => ['/testimonials'],
-            'calculator'   => ['/calculator'],
             'faq'          => ['/faq'],
             'contact'      => ['/contact'],
             'blog'         => ['/blog'],
@@ -39,5 +38,10 @@ class PublicPagesTest extends TestCase
     public function test_admin_dashboard_redirects_anonymous_visitors_to_login(): void
     {
         $this->get('/admin')->assertRedirect(route('admin.login'));
+    }
+
+    public function test_calculator_redirects_to_pricing(): void
+    {
+        $this->get('/calculator')->assertRedirect(route('pricing'));
     }
 }

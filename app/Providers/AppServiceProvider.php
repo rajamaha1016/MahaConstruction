@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
 use App\Services\YouTubeSyncService;
+use App\Services\PackageMatrixService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
                 'company_email'           => 'Mahaconstructions2013@gmail.com',
                 'company_address'         => 'Tamilnomi complex, 1st floor, ICICI Bank Upstar, Near kottar police station, Nagercoil',
                 'company_hours'           => 'Monday - Saturday: 10:00 AM - 6:00 PM',
-                'company_branches'        => 'KANYAKUMARI, TIRUNELVELI AND CHENNAI EST-2013',
+                'company_branches'        => 'KANYAKUMARI, TIRUNELVELI AND CHENNAI',
                 'hero_title'              => 'BUILDING LUXURY ARCHITECTURAL MASTERPIECES WITH UNCOMPROMISING EXCELLENCE',
                 'hero_subtitle'           => "Tamil Nadu's premier government-registered engineering firm delivering custom luxury villas, residential residences, and architectural homes with itemized material transparency and 15-year structural warranties.",
                 'hero_check1'             => 'Premium Materials',
@@ -53,28 +54,40 @@ class AppServiceProvider extends ServiceProvider
             $rawPhone    = preg_replace('/[^0-9]/', '', $mergedSettings['company_phone']);
             $rawWhatsapp = preg_replace('/[^0-9]/', '', $mergedSettings['company_whatsapp']);
 
+            if (strlen($rawPhone) === 10) {
+                $rawPhone = '91' . $rawPhone;
+            }
+            if (strlen($rawWhatsapp) === 10) {
+                $rawWhatsapp = '91' . $rawWhatsapp;
+            }
+
+            $resMatrix = PackageMatrixService::parseMatrix($settingsList['spec_matrix_residential'] ?? null, 'residential');
+            $comMatrix = PackageMatrixService::parseMatrix($settingsList['spec_matrix_commercial'] ?? null, 'commercial');
+
             $view->with([
-                'site_settings'     => $mergedSettings,
-                'company_phone'     => $mergedSettings['company_phone'],
-                'company_phone_sec' => $mergedSettings['company_phone_secondary'],
-                'company_whatsapp'  => $mergedSettings['company_whatsapp'],
-                'company_email'     => $mergedSettings['company_email'],
-                'company_address'   => $mergedSettings['company_address'],
-                'company_hours'     => $mergedSettings['company_hours'],
-                'company_branches'  => $mergedSettings['company_branches'],
-                'raw_phone'         => $rawPhone    ?: '919095929543',
-                'raw_whatsapp'      => $rawWhatsapp ?: '919095929543',
-                'hero_title'        => $mergedSettings['hero_title'],
-                'hero_subtitle'     => $mergedSettings['hero_subtitle'],
-                'hero_check1'       => $mergedSettings['hero_check1'],
-                'hero_check2'       => $mergedSettings['hero_check2'],
-                'hero_check3'       => $mergedSettings['hero_check3'],
-                'hero_check4'       => $mergedSettings['hero_check4'],
-                'hero_check5'       => $mergedSettings['hero_check5'],
-                'hero_cta_primary'  => $mergedSettings['hero_cta_primary'],
-                'yt_channel_url'    => YouTubeSyncService::getActiveChannelUrl(),
-                'yt_channel_meta'   => YouTubeSyncService::getChannelMeta(),
-                'yt_channel_handle' => YouTubeSyncService::getChannelHandle(),
+                'site_settings'           => $mergedSettings,
+                'package_spec_matrix_res' => $resMatrix,
+                'package_spec_matrix_com' => $comMatrix,
+                'company_phone'           => $mergedSettings['company_phone'],
+                'company_phone_sec'       => $mergedSettings['company_phone_secondary'],
+                'company_whatsapp'        => $mergedSettings['company_whatsapp'],
+                'company_email'           => $mergedSettings['company_email'],
+                'company_address'         => $mergedSettings['company_address'],
+                'company_hours'           => $mergedSettings['company_hours'],
+                'company_branches'        => $mergedSettings['company_branches'],
+                'raw_phone'               => $rawPhone    ?: '919095929543',
+                'raw_whatsapp'            => $rawWhatsapp ?: '919095929543',
+                'hero_title'              => $mergedSettings['hero_title'],
+                'hero_subtitle'           => $mergedSettings['hero_subtitle'],
+                'hero_check1'             => $mergedSettings['hero_check1'],
+                'hero_check2'             => $mergedSettings['hero_check2'],
+                'hero_check3'             => $mergedSettings['hero_check3'],
+                'hero_check4'             => $mergedSettings['hero_check4'],
+                'hero_check5'             => $mergedSettings['hero_check5'],
+                'hero_cta_primary'        => $mergedSettings['hero_cta_primary'],
+                'yt_channel_url'          => YouTubeSyncService::getActiveChannelUrl(),
+                'yt_channel_meta'         => YouTubeSyncService::getChannelMeta(),
+                'yt_channel_handle'       => YouTubeSyncService::getChannelHandle(),
             ]);
         });
     }

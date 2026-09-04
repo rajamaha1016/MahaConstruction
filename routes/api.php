@@ -39,6 +39,7 @@ Route::get('/packages',              [ApiController::class, 'getPackages']);
 Route::get('/partners',              [ApiController::class, 'getPartners']);
 Route::get('/settings',              [ApiController::class, 'getSettings']);
 Route::get('/settings/{key}',        [ApiController::class, 'getSetting']);
+Route::get('/matrix/{division?}',    [ApiController::class, 'getPackageMatrix']);
 Route::get('/stats',                 [ApiController::class, 'getStats']);
 Route::get('/youtube/channel-videos',[ApiController::class, 'getYoutubeVideos']);
 
@@ -93,6 +94,8 @@ Route::middleware(['admin.api.session', 'admin.auth'])->group(function () {
 
     // Settings
     Route::post('/settings',             [ApiController::class, 'saveSetting']);
+    Route::post('/settings/matrix',      [ApiController::class, 'savePackageMatrix']);
+    Route::get('/settings/matrix/{division?}', [ApiController::class, 'getPackageMatrix']);
     Route::post('/settings/contact',     [ApiController::class, 'saveContactSettings']);
     Route::post('/settings/guidebook',   [ApiController::class, 'updateGuidebookPdf']);
     Route::delete('/settings/guidebook', [ApiController::class, 'deleteGuidebookPdf']);

@@ -238,7 +238,8 @@ class DatabaseSeeder extends Seeder
 
         // 9. Settings
         Setting::firstOrCreate(['key' => 'youtube_channel_url'], ['value' => 'https://www.youtube.com/@mahaconstructions2013']);
-        Setting::firstOrCreate(['key' => 'company_phone'], ['value' => '+91 94430 08095']);
+        Setting::firstOrCreate(['key' => 'company_phone'], ['value' => '+91 90959 29543']);
+        Setting::firstOrCreate(['key' => 'company_whatsapp'], ['value' => '+91 90959 29543']);
         Setting::firstOrCreate(['key' => 'company_email'], ['value' => 'Mahaconstructions2013@gmail.com']);
         // 10. Guidebook Leads
         if (\App\Models\GuidebookLead::count() === 0) {

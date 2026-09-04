@@ -35,8 +35,8 @@ class PageController extends Controller
         $yt_channel_handle = YouTubeSyncService::getChannelHandle();
         $guidebook_pdf_url = Setting::where('key', 'guidebook_pdf_url')->value('value') ?: '/uploads/1785792673_new book.pdf';
         $intro_video_url   = Setting::where('key', 'intro_video_url')->value('value') ?: '/uploads/1785711422_WhatsApp Video 2026-07-30 at 10.50.53 AM.mp4';
-        $residential       = PackageDetail::where('division', 'residential')->get()->keyBy('tier');
-        $commercial        = PackageDetail::where('division', 'commercial')->get()->keyBy('tier');
+        $residential       = PackageDetail::where('division', 'residential')->orderBy('price_per_sqft', 'asc')->get();
+        $commercial        = PackageDetail::where('division', 'commercial')->orderBy('price_per_sqft', 'asc')->get();
 
         return view('home', compact(
             'services', 'projects', 'testimonials', 'partners', 'syncedVideos',
@@ -77,8 +77,7 @@ class PageController extends Controller
 
     public function calculator()
     {
-        $packages = PackageDetail::all();
-        return view('calculator', compact('packages'));
+        return redirect()->route('pricing');
     }
 
     public function faq()
@@ -107,8 +106,8 @@ class PageController extends Controller
 
     public function pricing()
     {
-        $residential = PackageDetail::where('division', 'residential')->get()->keyBy('tier');
-        $commercial  = PackageDetail::where('division', 'commercial')->get()->keyBy('tier');
+        $residential = PackageDetail::where('division', 'residential')->orderBy('price_per_sqft', 'asc')->get();
+        $commercial  = PackageDetail::where('division', 'commercial')->orderBy('price_per_sqft', 'asc')->get();
         return view('pricing', compact('residential', 'commercial'));
     }
 
@@ -142,7 +141,7 @@ class PageController extends Controller
     {
         $staticRoutes = [
             'home', 'services', 'projects', 'gallery', 'testimonials',
-            'calculator', 'faq', 'contact', 'blog', 'pricing', 'about',
+            'faq', 'contact', 'blog', 'pricing', 'about',
             'careers', 'privacy', 'terms',
         ];
 

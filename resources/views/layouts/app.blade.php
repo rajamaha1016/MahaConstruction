@@ -67,9 +67,6 @@
         <a href="tel:+{{ $raw_phone }}" class="float-btn phone-btn" title="Call Us">
             <i class="fas fa-phone" style="font-size:18px;"></i>
         </a>
-        <a href="{{ route('home') }}#home-builders-guide-section" class="float-btn quote-btn" title="The Home Builder's Guide">
-            <i class="fas fa-file-invoice" style="font-size:18px;"></i>
-        </a>
         <button class="float-btn back-top-btn" id="backToTopBtn" title="Back to Top">
             <i class="fas fa-chevron-up" style="font-size:16px;"></i>
         </button>
@@ -130,7 +127,7 @@
                     <h4 class="footer-heading">CONTACT US</h4>
                     <div class="footer-contact-item">
                         <span class="contact-label">Office:</span>
-                        <span>{{ $company_phone }} @if(!empty($company_phone_sec)) / Engr: {{ $company_phone_sec }} @endif</span>
+                        <span><a href="tel:+{{ $raw_phone }}" style="color:inherit;text-decoration:none;">{{ $company_phone }}</a> @if(!empty($company_phone_sec)) / Engr: <a href="tel:+{{ preg_replace('/[^0-9]/', '', $company_phone_sec) }}" style="color:inherit;text-decoration:none;">{{ $company_phone_sec }}</a> @endif</span>
                     </div>
                     <div class="footer-contact-item">
                         <span class="contact-label">Email:</span>
@@ -245,77 +242,167 @@
         </div>
     </div>
 
-    <!-- Construction Packages Comparison Matrix Modal -->
-    <div class="modal-backdrop" id="packageMatrixModal">
-        <div class="matrix-modal-content">
-            <button class="modal-close-icon" id="closeMatrixModal"><i class="fas fa-xmark"></i></button>
-            <div class="matrix-modal-header">
-                <h3>CONSTRUCTION PACKAGES COMPARISON MATRIX</h3>
-            </div>
-            <div class="table-responsive">
-                <table class="comparison-table">
-                    @php
-                        $modalRes = \App\Models\PackageDetail::where('division', 'residential')->get()->keyBy('tier');
-                        $bRate = $modalRes['basic']->price_per_sqft ?? 1999;
-                        $sRate = $modalRes['standard']->price_per_sqft ?? 2199;
-                        $pRate = $modalRes['premium']->price_per_sqft ?? 2399;
-                        $lRate = $modalRes['luxury']->price_per_sqft ?? 2999;
-                    @endphp
-                    <thead>
-                        <tr>
-                            <th>FEATURE</th>
-                            <th>BASIC (₹{{ number_format($bRate) }})</th>
-                            <th>STANDARD (₹{{ number_format($sRate) }})</th>
-                            <th>PREMIUM (₹{{ number_format($pRate) }})</th>
-                            <th>LUXURY (₹{{ number_format($lRate) }})</th>
-                        </tr>
-                    </thead>
+    <!-- Dedicated Construction Package Details Modal (Inclusions & Exclusions) -->
+    <div class="modal-backdrop" id="packageDetailsModal">
+        <div class="package-details-modal-content">
+            <div class="pkg-modal-top-beam"></div>
+            <button class="modal-close-icon" id="closePackageDetailsModal"><i class="fas fa-xmark"></i></button>
 
-                    <tbody>
-                        <tr>
-                            <td class="feature-title">Steel Grade</td>
-                            <td>Fe-500 TMT</td>
-                            <td>Fe-550 JSW/Tata</td>
-                            <td>Tata Tiscon</td>
-                            <td>Tata Tiscon Super</td>
-                        </tr>
-                        <tr>
-                            <td class="feature-title">Flooring</td>
-                            <td>Vitrified Tiles (₹55/sqft)</td>
-                            <td>Kajaria Tiles (₹75/sqft)</td>
-                            <td>Granite / Vitrified (₹130/sqft)</td>
-                            <td>Italian Marble (₹250+/sqft)</td>
-                        </tr>
-                        <tr>
-                            <td class="feature-title">Sanitary Fittings</td>
-                            <td>Parryware / Cera</td>
-                            <td>Jaquar Collection</td>
-                            <td>Kohler Collection</td>
-                            <td>Grohe / Kohler Imported</td>
-                        </tr>
-                        <tr>
-                            <td class="feature-title">Main Door</td>
-                            <td>Flush Door</td>
-                            <td>Teak Wood Frame</td>
-                            <td>Solid Teak Wood</td>
-                            <td>Custom Carved Luxury Teak</td>
-                        </tr>
-                        <tr>
-                            <td class="feature-title">Warranty</td>
-                            <td>10 Years</td>
-                            <td>10 Years</td>
-                            <td>15 Years</td>
-                            <td>20 Years Registered</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Meta Header Row -->
+            <div class="pkg-modal-meta-row">
+                <div style="flex:1;min-width:260px;">
+                    <span class="plan-tier-label" id="modalPkgTierLabel" style="font-size:0.75rem;">RESIDENTIAL • BASIC TIER</span>
+                    <h2 class="pkg-modal-title" id="modalPkgTitle">BASIC PLAN</h2>
+                    <div style="font-size:0.85rem;color:var(--text-muted);" id="modalPkgSubtitle">Solid & Affordable Turnkey Solution</div>
+                </div>
+                <div class="pkg-modal-price-box">
+                    <div class="pkg-modal-price-val" id="modalPkgPrice">₹1,999 <span>/ sq.ft</span></div>
+                    <div style="font-size:0.7rem;color:#D4AF37;font-weight:700;letter-spacing:0.05em;margin-top:2px;">TURNKEY RATE</div>
+                </div>
             </div>
-            <div class="matrix-modal-footer">
-                <button class="btn-close-matrix" id="btnCloseMatrix">CLOSE COMPARISON</button>
+
+            <!-- Badges Row -->
+            <div class="pkg-modal-badges-row">
+                <span class="pkg-badge-chip" id="modalPkgWarranty"><i class="fas fa-shield-halved" style="color:var(--gold);"></i> 10 Yrs Structural Warranty</span>
+                <span class="pkg-badge-chip" id="modalPkgDelivery"><i class="fas fa-calendar-check" style="color:var(--gold);"></i> 12 Months Delivery</span>
+                <span class="pkg-badge-chip"><i class="fas fa-gem" style="color:var(--gold);"></i> 100% Material Brand Transparency</span>
+                <span class="pkg-badge-chip"><i class="fas fa-file-contract" style="color:var(--gold);"></i> Zero Hidden Costs</span>
+            </div>
+
+            <!-- Description Box -->
+            <div class="pkg-modal-desc-box" id="modalPkgDescription">
+                A solid, cost-effective residential build using quality materials, standard-grade finishes, and proven structural systems — ideal for budget-conscious homeowners.
+            </div>
+
+            <!-- Inclusions & Exclusions 2-Column Grid -->
+            <div class="pkg-inc-exc-grid">
+                <!-- INCLUSIONS (What is included) -->
+                <div class="pkg-inc-box">
+                    <div class="pkg-inc-box-header">
+                        <i class="fas fa-circle-check" style="font-size:1.1rem;"></i>
+                        <span>INCLUSIONS (WHAT'S INCLUDED)</span>
+                    </div>
+                    <ul class="pkg-item-list" id="modalPkgInclusions">
+                        <!-- Populated dynamically -->
+                    </ul>
+                </div>
+
+                <!-- EXCLUSIONS (What is excluded / custom add-ons) -->
+                <div class="pkg-exc-box">
+                    <div class="pkg-exc-box-header">
+                        <i class="fas fa-circle-xmark" style="font-size:1.1rem;"></i>
+                        <span>EXCLUSIONS (CUSTOM ADD-ONS)</span>
+                    </div>
+                    <div style="font-size:0.72rem;color:#94A3B8;margin:-8px 0 12px;line-height:1.4;">
+                        Available upon request as custom add-ons or interior upgrades.
+                    </div>
+                    <ul class="pkg-item-list" id="modalPkgExclusions">
+                        <!-- Populated dynamically -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Key Materials & Specs Checklist -->
+            <div class="pkg-specs-card">
+                <div class="pkg-specs-header">
+                    <i class="fas fa-layer-group" style="font-size:0.95rem;"></i>
+                    <span>KEY SPECIFICATIONS & MATERIAL HIGHLIGHTS</span>
+                </div>
+                <ul class="pkg-specs-grid" id="modalPkgFeatures" style="list-style:none;padding:0;margin:0;">
+                    <!-- Populated dynamically -->
+                </ul>
+            </div>
+
+            <!-- Modal Action Buttons -->
+            <div class="pkg-modal-actions">
+                <button type="button" class="btn-gold-pill" id="btnPkgRequestQuote">
+                    <i class="fas fa-paper-plane" style="margin-right:6px;"></i> REQUEST ESTIMATE FOR THIS PACKAGE
+                </button>
+                <button type="button" class="btn-whatsapp-outline" style="border-color:var(--border-gold);color:var(--text-cream);" id="btnPkgConsult">
+                    <i class="fas fa-calendar-check" style="margin-right:6px;"></i> FREE SITE VISIT
+                </button>
+                <a href="#" target="_blank" class="btn-whatsapp-outline" style="border-color:#25D366;color:#25D366;" id="btnPkgWhatsApp">
+                    <i class="fab fa-whatsapp" style="margin-right:6px;"></i> WHATSAPP INQUIRY
+                </a>
             </div>
         </div>
     </div>
 
+    <!-- Construction Packages Comparison Matrix Modal -->
+    <div class="modal-backdrop" id="packageMatrixModal">
+        <div class="matrix-modal-content" style="max-width:960px;width:95%;">
+            <button class="modal-close-icon" id="closeMatrixModal"><i class="fas fa-xmark"></i></button>
+            <div class="matrix-modal-header" style="text-align:center;">
+                <span class="sec-tag">OFFICIAL BENCHMARKS</span>
+                <h3 style="margin-top:4px;">CONSTRUCTION PACKAGES COMPARISON MATRIX</h3>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin:6px auto 0;">Detailed specification and material comparison across our construction plans.</p>
+                <div class="tab-toggle-group" style="margin:14px auto 0;max-width:300px;">
+                    <button type="button" class="tab-btn modal-mat-toggle active" data-target-matrix="modalMatResWrap">RESIDENTIAL</button>
+                    <button type="button" class="tab-btn modal-mat-toggle" data-target-matrix="modalMatComWrap">COMMERCIAL</button>
+                </div>
+            </div>
+
+            <!-- Residential Table Wrap -->
+            <div class="table-responsive" id="modalMatResWrap" style="margin-top:16px;">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>SPECIFICATION</th>
+                            @foreach($package_spec_matrix_res['headers'] as $header)
+                                <th>{{ strtoupper($header) }}</th>
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($package_spec_matrix_res['rows'] as $row)
+                            <tr>
+                                <td class="feature-title">{{ $row['feature'] }}</td>
+                                @foreach($row['values'] as $val)
+                                    <td>{{ $val }}</td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Commercial Table Wrap -->
+            <div class="table-responsive" id="modalMatComWrap" style="margin-top:16px;display:none;">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>SPECIFICATION</th>
+                            @foreach($package_spec_matrix_com['headers'] as $header)
+                                <th>{{ strtoupper($header) }}</th>
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($package_spec_matrix_com['rows'] as $row)
+                            <tr>
+                                <td class="feature-title">{{ $row['feature'] }}</td>
+                                @foreach($row['values'] as $val)
+                                    <td>{{ $val }}</td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="matrix-modal-footer" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px;">
+                <button type="button" class="btn-gold-pill" data-open-quote style="padding:10px 20px;">
+                    <i class="fas fa-paper-plane" style="margin-right:6px;"></i> REQUEST CUSTOM ESTIMATE
+                </button>
+                <button type="button" class="btn-close-matrix" id="btnCloseMatrix">CLOSE COMPARISON</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.companyWhatsappRaw = '{{ $raw_whatsapp }}';
+        window.companyPhoneRaw = '{{ $raw_phone }}';
+    </script>
     <script src="{{ asset('js/app.js') }}"></script>
     @stack('scripts')
 </body>
