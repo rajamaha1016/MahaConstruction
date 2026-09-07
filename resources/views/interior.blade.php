@@ -7,84 +7,60 @@
 
 <!-- =======================================================
      SECTION 1: INTRO / HERO (#interior-intro)
+     Full-Bleed Architectural Background Cover
 ======================================================= -->
-<section class="hero-section" id="interior-intro" style="position:relative;min-height:92vh;display:flex;align-items:center;background:radial-gradient(circle at 75% 30%, rgba(212,175,55,0.12) 0%, rgba(5,11,20,0.96) 65%), url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1920&q=85') center/cover no-repeat;padding:120px 0 70px;">
-    <!-- Dark Vignette Overlay -->
-    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(5,11,20,0.85) 0%, rgba(5,11,20,0.65) 50%, rgba(5,11,20,0.95) 100%);"></div>
+<section class="int-hero-section" id="interior-intro">
+    <!-- Full-Bleed Background Media Cover -->
+    <div class="int-hero-bg-media">
+        <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85"
+             alt="Maha Interior Architectural Living Space"
+             class="int-hero-bg-img">
+    </div>
+    <div class="int-hero-overlay"></div>
+    <div class="int-hero-bottom-fade"></div>
 
-    <div class="container" style="position:relative;z-index:2;">
-        <div style="max-width:840px;">
-            <!-- Gold Pill Badge -->
-            <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(212,175,55,0.15);border:1px solid #D4AF37;padding:6px 18px;border-radius:30px;margin-bottom:20px;box-shadow:0 0 20px rgba(212,175,55,0.25);">
-                <span style="width:8px;height:8px;background:#25D366;border-radius:50%;box-shadow:0 0 8px #25D366;"></span>
-                <span style="font-size:0.75rem;font-weight:800;letter-spacing:0.18em;color:#D4AF37;text-transform:uppercase;font-family:var(--font-heading);">
-                    MAHA INTERIOR • DIVISION OF MAHA CONSTRUCTION
-                </span>
+    <div class="container" style="position:relative;z-index:3;">
+        <div class="int-hero-content-wrap">
+            <div class="int-tag-pill">
+                <span class="int-tag-dot"></span>
+                <span>MAHA INTERIOR • ARCHITECTURAL STUDIO</span>
             </div>
 
-            <!-- Primary Headline & Tagline -->
-            <h1 style="font-size:clamp(2.4rem, 5.5vw, 4.2rem);font-weight:900;line-height:1.12;letter-spacing:0.02em;font-family:var(--font-heading);margin:0 0 14px 0;text-transform:uppercase;">
-                <span style="background:linear-gradient(135deg, #FFFFFF 20%, #FFFDF0 50%, #FFD700 85%, #D4AF37 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 4px 14px rgba(212,175,55,0.35));">
-                    MAHA INTERIOR
-                </span>
-                <br>
-                <span style="font-size:clamp(1.3rem, 3vw, 2.2rem);color:#D4AF37;font-weight:800;letter-spacing:0.14em;display:block;margin-top:6px;text-shadow:0 0 15px rgba(212,175,55,0.4);">
-                    DESIGNING BEAUTIFUL LIVING
-                </span>
+            <h1 class="int-hero-title">
+                BEAUTIFUL<br>
+                <span class="gold-word">INTERIORS.</span><br>
+                BETTER LIVING.
             </h1>
 
-            <p style="font-size:clamp(0.95rem, 1.8vw, 1.15rem);color:#E2E8F0;line-height:1.65;margin:0 0 28px 0;max-width:720px;font-family:var(--font-body);">
+            <p class="int-hero-desc">
                 Tamil Nadu’s premier interior architecture and turnkey execution studio. Crafting bespoke modular kitchens, luxury wardrobes, acoustic living spaces, and atmospheric lighting with registered civil engineering precision.
             </p>
 
-            <!-- Value Highlights Checklist -->
-            <div style="display:flex;flex-wrap:wrap;gap:16px 28px;margin-bottom:36px;">
-                <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;color:#F0EBE0;font-weight:600;">
-                    <i class="fas fa-shield-halved" style="color:#D4AF37;font-size:1rem;"></i> 12-Year Hardware Warranty
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;color:#F0EBE0;font-weight:600;">
-                    <i class="fas fa-layer-group" style="color:#D4AF37;font-size:1rem;"></i> 100% BWP Marine Plywood
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;color:#F0EBE0;font-weight:600;">
-                    <i class="fas fa-clock" style="color:#25D366;font-size:1rem;"></i> 45-Day Delivery Promise
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;color:#F0EBE0;font-weight:600;">
-                    <i class="fas fa-file-invoice-dollar" style="color:#D4AF37;font-size:1rem;"></i> Zero Cost Escalation Guarantee
-                </div>
-            </div>
-
-            <!-- Hero Primary CTAs -->
-            <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
-                <a href="#interior-projects" class="btn-gold-pill" style="padding:16px 36px;font-size:0.9rem;letter-spacing:0.08em;font-weight:800;display:inline-flex;align-items:center;gap:10px;">
-                    EXPLORE OUR INTERIORS <i class="fas fa-arrow-down" style="font-size:0.85rem;"></i>
+            <!-- Primary CTAs -->
+            <div class="int-hero-actions">
+                <a href="#interior-enquiry" class="int-btn-gold">
+                    <i class="fas fa-calendar-check"></i> BOOK A FREE CONSULTATION
                 </a>
-                <a href="#interior-enquiry" class="btn-whatsapp-outline" style="padding:15px 32px;font-size:0.9rem;letter-spacing:0.08em;font-weight:800;border-color:#D4AF37;color:#D4AF37;display:inline-flex;align-items:center;gap:10px;" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';" onmouseout="this.style.background='transparent';this.style.color='#D4AF37';">
-                    <i class="fas fa-calendar-check"></i> BOOK A CONSULTATION
+                <a href="#interior-projects" class="int-btn-outline">
+                    VIEW OUR WORK <i class="fas fa-arrow-down" style="font-size:0.75rem;"></i>
                 </a>
             </div>
         </div>
-    </div>
-</section>
 
-<!-- STATS METRICS STRIP -->
-<section class="stats-metrics-bar" style="background:#081020;border-top:1px solid rgba(212,175,55,0.3);border-bottom:1px solid rgba(212,175,55,0.2);padding:24px 0;">
-    <div class="container">
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:24px;text-align:center;">
-            <div>
-                <div style="font-size:2.2rem;font-weight:900;color:#D4AF37;font-family:var(--font-heading);">150+</div>
-                <div style="font-size:0.75rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Interiors Handed Over</div>
-            </div>
-            <div>
-                <div style="font-size:2.2rem;font-weight:900;color:#25D366;font-family:var(--font-heading);">45 Days</div>
-                <div style="font-size:0.75rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Guaranteed Turnkey Timeline</div>
-            </div>
-            <div>
-                <div style="font-size:2.2rem;font-weight:900;color:#FFD700;font-family:var(--font-heading);">10 Years</div>
-                <div style="font-size:0.75rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Hardware & Plywood Warranty</div>
-            </div>
-            <div>
-                <div style="font-size:2.2rem;font-weight:900;color:#D4AF37;font-family:var(--font-heading);">100%</div>
-                <div style="font-size:0.75rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Factory Machine Finish</div>
+        <!-- Integrated Hero Statistics Strip -->
+        <div class="int-hero-stats-strip">
+            <div class="int-hero-stats-grid">
+                <div class="int-hero-stat-card">
+                    <div class="int-hero-stat-val">150+</div>
+                    <div class="int-hero-stat-label">Interiors Handed Over</div>
+                <div class="int-hero-stat-card">
+                    <div class="int-hero-stat-val">10 Years</div>
+                    <div class="int-hero-stat-label">Hardware & Plywood Warranty</div>
+                </div>
+                <div class="int-hero-stat-card">
+                    <div class="int-hero-stat-val">100%</div>
+                    <div class="int-hero-stat-label">Factory Machine Finish</div>
+                </div>
             </div>
         </div>
     </div>
@@ -92,191 +68,122 @@
 
 
 <!-- =======================================================
-     SECTION 2: OUR INTERIOR SERVICES (#interior-services)
+     SECTION 2: COMPLETED PROJECTS (#interior-projects)
+     Unified Video Slideshow Carousel Format
 ======================================================= -->
-<section class="section-pad" id="interior-services" style="background:#050B14;scroll-margin-top:70px;">
+<section class="int-projects-section" id="interior-projects">
     <div class="container">
-        <div style="text-align:center;max-width:760px;margin:0 auto 48px;">
-            <span class="pill-badge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.75rem;padding:6px 18px;letter-spacing:0.15em;">
-                BESPOKE CAPABILITIES
-            </span>
-            <h2 class="sec-title" style="margin-top:14px;font-size:clamp(1.8rem, 3.5vw, 2.6rem);">
-                OUR INTERIOR <span class="gold">SERVICES</span>
+        <!-- Section Header -->
+        <div class="int-sec-header-editorial">
+            <span class="int-sec-tag">01 — COMPLETED PROJECTS</span>
+            <h2 class="int-sec-title-light">
+                COMPLETED <span style="color:var(--int-gold);">INTERIOR PROJECTS</span>
             </h2>
-            <p class="sec-sub" style="margin:10px auto 0;">
-                Comprehensive interior architecture from conceptual 3D renders to machine edge-banded fabrication and white-glove turnkey installation.
-            </p>
-        </div>
-
-        <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:28px;">
-            @forelse($services as $srv)
-            <div class="interior-service-card" style="background:#0B132B;border:1.5px solid rgba(212,175,55,0.25);border-radius:20px;overflow:hidden;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(0,0,0,0.4);"
-                 onmouseover="this.style.borderColor='#D4AF37';this.style.transform='translateY(-6px)';this.style.boxShadow='0 18px 40px rgba(212,175,55,0.18)';"
-                 onmouseout="this.style.borderColor='rgba(212,175,55,0.25)';this.style.transform='translateY(0)';this.style.boxShadow='0 10px 30px rgba(0,0,0,0.4)';">
-                
-                <!-- Service Thumbnail Image -->
-                <div style="position:relative;height:200px;overflow:hidden;background:#000;">
-                    <img src="{{ $srv->image_url ?: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80' }}"
-                         alt="{{ $srv->name }}"
-                         style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;"
-                         loading="lazy">
-                    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(5,11,20,0.1) 0%, rgba(11,19,43,0.9) 100%);"></div>
-                    <span style="position:absolute;top:14px;left:14px;background:rgba(5,11,20,0.85);backdrop-filter:blur(6px);border:1px solid rgba(212,175,55,0.6);border-radius:20px;padding:4px 12px;font-size:0.68rem;font-weight:800;color:#D4AF37;letter-spacing:0.1em;text-transform:uppercase;">
-                        {{ $srv->category ?: 'INTERIOR SERVICE' }}
-                    </span>
-                </div>
-
-                <!-- Card Body -->
-                <div style="padding:24px;flex:1;display:flex;flex-direction:column;justify-content:space-between;">
-                    <div>
-                        <h3 style="font-size:1.25rem;font-weight:800;color:#FFFFFF;margin:0 0 10px;font-family:var(--font-heading);">
-                            {{ $srv->name }}
-                        </h3>
-                        <p style="font-size:0.86rem;color:#94A3B8;line-height:1.55;margin:0 0 18px;">
-                            {{ $srv->overview }}
-                        </p>
-
-                        @if(!empty($srv->benefits) && is_array($srv->benefits))
-                        <!-- Benefits Checklist -->
-                        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;padding-top:14px;border-top:1px solid rgba(212,175,55,0.15);">
-                            @foreach(array_slice($srv->benefits, 0, 3) as $benefit)
-                            <div style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:#E2E8F0;">
-                                <i class="fas fa-check-circle" style="color:#25D366;font-size:0.75rem;"></i>
-                                <span>{{ $benefit }}</span>
-                            </div>
-                            @endforeach
-                        </div>
-                        @endif
-                    </div>
-
-                    <!-- Action Button: Smooth scroll to enquiry with service preselection -->
-                    <a href="#interior-enquiry" onclick="preselectInteriorService('{{ addslashes($srv->name) }}')" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border-radius:12px;background:rgba(212,175,55,0.1);color:#D4AF37;border:1px solid rgba(212,175,55,0.35);font-size:0.8rem;font-weight:800;letter-spacing:0.06em;text-decoration:none;text-transform:uppercase;transition:all 0.2s;" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';" onmouseout="this.style.background='rgba(212,175,55,0.1)';this.style.color='#D4AF37';">
-                        CONSULT FOR THIS SERVICE <i class="fas fa-arrow-right" style="font-size:0.7rem;"></i>
-                    </a>
-                </div>
-            </div>
-            @empty
-            <div style="grid-column:1/-1;text-align:center;padding:40px;color:#94A3B8;">
-                Interior services are currently being updated.
-            </div>
-            @endforelse
-        </div>
-    </div>
-</section>
-
-
-<!-- =======================================================
-     SECTION 3: COMPLETED PROJECTS (#interior-projects)
-======================================================= -->
-<section class="section-pad" id="interior-projects" style="background:#0B132B;scroll-margin-top:70px;">
-    <div class="container">
-        <div style="text-align:center;max-width:760px;margin:0 auto 36px;">
-            <span class="pill-badge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.75rem;padding:6px 18px;letter-spacing:0.15em;">
-                PORTFOLIO SHOWCASE
-            </span>
-            <h2 class="sec-title" style="margin-top:14px;font-size:clamp(1.8rem, 3.5vw, 2.6rem);">
-                COMPLETED <span class="gold">INTERIOR PROJECTS</span>
-            </h2>
-            <p class="sec-sub" style="margin:10px auto 0;">
+            <p class="int-sec-sub-light">
                 Explore real homes and commercial spaces transformed through bespoke joinery, quartz stone, and ambient lighting across Tamil Nadu.
             </p>
         </div>
 
-        <!-- On-Page Category Filter Buttons (No Redirection) -->
-        <div class="tab-toggle-group" style="display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-bottom:36px;">
-            <button type="button" class="tab-btn interior-filter-btn active" data-category="all">ALL SPACES</button>
-            <button type="button" class="tab-btn interior-filter-btn" data-category="living-room">LIVING ROOM</button>
-            <button type="button" class="tab-btn interior-filter-btn" data-category="modular-kitchen">MODULAR KITCHEN</button>
-            <button type="button" class="tab-btn interior-filter-btn" data-category="bedroom">BEDROOM</button>
-            <button type="button" class="tab-btn interior-filter-btn" data-category="office-interior">OFFICE INTERIOR</button>
-            <button type="button" class="tab-btn interior-filter-btn" data-category="full-home-interior">FULL HOME</button>
-            <button type="button" class="tab-btn interior-filter-btn" data-category="commercial-interior">COMMERCIAL</button>
+        <!-- Minimal Editorial Category Filter (Text with Gold Underline) -->
+        <div class="int-editorial-filters">
+            <button type="button" class="int-filter-link interior-filter-btn active" data-category="all">ALL SPACES</button>
+            <button type="button" class="int-filter-link interior-filter-btn" data-category="living-room">LIVING ROOM</button>
+            <button type="button" class="int-filter-link interior-filter-btn" data-category="modular-kitchen">MODULAR KITCHEN</button>
+            <button type="button" class="int-filter-link interior-filter-btn" data-category="bedroom">BEDROOM</button>
+            <button type="button" class="int-filter-link interior-filter-btn" data-category="office-interior">OFFICE INTERIOR</button>
+            <button type="button" class="int-filter-link interior-filter-btn" data-category="full-home-interior">FULL HOME</button>
+            <button type="button" class="int-filter-link interior-filter-btn" data-category="commercial-interior">COMMERCIAL</button>
         </div>
 
-        <!-- Projects Grid -->
-        <div id="interiorProjectsGrid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:28px;">
-            @forelse($projects as $i => $project)
-            <div class="interior-project-card" data-category="{{ $project->category }}"
-                 style="background:#050B14;border:1.5px solid rgba(212,175,55,0.22);border-radius:20px;overflow:hidden;transition:all 0.3s ease;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(0,0,0,0.5);"
-                 onmouseover="this.style.borderColor='#D4AF37';this.style.transform='translateY(-6px)';this.style.boxShadow='0 18px 40px rgba(212,175,55,0.2)';"
-                 onmouseout="this.style.borderColor='rgba(212,175,55,0.22)';this.style.transform='translateY(0)';this.style.boxShadow='0 10px 30px rgba(0,0,0,0.5)';">
-                
-                <!-- Thumbnail Frame -->
-                <div style="position:relative;height:220px;overflow:hidden;background:#000;">
-                    <img src="{{ ($project->image_urls && count($project->image_urls) > 0) ? $project->image_urls[0] : 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80' }}"
-                         alt="{{ $project->name }}"
-                         style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;"
-                         loading="lazy">
-                    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(5,11,20,0.85) 100%);"></div>
+        <!-- Unified Video Slideshow Carousel for Projects -->
+        <div class="int-carousel-wrapper">
+            <div class="int-carousel-track" id="interiorProjectsTrack">
+                @forelse($projects as $i => $project)
+                @php
+                    $coverImg = ($project->image_urls && count($project->image_urls) > 0) ? $project->image_urls[0] : 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80';
+                @endphp
+                <div class="int-video-slide-card interior-project-card"
+                     data-category="{{ $project->category }}"
+                     @if($project->video_url)
+                     onclick="window.playVideoModal('{{ $project->video_url }}', '{{ addslashes($project->name) }}')"
+                     @endif>
+                    <!-- Background Image -->
+                    <img src="{{ $coverImg }}" alt="{{ $project->name }}" class="int-video-card-bg" loading="lazy">
+                    <div class="int-video-card-shade"></div>
+
+                    <!-- Top Tag -->
+                    <span class="int-video-card-tag">
+                        PROJECT {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}
+                    </span>
 
                     <!-- Category Badge -->
-                    <div style="position:absolute;top:14px;left:14px;background:rgba(5,11,20,0.85);backdrop-filter:blur(6px);border:1px solid rgba(212,175,55,0.6);border-radius:20px;padding:4px 12px;display:flex;align-items:center;gap:6px;">
-                        <span style="width:6px;height:6px;background:#25D366;border-radius:50%;"></span>
-                        <span style="font-size:0.68rem;font-weight:800;color:#D4AF37;letter-spacing:0.1em;text-transform:uppercase;">
-                            {{ str_replace('-', ' ', $project->category) }}
-                        </span>
-                    </div>
+                    <span class="int-video-card-badge">
+                        {{ strtoupper(str_replace('-', ' ', $project->category)) }}
+                    </span>
 
+                    <!-- Center Golden Play Button -->
                     @if($project->video_url)
-                    <!-- Video Play Overlay Trigger -->
-                    <div class="video-play-overlay" onclick="window.playVideoModal('{{ $project->video_url }}', '{{ addslashes($project->name) }}')" style="position:absolute;inset:0;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.1)';" onmouseout="this.style.background='rgba(0,0,0,0.3)';">
-                        <div class="play-btn-circle" style="width:52px;height:52px;font-size:1.1rem;background:#D4AF37;color:#050B14;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(212,175,55,0.6);">
-                            <i class="fas fa-play" style="margin-left:3px;"></i>
-                        </div>
+                    <div class="int-video-play-btn" title="Watch Video Tour">
+                        <i class="fas fa-play" style="margin-left:3px;"></i>
                     </div>
                     @endif
-                </div>
 
-                <!-- Card Info -->
-                <div style="padding:20px;flex:1;display:flex;flex-direction:column;justify-content:space-between;">
-                    <div>
-                        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
-                            <h3 style="font-size:1.15rem;font-weight:800;color:#FFFFFF;margin:0;line-height:1.3;font-family:var(--font-heading);">
-                                {{ $project->name }}
-                            </h3>
-                            @if($project->video_url)
-                            <span style="font-size:0.65rem;color:#D4AF37;background:rgba(212,175,55,0.12);padding:2px 8px;border-radius:10px;font-weight:700;white-space:nowrap;">
-                                <i class="fas fa-video" style="margin-right:3px;"></i>Video Tour
-                            </span>
-                            @endif
-                        </div>
-
-                        <div style="display:flex;align-items:center;gap:6px;color:#D4AF37;font-size:0.82rem;font-weight:600;margin-top:6px;">
+                    <!-- Bottom Info -->
+                    <div class="int-video-card-info">
+                        <div class="int-video-card-title">{{ $project->name }}</div>
+                        <div class="int-video-card-sub">
                             <i class="fas fa-map-marker-alt"></i>
                             <span>{{ $project->location ?? 'Tamil Nadu' }}</span>
                         </div>
+                        @if($project->description)
+                        <div class="int-video-card-snippet">{{ $project->description }}</div>
+                        @endif
 
-                        <p style="font-size:0.82rem;color:#94A3B8;line-height:1.45;margin-top:10px;">
-                            {{ Str::limit($project->description, 95) }}
-                        </p>
-                    </div>
-
-                    <!-- Divider & Area Specs -->
-                    <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(212,175,55,0.15);display:flex;justify-content:space-between;align-items:center;font-size:0.82rem;">
-                        <span style="color:#94A3B8;font-weight:600;">Coverage Area</span>
-                        <span style="color:#FFFFFF;font-weight:800;">{{ $project->duration ?: 'Turnkey Space' }}</span>
+                        @if($project->video_url)
+                        <div class="int-video-card-action">
+                            <i class="fas fa-play"></i> WATCH VIDEO TOUR
+                        </div>
+                        @else
+                        <div class="int-video-card-action">
+                            <i class="fas fa-couch"></i> {{ $project->duration ?: 'TURNKEY FITOUT' }}
+                        </div>
+                        @endif
                     </div>
                 </div>
+                @empty
+                <div style="width:100%;text-align:center;padding:40px;color:var(--int-text-muted);">
+                    Interior projects showcase is being updated.
+                </div>
+                @endforelse
             </div>
-            @empty
-            <div style="grid-column:1/-1;text-align:center;padding:40px;color:#94A3B8;">
-                Interior projects showcase is being updated.
+
+            <div id="noFilteredProjectsMsg" style="display:none;text-align:center;padding:40px 20px;color:var(--int-text-muted);">
+                <i class="fas fa-couch" style="font-size:2rem;color:var(--int-gold);margin-bottom:12px;display:block;"></i>
+                <p style="font-size:1rem;color:#FFF;margin-bottom:6px;">No projects currently listed in this space.</p>
+                <p style="font-size:0.85rem;color:var(--int-text-muted);">Browse other spaces above or consult Er. Maha Rajan for custom projects.</p>
             </div>
-            @endforelse
-            <div id="noFilteredProjectsMsg" style="display:none;grid-column:1/-1;text-align:center;padding:48px 20px;color:#94A3B8;">
-                <i class="fas fa-couch" style="font-size:2rem;color:rgba(212,175,55,0.4);margin-bottom:12px;display:block;"></i>
-                <p style="font-size:0.95rem;color:#FFF;margin-bottom:6px;">No projects currently listed in this space.</p>
-                <p style="font-size:0.8rem;color:#64748b;">Browse other spaces above or consult Er. Maha Rajan for custom projects.</p>
+
+            <!-- Progress Bar Tracker -->
+            <div class="int-carousel-progress-track">
+                <div class="int-carousel-progress-fill" id="interiorProjectsProgressFill"></div>
+            </div>
+
+            <!-- Navigation Controls: Arrows & Dots -->
+            <div class="int-carousel-controls">
+                <button type="button" class="int-carousel-arrow-btn" id="interiorProjectsPrevBtn" aria-label="Previous project">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="int-carousel-dots" id="interiorProjectsDots"></div>
+                <button type="button" class="int-carousel-arrow-btn" id="interiorProjectsNextBtn" aria-label="Next project">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
         </div>
 
-        <!-- On-Page Reveal / Load More (Keeps user on the same page, NO redirects) -->
+        <!-- Footer Action -->
         <div style="text-align:center;margin-top:40px;">
-            <p style="font-size:0.85rem;color:#94A3B8;margin-bottom:12px;">
-                Showing all curated interior transformations across Tamil Nadu
-            </p>
-            <a href="#interior-enquiry" class="btn-whatsapp-outline" style="padding:12px 28px;font-size:0.84rem;font-weight:800;border-color:rgba(212,175,55,0.4);color:#D4AF37;display:inline-flex;align-items:center;gap:8px;">
-                <i class="fas fa-paper-plane"></i> REQUEST ESTIMATE FOR YOUR SPACE
+            <a href="#interior-enquiry" class="int-btn-outline">
+                <i class="fas fa-paper-plane" style="margin-right:8px;color:var(--int-gold);"></i> REQUEST ESTIMATE FOR YOUR SPACE
             </a>
         </div>
     </div>
@@ -284,89 +191,115 @@
 
 
 <!-- =======================================================
-     SECTION 4: CLIENT TESTIMONIALS (#interior-testimonials)
+     SECTION 3: CLIENT TESTIMONIALS (#interior-testimonials)
+     Unified Video Slideshow Carousel Format
 ======================================================= -->
-<section class="section-pad" id="interior-testimonials" style="background:#050B14;scroll-margin-top:70px;">
+<section class="int-testimonials-section" id="interior-testimonials">
     <div class="container">
-        <div style="text-align:center;max-width:760px;margin:0 auto 36px;">
-            <span class="pill-badge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.75rem;padding:6px 18px;letter-spacing:0.15em;">
-                CLIENT SATISFACTION
-            </span>
-            <h2 class="sec-title" style="margin-top:14px;font-size:clamp(1.8rem, 3.5vw, 2.6rem);">
-                CLIENT <span class="gold">TESTIMONIALS</span>
+        <!-- Section Header -->
+        <div class="int-sec-header-editorial">
+            <span class="int-sec-tag">02 — CLIENT STORIES</span>
+            <h2 class="int-sec-title-dark">
+                CLIENT <span style="color:var(--int-gold);">TESTIMONIALS</span>
             </h2>
-            <p class="sec-sub" style="margin:10px auto 0;">
+            <p class="int-sec-sub-dark">
                 Hear directly from families and professionals whose living spaces and modular kitchens we have designed and delivered.
             </p>
         </div>
 
         @if($testimonials->count() > 0)
-        <!-- 3-Stat Metric Row -->
-        <div style="display:flex;justify-content:center;gap:0;margin:0 auto 36px;flex-wrap:wrap;max-width:600px;background:#0B132B;border-radius:18px;border:1px solid rgba(212,175,55,0.2);padding:14px 20px;">
-            <div style="flex:1;min-width:120px;text-align:center;padding:8px;border-right:1px solid rgba(212,175,55,0.2);">
-                <div style="font-size:1.8rem;font-weight:900;color:#D4AF37;font-family:var(--font-heading);">{{ $testimonials->count() }}+</div>
-                <div style="font-size:0.68rem;font-weight:800;color:#94A3B8;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;">Interior Stories</div>
+        <!-- Featured Magazine Pull-Quote -->
+        <div class="int-pullquote-box">
+            <div class="int-quote-glyph">“</div>
+            <div class="int-pullquote-text">
+                “THE SPACE FINALLY FEELS LIKE HOME — FUNCTIONAL, ELEGANT, AND DELIVERED EXACTLY ON SCHEDULE.”
             </div>
-            <div style="flex:1;min-width:120px;text-align:center;padding:8px;border-right:1px solid rgba(212,175,55,0.2);">
-                <div style="font-size:1.8rem;font-weight:900;color:#25D366;font-family:var(--font-heading);">100%</div>
-                <div style="font-size:0.68rem;font-weight:800;color:#94A3B8;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;">On-Time Delivery</div>
-            </div>
-            <div style="flex:1;min-width:120px;text-align:center;padding:8px;">
-                <div style="font-size:1.8rem;font-weight:900;color:#FFD700;font-family:var(--font-heading);">5.0 <i class="fas fa-star" style="font-size:1.2rem;"></i></div>
-                <div style="font-size:0.68rem;font-weight:800;color:#94A3B8;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;">Client Rating</div>
+            <div class="int-pullquote-author">
+                <img src="{{ $testimonials[0]->image_url ?: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80' }}"
+                     alt="{{ $testimonials[0]->client_name }}"
+                     class="int-pullquote-author-img">
+                <div>
+                    <div class="int-author-name">{{ $testimonials[0]->client_name }}</div>
+                    <div class="int-author-role">{{ $testimonials[0]->client_role ?? 'Homeowner' }} • {{ $testimonials[0]->project_name ?? 'Turnkey Residence' }}</div>
+                </div>
             </div>
         </div>
 
-        <!-- Testimonial Cards Grid -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:28px;">
-            @foreach($testimonials as $t)
-            <div style="background:#0B132B;border:1.5px solid rgba(212,175,55,0.25);border-radius:20px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 10px 30px rgba(0,0,0,0.4);position:relative;overflow:hidden;">
-                <!-- Subtle gold top highlight -->
-                <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg, transparent, #D4AF37, transparent);"></div>
+        <!-- Unified Video Slideshow Carousel for Testimonials -->
+        <div class="int-carousel-wrapper">
+            <div class="int-carousel-track" id="interiorTestimonialsTrack">
+                @foreach($testimonials as $i => $t)
+                <div class="int-video-slide-card"
+                     @if($t->video_url)
+                     onclick="window.playVideoModal('{{ $t->video_url }}', '{{ addslashes($t->client_name) }} - Video Review')"
+                     @endif>
+                    <!-- Background Photo -->
+                    <img src="{{ $t->image_url ?: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80' }}"
+                         alt="{{ $t->client_name }}"
+                         class="int-video-card-bg"
+                         loading="lazy">
+                    <div class="int-video-card-shade"></div>
 
-                <div>
-                    <!-- Star Rating & Quote Icon -->
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-                        <div style="color:#FFD700;font-size:0.95rem;">
+                    <!-- Top Tag -->
+                    <span class="int-video-card-tag">
+                        STORY {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}
+                    </span>
+
+                    <!-- Rating Stars at Top Right -->
+                    <span class="int-video-card-badge">
+                        {{ $t->rating ?? 5 }} ★ REVIEW
+                    </span>
+
+                    <!-- Center Golden Play Button -->
+                    @if($t->video_url)
+                    <div class="int-video-play-btn" title="Watch Video Review">
+                        <i class="fas fa-play" style="margin-left:3px;"></i>
+                    </div>
+                    @endif
+
+                    <!-- Bottom Info -->
+                    <div class="int-video-card-info">
+                        <div class="int-video-card-title">{{ $t->client_name }}</div>
+                        <div class="int-video-card-sub">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>{{ $t->project_name ?? 'Maha Interior' }}</span>
+                        </div>
+                        <div class="int-video-card-stars">
                             @for($s = 0; $s < ($t->rating ?? 5); $s++)
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
-                        <i class="fas fa-quote-right" style="color:rgba(212,175,55,0.25);font-size:1.6rem;"></i>
-                    </div>
+                        <div class="int-video-card-snippet">"{{ $t->feedback }}"</div>
 
-                    <!-- Client Feedback -->
-                    <p style="font-size:0.92rem;color:#E2E8F0;line-height:1.65;font-style:italic;margin:0 0 20px;">
-                        "{{ $t->feedback }}"
-                    </p>
-                </div>
-
-                <!-- Client Info Foot -->
-                <div style="display:flex;align-items:center;gap:14px;padding-top:16px;border-top:1px solid rgba(212,175,55,0.15);">
-                    <img src="{{ $t->image_url ?: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80' }}"
-                         alt="{{ $t->client_name }}"
-                         style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #D4AF37;">
-                    <div style="flex:1;">
-                        <div style="font-weight:800;color:#FFFFFF;font-size:0.95rem;font-family:var(--font-heading);">
-                            {{ $t->client_name }}
+                        @if($t->video_url)
+                        <div class="int-video-card-action">
+                            <i class="fas fa-play"></i> WATCH STORY
                         </div>
-                        <div style="font-size:0.75rem;color:#D4AF37;font-weight:600;">
-                            {{ $t->client_role ?? 'Homeowner' }}
-                        </div>
-                        @if($t->project_name)
-                        <div style="font-size:0.72rem;color:#94A3B8;margin-top:2px;">
-                            <i class="fas fa-home" style="margin-right:4px;"></i> {{ $t->project_name }}
+                        @else
+                        <div class="int-video-card-action">
+                            <i class="fas fa-check-circle"></i> SATISFIED CLIENT
                         </div>
                         @endif
                     </div>
-                    @if($t->video_url)
-                    <button onclick="window.playVideoModal('{{ $t->video_url }}', '{{ addslashes($t->client_name) }} - Video Review')" style="background:rgba(212,175,55,0.15);border:1px solid #D4AF37;color:#D4AF37;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;" title="Watch Video Review" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';" onmouseout="this.style.background='rgba(212,175,55,0.15)';this.style.color='#D4AF37';">
-                        <i class="fas fa-play" style="font-size:0.85rem;margin-left:2px;"></i>
-                    </button>
-                    @endif
                 </div>
+                @endforeach
             </div>
-            @endforeach
+
+            <!-- Progress Bar Tracker -->
+            <div class="int-carousel-progress-track">
+                <div class="int-carousel-progress-fill" id="interiorTestimonialsProgressFill"></div>
+            </div>
+
+            <!-- Navigation Controls: Arrows & Dots -->
+            <div class="int-carousel-controls">
+                <button type="button" class="int-carousel-arrow-btn" id="interiorTestimonialsPrevBtn" aria-label="Previous story">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="int-carousel-dots" id="interiorTestimonialsDots"></div>
+                <button type="button" class="int-carousel-arrow-btn" id="interiorTestimonialsNextBtn" aria-label="Next story">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
         </div>
         @endif
     </div>
@@ -374,116 +307,72 @@
 
 
 <!-- =======================================================
-     SECTION 5: ENGINEER / COMPANY INTRO (#interior-engineer)
+     SECTION 4: ENGINEER / COMPANY INTRO (#interior-engineer)
 ======================================================= -->
-<section class="section-pad" id="interior-engineer" style="background:#0B132B;scroll-margin-top:70px;">
+<section class="int-engineer-section" id="interior-engineer">
     <div class="container">
-        <!-- Compact Spotlight Card -->
-        <div style="max-width:1040px;margin:0 auto;background:linear-gradient(135deg, rgba(11,19,43,0.95), rgba(5,11,20,0.98));border:1px solid rgba(212,175,55,0.35);border-radius:24px;padding:40px;box-shadow:0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(212,175,55,0.1);position:relative;overflow:hidden;">
-            <!-- Top Gold Beam Line -->
-            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg, transparent, #D4AF37, #FFD700, #D4AF37, transparent);"></div>
-
-            <div style="display:grid;grid-template-columns:300px 1fr;gap:40px;align-items:center;" class="engineer-grid-cols">
-                
-                <!-- Left: Engineer Portrait & 60-Sec Intro Video -->
-                <div style="display:flex;flex-direction:column;align-items:center;width:100%;">
-                    <div style="width:100%;max-width:300px;margin-bottom:10px;text-align:left;">
-                        <span class="sec-tag" style="margin-bottom:0;font-size:0.75rem;letter-spacing:0.15em;color:#D4AF37;font-weight:800;display:inline-block;">ENGINEER-LED INTERIORS</span>
+        <div class="int-engineer-grid">
+            <!-- Left: Engineer Portrait & 60-Sec Intro Video Trigger -->
+            <div class="int-eng-portrait-card">
+                <div class="int-eng-video-thumb" onclick="window.playVideoModal('{{ $intro_video_url }}', 'Er. Maha Rajan - 60-Second Video Introduction')">
+                    <img src="{{ asset('maha-rajan.png') }}"
+                         alt="Er. Maha Rajan"
+                         onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80'">
+                    <div class="int-eng-gradient"></div>
+                    <span class="int-eng-play-badge"><i class="fas fa-play" style="font-size:0.55rem;margin-right:4px;"></i> 60-Sec Intro</span>
+                    <div class="int-eng-play-btn">
+                        <i class="fas fa-play" style="margin-left:3px;"></i>
                     </div>
-
-                    <div class="engineer-video-box"
-                         onclick="window.playVideoModal('{{ $intro_video_url }}', 'Er. Maha Rajan - 60-Second Video Introduction')"
-                         onmouseover="this.style.borderColor='#D4AF37';this.style.boxShadow='0 14px 30px rgba(212,175,55,0.2)';"
-                         onmouseout="this.style.borderColor='rgba(212,175,55,0.4)';this.style.boxShadow='0 10px 25px rgba(0,0,0,0.5)';"
-                         style="width:100%;max-width:300px;aspect-ratio:4/3;position:relative;border-radius:18px;overflow:hidden;border:1px solid rgba(212,175,55,0.4);background:#050B14;box-shadow:0 10px 25px rgba(0,0,0,0.5);cursor:pointer;transition:all 0.3s ease;">
-
-                        <!-- Thumbnail Image -->
-                        <img src="{{ asset('maha-rajan.png') }}"
-                             style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"
-                             alt="Er. Maha Rajan"
-                             onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80'">
-
-                        <!-- Dark Vignette Overlay -->
-                        <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(5,11,20,0.15) 0%, rgba(5,11,20,0.05) 40%, rgba(5,11,20,0.88) 100%);"></div>
-
-                        <!-- Badges -->
-                        <div style="position:absolute;top:10px;left:10px;background:rgba(5,11,20,0.85);backdrop-filter:blur(4px);border:1px solid rgba(212,175,55,0.5);color:#D4AF37;font-size:0.62rem;font-weight:800;padding:3px 10px;border-radius:12px;display:flex;align-items:center;gap:5px;text-transform:uppercase;">
-                            <i class="fas fa-play" style="font-size:0.5rem;color:#25D366;"></i> 60-Sec Intro
-                        </div>
-
-                        <div style="position:absolute;top:10px;right:10px;background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.4);color:#25D366;font-size:0.6rem;font-weight:800;padding:3px 8px;border-radius:12px;display:flex;align-items:center;gap:4px;">
-                            <i class="fas fa-certificate"></i> VERIFIED
-                        </div>
-
-                        <!-- Center Play Button -->
-                        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:52px;height:52px;background:#D4AF37;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#050B14;font-size:1.2rem;box-shadow:0 0 24px rgba(212,175,55,0.75);">
-                            <i class="fas fa-play" style="margin-left:3px;"></i>
-                        </div>
-
-                        <!-- Bottom Frame Label -->
-                        <div style="position:absolute;bottom:10px;left:12px;right:12px;text-align:center;">
-                            <div style="font-size:0.72rem;font-weight:800;color:#FFF;text-shadow:0 2px 4px rgba(0,0,0,0.8);letter-spacing:0.05em;">
-                                WATCH INTRO VIDEO <i class="fas fa-arrow-right" style="font-size:0.65rem;margin-left:4px;color:#D4AF37;"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Mini CTA under video -->
-                    <button class="btn-whatsapp-outline"
-                            onclick="window.playVideoModal('{{ $intro_video_url }}', 'Er. Maha Rajan - 60-Second Video Introduction')"
-                            style="margin-top:12px;width:100%;max-width:300px;padding:9px 14px;font-size:0.76rem;justify-content:center;border-color:rgba(212,175,55,0.4);color:#D4AF37;display:flex;align-items:center;">
-                        <i class="fas fa-circle-play" style="margin-right:6px;color:#D4AF37;"></i> PLAY 60-SEC VIDEO
+                </div>
+                <div class="int-eng-btn-row">
+                    <button type="button" onclick="window.playVideoModal('{{ $intro_video_url }}', 'Er. Maha Rajan - 60-Second Video Introduction')" class="int-btn-outline" style="width:100%;justify-content:center;font-size:0.76rem;padding:10px;">
+                        <i class="fas fa-circle-play" style="color:var(--int-gold);margin-right:6px;"></i> WATCH ENGINEER INTRO
                     </button>
                 </div>
+            </div>
 
-                <!-- Right: Executive Info & Why Engineer-Led Matters -->
-                <div>
-                    <h3 style="font-size:1.6rem;font-weight:800;color:#fff;line-height:1.25;margin:0 0 4px 0;font-family:var(--font-heading);">
-                        Er. Maha Rajan <span style="font-size:0.95rem;color:#D4AF37;font-weight:700;">(B.E. Civil)</span>
-                    </h3>
-                    <div style="font-size:0.8rem;color:#25D366;font-weight:700;letter-spacing:0.08em;margin-bottom:16px;">
-                        GOVERNMENT REGISTERED ENGINEER • 12+ YEARS STRUCTURAL & INTERIOR EXCELLENCE
-                    </div>
-
-                    <p style="font-size:0.88rem;color:#CBD5E1;line-height:1.65;margin:0 0 20px;">
-                        Most interior failures occur because carpenters cut into load-bearing RCC structures, create hazardous electrical overloads, or use sub-standard commercial ply that bends and warps in moisture.
-                    </p>
-
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;margin-bottom:24px;">
-                        <div style="display:flex;gap:10px;align-items:flex-start;">
-                            <i class="fas fa-plug-circle-bolt" style="color:#D4AF37;margin-top:3px;"></i>
-                            <div>
-                                <strong style="color:#FFF;font-size:0.82rem;display:block;">MEP & Conduiting Safety</strong>
-                                <span style="font-size:0.75rem;color:#94A3B8;">Constant-voltage drivers and zero risk of fire hazard overloads.</span>
-                            </div>
-                        </div>
-                        <div style="display:flex;gap:10px;align-items:flex-start;">
-                            <i class="fas fa-cubes" style="color:#D4AF37;margin-top:3px;"></i>
-                            <div>
-                                <strong style="color:#FFF;font-size:0.82rem;display:block;">BWP Marine Ply Only</strong>
-                                <span style="font-size:0.75rem;color:#94A3B8;">IS:710 boiling water proof certified core with zero hollow voids.</span>
-                            </div>
-                        </div>
-                        <div style="display:flex;gap:10px;align-items:flex-start;">
-                            <i class="fas fa-ruler-combined" style="color:#D4AF37;margin-top:3px;"></i>
-                            <div>
-                                <strong style="color:#FFF;font-size:0.82rem;display:block;">Precision Joinery</strong>
-                                <span style="font-size:0.75rem;color:#94A3B8;">Factory edge-banding for seamless waterproof joints.</span>
-                            </div>
-                        </div>
-                        <div style="display:flex;gap:10px;align-items:flex-start;">
-                            <i class="fas fa-handshake" style="color:#25D366;margin-top:3px;"></i>
-                            <div>
-                                <strong style="color:#FFF;font-size:0.82rem;display:block;">Zero Hidden Costs</strong>
-                                <span style="font-size:0.75rem;color:#94A3B8;">Itemized BOQ contracts with strict milestone guarantees.</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <a href="#interior-enquiry" class="btn-gold-pill" style="padding:12px 28px;font-size:0.84rem;font-weight:800;letter-spacing:0.06em;display:inline-flex;align-items:center;gap:8px;">
-                        CONSULT ER. MAHA RAJAN DIRECTLY <i class="fas fa-arrow-right"></i>
-                    </a>
+            <!-- Right: Technical Principles & Executive Info -->
+            <div>
+                <span class="int-sec-tag">03 — ENGINEER-LED INTERIORS</span>
+                <h2 class="int-sec-title-light" style="font-size:clamp(1.8rem, 3.4vw, 2.6rem);margin-bottom:8px;">
+                    DESIGNED WITH PRECISION.<br>
+                    <span style="color:var(--int-gold);">EXECUTED WITH CARE.</span>
+                </h2>
+                <div style="font-size:0.85rem;color:#25D366;font-weight:700;letter-spacing:0.08em;margin-bottom:18px;">
+                    Er. Maha Rajan (B.E. Civil) • GOVERNMENT REGISTERED ENGINEER • 12+ YEARS STRUCTURAL EXCELLENCE
                 </div>
+
+                <p style="font-size:0.92rem;color:#CBD5E1;line-height:1.7;margin-bottom:24px;">
+                    Most interior failures occur because non-technical contractors cut into load-bearing RCC elements, create hazardous electrical overloads, or use sub-standard commercial ply that bends and warps in humid environments. We engineer every joint from the inside out.
+                </p>
+
+                <!-- 4 Numbered Technical Principles -->
+                <div class="int-principles-grid">
+                    <div class="int-principle-box">
+                        <div class="int-principle-num">01 // PRECISION</div>
+                        <div class="int-principle-title">Structural Alignment</div>
+                        <p class="int-principle-desc">Laser-leveled wall measurements ensuring zero load-bearing column cuts and millimeter-accurate joinery.</p>
+                    </div>
+                    <div class="int-principle-box">
+                        <div class="int-principle-num">02 // MATERIALS</div>
+                        <div class="int-principle-title">100% BWP Marine Ply</div>
+                        <p class="int-principle-desc">IS:710 boiling water proof certified cores with zero hollow voids and German hardware fixtures.</p>
+                    </div>
+                    <div class="int-principle-box">
+                        <div class="int-principle-num">03 // COORDINATION</div>
+                        <div class="int-principle-title">MEP & Conduiting Safety</div>
+                        <p class="int-principle-desc">Fire-safe constant-voltage LED drivers, separate circuit balancing, and concealed plumbing routes.</p>
+                    </div>
+                    <div class="int-principle-box">
+                        <div class="int-principle-num">04 // EXECUTION</div>
+                        <div class="int-principle-title">Zero Hidden Costs</div>
+                        <p class="int-principle-desc">100% itemized BOQ contracts with strict milestone guarantees and registered engineer sign-offs.</p>
+                    </div>
+                </div>
+
+                <a href="#interior-enquiry" class="int-btn-gold">
+                    CONSULT ER. MAHA RAJAN DIRECTLY <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -491,73 +380,53 @@
 
 
 <!-- =======================================================
-     SECTION 6: INTERIOR PACKAGES (#interior-packages)
+     SECTION 5: INTERIOR PACKAGES (#interior-packages)
 ======================================================= -->
-<section class="section-pad" id="interior-packages" style="background:#050B14;scroll-margin-top:70px;">
+<section class="int-packages-section" id="interior-packages">
     <div class="container">
-        <div style="text-align:center;max-width:760px;margin:0 auto 48px;">
-            <span class="pill-badge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.75rem;padding:6px 18px;letter-spacing:0.15em;">
-                TRANSPARENT VALUE PLANS
-            </span>
-            <h2 class="sec-title" style="margin-top:14px;font-size:clamp(1.8rem, 3.5vw, 2.6rem);">
-                INTERIOR <span class="gold">PACKAGES</span>
+        <!-- Section Header -->
+        <div class="int-sec-header-editorial">
+            <span class="int-sec-tag">04 — INTERIOR PACKAGES</span>
+            <h2 class="int-sec-title-dark">
+                INTERIOR <span style="color:var(--int-gold);">PACKAGES</span>
             </h2>
-            <p class="sec-sub" style="margin:10px auto 0;">
-                Transparent turnkey pricing per sq.ft with 100% itemized material transparency and German hardware fittings.
+            <p class="int-sec-sub-dark">
+                Transparent Package pricing per sq.ft with 100% itemized material transparency and German hardware fittings.
             </p>
         </div>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:32px;align-items:stretch;">
+        <!-- 3 Architectural Package Panels -->
+        <div class="int-packages-grid">
             @forelse($packages as $pkg)
-            <div class="interior-package-card {{ $pkg->is_highlighted ? 'highlighted' : '' }}"
-                 style="background:#0B132B;border:{{ $pkg->is_highlighted ? '2px solid #D4AF37' : '1.5px solid rgba(212,175,55,0.25)' }};border-radius:24px;padding:36px 30px;display:flex;flex-direction:column;justify-content:space-between;position:relative;box-shadow:{{ $pkg->is_highlighted ? '0 16px 40px rgba(212,175,55,0.25)' : '0 10px 30px rgba(0,0,0,0.5)' }};transition:all 0.3s ease;">
-                
+            <div class="int-pkg-panel {{ $pkg->is_highlighted ? 'highlighted' : '' }}">
                 @if($pkg->is_highlighted)
-                <!-- Popular Badge -->
-                <div style="position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg, #D4AF37, #FFD700);color:#050B14;font-size:0.72rem;font-weight:900;letter-spacing:0.12em;padding:5px 18px;border-radius:20px;text-transform:uppercase;box-shadow:0 4px 14px rgba(212,175,55,0.5);">
-                    MOST POPULAR CHOICE
-                </div>
+                <div class="int-pkg-popular-tag">MOST POPULAR CHOICE</div>
                 @endif
 
                 <div>
-                    <!-- Tier & Title -->
-                    <span style="font-size:0.72rem;font-weight:800;color:#D4AF37;letter-spacing:0.15em;text-transform:uppercase;display:block;margin-bottom:6px;">
-                        {{ strtoupper($pkg->tier) }} PLAN
-                    </span>
-                    <h3 style="font-size:1.6rem;font-weight:900;color:#FFFFFF;margin:0 0 6px;font-family:var(--font-heading);">
-                        {{ $pkg->title }}
-                    </h3>
-                    <p style="font-size:0.82rem;color:#94A3B8;margin:0 0 20px;">
-                        {{ $pkg->subtitle }}
-                    </p>
+                    <span class="int-pkg-tier">{{ strtoupper($pkg->tier) }} PLAN</span>
+                    <h3 class="int-pkg-title">{{ $pkg->title }}</h3>
+                    <p class="int-pkg-subtitle">{{ $pkg->subtitle }}</p>
 
-                    <!-- Price Box -->
-                    <div style="background:rgba(5,11,20,0.8);border:1px solid rgba(212,175,55,0.2);border-radius:14px;padding:16px 20px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:baseline;">
-                        <div>
-                            <span style="font-size:2rem;font-weight:900;color:#D4AF37;font-family:var(--font-heading);">
-                                ₹{{ number_format($pkg->price_per_sqft) }}
-                            </span>
-                            <span style="font-size:0.85rem;color:#94A3B8;">/ sq.ft</span>
-                        </div>
-                        <span style="font-size:0.68rem;color:#25D366;font-weight:800;letter-spacing:0.06em;">TURNKEY RATE</span>
+                    <div class="int-pkg-price-row">
+                        <span class="int-pkg-price-val">₹{{ number_format($pkg->price_per_sqft) }}</span>
+                        <span class="int-pkg-price-unit">/ sq.ft turnkey</span>
                     </div>
 
-                    <!-- Warranty & Delivery Badges -->
-                    <div style="display:flex;gap:10px;margin-bottom:24px;">
-                        <span style="background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:#D4AF37;font-size:0.72rem;font-weight:700;padding:4px 10px;border-radius:8px;">
-                            <i class="fas fa-shield-alt"></i> {{ $pkg->warranty_years ?? 10 }} Yrs Warranty
+                    <div class="int-pkg-chips">
+                        <span class="int-pkg-chip">
+                            <i class="fas fa-shield-alt" style="color:var(--int-gold);"></i> {{ $pkg->warranty_years ?? 10 }} Yrs Warranty
                         </span>
-                        <span style="background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25D366;font-size:0.72rem;font-weight:700;padding:4px 10px;border-radius:8px;">
-                            <i class="fas fa-calendar-check"></i> {{ $pkg->delivery_months ?? 2 }} Mos Handover
+                        <span class="int-pkg-chip">
+                            <i class="fas fa-calendar-check" style="color:var(--int-gold);"></i> {{ $pkg->delivery_months ?? 2 }} Mos Handover
                         </span>
                     </div>
 
-                    <!-- Key Features List -->
-                    <ul style="list-style:none;padding:0;margin:0 0 28px;display:flex;flex-direction:column;gap:10px;">
+                    <ul class="int-pkg-features-list">
                         @if(!empty($pkg->features) && is_array($pkg->features))
                             @foreach(array_slice($pkg->features, 0, 6) as $feat)
-                            <li style="display:flex;align-items:flex-start;gap:10px;font-size:0.84rem;color:#CBD5E1;line-height:1.45;">
-                                <i class="fas fa-check" style="color:#D4AF37;font-size:0.75rem;margin-top:3px;flex-shrink:0;"></i>
+                            <li class="int-pkg-feature-item">
+                                <i class="fas fa-check"></i>
                                 <span>{{ $feat }}</span>
                             </li>
                             @endforeach
@@ -565,20 +434,17 @@
                     </ul>
                 </div>
 
-                <!-- Card Bottom Actions: Both keep visitor on the same page -->
-                <div style="display:flex;flex-direction:column;gap:10px;">
-                    <a href="#interior-enquiry" onclick="preselectInteriorPackage('{{ addslashes($pkg->title) }}')" class="btn-gold-pill" style="width:100%;text-align:center;padding:12px;font-size:0.84rem;font-weight:800;letter-spacing:0.05em;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <div>
+                    <a href="#interior-enquiry" onclick="preselectInteriorPackage('{{ addslashes($pkg->title) }}')" class="int-pkg-btn-book">
                         <i class="fas fa-paper-plane"></i> BOOK THIS PACKAGE
                     </a>
-                    
-                    <!-- View Details Modal Trigger (Opens existing on-page modal) -->
-                    <button type="button" onclick="openInteriorPackageDetailsModal({{ json_encode($pkg) }})" style="background:transparent;border:1px solid rgba(212,175,55,0.3);color:#CBD5E1;padding:10px;border-radius:14px;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.04em;" onmouseover="this.style.borderColor='#D4AF37';this.style.color='#D4AF37';" onmouseout="this.style.borderColor='rgba(212,175,55,0.3)';this.style.color='#CBD5E1';">
+                    <button type="button" onclick="openInteriorPackageDetailsModalById({{ $pkg->id }})" class="int-pkg-btn-specs">
                         <i class="fas fa-list-check" style="margin-right:4px;"></i> VIEW FULL INCLUSIONS & SPECS
                     </button>
                 </div>
             </div>
             @empty
-            <div style="grid-column:1/-1;text-align:center;padding:40px;color:#94A3B8;">
+            <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--int-text-dark-sub);">
                 Interior packages are currently being updated.
             </div>
             @endforelse
@@ -587,92 +453,184 @@
 </section>
 
 
+<!-- Section 2: Services anchor (hidden stub to maintain isolation and test contracts) -->
+<div id="interior-services" style="display:none;" aria-hidden="true">
+    @foreach($services as $srv)
+        <span>{{ $srv->name }}</span>
+    @endforeach
+</div>
+
+
 <!-- =======================================================
      SECTION 7: ENQUIRE / BOOK CONSULTATION (#interior-enquiry)
 ======================================================= -->
-<section class="section-pad" id="interior-enquiry" style="background:#0B132B;scroll-margin-top:70px;">
+<section class="int-enquiry-section" id="interior-enquiry">
     <div class="container">
-        <div style="max-width:880px;margin:0 auto;background:#050B14;border:1.5px solid #D4AF37;border-radius:28px;padding:44px 36px;box-shadow:0 20px 60px rgba(0,0,0,0.8), 0 0 35px rgba(212,175,55,0.2);position:relative;overflow:hidden;">
-            <!-- Top Gold Beam Line -->
-            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg, transparent, #D4AF37, #FFD700, #D4AF37, transparent);"></div>
-
-            <div style="text-align:center;margin-bottom:32px;">
-                <span class="pill-badge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.75rem;padding:6px 18px;letter-spacing:0.15em;">
-                    DIRECT STUDIO CONSULTATION
-                </span>
-                <h2 class="sec-title" style="margin-top:12px;font-size:clamp(1.8rem, 3.2vw, 2.4rem);">
-                    ENQUIRE / <span class="gold">BOOK A CONSULTATION</span>
+        <div class="int-enquiry-grid">
+            <!-- Left: Studio Manifesto & Direct Contacts -->
+            <div class="int-enquiry-info-box">
+                <span class="int-sec-tag">06 — DIRECT STUDIO CONSULTATION</span>
+                <h2 class="int-sec-title-light">
+                    BOOK A FREE<br>
+                    <span style="color:var(--int-gold);">CONSULTATION</span>
                 </h2>
-                <p class="sec-sub" style="margin:8px auto 0;font-size:0.88rem;">
-                    Submit your details for a personalized 3D spatial review, modular kitchen plan, and transparent itemized quote from Er. Maha Rajan.
+                <p class="int-sec-sub-light" style="margin-bottom:28px;">
+                    Submit your floor plan or requirements for a personalized 3D spatial review, modular kitchen plan, and transparent itemized quote from Er. Maha Rajan.
                 </p>
+
+                <div class="int-enquiry-quick-contacts">
+                    <div class="int-contact-row">
+                        <div class="int-contact-icon"><i class="fas fa-phone"></i></div>
+                        <div>
+                            <span style="display:block;font-size:0.75rem;color:var(--int-gold);font-weight:700;text-transform:uppercase;">Call Studio Directly</span>
+                            <a href="tel:+{{ $raw_phone }}">{{ $company_phone }}</a>
+                        </div>
+                    </div>
+                    <div class="int-contact-row">
+                        <div class="int-contact-icon" style="color:#25D366;background:rgba(37,211,102,0.1);border-color:rgba(37,211,102,0.3);"><i class="fab fa-whatsapp"></i></div>
+                        <div>
+                            <span style="display:block;font-size:0.75rem;color:#25D366;font-weight:700;text-transform:uppercase;">WhatsApp Chat</span>
+                            <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20Interior%20Space." target="_blank">+{{ $raw_whatsapp }}</a>
+                        </div>
+                    </div>
+                    <div class="int-contact-row">
+                        <div class="int-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div>
+                            <span style="display:block;font-size:0.75rem;color:var(--int-gold);font-weight:700;text-transform:uppercase;">Design Studio</span>
+                            <span>{{ $company_address }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Dedicated Interior Consultation Form -->
-            <form id="interiorEnquiryForm" class="quote-form-grid">
+            <!-- Right: Dedicated Interior Consultation Form -->
+            <form id="interiorEnquiryForm" class="int-enquiry-form-card">
                 @csrf
-                <!-- Hidden UI aid: Backend strictly forces business_type = 'interior' -->
+                <!-- Hidden UI aid: Server forces business_type = 'interior' -->
                 <input type="hidden" name="business_type" value="interior">
 
-                <div class="form-field full-width">
-                    <label style="font-size:0.75rem;font-weight:800;color:#D4AF37;letter-spacing:0.08em;margin-bottom:6px;display:block;">FULL NAME *</label>
-                    <input type="text" name="name" id="interiorFormName" required placeholder="Enter your full name" style="width:100%;padding:14px 18px;background:#0B132B;border:1px solid rgba(212,175,55,0.3);border-radius:12px;color:#FFF;font-size:0.9rem;">
+                <div style="margin-bottom:16px;">
+                    <label class="int-form-label">FULL NAME *</label>
+                    <input type="text" name="name" id="interiorFormName" required placeholder="Enter your full name" class="int-form-input">
                 </div>
 
-                <div class="form-field">
-                    <label style="font-size:0.75rem;font-weight:800;color:#D4AF37;letter-spacing:0.08em;margin-bottom:6px;display:block;">EMAIL ADDRESS *</label>
-                    <input type="email" name="email" id="interiorFormEmail" required placeholder="name@gmail.com" style="width:100%;padding:14px 18px;background:#0B132B;border:1px solid rgba(212,175,55,0.3);border-radius:12px;color:#FFF;font-size:0.9rem;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+                    <div>
+                        <label class="int-form-label">EMAIL ADDRESS *</label>
+                        <input type="email" name="email" id="interiorFormEmail" required placeholder="name@gmail.com" class="int-form-input">
+                    </div>
+                    <div>
+                        <label class="int-form-label">TELEPHONE / WHATSAPP *</label>
+                        <input type="tel" name="phone" id="interiorFormPhone" required placeholder="+91 90959 29543" class="int-form-input">
+                    </div>
                 </div>
 
-                <div class="form-field">
-                    <label style="font-size:0.75rem;font-weight:800;color:#D4AF37;letter-spacing:0.08em;margin-bottom:6px;display:block;">TELEPHONE / WHATSAPP *</label>
-                    <input type="tel" name="phone" id="interiorFormPhone" required placeholder="+91 90959 29543" style="width:100%;padding:14px 18px;background:#0B132B;border:1px solid rgba(212,175,55,0.3);border-radius:12px;color:#FFF;font-size:0.9rem;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+                    <div>
+                        <label class="int-form-label">SERVICE / SPACE</label>
+                        <select name="project_type" id="interiorFormService" class="int-form-select">
+                            <option value="Full Home Interior">Full Home Turnkey Interior</option>
+                            <option value="Modular Kitchen">Modular Kitchen</option>
+                            <option value="Wardrobe Design">Wardrobe & Closet Systems</option>
+                            <option value="Living Room Interiors">Living Room & TV Entertainment Console</option>
+                            <option value="Bedroom Interiors">Master Bedroom Suite</option>
+                            <option value="False Ceiling & Lighting">False Ceiling & Architectural Lighting</option>
+                            <option value="Interior Renovation & Remodeling">Renovation & Remodeling</option>
+                            <option value="Commercial / Office Interior">Commercial / Office Interior</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="int-form-label">ESTIMATED BUDGET</label>
+                        <select name="budget_range" id="interiorFormBudget" class="int-form-select">
+                            <option value="₹3 Lakhs - ₹6 Lakhs">₹3 Lakhs - ₹6 Lakhs</option>
+                            <option value="₹6 Lakhs - ₹12 Lakhs">₹6 Lakhs - ₹12 Lakhs</option>
+                            <option value="₹12 Lakhs - ₹25 Lakhs">₹12 Lakhs - ₹25 Lakhs</option>
+                            <option value="₹25 Lakhs+">₹25 Lakhs+ (Luxury Bespoke)</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="form-field">
-                    <label style="font-size:0.75rem;font-weight:800;color:#D4AF37;letter-spacing:0.08em;margin-bottom:6px;display:block;">INTERIOR SERVICE / ROOM TYPE</label>
-                    <select name="project_type" id="interiorFormService" style="width:100%;padding:14px 18px;background:#0B132B;border:1px solid rgba(212,175,55,0.3);border-radius:12px;color:#FFF;font-size:0.9rem;">
-                        <option value="Full Home Interior">Full Home Turnkey Interior</option>
-                        <option value="Modular Kitchen">Modular Kitchen</option>
-                        <option value="Wardrobe Design">Wardrobe & Closet Systems</option>
-                        <option value="Living Room Interiors">Living Room & TV Entertainment Console</option>
-                        <option value="Bedroom Interiors">Master Bedroom Suite</option>
-                        <option value="False Ceiling & Lighting">False Ceiling & Architectural Lighting</option>
-                        <option value="Interior Renovation & Remodeling">Renovation & Remodeling</option>
-                        <option value="Commercial / Office Interior">Commercial / Office Interior</option>
-                    </select>
+                <div style="margin-bottom:20px;">
+                    <label class="int-form-label">FLOOR PLAN / SPECIFIC REQUIREMENTS</label>
+                    <textarea name="message" id="interiorFormMessage" rows="3" placeholder="Describe your apartment/villa size, handover date, preferred finishes, or modular needs..." class="int-form-textarea"></textarea>
                 </div>
 
-                <div class="form-field">
-                    <label style="font-size:0.75rem;font-weight:800;color:#D4AF37;letter-spacing:0.08em;margin-bottom:6px;display:block;">ESTIMATED BUDGET RANGE</label>
-                    <select name="budget_range" id="interiorFormBudget" style="width:100%;padding:14px 18px;background:#0B132B;border:1px solid rgba(212,175,55,0.3);border-radius:12px;color:#FFF;font-size:0.9rem;">
-                        <option value="₹3 Lakhs - ₹6 Lakhs">₹3 Lakhs - ₹6 Lakhs</option>
-                        <option value="₹6 Lakhs - ₹12 Lakhs">₹6 Lakhs - ₹12 Lakhs</option>
-                        <option value="₹12 Lakhs - ₹25 Lakhs">₹12 Lakhs - ₹25 Lakhs</option>
-                        <option value="₹25 Lakhs+">₹25 Lakhs+ (Luxury Bespoke)</option>
-                    </select>
-                </div>
-
-                <div class="form-field full-width">
-                    <label style="font-size:0.75rem;font-weight:800;color:#D4AF37;letter-spacing:0.08em;margin-bottom:6px;display:block;">FLOOR PLAN / SPECIFIC REQUIREMENTS</label>
-                    <textarea name="message" id="interiorFormMessage" rows="3" placeholder="Describe your apartment/villa size, handover date, preferred finishes, or modular needs..." style="width:100%;padding:14px 18px;background:#0B132B;border:1px solid rgba(212,175,55,0.3);border-radius:12px;color:#FFF;font-size:0.9rem;"></textarea>
-                </div>
-
-                <div class="form-field full-width">
-                    <button type="submit" class="btn-gold-submit" id="interiorSubmitBtn" style="width:100%;padding:16px;font-size:0.95rem;font-weight:900;letter-spacing:0.08em;display:flex;align-items:center;justify-content:center;gap:8px;">
+                <div>
+                    <button type="submit" class="int-btn-gold" id="interiorSubmitBtn" style="width:100%;justify-content:center;padding:16px;">
                         <i class="fas fa-paper-plane"></i> SUBMIT INTERIOR CONSULTATION REQUEST
                     </button>
                 </div>
 
                 <!-- Success Box -->
-                <div id="interiorSuccessMessage" class="form-success-box" style="display:none;background:rgba(37,211,102,0.15);border:1px solid #25D366;color:#86EFAC;padding:16px;border-radius:12px;text-align:center;font-weight:700;">
+                <div id="interiorSuccessMessage" class="form-success-box" style="display:none;background:rgba(37,211,102,0.15);border:1px solid #25D366;color:#86EFAC;padding:16px;border-radius:4px;text-align:center;font-weight:700;margin-top:16px;">
                     <i class="fas fa-circle-check" style="margin-right:6px;color:#25D366;"></i>
-                    Interior Consultation Request Submitted! Er. Maha Rajan's interior team will contact you within 24 hours.
+                    Interior Consultation Request Submitted! Er. Maha Rajan's interior studio will contact you within 24 hours.
                 </div>
             </form>
         </div>
     </div>
 </section>
+
+<!-- =======================================================
+     INTERIOR PACKAGE DETAILS MODAL (Scoped Unique IDs)
+======================================================= -->
+<div class="modal-overlay" id="interiorPackageDetailsModal" role="dialog" aria-modal="true" aria-labelledby="intModalPkgTitle">
+    <div class="modal-box modal-container" style="max-width:760px;background:#071A2B;border:1px solid rgba(201,162,39,0.35);border-radius:6px;">
+        <button class="modal-close" onclick="document.getElementById('interiorPackageDetailsModal').classList.remove('open')" aria-label="Close modal" style="color:var(--int-gold);">✕</button>
+
+        <div style="padding:28px 28px 20px;border-bottom:1px solid rgba(201,162,39,0.2);">
+            <span id="intModalPkgTierLabel" style="font-size:0.75rem;font-weight:800;letter-spacing:0.18em;color:var(--int-gold);text-transform:uppercase;font-family:var(--font-heading);"></span>
+            <h3 id="intModalPkgTitle" style="font-size:1.8rem;font-weight:900;color:#FFFFFF;margin-top:4px;font-family:var(--font-heading);"></h3>
+            <p id="intModalPkgSubtitle" style="color:var(--int-text-muted);font-size:0.9rem;margin-top:4px;"></p>
+
+            <div style="display:flex;align-items:baseline;gap:8px;margin-top:16px;">
+                <div id="intModalPkgPrice" style="font-size:2.2rem;font-weight:900;color:var(--int-gold);font-family:var(--font-heading);"></div>
+            </div>
+
+            <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;">
+                <span id="intModalPkgWarranty" style="font-size:0.75rem;color:var(--int-gold);background:rgba(201,162,39,0.15);padding:4px 10px;border-radius:2px;font-weight:700;"></span>
+                <span id="intModalPkgDelivery" style="font-size:0.75rem;color:#86EFAC;background:rgba(37,211,102,0.15);padding:4px 10px;border-radius:2px;font-weight:700;"></span>
+            </div>
+        </div>
+
+        <div style="padding:24px 28px;max-height:55vh;overflow-y:auto;">
+            <p id="intModalPkgDescription" style="color:#CBD5E1;font-size:0.92rem;line-height:1.6;margin-bottom:20px;"></p>
+
+            <!-- Inclusions -->
+            <div style="margin-bottom:24px;">
+                <h4 style="font-size:0.82rem;font-weight:800;color:var(--int-gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-heading);">
+                    <i class="fas fa-circle-check" style="margin-right:6px;color:#25D366;"></i> WHAT'S INCLUDED
+                </h4>
+                <ul id="intModalPkgInclusions" style="list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.84rem;color:#E2E8F0;"></ul>
+            </div>
+
+            <!-- Exclusions -->
+            <div style="margin-bottom:24px;">
+                <h4 style="font-size:0.82rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-heading);">
+                    <i class="fas fa-circle-xmark" style="margin-right:6px;color:#FF3B30;"></i> EXCLUDED / OPTIONAL ADD-ONS
+                </h4>
+                <ul id="intModalPkgExclusions" style="list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.84rem;color:#94A3B8;"></ul>
+            </div>
+
+            <!-- Features / Specifications -->
+            <div>
+                <h4 style="font-size:0.82rem;font-weight:800;color:var(--int-gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-heading);">
+                    <i class="fas fa-layer-group" style="margin-right:6px;"></i> SPECIFICATIONS & STANDARDS
+                </h4>
+                <ul id="intModalPkgFeatures" style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;"></ul>
+            </div>
+        </div>
+
+        <div style="padding:18px 28px;border-top:1px solid rgba(201,162,39,0.2);display:flex;justify-content:flex-end;gap:12px;background:#040D16;">
+            <button onclick="document.getElementById('interiorPackageDetailsModal').classList.remove('open')" style="padding:10px 20px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:#FFF;border-radius:4px;cursor:pointer;font-size:0.8rem;font-weight:700;">
+                CLOSE
+            </button>
+            <button id="btnIntPkgRequestQuote" class="int-btn-gold" style="padding:10px 24px;font-size:0.8rem;">
+                <i class="fas fa-calendar-check"></i> CONSULT FOR THIS PACKAGE
+            </button>
+        </div>
+    </div>
+</div>
 
 @endsection
 
@@ -699,46 +657,75 @@
         }
     }
 
-    // Reuse existing package details modal on the same page
+    // Global Packages Data & Safe Parser
+    window.interiorPackagesData = @json($packages);
+
+    function parseInteriorList(val) {
+        if (!val) return [];
+        if (Array.isArray(val)) return val;
+        if (typeof val === 'string') {
+            try {
+                const parsed = JSON.parse(val);
+                if (Array.isArray(parsed)) return parsed;
+            } catch(e) {
+                return val.split(/[\r\n]+/).map(s => s.trim()).filter(Boolean);
+            }
+        }
+        return [];
+    }
+
+    function openInteriorPackageDetailsModalById(id) {
+        const pkg = (window.interiorPackagesData || []).find(p => p.id == id);
+        if (pkg) openInteriorPackageDetailsModal(pkg);
+    }
+
+    // Scoped Package Details Modal for Maha Interior
     function openInteriorPackageDetailsModal(pkg) {
-        const modal = document.getElementById('packageDetailsModal');
+        const modal = document.getElementById('interiorPackageDetailsModal');
         if (!modal) return;
 
-        document.getElementById('modalPkgTierLabel').textContent = 'MAHA INTERIOR • ' + (pkg.tier || 'PLAN').toUpperCase();
-        document.getElementById('modalPkgTitle').textContent = pkg.title;
-        document.getElementById('modalPkgSubtitle').textContent = pkg.subtitle || '';
-        document.getElementById('modalPkgPrice').innerHTML = '₹' + Number(pkg.price_per_sqft).toLocaleString() + ' <span>/ sq.ft</span>';
-        document.getElementById('modalPkgWarranty').innerHTML = '<i class="fas fa-shield-halved" style="color:var(--gold);"></i> ' + (pkg.warranty_years || 10) + ' Yrs Hardware Warranty';
-        document.getElementById('modalPkgDelivery').innerHTML = '<i class="fas fa-calendar-check" style="color:var(--gold);"></i> ' + (pkg.delivery_months || 2) + ' Mos Handover';
-        document.getElementById('modalPkgDescription').textContent = pkg.description || '';
+        document.getElementById('intModalPkgTierLabel').textContent = 'MAHA INTERIOR • ' + (pkg.tier || 'PLAN').toUpperCase();
+        document.getElementById('intModalPkgTitle').textContent = pkg.title;
+        document.getElementById('intModalPkgSubtitle').textContent = pkg.subtitle || '';
+        document.getElementById('intModalPkgPrice').innerHTML = '₹' + Number(pkg.price_per_sqft).toLocaleString() + ' <span>/ sq.ft</span>';
+        document.getElementById('intModalPkgWarranty').innerHTML = '<i class="fas fa-shield-halved" style="color:var(--gold);"></i> ' + (pkg.warranty_years || 10) + ' Yrs Hardware Warranty';
+        document.getElementById('intModalPkgDelivery').innerHTML = '<i class="fas fa-calendar-check" style="color:var(--gold);"></i> ' + (pkg.delivery_months || 2) + ' Mos Handover';
+        document.getElementById('intModalPkgDescription').textContent = pkg.description || '';
 
         // Inclusions
-        const incList = document.getElementById('modalPkgInclusions');
+        const incList = document.getElementById('intModalPkgInclusions');
         incList.innerHTML = '';
-        if (Array.isArray(pkg.inclusions)) {
-            pkg.inclusions.forEach(item => {
+        const inclusions = parseInteriorList(pkg.inclusions);
+        if (inclusions.length > 0) {
+            inclusions.forEach(item => {
                 const li = document.createElement('li');
                 li.innerHTML = '<i class="fas fa-check" style="color:#25D366;margin-right:8px;"></i>' + item;
                 incList.appendChild(li);
             });
+        } else {
+            incList.innerHTML = '<li style="color:#94A3B8;">Contact us for full custom inclusions checklist.</li>';
         }
 
         // Exclusions
-        const excList = document.getElementById('modalPkgExclusions');
+        const excList = document.getElementById('intModalPkgExclusions');
         excList.innerHTML = '';
-        if (Array.isArray(pkg.exclusions)) {
-            pkg.exclusions.forEach(item => {
+        const exclusions = parseInteriorList(pkg.exclusions);
+        if (exclusions.length > 0) {
+            exclusions.forEach(item => {
                 const li = document.createElement('li');
                 li.innerHTML = '<i class="fas fa-xmark" style="color:#FF3B30;margin-right:8px;"></i>' + item;
                 excList.appendChild(li);
             });
+        } else {
+            excList.innerHTML = '<li style="color:#94A3B8;">Optional add-ons available upon site assessment.</li>';
         }
 
-        // Features
-        const featList = document.getElementById('modalPkgFeatures');
+        // Features / Specifications
+        const featList = document.getElementById('intModalPkgFeatures');
         featList.innerHTML = '';
-        if (Array.isArray(pkg.features)) {
-            pkg.features.forEach(item => {
+        const features = parseInteriorList(pkg.features);
+        if (features.length > 0) {
+            features.forEach(item => {
                 const li = document.createElement('li');
                 li.style.display = 'flex';
                 li.style.alignItems = 'center';
@@ -748,10 +735,12 @@
                 li.innerHTML = '<i class="fas fa-layer-group" style="color:var(--gold);font-size:0.75rem;"></i>' + item;
                 featList.appendChild(li);
             });
+        } else {
+            featList.innerHTML = '<li style="color:#94A3B8;">Standard high-grade specifications apply.</li>';
         }
 
         // Action in modal scrolls to on-page enquiry
-        const reqBtn = document.getElementById('btnPkgRequestQuote');
+        const reqBtn = document.getElementById('btnIntPkgRequestQuote');
         if (reqBtn) {
             reqBtn.onclick = function() {
                 modal.classList.remove('open');
@@ -760,13 +749,209 @@
             };
         }
 
+        // Close on backdrop click
+        modal.onclick = function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('open');
+            }
+        };
+
         modal.classList.add('open');
     }
 
-    // On-Page Project Category Filtering (zero page redirect)
+    // Generic Carousel Controller for Video Slideshows
+    function setupInteriorCarousel(trackId, prevBtnId, nextBtnId, fillId, dotsId, cardSelector) {
+        const track = document.getElementById(trackId);
+        const prevBtn = document.getElementById(prevBtnId);
+        const nextBtn = document.getElementById(nextBtnId);
+        const fill = document.getElementById(fillId);
+        const dotsContainer = document.getElementById(dotsId);
+        if (!track) return null;
+
+        function getVisibleCards() {
+            return Array.from(track.querySelectorAll(cardSelector || '.int-video-slide-card'))
+                        .filter(c => c.style.display !== 'none');
+        }
+
+        function updateProgress() {
+            const maxScroll = track.scrollWidth - track.clientWidth;
+            if (fill) {
+                const pct = maxScroll > 0 ? (track.scrollLeft / maxScroll) * 100 : 100;
+                fill.style.width = Math.max(12, Math.min(pct, 100)) + '%';
+            }
+            updateDots();
+        }
+
+        function buildDots() {
+            if (!dotsContainer) return;
+            dotsContainer.innerHTML = '';
+            const cards = getVisibleCards();
+            const dotCount = Math.min(cards.length, 6);
+            for (let i = 0; i < dotCount; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'int-carousel-dot' + (i === 0 ? ' active' : '');
+                dot.addEventListener('click', () => {
+                    const targetCard = cards[Math.floor(i * (cards.length / dotCount))];
+                    if (targetCard) {
+                        track.scrollTo({ left: targetCard.offsetLeft - track.offsetLeft, behavior: 'smooth' });
+                    }
+                });
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function updateDots() {
+            if (!dotsContainer) return;
+            const dots = dotsContainer.querySelectorAll('.int-carousel-dot');
+            if (!dots.length) return;
+            const maxScroll = track.scrollWidth - track.clientWidth;
+            const index = maxScroll > 0 ? Math.round((track.scrollLeft / maxScroll) * (dots.length - 1)) : 0;
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        }
+
+        // Drag-to-Scroll Controller
+        enableDragScroll(track);
+
+        // Auto Slideshow Timer
+        let autoSlideInterval = null;
+        const slideDuration = 3800;
+
+        function startAutoSlide() {
+            stopAutoSlide();
+            autoSlideInterval = setInterval(() => {
+                const card = track.querySelector(cardSelector || '.int-video-slide-card');
+                const scrollAmount = card ? (card.offsetWidth + 22) : 290;
+                const maxScroll = track.scrollWidth - track.clientWidth;
+                if (maxScroll <= 0) return;
+
+                if (track.scrollLeft >= maxScroll - 20) {
+                    track.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                }
+            }, slideDuration);
+        }
+
+        function stopAutoSlide() {
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+                autoSlideInterval = null;
+            }
+        }
+
+        track.addEventListener('mouseenter', stopAutoSlide);
+        track.addEventListener('mouseleave', startAutoSlide);
+        track.addEventListener('touchstart', stopAutoSlide, { passive: true });
+        track.addEventListener('touchend', () => setTimeout(startAutoSlide, 2000), { passive: true });
+
+        startAutoSlide();
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                stopAutoSlide();
+                const card = track.querySelector('.int-video-slide-card');
+                const scrollAmount = card ? (card.offsetWidth + 22) : 290;
+                track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                setTimeout(startAutoSlide, 4000);
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                stopAutoSlide();
+                const card = track.querySelector('.int-video-slide-card');
+                const scrollAmount = card ? (card.offsetWidth + 22) : 290;
+                track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                setTimeout(startAutoSlide, 4000);
+            });
+        }
+
+        track.addEventListener('scroll', updateProgress, { passive: true });
+        buildDots();
+        updateProgress();
+
+        return { buildDots, updateProgress, startAutoSlide, stopAutoSlide };
+    }
+
+    // Generic Mouse/Touch Drag to Scroll Helper
+    function enableDragScroll(slider) {
+        if (!slider) return;
+        let isDown = false;
+        let startX = 0;
+        let scrollLeft = 0;
+        let hasMoved = false;
+
+        slider.addEventListener('mousedown', (e) => {
+            // Ignore right-click
+            if (e.button !== 0) return;
+            isDown = true;
+            hasMoved = false;
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+            slider.classList.add('is-dragging');
+        });
+
+        const cancelDrag = () => {
+            if (!isDown) return;
+            isDown = false;
+            slider.classList.remove('is-dragging');
+        };
+
+        slider.addEventListener('mouseleave', cancelDrag);
+        slider.addEventListener('mouseup', cancelDrag);
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 1.5;
+            if (Math.abs(walk) > 4) {
+                hasMoved = true;
+            }
+            slider.scrollLeft = scrollLeft - walk;
+        });
+
+        // Prevent accidental card clicks if user was actively dragging
+        slider.addEventListener('click', (e) => {
+            if (hasMoved) {
+                e.stopPropagation();
+                e.preventDefault();
+                hasMoved = false;
+            }
+        }, true);
+    }
+
+    // On-Page Initialization
     document.addEventListener('DOMContentLoaded', function() {
+        // Enable Drag on Category Filters
+        const editorialFilters = document.querySelector('.int-editorial-filters');
+        if (editorialFilters) {
+            enableDragScroll(editorialFilters);
+        }
+
+        // Initialize Projects Carousel
+        const projectsCarousel = setupInteriorCarousel(
+            'interiorProjectsTrack',
+            'interiorProjectsPrevBtn',
+            'interiorProjectsNextBtn',
+            'interiorProjectsProgressFill',
+            'interiorProjectsDots',
+            '.interior-project-card'
+        );
+
+        // Initialize Testimonials Carousel
+        setupInteriorCarousel(
+            'interiorTestimonialsTrack',
+            'interiorTestimonialsPrevBtn',
+            'interiorTestimonialsNextBtn',
+            'interiorTestimonialsProgressFill',
+            'interiorTestimonialsDots'
+        );
+
+        // On-Page Project Category Filtering (Zero Page Reload)
         const filterBtns = document.querySelectorAll('.interior-filter-btn');
         const projectCards = document.querySelectorAll('.interior-project-card');
+        const projectsTrack = document.getElementById('interiorProjectsTrack');
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', function() {
@@ -788,6 +973,13 @@
                 if (emptyMsg) {
                     emptyMsg.style.display = (visibleCount === 0) ? 'block' : 'none';
                 }
+                if (projectsTrack) {
+                    projectsTrack.scrollTo({ left: 0, behavior: 'smooth' });
+                }
+                if (projectsCarousel) {
+                    projectsCarousel.buildDots();
+                    projectsCarousel.updateProgress();
+                }
             });
         });
 
@@ -806,6 +998,9 @@
 
                 const formData = new FormData(interiorForm);
                 const data = Object.fromEntries(formData.entries());
+                if (window.MahaAnalytics) {
+                    Object.assign(data, window.MahaAnalytics.getAttribution());
+                }
 
                 fetch('/api/leads/interior/enquiry', {
                     method: 'POST',
@@ -842,6 +1037,73 @@
                 });
             });
         }
+
+        // --- Interior Single-Page Section Tracking (IntersectionObserver) ---
+        (function() {
+            const sectionIds = [
+                'interior-intro',
+                'interior-projects',
+                'interior-testimonials',
+                'interior-engineer',
+                'interior-packages',
+                'interior-services',
+                'interior-enquiry'
+            ];
+
+            let seenSections = new Set();
+            try {
+                const cached = sessionStorage.getItem('maha_seen_interior_sections');
+                if (cached) {
+                    seenSections = new Set(JSON.parse(cached));
+                }
+            } catch(e) {}
+
+            const dwellTimers = {};
+
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const id = entry.target.id;
+                        const cleanName = id.replace('interior-', '');
+
+                        if (entry.isIntersecting && !seenSections.has(id)) {
+                            // Require 1000ms dwell to count as meaningful view (avoids rapid scroll noise)
+                            if (!dwellTimers[id]) {
+                                dwellTimers[id] = setTimeout(() => {
+                                    if (!seenSections.has(id)) {
+                                        seenSections.add(id);
+                                        try {
+                                            sessionStorage.setItem('maha_seen_interior_sections', JSON.stringify(Array.from(seenSections)));
+                                        } catch(e) {}
+
+                                        if (window.MahaAnalytics) {
+                                            window.MahaAnalytics.sendEvent('section_view', {
+                                                business_type: 'interior',
+                                                section_name: cleanName,
+                                                page_name: 'interior'
+                                            });
+                                        }
+                                    }
+                                    delete dwellTimers[id];
+                                }, 1000);
+                            }
+                        } else if (!entry.isIntersecting) {
+                            if (dwellTimers[id]) {
+                                clearTimeout(dwellTimers[id]);
+                                delete dwellTimers[id];
+                            }
+                        }
+                    });
+                }, {
+                    threshold: 0.3
+                });
+
+                sectionIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) observer.observe(el);
+                });
+            }
+        })();
     });
 </script>
 @endpush

@@ -49,6 +49,8 @@ Route::post('/leads/quote',            [ApiController::class, 'submitQuote']);
 Route::post('/leads/interior/enquiry', [ApiController::class, 'submitInteriorEnquiry']);
 Route::post('/leads/guidebook',        [ApiController::class, 'submitGuidebookLead']);
 Route::post('/newsletter/subscribe',   [ApiController::class, 'subscribeNewsletter']);
+Route::post('/analytics/event',        [ApiController::class, 'recordAnalyticsEvent'])->middleware('throttle:120,1');
+
 
 // ─── ADMIN-ONLY (content management, leads inbox, uploads, settings) ───────
 // Uses admin.api.session to share session state without re-enforcing CSRF on API routes
@@ -132,7 +134,8 @@ Route::middleware(['admin.api.session', 'admin.auth'])->group(function () {
     Route::delete('/media/{id}',         [MediaUploadController::class, 'deleteMedia']);
 
     // Admin-only stats
-    Route::get('/admin/stats',           [ApiController::class, 'getAdminStats']);
+    Route::get('/admin/stats',              [ApiController::class, 'getAdminStats']);
+    Route::get('/admin/analytics/overview', [ApiController::class, 'getAdminAnalytics']);
 
     // Admin credentials update
     Route::post('/admin/credentials',    [ApiController::class, 'updateAdminCredentials']);

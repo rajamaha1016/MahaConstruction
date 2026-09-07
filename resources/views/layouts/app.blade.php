@@ -8,41 +8,40 @@
     <meta name="description" content="@yield('description', 'Maha Construction is Tamil Nadu\'s premier government-registered engineering firm delivering custom luxury villas, residential residences, and architectural homes.')"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ file_exists(public_path('css/app.css')) ? filemtime(public_path('css/app.css')) : time() }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     @stack('styles')
 </head>
-<body class="dark-theme">
+<body class="dark-theme {{ request()->routeIs('interior') ? 'interior-body' : '' }}">
 
     <!-- Main Navigation Bar -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar {{ request()->routeIs('interior') ? 'interior-navbar' : '' }}" id="navbar">
         <div class="container nav-container">
             @if(request()->routeIs('interior'))
-            <!-- INTERIOR LOGO & BRAND -->
-            <a href="{{ route('interior') }}" class="nav-logo" style="display:inline-flex;align-items:center;gap:16px;text-decoration:none;">
-                <div style="background:#FFFFFF;padding:6px 14px;border-radius:14px;border:2px solid #D4AF37;box-shadow:0 4px 22px rgba(0,0,0,0.5),0 0 25px rgba(212,175,55,0.45);display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);" onmouseover="this.style.boxShadow='0 6px 28px rgba(212,175,55,0.7),0 0 30px rgba(212,175,55,0.6)';this.style.transform='scale(1.04)';" onmouseout="this.style.boxShadow='0 4px 22px rgba(0,0,0,0.5),0 0 25px rgba(212,175,55,0.45)';this.style.transform='scale(1)';">
+            <!-- INTERIOR LOGO & BRAND (ARCHITECTURAL LUXURY) -->
+            <a href="{{ route('interior') }}" class="nav-logo interior-nav-logo" style="display:inline-flex;align-items:center;gap:14px;text-decoration:none;">
+                <div class="interior-logo-badge">
                     <img src="{{ asset('logo.jpg') }}"
                          alt="Maha Interior Logo"
-                         style="height:54px;width:auto;object-fit:contain;display:block;">
+                         class="interior-logo-img">
                 </div>
-                <div style="display:flex;flex-direction:column;justify-content:center;">
-                    <span style="font-size:1.35rem;font-weight:900;letter-spacing:0.07em;line-height:1.15;font-family:var(--font-heading);background:linear-gradient(135deg,#FFFFFF 15%,#FFFDF0 45%,#FFD700 80%,#D4AF37 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 8px rgba(212,175,55,0.35));">MAHA INTERIOR</span>
-                    <span style="font-size:0.68rem;font-weight:800;letter-spacing:0.24em;color:#D4AF37;text-transform:uppercase;margin-top:4px;font-family:var(--font-heading);text-shadow:0 0 10px rgba(212,175,55,0.4);">DESIGNING BEAUTIFUL LIVING</span>
+                <div class="interior-logo-text">
+                    <span class="interior-brand-title">MAHA INTERIOR</span>
+                    <span class="interior-brand-tagline">DESIGNING BEAUTIFUL LIVING</span>
                 </div>
             </a>
 
-            <div class="nav-menu" id="navMenu">
-                <a href="#interior-intro" class="nav-item">HOME</a>
-                <a href="#interior-services" class="nav-item">SERVICES</a>
-                <a href="#interior-projects" class="nav-item">PROJECTS</a>
-                <a href="#interior-testimonials" class="nav-item">TESTIMONIALS</a>
-                <a href="#interior-packages" class="nav-item">PACKAGES</a>
-                <a href="#interior-enquiry" class="nav-item">CONTACT</a>
+            <div class="nav-menu interior-nav-menu" id="navMenu">
+                <a href="#interior-intro" class="nav-item interior-nav-item">HOME</a>
+                <a href="#interior-projects" class="nav-item interior-nav-item">PROJECTS</a>
+                <a href="#interior-testimonials" class="nav-item interior-nav-item">TESTIMONIALS</a>
+                <a href="#interior-packages" class="nav-item interior-nav-item">PACKAGES</a>
+                <a href="#interior-enquiry" class="nav-item interior-nav-item">CONTACT</a>
             </div>
 
-            <div class="nav-actions">
-                <a href="{{ route('home') }}" class="division-switch-btn" title="Switch to Construction Website" style="display:inline-flex;align-items:center;gap:6px;background:rgba(212,175,55,0.12);color:#D4AF37;border:1.5px solid #D4AF37;padding:7px 15px;border-radius:20px;font-size:0.75rem;font-weight:800;letter-spacing:0.08em;text-decoration:none;transition:all 0.3s ease;text-transform:uppercase;font-family:var(--font-heading);" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';" onmouseout="this.style.background='rgba(212,175,55,0.12)';this.style.color='#D4AF37';">
+            <div class="nav-actions interior-nav-actions">
+                <a href="{{ route('home') }}" class="division-switch-btn interior-switch-btn" title="Switch to Construction Website">
                     <i class="fas fa-building" style="font-size:0.75rem;"></i> CONSTRUCTION
                 </a>
                 <button class="nav-search-btn" id="searchToggleBtn" title="Search">
@@ -95,6 +94,7 @@
         </div>
     </div>
 
+    @if(!request()->routeIs('interior'))
     <!-- Fixed Floating Right Action Bar -->
     <div class="floating-actions-bar">
         <button class="float-btn chat-btn" data-open-quote title="Chat with Us">
@@ -110,6 +110,7 @@
             <i class="fas fa-chevron-up" style="font-size:16px;"></i>
         </button>
     </div>
+    @endif
 
     <!-- Main Page Content -->
     <main>
@@ -117,25 +118,25 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer {{ request()->routeIs('interior') ? 'interior-footer' : '' }}">
         <div class="container footer-container">
             @if(request()->routeIs('interior'))
-            <!-- INTERIOR FOOTER CONTENT -->
-            <div class="footer-top-grid">
-                <div class="footer-brand-col">
+            <!-- INTERIOR FOOTER CONTENT (ARCHITECTURAL EDITORIAL) -->
+            <div class="footer-top-grid interior-footer-grid">
+                <div class="footer-brand-col interior-footer-brand">
                     <div class="footer-logo">
-                        <div class="logo-badge" style="background:#FFFFFF;padding:4px 10px;border-radius:10px;border:1.5px solid #D4AF37;box-shadow:0 4px 14px rgba(0,0,0,0.4),0 0 12px rgba(212,175,55,0.25);">
-                            <img src="{{ asset('logo.jpg') }}" alt="Maha Interior Logo" style="height:36px;width:auto;object-fit:contain;display:block;">
+                        <div class="logo-badge interior-footer-badge">
+                            <img src="{{ asset('logo.jpg') }}" alt="Maha Interior Logo" class="interior-footer-logo-img">
                         </div>
                         <div class="logo-text-group">
-                            <span class="logo-brand">MAHA INTERIOR</span>
-                            <span class="logo-tagline">DESIGNING BEAUTIFUL LIVING</span>
+                            <span class="logo-brand interior-footer-brand-name">MAHA INTERIOR</span>
+                            <span class="logo-tagline interior-footer-tagline">DESIGNING BEAUTIFUL LIVING</span>
                         </div>
                     </div>
-                    <p class="footer-desc">
-                        Tamil Nadu's premier interior architecture and execution studio. Delivering bespoke modular kitchens, luxury wardrobes, acoustic living spaces, and turnkey interior fitouts with structural engineering precision.
+                    <p class="footer-desc interior-footer-desc">
+                        Tamil Nadu's premier interior architecture and execution studio. Delivering bespoke modular kitchens, luxury wardrobes, acoustic living spaces, and turnkey interior fitouts with civil engineering precision.
                     </p>
-                    <div class="footer-social-row">
+                    <div class="footer-social-row interior-footer-social">
                         <a href="https://www.instagram.com/mahaconstructions_2013" target="_blank" class="social-icon-btn" title="Instagram"><i class="fab fa-instagram"></i></a>
                         <a href="https://www.facebook.com/mahaconstructions" target="_blank" class="social-icon-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
                         <a href="{{ $yt_channel_url }}" target="_blank" class="social-icon-btn" title="YouTube"><i class="fab fa-youtube"></i></a>
@@ -143,20 +144,20 @@
                 </div>
 
                 <div class="footer-links-col">
-                    <h4 class="footer-heading">ON-PAGE SECTIONS</h4>
-                    <ul class="footer-nav">
-                        <li><a href="#interior-intro">Home / Intro</a></li>
-                        <li><a href="#interior-services">Our Services</a></li>
-                        <li><a href="#interior-projects">Completed Projects</a></li>
-                        <li><a href="#interior-testimonials">Client Testimonials</a></li>
-                        <li><a href="#interior-packages">Interior Packages</a></li>
-                        <li><a href="#interior-enquiry">Book Consultation</a></li>
+                    <h4 class="footer-heading interior-footer-heading">ON-PAGE SECTIONS</h4>
+                    <ul class="footer-nav interior-footer-nav">
+                        <li><a href="#interior-intro">00 • Studio Hero</a></li>
+                        <li><a href="#interior-projects">01 • Portfolio Showcase</a></li>
+                        <li><a href="#interior-testimonials">02 • Client Stories</a></li>
+                        <li><a href="#interior-engineer">03 • Engineered Interiors</a></li>
+                        <li><a href="#interior-packages">04 • Interior Packages</a></li>
+                        <li><a href="#interior-enquiry">05 • Book Consultation</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-links-col">
-                    <h4 class="footer-heading">INTERIOR SERVICES</h4>
-                    <ul class="footer-nav">
+                    <h4 class="footer-heading interior-footer-heading">DESIGN CAPABILITIES</h4>
+                    <ul class="footer-nav interior-footer-nav">
                         <li>Interior Design & Planning</li>
                         <li>Turnkey Interior Execution</li>
                         <li>Modular Kitchen Solutions</li>
@@ -167,37 +168,42 @@
                         <li>Architectural Lighting</li>
                         <li>Renovation & Remodeling</li>
                     </ul>
-                    <p style="font-size:0.78rem;color:var(--text-muted);margin-top:14px;line-height:1.45;font-family:var(--font-body);">Factory-finished precision joinery with 10-year hardware warranty.</p>
+                    <p class="interior-footer-note">Factory-finished precision joinery with 10-year hardware warranty.</p>
                 </div>
 
                 <div class="footer-contact-col">
-                    <h4 class="footer-heading">CONTACT US</h4>
-                    <div class="footer-contact-item">
-                        <span class="contact-label">Office:</span>
-                        <span><a href="tel:+{{ $raw_phone }}" style="color:inherit;text-decoration:none;">{{ $company_phone }}</a> @if(!empty($company_phone_sec)) / Engr: <a href="tel:+{{ preg_replace('/[^0-9]/', '', $company_phone_sec) }}" style="color:inherit;text-decoration:none;">{{ $company_phone_sec }}</a> @endif</span>
+                    <h4 class="footer-heading interior-footer-heading">STUDIO CONTACT</h4>
+                    <div class="footer-contact-item interior-contact-item">
+                        <span class="contact-label">Telephone:</span>
+                        <span><a href="tel:+{{ $raw_phone }}">{{ $company_phone }}</a> @if(!empty($company_phone_sec)) / <a href="tel:+{{ preg_replace('/[^0-9]/', '', $company_phone_sec) }}">{{ $company_phone_sec }}</a> @endif</span>
                     </div>
-                    <div class="footer-contact-item">
+                    <div class="footer-contact-item interior-contact-item">
                         <span class="contact-label">Email:</span>
-                        <span><a href="mailto:{{ $company_email }}" style="color:inherit;">{{ $company_email }}</a></span>
+                        <span><a href="mailto:{{ $company_email }}">{{ $company_email }}</a></span>
                     </div>
-                    <div class="footer-contact-item">
-                        <span class="contact-label">Web:</span>
+                    <div class="footer-contact-item interior-contact-item">
+                        <span class="contact-label">Showcase:</span>
                         <span>www.mahaconstructions.in/interior</span>
                     </div>
-                    <div class="footer-contact-item">
-                        <span class="contact-label">Address:</span>
+                    <div class="footer-contact-item interior-contact-item">
+                        <span class="contact-label">Studio Address:</span>
                         <span>{{ $company_address }}</span>
+                    </div>
+                    <div style="margin-top:16px;">
+                        <a href="{{ route('home') }}" class="division-switch-btn interior-switch-btn" title="Switch to Construction Website" style="display:inline-flex;">
+                            <i class="fas fa-building" style="font-size:0.75rem;"></i> SWITCH TO CONSTRUCTION
+                        </a>
                     </div>
                 </div>
             </div>
 
-            <div class="footer-location-strip">
-                <span><i class="fas fa-map-marker-alt" style="margin-right:6px;color:var(--gold);"></i> <strong>Studio Location:</strong> Nagercoil, Kanyakumari, Tamil Nadu</span>
+            <div class="footer-location-strip interior-location-strip">
+                <span><i class="fas fa-map-marker-alt" style="margin-right:8px;color:var(--gold);"></i> <strong>Studio Location:</strong> Nagercoil, Kanyakumari, Tamil Nadu</span>
                 <a href="https://maps.google.com" target="_blank" class="map-link">VIEW ON GOOGLE MAPS <i class="fas fa-arrow-right" style="margin-left:6px;"></i></a>
             </div>
 
-            <div class="footer-bottom-bar" style="justify-content:center;text-align:center;">
-                <p>© {{ date('Y') }} MAHA INTERIOR • Division of Maha Construction. Er. Maha Rajan (Government Registered Engineer). All rights reserved.</p>
+            <div class="footer-bottom-bar interior-bottom-bar" style="justify-content:center;text-align:center;">
+                <p>© {{ date('Y') }} MAHA GROUPS. All rights reserved.</p>
             </div>
             @else
             <!-- CONSTRUCTION FOOTER CONTENT -->
@@ -260,7 +266,7 @@
                     </div>
                     <div class="footer-contact-item">
                         <span class="contact-label">Web:</span>
-                        <span>www.mahaconstructions.in</span>
+                        <span>www.maha-constructions.com</span>
                     </div>
                     <div class="footer-contact-item">
                         <span class="contact-label">Address:</span>
@@ -275,7 +281,7 @@
             </div>
 
             <div class="footer-bottom-bar" style="justify-content:center;text-align:center;">
-                <p>© {{ date('Y') }} MAHA CONSTRUCTIONS. Er. Maha Rajan (Government Registered Engineer). All rights reserved.</p>
+                <p>© {{ date('Y') }} MAHA GROUPS. All rights reserved.</p>
             </div>
             @endif
         </div>

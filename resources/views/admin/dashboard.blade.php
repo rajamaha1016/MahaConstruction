@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
     <style>
         body { background: #050B14; color: #F0EBE0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         .admin-layout { display: flex; min-height: 100vh; }
@@ -171,6 +173,37 @@
             color: #050B14;
             box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
         }
+        .analytics-pill-group {
+            display: inline-flex;
+            align-items: center;
+            background: #050B14;
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            border-radius: 9999px;
+            padding: 3px;
+            gap: 3px;
+        }
+        .analytics-pill-btn {
+            background: transparent;
+            border: none;
+            color: #94A3B8;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        .analytics-pill-btn:hover { color: #FFF; }
+        .analytics-pill-btn.active {
+            background: linear-gradient(135deg, #D4AF37 0%, #AA820A 100%);
+            color: #050B14;
+            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.35);
+        }
+
 
         @media (max-width: 992px) {
             .admin-layout { flex-direction: column; }
@@ -367,7 +400,14 @@
         </div>
         <ul class="sidebar-nav-list">
             <li>
+                <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('analytics', this)">
+                    <span>📊 ANALYTICS</span>
+                    <span class="badge-count" style="background:rgba(37,211,102,0.2);color:#25D366;font-weight:800;">LIVE</span>
+                </a>
+            </li>
+            <li>
                 <a href="#" class="sidebar-nav-link active" onclick="switchAdminTab('reviews', this)">
+
                     <span>CLIENT VIDEO REVIEWS</span>
                     <span class="badge-count">{{ \App\Models\Testimonial::count() }}</span>
                 </a>
@@ -376,12 +416,6 @@
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('projects', this)">
                     <span>COMPLETED PROJECTS</span>
                     <span class="badge-count">{{ \App\Models\Project::count() }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('services', this)">
-                    <span>SERVICES</span>
-                    <span class="badge-count">{{ \App\Models\Service::count() }}</span>
                 </a>
             </li>
             <li>
@@ -467,8 +501,310 @@
         <!-- Body Content -->
         <div class="admin-body-content">
 
+            <!-- 0. WEBSITE & LEAD ANALYTICS TAB -->
+            <div class="admin-tab-pane" id="tab-analytics">
+                <div class="card-dark-panel" style="margin-bottom:20px;">
+                    <!-- Top Bar: Title & Selectors -->
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:24px;">
+                        <div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <h2 class="panel-header-title" style="margin-bottom:0;">📊 WEBSITE & LEAD ANALYTICS</h2>
+                                <span style="background:rgba(37,211,102,0.15);color:#25D366;border:1px solid rgba(37,211,102,0.3);padding:3px 10px;border-radius:12px;font-size:0.7rem;font-weight:800;letter-spacing:0.05em;">LIVE METRICS</span>
+                            </div>
+                            <p class="panel-header-sub" style="margin-bottom:0;margin-top:4px;">Actionable business intelligence across Construction & Interior divisions</p>
+                        </div>
+
+                        <!-- Action Toolbar: Division Filter, Period Filter & Refresh -->
+                        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                            <!-- Division Selector: [ ALL ] [ 🏢 CONSTRUCTION ] [ 🛋️ INTERIOR ] -->
+                            <div class="analytics-pill-group" id="analyticsDivisionGroup">
+                                <button type="button" class="analytics-pill-btn active" onclick="setAnalyticsDivision('all')" id="btnDivAll">
+                                    ALL
+                                </button>
+                                <button type="button" class="analytics-pill-btn" onclick="setAnalyticsDivision('construction')" id="btnDivConst">
+                                    🏢 CONSTRUCTION
+                                </button>
+                                <button type="button" class="analytics-pill-btn" onclick="setAnalyticsDivision('interior')" id="btnDivInt">
+                                    🛋️ INTERIOR
+                                </button>
+                            </div>
+
+                            <!-- Date Period Selector: [ TODAY ] [ 7 DAYS ] [ 30 DAYS ] [ 3 MONTHS ] [ 1 YEAR ] -->
+                            <div class="analytics-pill-group" id="analyticsPeriodGroup">
+                                <button type="button" class="analytics-pill-btn" onclick="setAnalyticsPeriod('today')" id="btnPeriodToday">TODAY</button>
+                                <button type="button" class="analytics-pill-btn" onclick="setAnalyticsPeriod('7days')" id="btnPeriod7days">7 DAYS</button>
+                                <button type="button" class="analytics-pill-btn active" onclick="setAnalyticsPeriod('30days')" id="btnPeriod30days">30 DAYS</button>
+                                <button type="button" class="analytics-pill-btn" onclick="setAnalyticsPeriod('3months')" id="btnPeriod3months">3 MONTHS</button>
+                                <button type="button" class="analytics-pill-btn" onclick="setAnalyticsPeriod('1year')" id="btnPeriod1year">1 YEAR</button>
+                            </div>
+
+                            <button type="button" onclick="fetchAdminAnalytics()" class="btn-gold-pill" style="padding:7px 16px;font-size:0.75rem;display:inline-flex;align-items:center;gap:6px;" title="Refresh Analytics Data">
+                                <i class="fas fa-arrows-rotate" id="analyticsRefreshIcon"></i> REFRESH
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 5 Primary Metric KPI Cards -->
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:16px;margin-bottom:24px;">
+                        <!-- Card 1: Visitors -->
+                        <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;">
+                            <div>
+                                <div style="font-size:0.72rem;color:#94A3B8;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;">UNIQUE VISITORS</div>
+                                <div style="font-size:2.1rem;font-weight:900;color:#fff;font-family:'Montserrat',sans-serif;line-height:1.2;margin:6px 0;" id="kpiVisitors">0</div>
+                            </div>
+                            <div style="font-size:0.72rem;color:#D4AF37;display:flex;align-items:center;gap:6px;" id="kpiVisitorBreakdown">
+                                <span>New: <b id="kpiNewVisitors">0</b></span> • <span>Returning: <b id="kpiReturningVisitors">0</b></span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Page Views -->
+                        <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;">
+                            <div>
+                                <div style="font-size:0.72rem;color:#94A3B8;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;">PAGE VIEWS</div>
+                                <div style="font-size:2.1rem;font-weight:900;color:#fff;font-family:'Montserrat',sans-serif;line-height:1.2;margin:6px 0;" id="kpiPageViews">0</div>
+                            </div>
+                            <div style="font-size:0.72rem;color:#94A3B8;">
+                                Total Events: <b id="kpiTotalEvents" style="color:#D4AF37;">0</b>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Sessions -->
+                        <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;">
+                            <div>
+                                <div style="font-size:0.72rem;color:#94A3B8;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;">SESSIONS / VISITS</div>
+                                <div style="font-size:2.1rem;font-weight:900;color:#fff;font-family:'Montserrat',sans-serif;line-height:1.2;margin:6px 0;" id="kpiSessions">0</div>
+                            </div>
+                            <div style="font-size:0.72rem;color:#94A3B8;">
+                                30-min browsing windows
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Enquiries & Consultations -->
+                        <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;">
+                            <div>
+                                <div style="font-size:0.72rem;color:#94A3B8;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;">TOTAL ENQUIRIES</div>
+                                <div style="font-size:2.1rem;font-weight:900;color:#25D366;font-family:'Montserrat',sans-serif;line-height:1.2;margin:6px 0;" id="kpiEnquiries">0</div>
+                            </div>
+                            <div style="font-size:0.72rem;color:#94A3B8;">
+                                Consultations: <b id="kpiConsultations" style="color:#25D366;">0</b>
+                            </div>
+                        </div>
+
+                        <!-- Card 5: Conversion Rate -->
+                        <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;">
+                            <div>
+                                <div style="font-size:0.72rem;color:#94A3B8;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;">CONVERSION RATE</div>
+                                <div style="font-size:2.1rem;font-weight:900;color:#FFD700;font-family:'Montserrat',sans-serif;line-height:1.2;margin:6px 0;" id="kpiConversionRate">0.00%</div>
+                            </div>
+                            <div style="font-size:0.70rem;color:#94A3B8;" title="Formula: (Successful Enquiries / Unique Visitors) × 100">
+                                Enquiries / Visitors × 100
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Construction vs Interior Head-to-Head Comparison Strip -->
+                    <div style="background:#050B14;border:1px solid rgba(212,175,55,0.2);border-radius:16px;padding:18px 24px;margin-bottom:24px;">
+                        <div style="font-size:0.8rem;font-weight:800;color:#D4AF37;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
+                            <span>🏢 CONSTRUCTION VS 🛋️ INTERIOR DIVISION COMPARISON</span>
+                            <span style="font-size:0.72rem;color:#94A3B8;font-weight:500;">Strict Division Filtering Applied</span>
+                        </div>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:20px;">
+                            <!-- Construction Column -->
+                            <div style="background:#0B132B;border:1px solid rgba(212,175,55,0.25);border-radius:12px;padding:16px;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid rgba(212,175,55,0.15);padding-bottom:8px;">
+                                    <span style="font-weight:800;font-size:0.85rem;color:#FFF;"><i class="fas fa-building" style="color:#D4AF37;margin-right:6px;"></i> MAHA CONSTRUCTION</span>
+                                    <span style="font-size:0.72rem;color:#D4AF37;font-weight:700;">CONV: <b id="constConvRate">0.00%</b></span>
+                                </div>
+                                <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:8px;text-align:center;">
+                                    <div>
+                                        <div style="font-size:0.68rem;color:#94A3B8;font-weight:700;">VISITORS</div>
+                                        <div style="font-size:1.1rem;font-weight:800;color:#FFF;margin-top:2px;" id="constVisitors">0</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:0.68rem;color:#94A3B8;font-weight:700;">SESSIONS</div>
+                                        <div style="font-size:1.1rem;font-weight:800;color:#FFF;margin-top:2px;" id="constSessions">0</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:0.68rem;color:#94A3B8;font-weight:700;">PAGE VIEWS</div>
+                                        <div style="font-size:1.1rem;font-weight:800;color:#FFF;margin-top:2px;" id="constPageViews">0</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:0.68rem;color:#94A3B8;font-weight:700;">LEADS</div>
+                                        <div style="font-size:1.1rem;font-weight:800;color:#25D366;margin-top:2px;" id="constEnquiries">0</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Interior Column -->
+                            <div style="background:#0B132B;border:1px solid rgba(212,175,55,0.25);border-radius:12px;padding:16px;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid rgba(212,175,55,0.15);padding-bottom:8px;">
+                                    <span style="font-weight:800;font-size:0.85rem;color:#FFF;"><i class="fas fa-couch" style="color:#D4AF37;margin-right:6px;"></i> MAHA INTERIOR</span>
+                                    <span style="font-size:0.72rem;color:#D4AF37;font-weight:700;">CONV: <b id="intConvRate">0.00%</b></span>
+                                </div>
+                                <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:8px;text-align:center;">
+                                    <div>
+                                        <div style="font-size:0.68rem;color:#94A3B8;font-weight:700;">VISITORS</div>
+                                        <div style="font-size:1.1rem;font-weight:800;color:#FFF;margin-top:2px;" id="intVisitors">0</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:0.68rem;color:#94A3B8;font-weight:700;">SESSIONS</div>
+                                        <div style="font-size:1.1rem;font-weight:800;color:#FFF;margin-top:2px;" id="intSessions">0</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:0.68rem;color:#94A3B8;font-weight:700;">PAGE VIEWS</div>
+                                        <div style="font-size:1.1rem;font-weight:800;color:#FFF;margin-top:2px;" id="intPageViews">0</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:0.68rem;color:#94A3B8;font-weight:700;">CONSULTATIONS</div>
+                                        <div style="font-size:1.1rem;font-weight:800;color:#25D366;margin-top:2px;" id="intEnquiries">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Grid -->
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(420px, 1fr));gap:20px;margin-bottom:24px;">
+                        <!-- Chart 1: Visitors & Views Over Time -->
+                        <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:20px;">
+                            <div style="font-size:0.85rem;font-weight:800;color:#FFF;margin-bottom:4px;text-transform:uppercase;">
+                                <i class="fas fa-chart-area" style="color:#D4AF37;margin-right:6px;"></i> Visitors & Page Views Over Time
+                            </div>
+                            <p style="font-size:0.75rem;color:#94A3B8;margin-bottom:14px;">Daily visitor volume and page interactions across selected date window</p>
+                            <div style="position:relative;height:260px;width:100%;">
+                                <canvas id="chartVisitorsTimeline"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart 2: Construction vs Interior Comparison -->
+                        <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:20px;">
+                            <div style="font-size:0.85rem;font-weight:800;color:#FFF;margin-bottom:4px;text-transform:uppercase;">
+                                <i class="fas fa-chart-simple" style="color:#D4AF37;margin-right:6px;"></i> Construction vs Interior Traffic & Leads
+                            </div>
+                            <p style="font-size:0.75rem;color:#94A3B8;margin-bottom:14px;">Comparative breakdown of visitor reach and enquiry generation</p>
+                            <div style="position:relative;height:260px;width:100%;">
+                                <canvas id="chartDivisionComparison"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart 3: Traffic Sources -->
+                        <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:20px;">
+                            <div style="font-size:0.85rem;font-weight:800;color:#FFF;margin-bottom:4px;text-transform:uppercase;">
+                                <i class="fas fa-compass" style="color:#D4AF37;margin-right:6px;"></i> Traffic Sources Breakdown
+                            </div>
+                            <p style="font-size:0.75rem;color:#94A3B8;margin-bottom:14px;">Referral origins including Google, Social Media, Direct & Campaigns</p>
+                            <div style="position:relative;height:260px;width:100%;">
+                                <canvas id="chartTrafficSources"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart 4: Device Breakdown -->
+                        <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:20px;">
+                            <div style="font-size:0.85rem;font-weight:800;color:#FFF;margin-bottom:4px;text-transform:uppercase;">
+                                <i class="fas fa-mobile-screen" style="color:#D4AF37;margin-right:6px;"></i> Device Usage Breakdown
+                            </div>
+                            <p style="font-size:0.75rem;color:#94A3B8;margin-bottom:14px;">Distribution of visitors by Mobile, Desktop and Tablet hardware</p>
+                            <div style="position:relative;height:260px;width:100%;">
+                                <canvas id="chartDeviceBreakdown"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interior 7-Section Funnel Performance -->
+                    <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:22px;margin-bottom:24px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:8px;">
+                            <div style="font-size:0.9rem;font-weight:800;color:#FFF;text-transform:uppercase;">
+                                <i class="fas fa-filter" style="color:#D4AF37;margin-right:6px;"></i> Interior Single-Page Section Funnel (#interior)
+                            </div>
+                            <span style="font-size:0.72rem;color:#94A3B8;">De-duplicated per session via 1000ms dwell observer</span>
+                        </div>
+                        <p style="font-size:0.78rem;color:#94A3B8;margin-bottom:18px;">Shows visitor flow and drop-off through the 7 core sections of the single-page showcase.</p>
+                        <div style="position:relative;height:240px;width:100%;">
+                            <canvas id="chartSectionFunnel"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Top Pages & Content Performance Tables -->
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(380px, 1fr));gap:20px;margin-bottom:24px;">
+                        <!-- Table: Top Pages -->
+                        <div style="background:#050B14;border:1px solid rgba(212,175,55,0.2);border-radius:16px;padding:20px;">
+                            <div style="font-size:0.85rem;font-weight:800;color:#FFF;margin-bottom:14px;text-transform:uppercase;">
+                                <i class="fas fa-file-lines" style="color:#D4AF37;margin-right:6px;"></i> Top Visited Pages
+                            </div>
+                            <div style="overflow-x:auto;">
+                                <table class="table-custom-dark" style="margin-top:0;">
+                                    <thead>
+                                        <tr>
+                                            <th>PAGE</th>
+                                            <th>VIEWS</th>
+                                            <th>UNIQUE VISITORS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableTopPagesBody">
+                                        <tr><td colspan="3" style="text-align:center;color:#94A3B8;">Loading top pages...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Table: Top Content / Traffic Sources -->
+                        <div style="background:#050B14;border:1px solid rgba(212,175,55,0.2);border-radius:16px;padding:20px;">
+                            <div style="font-size:0.85rem;font-weight:800;color:#FFF;margin-bottom:14px;text-transform:uppercase;">
+                                <i class="fas fa-globe" style="color:#D4AF37;margin-right:6px;"></i> Top Referrer Channels
+                            </div>
+                            <div style="overflow-x:auto;">
+                                <table class="table-custom-dark" style="margin-top:0;">
+                                    <thead>
+                                        <tr>
+                                            <th>SOURCE</th>
+                                            <th>VISITORS</th>
+                                            <th>TOTAL EVENTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableTopSourcesBody">
+                                        <tr><td colspan="3" style="text-align:center;color:#94A3B8;">Loading sources...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Leads With Attribution -->
+                    <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:22px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+                            <div style="font-size:0.9rem;font-weight:800;color:#FFF;text-transform:uppercase;">
+                                <i class="fas fa-bullseye" style="color:#D4AF37;margin-right:6px;"></i> Recent Inbound Leads with Marketing Attribution
+                            </div>
+                            <span style="font-size:0.72rem;color:#94A3B8;">Privacy-conscious visitor context without raw personal tracking</span>
+                        </div>
+                        <div style="overflow-x:auto;">
+                            <table class="table-custom-dark" style="margin-top:0;">
+                                <thead>
+                                    <tr>
+                                        <th>LEAD ID</th>
+                                        <th>DIVISION</th>
+                                        <th>CLIENT NAME</th>
+                                        <th>PHONE</th>
+                                        <th>PROJECT TYPE</th>
+                                        <th>TRAFFIC SOURCE</th>
+                                        <th>DEVICE</th>
+                                        <th>LANDING PAGE</th>
+                                        <th>DATE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableRecentLeadsBody">
+                                    <tr><td colspan="9" style="text-align:center;color:#94A3B8;">Loading recent leads...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
             <!-- 1. CLIENT VIDEO REVIEWS TAB -->
             <div class="admin-tab-pane active" id="tab-reviews">
+
                 <div class="card-dark-panel">
                     <div style="display:flex;justify-content:space-between;align-items:center;">
                         <div>
@@ -660,46 +996,6 @@
                 </div>
             </div>
 
-            <!-- 3C. SERVICES TAB -->
-            <div class="admin-tab-pane" id="tab-services">
-                <div class="card-dark-panel">
-                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-                        <div>
-                            <h2 class="panel-header-title">SERVICES MANAGEMENT</h2>
-                            <p class="panel-header-sub">Manage construction and luxury interior design services.</p>
-                        </div>
-                        <button class="btn-gold-pill" onclick="openUploadModal('service')"><i class="fas fa-plus" style="margin-right:6px;"></i> ADD NEW SERVICE</button>
-                    </div>
-
-                    <div class="projects-grid-2" id="servicesGrid">
-                        @foreach(\App\Models\Service::all() as $service)
-                        <div class="project-video-card division-filterable" data-business-type="{{ $service->business_type ?? 'construction' }}">
-                            <div class="video-thumb-frame" style="height:180px;position:relative;">
-                                <img src="{{ $service->image_url ?? 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80' }}" style="width:100%;height:100%;object-fit:cover;" alt="Service">
-                                <span style="position:absolute;top:10px;right:10px;z-index:2;background:rgba(5,11,20,0.85);color:{{ ($service->business_type ?? 'construction') === 'interior' ? '#D4AF37' : '#25D366' }};border:1px solid rgba(212,175,55,0.3);padding:3px 8px;border-radius:6px;font-size:0.68rem;font-weight:700;text-transform:uppercase;">
-                                    {{ $service->business_type ?? 'construction' }}
-                                </span>
-                            </div>
-                            <div class="project-card-info" style="display:flex;justify-content:space-between;align-items:center;">
-                                <div style="overflow:hidden;margin-right:8px;">
-                                    <h4 style="color:#fff;font-size:1.02rem;margin:0 0 2px 0;">{{ $service->name }}</h4>
-                                    <span style="font-size:0.75rem;color:#D4AF37;">{{ $service->category ?? 'Service' }}</span>
-                                    @if($service->overview)
-                                    <p style="font-size:0.75rem;color:#94A3B8;margin:6px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">{{ $service->overview }}</p>
-                                    @endif
-                                </div>
-                                <div style="display:flex;gap:6px;flex-shrink:0;">
-                                    <button type="button" class="action-edit-btn" onclick='openEditModal("service", @json($service))' title="Edit Service"><i class="fas fa-pen-to-square"></i></button>
-                                    <button type="button" class="action-del-btn" onclick="deleteItem(event, 'services', {{ $service->id }}, this)" title="Delete Service"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-                    <div id="servicesEmptyState" class="empty-division-state" style="display:none;padding:40px;text-align:center;color:#94A3B8;">No services found for the selected division.</div>
-                </div>
-            </div>
-
             <!-- CONSULTATIONS & ESTIMATE LEADS TAB -->
             <div class="admin-tab-pane" id="tab-quotes">
                 <div class="card-dark-panel">
@@ -714,8 +1010,24 @@
                             </span>
                         </div>
                     </div>
+                    <!-- Drag & Scroll Control Bar for Leads Table -->
+                    <div class="admin-table-drag-bar">
+                        <div class="admin-drag-hint">
+                            <i class="fas fa-arrows-left-right" style="color:#D4AF37;"></i>
+                            <span>Drag Table / Use Slider To View Status & Action Columns</span>
+                        </div>
+                        <div class="admin-drag-controls-group">
+                            <button type="button" class="admin-table-scroll-btn" onclick="scrollQuotesTable(-250)">
+                                <i class="fas fa-chevron-left"></i> Left
+                            </button>
+                            <input type="range" min="0" max="100" value="0" id="quotesTableDragSlider" class="admin-drag-range-slider" aria-label="Drag table horizontally">
+                            <button type="button" class="admin-table-scroll-btn" onclick="scrollQuotesTable(250)">
+                                Right <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
 
-                    <div class="table-responsive">
+                    <div class="table-responsive" id="quotesTableWrapper">
                         <table class="table-custom-dark" id="quotesTable">
                             <thead>
                                 <tr>
@@ -1891,9 +2203,425 @@ function showSecurityAlert(message, type) {
     box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+// ─── ADMIN WEBSITE & LEAD ANALYTICS JAVASCRIPT ENGINE ───────────
+let analyticsDivision = 'all';
+let analyticsPeriod = '30days';
+let chartInstances = {};
+
+function setAnalyticsDivision(div) {
+    analyticsDivision = div;
+    ['all', 'construction', 'interior'].forEach(d => {
+        const btn = document.getElementById('btnDiv' + (d === 'all' ? 'All' : (d === 'construction' ? 'Const' : 'Int')));
+        if (btn) btn.classList.toggle('active', d === div);
+    });
+    fetchAdminAnalytics();
+}
+
+function setAnalyticsPeriod(p) {
+    analyticsPeriod = p;
+    ['today', '7days', '30days', '3months', '1year'].forEach(item => {
+        const btn = document.getElementById('btnPeriod' + item);
+        if (btn) btn.classList.toggle('active', item === p);
+    });
+    fetchAdminAnalytics();
+}
+
+function destroyChart(chartId) {
+    if (chartInstances[chartId]) {
+        try { chartInstances[chartId].destroy(); } catch(e) {}
+        delete chartInstances[chartId];
+    }
+}
+
+async function fetchAdminAnalytics() {
+    const icon = document.getElementById('analyticsRefreshIcon');
+    if (icon) icon.classList.add('fa-spin');
+
+    try {
+        const res = await fetch(`/api/admin/analytics/overview?division=${analyticsDivision}&period=${analyticsPeriod}`, {
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        if (!res.ok) throw new Error('Failed to load analytics: ' + res.status);
+        const data = await res.json();
+        renderAdminAnalytics(data);
+    } catch(err) {
+        console.error('Analytics load error:', err);
+    } finally {
+        if (icon) icon.classList.remove('fa-spin');
+    }
+}
+
+function renderAdminAnalytics(data) {
+    if (!data || !data.kpis) return;
+
+    // 1. KPI Cards
+    const kpis = data.kpis;
+    const vEl = document.getElementById('kpiVisitors');
+    if (vEl) vEl.textContent = (kpis.visitors || 0).toLocaleString();
+    const nvEl = document.getElementById('kpiNewVisitors');
+    if (nvEl) nvEl.textContent = (kpis.new_visitors || 0).toLocaleString();
+    const rvEl = document.getElementById('kpiReturningVisitors');
+    if (rvEl) rvEl.textContent = (kpis.returning_visitors || 0).toLocaleString();
+    const pvEl = document.getElementById('kpiPageViews');
+    if (pvEl) pvEl.textContent = (kpis.page_views || 0).toLocaleString();
+    const teEl = document.getElementById('kpiTotalEvents');
+    if (teEl) teEl.textContent = (kpis.total_events || 0).toLocaleString();
+    const sEl = document.getElementById('kpiSessions');
+    if (sEl) sEl.textContent = (kpis.sessions || 0).toLocaleString();
+    const eEl = document.getElementById('kpiEnquiries');
+    if (eEl) eEl.textContent = (kpis.enquiries || 0).toLocaleString();
+    const cEl = document.getElementById('kpiConsultations');
+    if (cEl) cEl.textContent = (kpis.consultations || 0).toLocaleString();
+    const crEl = document.getElementById('kpiConversionRate');
+    if (crEl) crEl.textContent = (kpis.conversion_rate || 0).toFixed(2) + '%';
+
+    // 2. Division Comparison Strip
+    if (data.division_comparison) {
+        const c = data.division_comparison.construction || {};
+        const i = data.division_comparison.interior || {};
+
+        const cv = document.getElementById('constVisitors'); if (cv) cv.textContent = (c.visitors || 0).toLocaleString();
+        const cs = document.getElementById('constSessions'); if (cs) cs.textContent = (c.sessions || 0).toLocaleString();
+        const cp = document.getElementById('constPageViews'); if (cp) cp.textContent = (c.page_views || 0).toLocaleString();
+        const ce = document.getElementById('constEnquiries'); if (ce) ce.textContent = (c.enquiries || 0).toLocaleString();
+        const ccr = document.getElementById('constConvRate'); if (ccr) ccr.textContent = (c.conversion_rate || 0).toFixed(2) + '%';
+
+        const iv = document.getElementById('intVisitors'); if (iv) iv.textContent = (i.visitors || 0).toLocaleString();
+        const is = document.getElementById('intSessions'); if (is) is.textContent = (i.sessions || 0).toLocaleString();
+        const ip = document.getElementById('intPageViews'); if (ip) ip.textContent = (i.page_views || 0).toLocaleString();
+        const ie = document.getElementById('intEnquiries'); if (ie) ie.textContent = (i.consultations || i.enquiries || 0).toLocaleString();
+        const icr = document.getElementById('intConvRate'); if (icr) icr.textContent = (i.conversion_rate || 0).toFixed(2) + '%';
+    }
+
+    // 3. Render Chart 1: Visitors & Views Over Time
+    if (data.time_series && typeof Chart !== 'undefined') {
+        renderTimelineChart(data.time_series);
+    }
+
+    // 4. Render Chart 2: Division Comparison Chart
+    if (data.division_comparison && typeof Chart !== 'undefined') {
+        renderDivisionChart(data.division_comparison);
+    }
+
+    // 5. Render Chart 3: Traffic Sources
+    if (data.traffic_sources && typeof Chart !== 'undefined') {
+        renderSourcesChart(data.traffic_sources);
+    }
+
+    // 6. Render Chart 4: Device Breakdown
+    if (data.device_breakdown && typeof Chart !== 'undefined') {
+        renderDeviceChart(data.device_breakdown);
+    }
+
+    // 7. Render Chart 5: Interior Section Funnel
+    if (data.section_performance && typeof Chart !== 'undefined') {
+        renderSectionFunnelChart(data.section_performance);
+    }
+
+    // 8. Top Pages Table
+    renderTopPagesTable(data.top_pages || []);
+
+    // 9. Top Sources Table
+    renderTopSourcesTable(data.traffic_sources || []);
+
+    // 10. Recent Leads Table
+    renderRecentLeadsTable(data.recent_leads || []);
+}
+
+function renderTimelineChart(ts) {
+    destroyChart('chartVisitorsTimeline');
+    const ctx = document.getElementById('chartVisitorsTimeline')?.getContext('2d');
+    if (!ctx) return;
+
+    chartInstances['chartVisitorsTimeline'] = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ts.labels || [],
+            datasets: [
+                {
+                    label: 'Unique Visitors',
+                    data: ts.visitors || [],
+                    borderColor: '#D4AF37',
+                    backgroundColor: 'rgba(212, 175, 55, 0.15)',
+                    borderWidth: 2.5,
+                    fill: true,
+                    tension: 0.35,
+                    pointRadius: 3,
+                    pointHoverRadius: 6,
+                },
+                {
+                    label: 'Page Views',
+                    data: ts.page_views || [],
+                    borderColor: '#60A5FA',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    borderDash: [4, 4],
+                    tension: 0.35,
+                    pointRadius: 2,
+                },
+                {
+                    label: 'Enquiries',
+                    data: ts.enquiries || [],
+                    borderColor: '#25D366',
+                    backgroundColor: 'rgba(37, 211, 102, 0.4)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#25D366',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: '#94A3B8', font: { family: 'Inter', size: 11, weight: '600' } } }
+            },
+            scales: {
+                x: { ticks: { color: '#64748B', font: { size: 10 } }, grid: { color: 'rgba(212, 175, 55, 0.08)' } },
+                y: { ticks: { color: '#64748B', font: { size: 10 } }, grid: { color: 'rgba(212, 175, 55, 0.08)' }, beginAtZero: true }
+            }
+        }
+    });
+}
+
+function renderDivisionChart(comp) {
+    destroyChart('chartDivisionComparison');
+    const ctx = document.getElementById('chartDivisionComparison')?.getContext('2d');
+    if (!ctx) return;
+
+    const c = comp.construction || {};
+    const i = comp.interior || {};
+
+    chartInstances['chartDivisionComparison'] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Unique Visitors', 'Page Views', 'Enquiries'],
+            datasets: [
+                {
+                    label: 'Construction',
+                    data: [c.visitors || 0, c.page_views || 0, c.enquiries || 0],
+                    backgroundColor: 'rgba(212, 175, 55, 0.85)',
+                    borderColor: '#D4AF37',
+                    borderWidth: 1,
+                    borderRadius: 6,
+                },
+                {
+                    label: 'Interior',
+                    data: [i.visitors || 0, i.page_views || 0, i.enquiries || 0],
+                    backgroundColor: 'rgba(96, 165, 250, 0.85)',
+                    borderColor: '#60A5FA',
+                    borderWidth: 1,
+                    borderRadius: 6,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: '#94A3B8', font: { family: 'Inter', size: 11 } } }
+            },
+            scales: {
+                x: { ticks: { color: '#94A3B8' }, grid: { color: 'rgba(212, 175, 55, 0.08)' } },
+                y: { ticks: { color: '#94A3B8' }, grid: { color: 'rgba(212, 175, 55, 0.08)' }, beginAtZero: true }
+            }
+        }
+    });
+}
+
+function renderSourcesChart(sources) {
+    destroyChart('chartTrafficSources');
+    const ctx = document.getElementById('chartTrafficSources')?.getContext('2d');
+    if (!ctx) return;
+
+    const labels = sources.map(s => s.referrer_host || 'Direct');
+    const data = sources.map(s => s.visitors || s.total || 0);
+
+    if (labels.length === 0) {
+        labels.push('Direct');
+        data.push(1);
+    }
+
+    chartInstances['chartTrafficSources'] = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: [
+                    '#D4AF37', '#60A5FA', '#34D399', '#F472B6', '#A78BFA', '#FBBF24', '#94A3B8'
+                ],
+                borderWidth: 2,
+                borderColor: '#050B14'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'right', labels: { color: '#94A3B8', font: { family: 'Inter', size: 10 } } }
+            }
+        }
+    });
+}
+
+function renderDeviceChart(devices) {
+    destroyChart('chartDeviceBreakdown');
+    const ctx = document.getElementById('chartDeviceBreakdown')?.getContext('2d');
+    if (!ctx) return;
+
+    const labels = ['Mobile', 'Desktop', 'Tablet'];
+    const data = [
+        devices['mobile'] ? devices['mobile'].count : 0,
+        devices['desktop'] ? devices['desktop'].count : 0,
+        devices['tablet'] ? devices['tablet'].count : 0,
+    ];
+
+    if (data.every(v => v === 0)) {
+        data[1] = 1;
+    }
+
+    chartInstances['chartDeviceBreakdown'] = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: ['#25D366', '#D4AF37', '#60A5FA'],
+                borderWidth: 2,
+                borderColor: '#050B14'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'right', labels: { color: '#94A3B8', font: { family: 'Inter', size: 10 } } }
+            }
+        }
+    });
+}
+
+function renderSectionFunnelChart(sections) {
+    destroyChart('chartSectionFunnel');
+    const ctx = document.getElementById('chartSectionFunnel')?.getContext('2d');
+    if (!ctx) return;
+
+    const labels = sections.map(s => s.section_name);
+    const data = sections.map(s => s.views || 0);
+
+    chartInstances['chartSectionFunnel'] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Section Views (Unique Sessions)',
+                data: data,
+                backgroundColor: [
+                    '#D4AF37', '#E5C158', '#F5D37A', '#A38122', '#7A6014', '#523F0B', '#25D366'
+                ],
+                borderRadius: 6,
+                borderWidth: 1,
+                borderColor: 'rgba(212, 175, 55, 0.4)'
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: { ticks: { color: '#94A3B8' }, grid: { color: 'rgba(212, 175, 55, 0.08)' }, beginAtZero: true },
+                y: { ticks: { color: '#FFF', font: { weight: '600', size: 11 } }, grid: { display: false } }
+            }
+        }
+    });
+}
+
+function renderTopPagesTable(pages) {
+    const tbody = document.getElementById('tableTopPagesBody');
+    if (!tbody) return;
+    if (pages.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#64748B;">No page view data recorded yet in this time window.</td></tr>';
+        return;
+    }
+
+    let html = '';
+    pages.forEach(p => {
+        html += `
+            <tr>
+                <td style="font-weight:700;color:#FFF;">
+                    <i class="fas fa-file-code" style="color:#D4AF37;margin-right:6px;"></i> ${p.page_name}
+                </td>
+                <td style="color:#D4AF37;font-weight:700;">${(p.views || 0).toLocaleString()}</td>
+                <td style="color:#25D366;font-weight:700;">${(p.visitors || 0).toLocaleString()}</td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+}
+
+function renderTopSourcesTable(sources) {
+    const tbody = document.getElementById('tableTopSourcesBody');
+    if (!tbody) return;
+    if (sources.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#64748B;">No external referrer data recorded yet.</td></tr>';
+        return;
+    }
+
+    let html = '';
+    sources.forEach(s => {
+        html += `
+            <tr>
+                <td style="font-weight:700;color:#FFF;">
+                    <i class="fas fa-globe" style="color:#60A5FA;margin-right:6px;"></i> ${s.referrer_host || 'Direct'}
+                </td>
+                <td style="color:#D4AF37;font-weight:700;">${(s.visitors || 0).toLocaleString()}</td>
+                <td style="color:#FFF;">${(s.total || 0).toLocaleString()}</td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+}
+
+function renderRecentLeadsTable(leads) {
+    const tbody = document.getElementById('tableRecentLeadsBody');
+    if (!tbody) return;
+    if (leads.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#64748B;">No recent leads recorded yet.</td></tr>';
+        return;
+    }
+
+    let html = '';
+    leads.forEach(l => {
+        const isInt = l.division === 'INTERIOR';
+        const divBadge = isInt 
+            ? `<span style="background:rgba(96,165,250,0.15);color:#60A5FA;border:1px solid rgba(96,165,250,0.3);padding:2px 8px;border-radius:6px;font-size:0.68rem;font-weight:800;">INTERIOR</span>`
+            : `<span style="background:rgba(212,175,55,0.15);color:#D4AF37;border:1px solid rgba(212,175,55,0.3);padding:2px 8px;border-radius:6px;font-size:0.68rem;font-weight:800;">CONSTRUCTION</span>`;
+
+        html += `
+            <tr>
+                <td style="font-weight:700;color:#FFF;">#${l.id}</td>
+                <td>${divBadge}</td>
+                <td style="font-weight:600;color:#FFF;">${l.name}</td>
+                <td style="font-family:monospace;color:#94A3B8;">${l.phone}</td>
+                <td style="color:#D4AF37;">${l.project_type}</td>
+                <td style="color:#FFF;"><span style="background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;">${l.source}</span></td>
+                <td style="color:#94A3B8;">${l.device}</td>
+                <td style="color:#94A3B8;font-family:monospace;">${l.landing_page}</td>
+                <td style="color:#64748B;font-size:0.75rem;">${l.created_at}</td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+}
+
 function switchAdminTab(tabKey, linkEl) {
-
-
     if (!linkEl) {
         linkEl = document.querySelector(`.sidebar-nav-link[onclick*="'${tabKey}'"]`) || 
                  document.querySelector(`.sidebar-nav-link[onclick*='"${tabKey}"']`);
@@ -1904,11 +2632,18 @@ function switchAdminTab(tabKey, linkEl) {
     const targetPane = document.getElementById('tab-' + tabKey);
     if (targetPane) targetPane.classList.add('active');
 
+    if (tabKey === 'analytics') {
+        if (typeof fetchAdminAnalytics === 'function') {
+            fetchAdminAnalytics();
+        }
+    }
+
     try {
         localStorage.setItem('maha_admin_active_tab', tabKey);
         history.replaceState(null, null, '#' + tabKey);
     } catch(e) {}
 }
+
 
 // ── DIVISION SWITCHER ENGINE (CONSTRUCTION VS INTERIOR) ──────────
 let currentDivision = localStorage.getItem('maha_admin_division') || 'construction';
@@ -4189,6 +4924,79 @@ function hideMatrixAlert() {
 // Initial render of matrix editor when page loads
 document.addEventListener('DOMContentLoaded', function() {
     renderMatrixEditorTable();
+});
+
+// ── LEADS TABLE DRAG & SCROLL CONTROL ─────────────────────────
+function scrollQuotesTable(offset) {
+    const wrap = document.getElementById('quotesTableWrapper');
+    if (!wrap) return;
+    wrap.scrollBy({ left: offset, behavior: 'smooth' });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const wrap = document.getElementById('quotesTableWrapper');
+    const slider = document.getElementById('quotesTableDragSlider');
+    if (!wrap) return;
+
+    // Sync scroll to slider
+    wrap.addEventListener('scroll', function() {
+        if (!slider) return;
+        const maxScroll = wrap.scrollWidth - wrap.clientWidth;
+        if (maxScroll > 0) {
+            slider.value = Math.round((wrap.scrollLeft / maxScroll) * 100);
+        }
+    }, { passive: true });
+
+    // Sync slider to scroll
+    if (slider) {
+        slider.addEventListener('input', function() {
+            const maxScroll = wrap.scrollWidth - wrap.clientWidth;
+            wrap.scrollLeft = (slider.value / 100) * maxScroll;
+        });
+    }
+
+    // Direct Mouse Click-and-Drag Scrolling on table
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    let hasDragged = false;
+
+    wrap.addEventListener('mousedown', function(e) {
+        if (e.button !== 0 || e.target.closest('a, button, input, select')) return;
+        isDown = true;
+        hasDragged = false;
+        startX = e.pageX - wrap.offsetLeft;
+        scrollLeft = wrap.scrollLeft;
+        wrap.classList.add('is-dragging');
+    });
+
+    const endDrag = function() {
+        if (!isDown) return;
+        isDown = false;
+        wrap.classList.remove('is-dragging');
+    };
+
+    wrap.addEventListener('mouseleave', endDrag);
+    wrap.addEventListener('mouseup', endDrag);
+
+    wrap.addEventListener('mousemove', function(e) {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - wrap.offsetLeft;
+        const walk = (x - startX) * 1.6;
+        if (Math.abs(walk) > 4) {
+            hasDragged = true;
+        }
+        wrap.scrollLeft = scrollLeft - walk;
+    });
+
+    wrap.addEventListener('click', function(e) {
+        if (hasDragged && !e.target.closest('a, button')) {
+            e.stopPropagation();
+            e.preventDefault();
+            hasDragged = false;
+        }
+    }, true);
 });
 </script>
 

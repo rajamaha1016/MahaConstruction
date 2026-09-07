@@ -18,6 +18,7 @@ use App\Models\NewsletterSubscriber;
 use App\Models\GuidebookLead;
 use App\Services\YouTubeSyncService;
 use App\Services\PackageMatrixService;
+use App\Services\AnalyticsService;
 
 class ApiController extends Controller
 {
@@ -428,6 +429,40 @@ class ApiController extends Controller
         // SERVER-ENFORCED: Construction contact submissions are always construction
         $data['business_type'] = 'construction';
         $contact = ContactRequest::create($data);
+
+        // Record successful contact submission in analytics (only after DB success)
+        try {
+            app(AnalyticsService::class)->recordEvent([
+                'business_type' => 'construction',
+                'event_type'    => 'contact_submitted',
+                'visitor_id'    => $request->input('visitor_id'),
+                'session_id'    => $request->input('session_id'),
+                'lead_id'       => $contact->id,
+                'lead_type'     => 'contact_request',
+                'page_name'     => 'contact',
+                'utm_source'    => $request->input('utm_source'),
+                'utm_medium'    => $request->input('utm_medium'),
+                'utm_campaign'  => $request->input('utm_campaign'),
+                'referrer'      => $request->input('referrer'),
+            ], $request);
+
+            app(AnalyticsService::class)->recordEvent([
+                'business_type' => 'construction',
+                'event_type'    => 'enquiry_submitted',
+                'visitor_id'    => $request->input('visitor_id'),
+                'session_id'    => $request->input('session_id'),
+                'lead_id'       => $contact->id,
+                'lead_type'     => 'contact_request',
+                'page_name'     => 'contact',
+                'utm_source'    => $request->input('utm_source'),
+                'utm_medium'    => $request->input('utm_medium'),
+                'utm_campaign'  => $request->input('utm_campaign'),
+                'referrer'      => $request->input('referrer'),
+            ], $request);
+        } catch (\Throwable $e) {
+            // Analytics logging failure must never block customer lead submission
+        }
+
         return response()->json(['message' => 'Contact lead submitted successfully', 'lead' => $contact], 201);
     }
 
@@ -466,6 +501,40 @@ class ApiController extends Controller
         // SERVER-ENFORCED: Construction proposal requests are always construction
         $data['business_type'] = 'construction';
         $quote = QuoteRequest::create($data);
+
+        // Record successful quote submission in analytics (only after DB success)
+        try {
+            app(AnalyticsService::class)->recordEvent([
+                'business_type' => 'construction',
+                'event_type'    => 'quote_submitted',
+                'visitor_id'    => $request->input('visitor_id'),
+                'session_id'    => $request->input('session_id'),
+                'lead_id'       => $quote->id,
+                'lead_type'     => 'quote_request',
+                'page_name'     => 'pricing',
+                'utm_source'    => $request->input('utm_source'),
+                'utm_medium'    => $request->input('utm_medium'),
+                'utm_campaign'  => $request->input('utm_campaign'),
+                'referrer'      => $request->input('referrer'),
+            ], $request);
+
+            app(AnalyticsService::class)->recordEvent([
+                'business_type' => 'construction',
+                'event_type'    => 'enquiry_submitted',
+                'visitor_id'    => $request->input('visitor_id'),
+                'session_id'    => $request->input('session_id'),
+                'lead_id'       => $quote->id,
+                'lead_type'     => 'quote_request',
+                'page_name'     => 'pricing',
+                'utm_source'    => $request->input('utm_source'),
+                'utm_medium'    => $request->input('utm_medium'),
+                'utm_campaign'  => $request->input('utm_campaign'),
+                'referrer'      => $request->input('referrer'),
+            ], $request);
+        } catch (\Throwable $e) {
+            // Analytics logging failure must never block customer lead submission
+        }
+
         return response()->json(['message' => 'Quote request submitted', 'lead' => $quote], 201);
     }
 
@@ -485,8 +554,30 @@ class ApiController extends Controller
             $data['project_type'] = 'Interior Design & Execution';
         }
         $quote = QuoteRequest::create($data);
+
+        // Record successful interior consultation / enquiry in analytics (only after DB success)
+        try {
+            app(AnalyticsService::class)->recordEvent([
+                'business_type' => 'interior',
+                'event_type'    => 'enquiry_submitted',
+                'visitor_id'    => $request->input('visitor_id'),
+                'session_id'    => $request->input('session_id'),
+                'lead_id'       => $quote->id,
+                'lead_type'     => 'quote_request',
+                'page_name'     => 'interior',
+                'section_name'  => 'enquiry',
+                'utm_source'    => $request->input('utm_source'),
+                'utm_medium'    => $request->input('utm_medium'),
+                'utm_campaign'  => $request->input('utm_campaign'),
+                'referrer'      => $request->input('referrer'),
+            ], $request);
+        } catch (\Throwable $e) {
+            // Analytics logging failure must never block customer lead submission
+        }
+
         return response()->json(['message' => 'Interior enquiry submitted successfully', 'lead' => $quote], 201);
     }
+
 
     public function getQuotes(Request $request)
     {
@@ -746,7 +837,55 @@ class ApiController extends Controller
             'email'   => $user->email,
         ]);
     }
+
+    // --- WEBSITE & LEAD ANALYTICS ---
+    public function recordAnalyticsEvent(Request $request, AnalyticsService $service)
+    {
+        $validated = $request->validate([
+            'business_type' => 'required|string|in:construction,interior',
+            'event_type'    => 'required|string|in:page_view,session_start,section_view,project_view,package_view,consultation_click,enquiry_submitted,quote_submitted,contact_submitted',
+            'visitor_id'    => 'nullable|string|max:64',
+            'session_id'    => 'nullable|string|max:64',
+            'page_url'      => 'nullable|string|max:2048',
+            'page_name'     => 'nullable|string|max:100',
+            'section_name'  => 'nullable|string|max:100',
+            'item_id'       => 'nullable|string|max:100',
+            'referrer'      => 'nullable|string|max:2048',
+            'utm_source'    => 'nullable|string|max:100',
+            'utm_medium'    => 'nullable|string|max:100',
+            'utm_campaign'  => 'nullable|string|max:100',
+            'device_type'   => 'nullable|string|in:mobile,desktop,tablet,unknown',
+        ]);
+
+        $event = $service->recordEvent($validated, $request);
+
+        return response()->json([
+            'success' => (bool)$event,
+            'event'   => $event ? [
+                'id'            => $event->id,
+                'business_type' => $event->business_type,
+                'event_type'    => $event->event_type,
+            ] : null,
+        ], $event ? 201 : 422);
+    }
+
+    public function getAdminAnalytics(Request $request, AnalyticsService $service)
+    {
+        $division = strtolower(trim($request->query('division', 'all')));
+        if (!in_array($division, ['all', 'construction', 'interior'], true)) {
+            $division = 'all';
+        }
+
+        $period = strtolower(trim($request->query('period', '30days')));
+        if (!in_array($period, ['today', '7days', '30days', '3months', '1year'], true)) {
+            $period = '30days';
+        }
+
+        $data = $service->getOverview($division, $period);
+        return response()->json($data);
+    }
 }
+
 
 
 

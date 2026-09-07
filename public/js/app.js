@@ -1,8 +1,169 @@
 /* =====================================================
+   MAHA WEBSITE ANALYTICS ENGINE (LIGHTWEIGHT & ASYNC)
+   ===================================================== */
+(function() {
+  function generateId(prefix) {
+    return prefix + '_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+  }
+
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^|;\\s*)' + name + '=([^;]*)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  }
+
+  function setCookie(name, val, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = name + '=' + encodeURIComponent(val) + '; expires=' + expires + '; path=/; SameSite=Lax';
+  }
+
+  // 1. Persistent Unique Visitor ID (localStorage + 1-year cookie fallback)
+  let vid = '';
+  try {
+    vid = localStorage.getItem('maha_vid');
+  } catch(e) {}
+  if (!vid) {
+    vid = getCookie('maha_vid');
+  }
+  if (!vid) {
+    vid = generateId('vid');
+    try { localStorage.setItem('maha_vid', vid); } catch(e) {}
+    setCookie('maha_vid', vid, 365);
+  }
+
+  // 2. 30-minute Sliding Session ID
+  let sid = '';
+  let isNewSession = false;
+  try {
+    sid = sessionStorage.getItem('maha_sid');
+  } catch(e) {}
+  if (!sid) {
+    sid = generateId('sid');
+    isNewSession = true;
+    try { sessionStorage.setItem('maha_sid', sid); } catch(e) {}
+  }
+
+  // 3. UTM & Attribution Capture
+  const urlParams = new URLSearchParams(window.location.search);
+  const utmSource = urlParams.get('utm_source');
+  const utmMedium = urlParams.get('utm_medium');
+  const utmCampaign = urlParams.get('utm_campaign');
+
+  if (utmSource) {
+    try {
+      sessionStorage.setItem('maha_utm_source', utmSource);
+      if (utmMedium) sessionStorage.setItem('maha_utm_medium', utmMedium);
+      if (utmCampaign) sessionStorage.setItem('maha_utm_campaign', utmCampaign);
+    } catch(e) {}
+  }
+
+  function getPageName() {
+    const path = window.location.pathname.replace(/\/$/, '') || '/';
+    if (path === '/' || path === '') return 'home';
+    if (path.startsWith('/interior')) return 'interior';
+    if (path.startsWith('/pricing')) return 'pricing';
+    if (path.startsWith('/projects')) return 'projects';
+    if (path.startsWith('/testimonials')) return 'testimonials';
+    return path.replace(/^\//, '');
+  }
+
+  function getBusinessType() {
+    return window.location.pathname.startsWith('/interior') ? 'interior' : 'construction';
+  }
+
+  function getAttribution() {
+    let sSource = null, sMedium = null, sCampaign = null;
+    try {
+      sSource = sessionStorage.getItem('maha_utm_source');
+      sMedium = sessionStorage.getItem('maha_utm_medium');
+      sCampaign = sessionStorage.getItem('maha_utm_campaign');
+    } catch(e) {}
+
+    return {
+      visitor_id: vid,
+      session_id: sid,
+      utm_source: utmSource || sSource || null,
+      utm_medium: utmMedium || sMedium || null,
+      utm_campaign: utmCampaign || sCampaign || null,
+      referrer: document.referrer || null,
+      page_url: window.location.pathname + window.location.search,
+      page_name: getPageName(),
+    };
+  }
+
+  function sendEvent(eventType, extraData) {
+    if (!eventType) return;
+    const attribution = getAttribution();
+    const payload = Object.assign({
+      business_type: getBusinessType(),
+      event_type: eventType,
+      visitor_id: vid,
+      session_id: sid,
+      page_url: window.location.pathname + window.location.search,
+      page_name: getPageName(),
+      referrer: document.referrer || null,
+      utm_source: attribution.utm_source,
+      utm_medium: attribution.utm_medium,
+      utm_campaign: attribution.utm_campaign,
+    }, extraData || {});
+
+    // Ensure business_type is strictly 'construction' or 'interior'
+    if (payload.business_type !== 'interior') {
+      payload.business_type = 'construction';
+    }
+
+    try {
+      const jsonStr = JSON.stringify(payload);
+      if (navigator.sendBeacon) {
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        navigator.sendBeacon('/api/analytics/event', blob);
+      } else {
+        fetch('/api/analytics/event', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+          },
+          body: jsonStr,
+          keepalive: true
+        }).catch(function() {});
+      }
+    } catch(e) {
+      // Analytics must never throw or block execution
+    }
+  }
+
+  window.MahaAnalytics = {
+    getVisitorId: function() { return vid; },
+    getSessionId: function() { return sid; },
+    getAttribution: getAttribution,
+    getPageName: getPageName,
+    getBusinessType: getBusinessType,
+    sendEvent: sendEvent
+  };
+
+  // Automatically record session_start and page_view
+  if (isNewSession) {
+    sendEvent('session_start');
+  }
+  sendEvent('page_view');
+
+  // Track consultation button clicks globally
+  document.addEventListener('click', function(e) {
+    const target = e.target.closest('[data-open-quote], a[href*="#interior-enquiry"], a[href*="whatsapp"]');
+    if (target) {
+      sendEvent('consultation_click', {
+        item_id: target.getAttribute('title') || target.innerText?.trim()?.substring(0, 50) || 'consultation_btn'
+      });
+    }
+  }, { passive: true });
+})();
+
+/* =====================================================
    MAHA CONSTRUCTION — EXACT VIDEO MATCH INTERACTIVITY
    ===================================================== */
 
 document.addEventListener('DOMContentLoaded', function () {
+
 
   // --- Mobile Navigation Drawer Toggle ---
   const navMobileToggle = document.getElementById('navMobileToggle');
@@ -120,6 +281,10 @@ document.addEventListener('DOMContentLoaded', function () {
       if (quoteSubmitBtn) quoteSubmitBtn.innerText = 'SUBMITTING...';
       const formData = new FormData(quoteModalForm);
       const data = Object.fromEntries(formData.entries());
+      if (window.MahaAnalytics) {
+        Object.assign(data, window.MahaAnalytics.getAttribution());
+      }
+
 
       fetch('/api/leads/quote', {
         method: 'POST',
@@ -790,6 +955,10 @@ document.addEventListener('DOMContentLoaded', function () {
       e.preventDefault();
       const formData = new FormData(contactFormCore);
       const data = Object.fromEntries(formData.entries());
+      if (window.MahaAnalytics) {
+        Object.assign(data, window.MahaAnalytics.getAttribution());
+      }
+
 
       fetch('/api/leads/contact', {
         method: 'POST',
