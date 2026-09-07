@@ -263,6 +263,11 @@
                 Interior projects showcase is being updated.
             </div>
             @endforelse
+            <div id="noFilteredProjectsMsg" style="display:none;grid-column:1/-1;text-align:center;padding:48px 20px;color:#94A3B8;">
+                <i class="fas fa-couch" style="font-size:2rem;color:rgba(212,175,55,0.4);margin-bottom:12px;display:block;"></i>
+                <p style="font-size:0.95rem;color:#FFF;margin-bottom:6px;">No projects currently listed in this space.</p>
+                <p style="font-size:0.8rem;color:#64748b;">Browse other spaces above or consult Er. Maha Rajan for custom projects.</p>
+            </div>
         </div>
 
         <!-- On-Page Reveal / Load More (Keeps user on the same page, NO redirects) -->
@@ -769,14 +774,20 @@
                 this.classList.add('active');
 
                 const targetCategory = this.getAttribute('data-category');
+                let visibleCount = 0;
                 projectCards.forEach(card => {
                     const cardCat = card.getAttribute('data-category');
                     if (targetCategory === 'all' || cardCat === targetCategory) {
                         card.style.display = 'flex';
+                        visibleCount++;
                     } else {
                         card.style.display = 'none';
                     }
                 });
+                const emptyMsg = document.getElementById('noFilteredProjectsMsg');
+                if (emptyMsg) {
+                    emptyMsg.style.display = (visibleCount === 0) ? 'block' : 'none';
+                }
             });
         });
 

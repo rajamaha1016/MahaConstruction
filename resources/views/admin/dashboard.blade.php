@@ -1463,7 +1463,7 @@
             <div style="display:flex;flex-direction:column;gap:13px;">
                 <div>
                     <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
-                    <select id="p_business_type" class="input-dark" style="width:100%;">
+                    <select id="p_business_type" class="input-dark" style="width:100%;" onchange="onProjectDivisionChanged(this.value)">
                         <option value="construction">Maha Construction</option>
                         <option value="interior">Maha Interior</option>
                     </select>
@@ -1474,11 +1474,21 @@
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                     <div>
-                        <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">CATEGORY *</label>
+                        <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">CATEGORY / SPACE *</label>
                         <select id="p_category" class="input-dark" style="width:100%;">
-                            <option value="villa">Luxury Villa</option>
-                            <option value="residential">Residential Residence</option>
-                            <option value="commercial">Commercial Hub</option>
+                            <optgroup label="🛋️ Interior Spaces (Maha Interior)" id="optgroupInteriorCats">
+                                <option value="living-room">Living Room</option>
+                                <option value="modular-kitchen">Modular Kitchen</option>
+                                <option value="bedroom">Bedroom</option>
+                                <option value="office-interior">Office Interior</option>
+                                <option value="full-home-interior">Full Home</option>
+                                <option value="commercial-interior">Commercial</option>
+                            </optgroup>
+                            <optgroup label="🏢 Construction Types (Maha Construction)" id="optgroupConstructionCats">
+                                <option value="villa">Luxury Villa</option>
+                                <option value="residential">Residential Residence</option>
+                                <option value="commercial">Commercial Hub</option>
+                            </optgroup>
                         </select>
                     </div>
                     <div>
@@ -2367,6 +2377,16 @@ function resetAllForms() {
     autoExtractedProjectBlob     = null;
 }
 
+function onProjectDivisionChanged(div) {
+    const catSelect = document.getElementById('p_category');
+    if (!catSelect) return;
+    if (div === 'interior') {
+        catSelect.value = 'living-room';
+    } else {
+        catSelect.value = 'villa';
+    }
+}
+
 function openUploadModal(type) {
     resetAllForms();
     const modal = document.getElementById('uploadModal');
@@ -2395,6 +2415,7 @@ function openUploadModal(type) {
     if (document.getElementById('p_business_type')) document.getElementById('p_business_type').value = curDiv;
     if (document.getElementById('pk_business_type')) document.getElementById('pk_business_type').value = curDiv;
     if (document.getElementById('s_business_type')) document.getElementById('s_business_type').value = curDiv;
+    if (type === 'project') onProjectDivisionChanged(curDiv);
 }
 
 function openEditModal(type, item) {
