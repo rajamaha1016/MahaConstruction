@@ -391,6 +391,12 @@
                 </a>
             </li>
             <li>
+                <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('quotes', this)">
+                    <span>CONSULTATIONS & LEADS</span>
+                    <span class="badge-count" id="sidebarQuotesCount">{{ \App\Models\QuoteRequest::count() }}</span>
+                </a>
+            </li>
+            <li>
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('partners', this)">
                     <span>BANKING & VENDORS</span>
                     <span class="badge-count">{{ \App\Models\Partner::count() }}</span>
@@ -691,6 +697,105 @@
                         @endforeach
                     </div>
                     <div id="servicesEmptyState" class="empty-division-state" style="display:none;padding:40px;text-align:center;color:#94A3B8;">No services found for the selected division.</div>
+                </div>
+            </div>
+
+            <!-- CONSULTATIONS & ESTIMATE LEADS TAB -->
+            <div class="admin-tab-pane" id="tab-quotes">
+                <div class="card-dark-panel">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+                        <div>
+                            <h2 class="panel-header-title"><i class="fas fa-handshake" style="margin-right:8px;color:#D4AF37;"></i> CONSULTATIONS & ESTIMATE LEADS</h2>
+                            <p class="panel-header-sub">Live inquiries submitted via the website for Free Consultations, Estimates, and Floor Plan Reviews.</p>
+                        </div>
+                        <div style="display:flex;gap:10px;align-items:center;">
+                            <span class="badge-count" id="quotesHeaderTotalBadge" style="padding:6px 14px;font-size:0.82rem;">
+                                {{ \App\Models\QuoteRequest::count() }} Total Leads
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table-custom-dark" id="quotesTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>DIVISION</th>
+                                    <th>CLIENT NAME</th>
+                                    <th>PHONE / WHATSAPP</th>
+                                    <th>EMAIL</th>
+                                    <th>PROJECT TYPE</th>
+                                    <th>BUDGET</th>
+                                    <th>MESSAGE / REQUIREMENTS</th>
+                                    <th>DATE</th>
+                                    <th>STATUS</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse(\App\Models\QuoteRequest::orderBy('id', 'desc')->get() as $i => $quote)
+                                <tr class="division-filterable" data-business-type="{{ $quote->business_type ?? 'construction' }}">
+                                    <td>{{ $i + 1 }}</td>
+                                    <td>
+                                        <span style="background:rgba(5,11,20,0.85);color:{{ ($quote->business_type ?? 'construction') === 'interior' ? '#D4AF37' : '#25D366' }};border:1px solid {{ ($quote->business_type ?? 'construction') === 'interior' ? 'rgba(212,175,55,0.4)' : 'rgba(37,211,102,0.4)' }};padding:3px 8px;border-radius:6px;font-size:0.7rem;font-weight:800;text-transform:uppercase;">
+                                            <i class="{{ ($quote->business_type ?? 'construction') === 'interior' ? 'fas fa-couch' : 'fas fa-building' }}" style="margin-right:3px;"></i>
+                                            {{ $quote->business_type ?? 'construction' }}
+                                        </span>
+                                    </td>
+                                    <td><strong>{{ $quote->name }}</strong></td>
+                                    <td>
+                                        @if($quote->phone)
+                                        <div style="display:flex;gap:6px;align-items:center;">
+                                            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $quote->phone) }}" style="color:#FFF;text-decoration:none;font-weight:600;font-size:0.85rem;" title="Call Client">
+                                                <i class="fas fa-phone" style="margin-right:4px;color:#D4AF37;"></i> {{ $quote->phone }}
+                                            </a>
+                                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $quote->phone) }}?text={{ urlencode('Hello ' . $quote->name . ', thank you for your consultation inquiry with Maha Group. How can we assist you today?') }}" target="_blank" class="action-edit-btn" style="color:#25D366;border-color:rgba(37,211,102,0.3);padding:4px 8px;font-size:0.75rem;" title="Chat on WhatsApp">
+                                                <i class="fab fa-whatsapp"></i>
+                                            </a>
+                                        </div>
+                                        @else
+                                        <span style="color:#64748b;">—</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($quote->email)
+                                        <a href="mailto:{{ $quote->email }}" style="color:#CBD5E1;text-decoration:none;font-size:0.82rem;">
+                                            <i class="fas fa-envelope" style="margin-right:4px;color:#D4AF37;"></i> {{ $quote->email }}
+                                        </a>
+                                        @else
+                                        <span style="color:#64748b;">—</span>
+                                        @endif
+                                    </td>
+                                    <td><span style="color:#D4AF37;font-weight:700;font-size:0.82rem;">{{ $quote->project_type ?? 'General' }}</span></td>
+                                    <td><span style="font-size:0.82rem;color:#E2E8F0;">{{ $quote->budget_range ?? '—' }}</span></td>
+                                    <td style="max-width:240px;font-size:0.8rem;color:#94A3B8;line-height:1.4;">
+                                        {{ $quote->message ?: 'No additional notes' }}
+                                    </td>
+                                    <td style="font-size:0.78rem;color:#64748b;white-space:nowrap;">
+                                        {{ $quote->created_at ? $quote->created_at->format('M j, Y g:i A') : 'Recently' }}
+                                    </td>
+                                    <td>
+                                        @if($quote->is_read)
+                                        <span style="color:#25D366;font-size:0.72rem;font-weight:700;"><i class="fas fa-check-double"></i> Read</span>
+                                        @else
+                                        <button type="button" class="btn-whatsapp-outline" onclick="markQuoteAsRead(event, {{ $quote->id }}, this)" style="padding:4px 8px;font-size:0.7rem;border-color:rgba(212,175,55,0.4);color:#D4AF37;" title="Mark as Read">
+                                            <i class="fas fa-envelope"></i> New
+                                        </button>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <button type="button" class="action-del-btn" onclick="deleteQuoteLead(event, {{ $quote->id }}, this)" title="Delete Lead"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="11" style="text-align:center;padding:32px;color:#94A3B8;">No consultation leads received yet.</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="quotesEmptyState" class="empty-division-state" style="display:none;padding:40px;text-align:center;color:#94A3B8;">No consultation leads found for the selected division.</div>
                 </div>
             </div>
 
@@ -1838,7 +1943,7 @@ function setAdminDivision(division) {
 }
 
 function checkEmptyStates() {
-    ['reviews', 'projects', 'packages', 'services'].forEach(tab => {
+    ['reviews', 'projects', 'packages', 'services', 'quotes'].forEach(tab => {
         const pane = document.getElementById('tab-' + tab);
         if (!pane) return;
         const visibleItems = pane.querySelectorAll('.division-filterable:not([style*="display: none"])');
@@ -2102,6 +2207,122 @@ async function deleteGuidebookLead(event, id, btnEl) {
             row.style.opacity = '0';
             row.style.transform = 'scale(0.9)';
             setTimeout(() => row.remove(), 350);
+        }
+    } catch (err) {
+        console.error('Delete error:', err);
+        alert('❌ Delete failed: ' + err.message);
+        if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.innerHTML = originalHtml;
+            btnEl.style.opacity = '1';
+        }
+    }
+}
+
+async function markQuoteAsRead(event, id, btnEl) {
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    const originalHtml = btnEl ? btnEl.innerHTML : '';
+    if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    }
+
+    try {
+        const res = await fetch('/api/quotes/' + id + '/read', {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'X-CSRF-TOKEN': CSRF(),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (res.status === 401) {
+            alert('Your admin session has expired. Redirecting to login...');
+            window.location.href = '/admin/login';
+            return;
+        }
+
+        if (!res.ok) {
+            throw new Error('Server error (' + res.status + ')');
+        }
+
+        if (btnEl) {
+            const parentTd = btnEl.parentElement;
+            parentTd.innerHTML = '<span style="color:#25D366;font-size:0.72rem;font-weight:700;"><i class="fas fa-check-double"></i> Read</span>';
+        }
+    } catch (err) {
+        console.error('Mark read error:', err);
+        alert('❌ Error: ' + err.message);
+        if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.innerHTML = originalHtml;
+        }
+    }
+}
+
+async function deleteQuoteLead(event, id, btnEl) {
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    const confirmed = await showDeleteConfirmModal({
+        title: 'DELETE CONSULTATION LEAD?',
+        message: 'Are you sure you want to permanently delete this consultation lead entry?',
+        confirmText: 'Yes, Delete Lead'
+    });
+    if (!confirmed) return;
+
+    const originalHtml = btnEl ? btnEl.innerHTML : '';
+    if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        btnEl.style.opacity = '0.7';
+    }
+
+    try {
+        const res = await fetch('/api/quotes/' + id, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'X-CSRF-TOKEN': CSRF(),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (res.status === 401) {
+            alert('Your admin session has expired. Redirecting to login...');
+            window.location.href = '/admin/login';
+            return;
+        }
+
+        if (!res.ok && res.status !== 404) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.message || 'Server error (' + res.status + ')');
+        }
+
+        const row = btnEl ? btnEl.closest('tr') : null;
+        if (row) {
+            row.style.transition = 'all 0.38s cubic-bezier(0.4, 0, 0.2, 1)';
+            row.style.transform = 'scale(0.85) translateY(-8px)';
+            row.style.opacity = '0';
+            setTimeout(() => {
+                row.remove();
+                const table = document.getElementById('quotesTable');
+                const remaining = table ? table.querySelectorAll('tbody tr.division-filterable').length : 0;
+                const sidebarBadge = document.getElementById('sidebarQuotesCount');
+                if (sidebarBadge) sidebarBadge.textContent = remaining;
+                const totalBadge = document.getElementById('quotesHeaderTotalBadge');
+                if (totalBadge) totalBadge.textContent = remaining + ' Total Leads';
+                checkEmptyStates();
+            }, 380);
+        } else {
+            location.reload();
         }
     } catch (err) {
         console.error('Delete error:', err);
