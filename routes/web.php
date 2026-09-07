@@ -13,22 +13,11 @@ use App\Http\Controllers\AdminController;
 
 // ─── PUBLIC PAGES ───────────────────────────────────────────────────────────
 Route::get('/',               [PageController::class, 'home'])->name('home');
-Route::get('/services',       [PageController::class, 'services'])->name('services');
 Route::get('/projects',       [PageController::class, 'projects'])->name('projects');
-Route::get('/gallery',        [PageController::class, 'gallery'])->name('gallery');
 Route::get('/testimonials',   [PageController::class, 'testimonials'])->name('testimonials');
 Route::redirect('/calculator', '/pricing')->name('calculator');
 Route::redirect('/cost-calculator', '/pricing');
-Route::get('/faq',            [PageController::class, 'faq'])->name('faq');
-Route::get('/contact',        [PageController::class, 'contact'])->name('contact');
-Route::get('/blog',           [PageController::class, 'blogIndex'])->name('blog');
-Route::get('/blog/{slug}',    [PageController::class, 'blogShow'])->name('blog.show');
 Route::get('/pricing',        [PageController::class, 'pricing'])->name('pricing');
-Route::get('/about',          [PageController::class, 'about'])->name('about');
-Route::get('/careers',        [PageController::class, 'careers'])->name('careers');
-Route::get('/privacy-policy', [PageController::class, 'privacy'])->name('privacy');
-Route::get('/terms',          [PageController::class, 'terms'])->name('terms');
-Route::get('/sitemap.xml',    [PageController::class, 'sitemap'])->name('sitemap');
 
 // ─── ADMIN AUTHENTICATION ────────────────────────────────────────────────────
 Route::get('/admin/login',    [AuthController::class, 'adminLoginPage'])->name('admin.login');

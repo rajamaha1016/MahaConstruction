@@ -8,7 +8,7 @@
         <p style="max-width:400px;margin:0 auto 32px;">The page you're looking for doesn't exist or has been moved.</p>
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
             <a href="{{ route('home') }}" class="btn-gold">← Go Home</a>
-            <a href="{{ route('contact') }}" class="btn-outline">Contact Us</a>
+            <button type="button" class="btn-outline" data-open-quote>Get Consultation</button>
         </div>
     </div>
 </section>

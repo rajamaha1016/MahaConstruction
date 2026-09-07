@@ -41,16 +41,6 @@ class ContactSettingsTest extends TestCase
         $this->assertDatabaseHas('settings', ['key' => 'company_whatsapp', 'value' => '+91 77777 33333']);
         $this->assertDatabaseHas('settings', ['key' => 'company_email', 'value' => 'support@mahaconstructions.com']);
         $this->assertDatabaseHas('settings', ['key' => 'company_address', 'value' => 'Suite 404, Maha Heights, Main Road, Nagercoil']);
-
-        // Verify live reflection on public contact page
-        $contactPage = $this->get('/contact');
-        $contactPage->assertOk();
-        $contactPage->assertSee('Suite 404, Maha Heights, Main Road, Nagercoil');
-        $contactPage->assertSee('+91 99999 11111');
-        $contactPage->assertSee('support@mahaconstructions.com');
-        $contactPage->assertSee('Mon-Fri: 9AM - 5PM');
-        $contactPage->assertSee('wa.me/917777733333', false);
-
         // Verify live reflection on home page footer & badges
         $homePage = $this->get('/');
         $homePage->assertOk();

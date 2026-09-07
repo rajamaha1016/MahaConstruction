@@ -20,18 +20,31 @@ class PublicPagesTest extends TestCase
     {
         return [
             'home'         => ['/'],
-            'services'     => ['/services'],
             'projects'     => ['/projects'],
-            'gallery'      => ['/gallery'],
             'testimonials' => ['/testimonials'],
-            'faq'          => ['/faq'],
-            'contact'      => ['/contact'],
-            'blog'         => ['/blog'],
             'pricing'      => ['/pricing'],
-            'about'        => ['/about'],
-            'careers'      => ['/careers'],
-            'privacy'      => ['/privacy-policy'],
-            'terms'        => ['/terms'],
+        ];
+    }
+
+    #[DataProvider('deletedRoutes')]
+    public function test_deleted_pages_return_404(string $uri): void
+    {
+        $this->get($uri)->assertNotFound();
+    }
+
+    public static function deletedRoutes(): array
+    {
+        return [
+            'services'       => ['/services'],
+            'gallery'        => ['/gallery'],
+            'faq'            => ['/faq'],
+            'contact'        => ['/contact'],
+            'careers'        => ['/careers'],
+            'privacy-policy' => ['/privacy-policy'],
+            'terms'          => ['/terms'],
+            'sitemap'        => ['/sitemap.xml'],
+            'blog'           => ['/blog'],
+            'about'          => ['/about'],
         ];
     }
 

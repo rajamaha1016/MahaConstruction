@@ -114,13 +114,17 @@
                 <div class="footer-links-col">
                     <h4 class="footer-heading">OUR SERVICES</h4>
                     <ul class="footer-nav">
-                        <li><a href="{{ route('services') }}">Luxury Residential Construction</a></li>
-                        <li><a href="{{ route('services') }}">Villa & Bungalow Construction</a></li>
-                        <li><a href="{{ route('services') }}">Premium Interior Fitouts</a></li>
-                        <li><a href="{{ route('services') }}">Structural Engineering Audits</a></li>
-                        <li><a href="{{ route('services') }}">3D Architectural Elevation & Vastu</a></li>
-                        <li><a href="{{ route('services') }}">Government Approval Processing</a></li>
+                        <li>Individual Villa & Apartment Constructions</li>
+                        <li>Commercial Constructions</li>
+                        <li>Architectural Design</li>
+                        <li>Interior Design & Execution</li>
+                        <li>Renovation & Remodeling</li>
+                        <li>Vastu Consultation</li>
+                        <li>Building Plan Approval</li>
+                        <li>Home Loan Assistance</li>
+                        <li>Turnkey Construction</li>
                     </ul>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-top:14px;line-height:1.45;font-family:var(--font-body);">Complete Project Solutions — From Concept to Handover</p>
                 </div>
 
                 <div class="footer-contact-col">
@@ -149,13 +153,8 @@
                 <a href="https://maps.google.com" target="_blank" class="map-link">VIEW ON GOOGLE MAPS <i class="fas fa-arrow-right" style="margin-left:6px;"></i></a>
             </div>
 
-            <div class="footer-bottom-bar">
+            <div class="footer-bottom-bar" style="justify-content:center;text-align:center;">
                 <p>© {{ date('Y') }} MAHA CONSTRUCTIONS. Er. Maha Rajan (Government Registered Engineer). All rights reserved.</p>
-                <div class="footer-legal-links">
-                    <a href="{{ route('privacy') }}">Privacy Policy</a>
-                    <span class="sep">•</span>
-                    <a href="{{ route('terms') }}">Terms of Service</a>
-                </div>
             </div>
         </div>
     </footer>
