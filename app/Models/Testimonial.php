@@ -10,7 +10,7 @@ class Testimonial extends Model
 
     protected $fillable = [
         'client_name', 'client_role', 'rating', 'feedback',
-        'image_url', 'video_url', 'project_name', 'duration'
+        'image_url', 'video_url', 'project_name', 'duration', 'business_type'
     ];
 
     protected $casts = ['rating' => 'integer'];

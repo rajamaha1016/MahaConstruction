@@ -18,9 +18,9 @@ class PageController extends Controller
 {
     public function home(YouTubeSyncService $ytService)
     {
-        $services       = Service::all();
-        $projects       = Project::orderBy('id', 'desc')->take(12)->get();
-        $testimonials   = Testimonial::orderBy('id', 'desc')->take(12)->get();
+        $services       = Service::where('business_type', 'construction')->get();
+        $projects       = Project::where('business_type', 'construction')->orderBy('id', 'desc')->take(12)->get();
+        $testimonials   = Testimonial::where('business_type', 'construction')->orderBy('id', 'desc')->take(12)->get();
         $partners       = Partner::where('is_active', true)->get();
         $yt_channel_url = YouTubeSyncService::getActiveChannelUrl();
         $ytData         = $ytService->getVideos($yt_channel_url);
@@ -35,8 +35,8 @@ class PageController extends Controller
         $yt_channel_handle = YouTubeSyncService::getChannelHandle();
         $guidebook_pdf_url = Setting::where('key', 'guidebook_pdf_url')->value('value') ?: '/uploads/1785792673_new book.pdf';
         $intro_video_url   = Setting::where('key', 'intro_video_url')->value('value') ?: '/uploads/1785711422_WhatsApp Video 2026-07-30 at 10.50.53 AM.mp4';
-        $residential       = PackageDetail::where('division', 'residential')->orderBy('price_per_sqft', 'asc')->get();
-        $commercial        = PackageDetail::where('division', 'commercial')->orderBy('price_per_sqft', 'asc')->get();
+        $residential       = PackageDetail::where('business_type', 'construction')->where('division', 'residential')->orderBy('price_per_sqft', 'asc')->get();
+        $commercial        = PackageDetail::where('business_type', 'construction')->where('division', 'commercial')->orderBy('price_per_sqft', 'asc')->get();
 
         return view('home', compact(
             'services', 'projects', 'testimonials', 'partners', 'syncedVideos',
@@ -45,11 +45,23 @@ class PageController extends Controller
         ));
     }
 
+    public function interior()
+    {
+        $services     = Service::where('business_type', 'interior')->get();
+        $projects     = Project::where('business_type', 'interior')->orderBy('id', 'desc')->get();
+        $testimonials = Testimonial::where('business_type', 'interior')->orderBy('id', 'desc')->get();
+        $packages     = PackageDetail::where('business_type', 'interior')->orderBy('price_per_sqft', 'asc')->get();
+        $intro_video_url = Setting::where('key', 'intro_video_url')->value('value') ?: '/uploads/1785711422_WhatsApp Video 2026-07-30 at 10.50.53 AM.mp4';
+
+        return view('interior', compact(
+            'services', 'projects', 'testimonials', 'packages', 'intro_video_url'
+        ));
+    }
 
     public function projects(Request $request)
     {
         $category = $request->get('category', 'all');
-        $query    = Project::orderBy('id', 'desc');
+        $query    = Project::where('business_type', 'construction')->orderBy('id', 'desc');
         if ($category !== 'all') {
             $query->where('category', $category);
         }
@@ -59,7 +71,7 @@ class PageController extends Controller
 
     public function testimonials()
     {
-        $testimonials = Testimonial::orderBy('id', 'desc')->get();
+        $testimonials = Testimonial::where('business_type', 'construction')->orderBy('id', 'desc')->get();
         return view('testimonials', compact('testimonials'));
     }
 
@@ -70,8 +82,8 @@ class PageController extends Controller
 
     public function pricing()
     {
-        $residential = PackageDetail::where('division', 'residential')->orderBy('price_per_sqft', 'asc')->get();
-        $commercial  = PackageDetail::where('division', 'commercial')->orderBy('price_per_sqft', 'asc')->get();
+        $residential = PackageDetail::where('business_type', 'construction')->where('division', 'residential')->orderBy('price_per_sqft', 'asc')->get();
+        $commercial  = PackageDetail::where('business_type', 'construction')->where('division', 'commercial')->orderBy('price_per_sqft', 'asc')->get();
         return view('pricing', compact('residential', 'commercial'));
     }
 

@@ -23,6 +23,7 @@ class PublicPagesTest extends TestCase
             'projects'     => ['/projects'],
             'testimonials' => ['/testimonials'],
             'pricing'      => ['/pricing'],
+            'interior'     => ['/interior'],
         ];
     }
 

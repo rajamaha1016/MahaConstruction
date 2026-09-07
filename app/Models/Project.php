@@ -11,7 +11,7 @@ class Project extends Model
     protected $fillable = [
         'name', 'client', 'location', 'budget', 'completion_date',
         'duration', 'architecture_style', 'description',
-        'image_urls', 'video_url', 'timeline', 'category', 'is_featured'
+        'image_urls', 'video_url', 'timeline', 'category', 'is_featured', 'business_type'
     ];
 
     protected $casts = [

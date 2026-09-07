@@ -141,6 +141,37 @@
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.5) !important;
         }
 
+        .division-switcher {
+            display: inline-flex;
+            align-items: center;
+            background: #050B14;
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            border-radius: 9999px;
+            padding: 3px;
+            gap: 4px;
+        }
+        .division-btn {
+            background: transparent;
+            border: none;
+            color: #94A3B8;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        .division-btn:hover { color: #FFF; }
+        .division-btn.active {
+            background: linear-gradient(135deg, #D4AF37 0%, #AA820A 100%);
+            color: #050B14;
+            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+        }
+
         @media (max-width: 992px) {
             .admin-layout { flex-direction: column; }
             .admin-sidebar {
@@ -348,8 +379,14 @@
                 </a>
             </li>
             <li>
+                <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('services', this)">
+                    <span>SERVICES</span>
+                    <span class="badge-count">{{ \App\Models\Service::count() }}</span>
+                </a>
+            </li>
+            <li>
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('packages', this)">
-                    <span>CONSTRUCTION PACKAGES</span>
+                    <span>PACKAGES</span>
                     <span class="badge-count">{{ \App\Models\PackageDetail::count() }}</span>
                 </a>
             </li>
@@ -391,15 +428,26 @@
 
     <!-- Main View -->
     <main class="admin-main-view">
-        <!-- Top Bar -->
+        <!-- Top Bar with Division Switcher -->
         <header class="admin-header-bar">
             <div>
-                <div class="admin-panel-title">MAHA CONSTRUCTIONS ADMIN PANEL</div>
-                <div class="admin-panel-sub">LOCAL FILE UPLOADS & LIVE CONTENT MANAGEMENT</div>
+                <div class="admin-panel-title">MAHA GROUP ADMIN PANEL</div>
+                <div class="admin-panel-sub">CONSTRUCTION & LUXURY INTERIOR MANAGEMENT</div>
             </div>
-            <div style="display:flex;gap:12px;">
-                <a href="{{ route('home') }}" target="_blank" class="btn-whatsapp-outline" style="border-color:#D4AF37;color:#D4AF37;padding:8px 18px;font-size:0.8rem;">
-                    <i class="fas fa-globe" style="margin-right:6px;"></i> LIVE WEBSITE
+
+            <!-- Division Switcher Bar -->
+            <div class="division-switcher">
+                <button type="button" id="btnDivConstruction" onclick="setAdminDivision('construction')" class="division-btn active">
+                    <i class="fas fa-building" style="margin-right:6px;"></i> CONSTRUCTION
+                </button>
+                <button type="button" id="btnDivInterior" onclick="setAdminDivision('interior')" class="division-btn">
+                    <i class="fas fa-couch" style="margin-right:6px;"></i> INTERIOR
+                </button>
+            </div>
+
+            <div style="display:flex;gap:12px;align-items:center;">
+                <a id="adminLiveWebsiteLink" href="{{ route('home') }}" target="_blank" class="btn-whatsapp-outline" style="border-color:#D4AF37;color:#D4AF37;padding:8px 18px;font-size:0.8rem;">
+                    <i class="fas fa-building" style="margin-right:6px;"></i> LIVE WEBSITE
                 </a>
                 <form method="POST" action="{{ route('admin.logout') }}" style="margin:0;">
                     @csrf
@@ -426,9 +474,12 @@
 
                     <div class="projects-grid-2">
                         @foreach(\App\Models\Testimonial::all() as $item)
-                        <div class="project-video-card">
-                            <div class="video-thumb-frame" style="height:220px;">
+                        <div class="project-video-card division-filterable" data-business-type="{{ $item->business_type ?? 'construction' }}">
+                            <div class="video-thumb-frame" style="height:220px;position:relative;">
                                 <img src="{{ $item->image_url ?? 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80' }}" style="width:100%;height:100%;object-fit:cover;" alt="Review">
+                                <span style="position:absolute;top:10px;right:10px;z-index:2;background:rgba(5,11,20,0.85);color:{{ ($item->business_type ?? 'construction') === 'interior' ? '#D4AF37' : '#25D366' }};border:1px solid rgba(212,175,55,0.3);padding:3px 8px;border-radius:6px;font-size:0.68rem;font-weight:700;text-transform:uppercase;">
+                                    {{ $item->business_type ?? 'construction' }}
+                                </span>
                                 <div class="video-play-overlay" onclick="window.playVideoModal('{{ $item->video_url }}')">
                                     <div class="play-btn-circle" style="width:48px;height:48px;font-size:1rem;"><i class="fas fa-play" style="margin-left:2px;"></i></div>
                                 </div>
@@ -446,6 +497,7 @@
                         </div>
                         @endforeach
                     </div>
+                    <div id="reviewsEmptyState" class="empty-division-state" style="display:none;padding:40px;text-align:center;color:#94A3B8;">No video testimonials found for the selected division.</div>
                 </div>
             </div>
 
@@ -462,9 +514,12 @@
 
                     <div class="projects-grid-2">
                         @foreach(\App\Models\Project::all() as $project)
-                        <div class="project-video-card">
-                            <div class="video-thumb-frame" style="height:220px;">
+                        <div class="project-video-card division-filterable" data-business-type="{{ $project->business_type ?? 'construction' }}">
+                            <div class="video-thumb-frame" style="height:220px;position:relative;">
                                 <img src="{{ ($project->image_urls && count($project->image_urls)>0) ? $project->image_urls[0] : 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80' }}" style="width:100%;height:100%;object-fit:cover;" alt="Project">
+                                <span style="position:absolute;top:10px;right:10px;z-index:2;background:rgba(5,11,20,0.85);color:{{ ($project->business_type ?? 'construction') === 'interior' ? '#D4AF37' : '#25D366' }};border:1px solid rgba(212,175,55,0.3);padding:3px 8px;border-radius:6px;font-size:0.68rem;font-weight:700;text-transform:uppercase;">
+                                    {{ $project->business_type ?? 'construction' }}
+                                </span>
                                 @if($project->video_url)
                                 <div class="video-play-overlay" onclick="window.playVideoModal('{{ $project->video_url }}')">
                                     <div class="play-btn-circle" style="width:48px;height:48px;font-size:1rem;"><i class="fas fa-play" style="margin-left:2px;"></i></div>
@@ -484,6 +539,7 @@
                         </div>
                         @endforeach
                     </div>
+                    <div id="projectsEmptyState" class="empty-division-state" style="display:none;padding:40px;text-align:center;color:#94A3B8;">No completed projects found for the selected division.</div>
                 </div>
             </div>
 
@@ -500,12 +556,17 @@
 
                     <div class="pricing-grid-3">
                         @foreach(\App\Models\PackageDetail::all() as $package)
-                        <div class="package-card" style="padding:20px;">
+                        <div class="package-card division-filterable" data-business-type="{{ $package->business_type ?? 'construction' }}" style="padding:20px;">
                             <div style="display:flex;justify-content:space-between;align-items:center;">
                                 <span class="plan-tier-label">{{ strtoupper($package->division) }} • {{ strtoupper($package->tier) }}</span>
-                                @if($package->is_highlighted)<span style="font-size:0.65rem;color:#D4AF37;font-weight:700;">★ POPULAR</span>@endif
+                                <div style="display:flex;gap:6px;align-items:center;">
+                                    <span style="font-size:0.65rem;background:rgba(212,175,55,0.15);color:{{ ($package->business_type ?? 'construction') === 'interior' ? '#D4AF37' : '#25D366' }};border:1px solid rgba(212,175,55,0.3);padding:2px 6px;border-radius:4px;font-weight:700;text-transform:uppercase;">
+                                        {{ $package->business_type ?? 'construction' }}
+                                    </span>
+                                    @if($package->is_highlighted)<span style="font-size:0.65rem;color:#D4AF37;font-weight:700;">★ POPULAR</span>@endif
+                                </div>
                             </div>
-                            <h3 class="plan-title" style="font-size:1.2rem;">{{ $package->title }}</h3>
+                            <h3 class="plan-title" style="font-size:1.2rem;margin-top:6px;">{{ $package->title }}</h3>
                             <div class="plan-price" style="font-size:1.5rem;margin:8px 0;">
                                 @if($package->price_per_sqft && $package->price_per_sqft > 0)
                                     ₹{{ number_format($package->price_per_sqft) }} <span>/ sq.ft</span>
@@ -523,10 +584,11 @@
                         </div>
                         @endforeach
                     </div>
+                    <div id="packagesEmptyState" class="empty-division-state" style="display:none;padding:40px;text-align:center;color:#94A3B8;">No packages found for the selected division.</div>
                 </div>
 
                 <!-- 3B. CONSTRUCTION PACKAGES COMPARISON MATRIX / SPEC TABLE EDITOR -->
-                <div class="card-dark-panel" style="margin-top:28px;">
+                <div class="card-dark-panel division-filterable" data-business-type="construction" style="margin-top:28px;">
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
                         <div>
                             <div style="display:flex;align-items:center;gap:10px;">
@@ -589,6 +651,46 @@
                             <i class="fas fa-floppy-disk" style="margin-right:6px;"></i> SAVE MATRIX
                         </button>
                     </div>
+                </div>
+            </div>
+
+            <!-- 3C. SERVICES TAB -->
+            <div class="admin-tab-pane" id="tab-services">
+                <div class="card-dark-panel">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                        <div>
+                            <h2 class="panel-header-title">SERVICES MANAGEMENT</h2>
+                            <p class="panel-header-sub">Manage construction and luxury interior design services.</p>
+                        </div>
+                        <button class="btn-gold-pill" onclick="openUploadModal('service')"><i class="fas fa-plus" style="margin-right:6px;"></i> ADD NEW SERVICE</button>
+                    </div>
+
+                    <div class="projects-grid-2" id="servicesGrid">
+                        @foreach(\App\Models\Service::all() as $service)
+                        <div class="project-video-card division-filterable" data-business-type="{{ $service->business_type ?? 'construction' }}">
+                            <div class="video-thumb-frame" style="height:180px;position:relative;">
+                                <img src="{{ $service->image_url ?? 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80' }}" style="width:100%;height:100%;object-fit:cover;" alt="Service">
+                                <span style="position:absolute;top:10px;right:10px;z-index:2;background:rgba(5,11,20,0.85);color:{{ ($service->business_type ?? 'construction') === 'interior' ? '#D4AF37' : '#25D366' }};border:1px solid rgba(212,175,55,0.3);padding:3px 8px;border-radius:6px;font-size:0.68rem;font-weight:700;text-transform:uppercase;">
+                                    {{ $service->business_type ?? 'construction' }}
+                                </span>
+                            </div>
+                            <div class="project-card-info" style="display:flex;justify-content:space-between;align-items:center;">
+                                <div style="overflow:hidden;margin-right:8px;">
+                                    <h4 style="color:#fff;font-size:1.02rem;margin:0 0 2px 0;">{{ $service->name }}</h4>
+                                    <span style="font-size:0.75rem;color:#D4AF37;">{{ $service->category ?? 'Service' }}</span>
+                                    @if($service->overview)
+                                    <p style="font-size:0.75rem;color:#94A3B8;margin:6px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">{{ $service->overview }}</p>
+                                    @endif
+                                </div>
+                                <div style="display:flex;gap:6px;flex-shrink:0;">
+                                    <button type="button" class="action-edit-btn" onclick='openEditModal("service", @json($service))' title="Edit Service"><i class="fas fa-pen-to-square"></i></button>
+                                    <button type="button" class="action-del-btn" onclick="deleteItem(event, 'services', {{ $service->id }}, this)" title="Delete Service"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    <div id="servicesEmptyState" class="empty-division-state" style="display:none;padding:40px;text-align:center;color:#94A3B8;">No services found for the selected division.</div>
                 </div>
             </div>
 
@@ -1192,6 +1294,13 @@
             <input type="hidden" id="t_editing_id" value="">
             <div style="display:flex;flex-direction:column;gap:13px;">
                 <div>
+                    <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
+                    <select id="t_business_type" class="input-dark" style="width:100%;">
+                        <option value="construction">Maha Construction</option>
+                        <option value="interior">Maha Interior</option>
+                    </select>
+                </div>
+                <div>
                     <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">CLIENT NAME *</label>
                     <input id="t_client_name" type="text" required placeholder="e.g. Dr. Suresh & Family" class="input-dark" style="width:100%;box-sizing:border-box;">
                 </div>
@@ -1247,6 +1356,13 @@
         <form id="formProject" style="display:none;" onsubmit="submitProject(event)">
             <input type="hidden" id="p_editing_id" value="">
             <div style="display:flex;flex-direction:column;gap:13px;">
+                <div>
+                    <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
+                    <select id="p_business_type" class="input-dark" style="width:100%;">
+                        <option value="construction">Maha Construction</option>
+                        <option value="interior">Maha Interior</option>
+                    </select>
+                </div>
                 <div>
                     <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">PROJECT NAME *</label>
                     <input id="p_name" type="text" required placeholder="e.g. Royal Heritage Luxury Villa" class="input-dark" style="width:100%;box-sizing:border-box;">
@@ -1317,6 +1433,13 @@
         <form id="formPackage" style="display:none;" onsubmit="submitPackage(event)">
             <input type="hidden" id="pk_editing_id" value="">
             <div style="display:flex;flex-direction:column;gap:13px;">
+                <div>
+                    <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
+                    <select id="pk_business_type" class="input-dark" style="width:100%;">
+                        <option value="construction">Maha Construction</option>
+                        <option value="interior">Maha Interior</option>
+                    </select>
+                </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                     <div>
                         <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">DIVISION *</label>
@@ -1445,6 +1568,49 @@ Landscaping" class="input-dark" style="width:100%;box-sizing:border-box;resize:v
 
                 <div id="partnerModalError" style="color:#FF3B30;font-size:0.8rem;display:none;"></div>
                 <button type="submit" id="btnSubmitPartner" class="btn-gold-submit" style="width:100%;padding:13px;margin-top:4px;">💾 SAVE PARTNER</button>
+            </div>
+        </form>
+
+        <!-- 5. SERVICE FORM (CREATE & EDIT) -->
+        <form id="formService" style="display:none;" onsubmit="submitService(event)">
+            <input type="hidden" id="s_editing_id" value="">
+            <div style="display:flex;flex-direction:column;gap:13px;">
+                <div>
+                    <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
+                    <select id="s_business_type" class="input-dark" style="width:100%;">
+                        <option value="construction">Maha Construction</option>
+                        <option value="interior">Maha Interior</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">SERVICE NAME *</label>
+                    <input id="s_name" type="text" required placeholder="e.g. Modular Kitchen Design & Execution" class="input-dark" style="width:100%;box-sizing:border-box;" oninput="autoGenerateServiceSlug(this.value)">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div>
+                        <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">SLUG *</label>
+                        <input id="s_slug" type="text" required placeholder="modular-kitchen-design" class="input-dark" style="width:100%;box-sizing:border-box;">
+                    </div>
+                    <div>
+                        <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">CATEGORY</label>
+                        <input id="s_category" type="text" placeholder="e.g. Modular Kitchen, Luxury, Civil" class="input-dark" style="width:100%;box-sizing:border-box;">
+                    </div>
+                </div>
+                <div>
+                    <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">OVERVIEW / DESCRIPTION</label>
+                    <textarea id="s_overview" rows="3" placeholder="Describe this service offering, workflow, and materials..." class="input-dark" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+                </div>
+                <div>
+                    <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;display:block;margin-bottom:5px;">COVER IMAGE FILE OR URL</label>
+                    <input id="s_image_file" type="file" accept="image/*" class="input-dark" style="width:100%;box-sizing:border-box;padding:8px;" onchange="previewSelectedImage(event, 's_cover_preview_img', 's_cover_preview_box')">
+                    <input id="s_image_url" type="text" placeholder="Or paste image URL here" class="input-dark" style="width:100%;box-sizing:border-box;margin-top:6px;">
+                    <div id="s_cover_preview_box" style="margin-top:10px;display:none;align-items:center;gap:12px;background:rgba(212,175,55,0.06);padding:8px 12px;border-radius:10px;border:1px dashed rgba(212,175,55,0.3);">
+                        <img id="s_cover_preview_img" src="" style="width:70px;height:50px;object-fit:cover;border-radius:6px;border:1px solid #D4AF37;" alt="Cover Preview">
+                        <span style="font-size:0.72rem;color:#25D366;font-weight:700;">✓ Image Selected</span>
+                    </div>
+                </div>
+                <div id="serviceModalError" style="color:#FF3B30;font-size:0.8rem;display:none;"></div>
+                <button type="submit" id="btnSubmitService" class="btn-gold-submit" style="width:100%;padding:13px;margin-top:4px;">💾 SAVE SERVICE</button>
             </div>
         </form>
 
@@ -1629,7 +1795,63 @@ function switchAdminTab(tabKey, linkEl) {
     } catch(e) {}
 }
 
+// ── DIVISION SWITCHER ENGINE (CONSTRUCTION VS INTERIOR) ──────────
+let currentDivision = localStorage.getItem('maha_admin_division') || 'construction';
+
+function setAdminDivision(division) {
+    currentDivision = division;
+    try {
+        localStorage.setItem('maha_admin_division', division);
+    } catch(e) {}
+
+    const btnConst = document.getElementById('btnDivConstruction');
+    const btnInt = document.getElementById('btnDivInterior');
+    if (btnConst && btnInt) {
+        btnConst.classList.toggle('active', division === 'construction');
+        btnInt.classList.toggle('active', division === 'interior');
+    }
+
+    // Filter cards across Reviews, Projects, Packages, and Services
+    document.querySelectorAll('.division-filterable').forEach(el => {
+        const itemType = el.getAttribute('data-business-type') || 'construction';
+        if (itemType === division) {
+            el.style.display = '';
+        } else {
+            el.style.display = 'none';
+        }
+    });
+
+    // Update empty states
+    checkEmptyStates();
+
+    // Update live website link button in top header
+    const liveLink = document.getElementById('adminLiveWebsiteLink');
+    if (liveLink) {
+        if (division === 'interior') {
+            liveLink.href = '{{ route("interior") }}';
+            liveLink.innerHTML = '<i class="fas fa-couch" style="margin-right:6px;"></i> LIVE INTERIOR';
+        } else {
+            liveLink.href = '{{ route("home") }}';
+            liveLink.innerHTML = '<i class="fas fa-building" style="margin-right:6px;"></i> LIVE CONSTRUCTION';
+        }
+    }
+}
+
+function checkEmptyStates() {
+    ['reviews', 'projects', 'packages', 'services'].forEach(tab => {
+        const pane = document.getElementById('tab-' + tab);
+        if (!pane) return;
+        const visibleItems = pane.querySelectorAll('.division-filterable:not([style*="display: none"])');
+        const emptyEl = document.getElementById(tab + 'EmptyState');
+        if (emptyEl) {
+            emptyEl.style.display = visibleItems.length === 0 ? 'block' : 'none';
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    setAdminDivision(currentDivision);
+
     let savedTab = window.location.hash ? window.location.hash.replace('#', '') : null;
     if (!savedTab) {
         savedTab = localStorage.getItem('maha_admin_active_tab');
@@ -1696,8 +1918,9 @@ async function deleteItem(event, endpoint, id, btnEl) {
     const entityNames = {
         'testimonials': 'Client Video Review',
         'projects': 'Completed Project',
-        'packages': 'Construction Package',
+        'packages': 'Package',
         'partners': 'Banking / Vendor Partner',
+        'services': 'Service',
         'leads': 'Lead Inquiry'
     };
     const entityName = entityNames[endpoint] || 'Item';
@@ -1896,11 +2119,11 @@ let autoExtractedTestimonialBlob = null;
 let autoExtractedProjectBlob     = null;
 
 function resetAllForms() {
-    ['formTestimonial','formProject','formPackage','formPartner'].forEach(id => {
+    ['formTestimonial','formProject','formPackage','formPartner','formService'].forEach(id => {
         const f = document.getElementById(id);
         if (f) { f.style.display = 'none'; f.reset(); }
     });
-    ['modalError','projectModalError','packageModalError','partnerModalError'].forEach(id => {
+    ['modalError','projectModalError','packageModalError','partnerModalError','serviceModalError'].forEach(id => {
         const el = document.getElementById(id);
         if (el) { el.style.display = 'none'; el.textContent = ''; }
     });
@@ -1908,12 +2131,14 @@ function resetAllForms() {
     document.getElementById('t_cover_preview_box').style.display = 'none';
     document.getElementById('p_cover_preview_box').style.display = 'none';
     document.getElementById('pt_logo_preview_box').style.display = 'none';
+    if (document.getElementById('s_cover_preview_box')) document.getElementById('s_cover_preview_box').style.display = 'none';
     document.getElementById('btnCaptureTFrame').style.display = 'none';
     document.getElementById('btnCapturePFrame').style.display = 'none';
     document.getElementById('t_editing_id').value = '';
     document.getElementById('p_editing_id').value = '';
     document.getElementById('pk_editing_id').value = '';
     document.getElementById('pt_editing_id').value = '';
+    if (document.getElementById('s_editing_id')) document.getElementById('s_editing_id').value = '';
     if (document.getElementById('pk_warranty')) document.getElementById('pk_warranty').value = '10';
     if (document.getElementById('pk_delivery')) document.getElementById('pk_delivery').value = '12';
     if (document.getElementById('pk_highlighted')) document.getElementById('pk_highlighted').checked = false;
@@ -1929,8 +2154,9 @@ function openUploadModal(type) {
     const titles = {
         testimonial: ['UPLOAD NEW VIDEO REVIEW', 'Add a client testimonial video & auto-captured cover image', 'formTestimonial', 'btnSubmitTestimonial', '💾 SAVE VIDEO REVIEW'],
         project:     ['UPLOAD COMPLETED PROJECT', 'Add a luxury project walkthrough video & cover image', 'formProject', 'btnSubmitProject', '💾 SAVE PROJECT'],
-        package:     ['ADD NEW CONSTRUCTION PACKAGE', 'Create a per sq.ft construction package', 'formPackage', 'btnSubmitPackage', '💾 SAVE PACKAGE'],
+        package:     ['ADD NEW PACKAGE', 'Create a per sq.ft package for Construction or Interior', 'formPackage', 'btnSubmitPackage', '💾 SAVE PACKAGE'],
         partner:     ['ADD NEW PARTNER / VENDOR', 'Add a banking partner for loans or a certified material vendor', 'formPartner', 'btnSubmitPartner', '💾 SAVE PARTNER'],
+        service:     ['ADD NEW SERVICE', 'Create a new service offering for Construction or Interior', 'formService', 'btnSubmitService', '💾 SAVE SERVICE'],
     };
 
     const cfg = titles[type];
@@ -1941,6 +2167,13 @@ function openUploadModal(type) {
     if (cfg[3] && document.getElementById(cfg[3])) {
         document.getElementById(cfg[3]).textContent = cfg[4];
     }
+
+    // Default division dropdown to current active division
+    const curDiv = (typeof currentDivision !== 'undefined' && currentDivision) ? currentDivision : 'construction';
+    if (document.getElementById('t_business_type')) document.getElementById('t_business_type').value = curDiv;
+    if (document.getElementById('p_business_type')) document.getElementById('p_business_type').value = curDiv;
+    if (document.getElementById('pk_business_type')) document.getElementById('pk_business_type').value = curDiv;
+    if (document.getElementById('s_business_type')) document.getElementById('s_business_type').value = curDiv;
 }
 
 function openEditModal(type, item) {
@@ -1955,6 +2188,7 @@ function openEditModal(type, item) {
         document.getElementById('btnSubmitTestimonial').textContent = '💾 UPDATE VIDEO REVIEW';
 
         document.getElementById('t_editing_id').value   = item.id;
+        if (document.getElementById('t_business_type')) document.getElementById('t_business_type').value = item.business_type || 'construction';
         document.getElementById('t_client_name').value  = item.client_name || '';
         document.getElementById('t_project_name').value = item.project_name || '';
         document.getElementById('t_client_role').value  = item.client_role || '';
@@ -1976,6 +2210,7 @@ function openEditModal(type, item) {
         document.getElementById('btnSubmitProject').textContent = '💾 UPDATE PROJECT';
 
         document.getElementById('p_editing_id').value    = item.id;
+        if (document.getElementById('p_business_type')) document.getElementById('p_business_type').value = item.business_type || 'construction';
         document.getElementById('p_name').value          = item.name || '';
         document.getElementById('p_category').value      = item.category || 'villa';
         document.getElementById('p_location').value      = item.location || '';
@@ -1995,12 +2230,13 @@ function openEditModal(type, item) {
             document.getElementById('btnCapturePFrame').style.display = 'inline-block';
         }
     } else if (type === 'package') {
-        document.getElementById('modalTitle').textContent = 'EDIT CONSTRUCTION PACKAGE';
+        document.getElementById('modalTitle').textContent = 'EDIT PACKAGE';
         document.getElementById('modalSub').textContent   = 'Update per sq.ft pricing, specifications & tier';
         document.getElementById('formPackage').style.display = 'block';
         document.getElementById('btnSubmitPackage').textContent = '💾 UPDATE PACKAGE';
 
         document.getElementById('pk_editing_id').value   = item.id;
+        if (document.getElementById('pk_business_type')) document.getElementById('pk_business_type').value = item.business_type || 'construction';
         document.getElementById('pk_division').value     = item.division || 'residential';
         document.getElementById('pk_tier').value         = item.tier || 'standard';
         document.getElementById('pk_title').value        = item.title || '';
@@ -2031,6 +2267,24 @@ function openEditModal(type, item) {
         if (item.logo_url) {
             document.getElementById('pt_logo_preview_img').src = item.logo_url;
             document.getElementById('pt_logo_preview_box').style.display = 'flex';
+        }
+    } else if (type === 'service') {
+        document.getElementById('modalTitle').textContent = 'EDIT SERVICE';
+        document.getElementById('modalSub').textContent   = 'Update service name, category, slug, or cover image';
+        document.getElementById('formService').style.display = 'block';
+        document.getElementById('btnSubmitService').textContent = '💾 UPDATE SERVICE';
+
+        document.getElementById('s_editing_id').value    = item.id;
+        if (document.getElementById('s_business_type')) document.getElementById('s_business_type').value = item.business_type || 'construction';
+        document.getElementById('s_name').value          = item.name || '';
+        document.getElementById('s_slug').value          = item.slug || '';
+        document.getElementById('s_category').value      = item.category || '';
+        document.getElementById('s_overview').value      = item.overview || '';
+        document.getElementById('s_image_url').value     = item.image_url || '';
+
+        if (item.image_url) {
+            document.getElementById('s_cover_preview_img').src = item.image_url;
+            document.getElementById('s_cover_preview_box').style.display = 'flex';
         }
     }
 }
@@ -2508,13 +2762,15 @@ async function submitTestimonial(e) {
             if (ytId) finalImageUrl = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
         }
 
+        const businessType = document.getElementById('t_business_type') ? document.getElementById('t_business_type').value : (currentDivision || 'construction');
         const payload = {
             client_name: clientName,
             project_name: projectName || null,
             client_role: clientRole || null,
             feedback: feedback || null,
             video_url: finalVideoUrl || null,
-            image_url: finalImageUrl || null
+            image_url: finalImageUrl || null,
+            business_type: businessType
         };
 
         const url    = editId ? `/api/testimonials/${editId}` : '/api/testimonials';
@@ -2581,6 +2837,7 @@ async function submitProject(e) {
             if (ytId) finalImageUrl = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
         }
 
+        const businessType = document.getElementById('p_business_type') ? document.getElementById('p_business_type').value : (currentDivision || 'construction');
         const payload = {
             name,
             category,
@@ -2589,7 +2846,8 @@ async function submitProject(e) {
             budget: budget || null,
             description: description || null,
             image_urls: finalImageUrl ? [finalImageUrl] : [],
-            video_url: finalVideoUrl || null
+            video_url: finalVideoUrl || null,
+            business_type: businessType
         };
 
         const url    = editId ? `/api/projects/${editId}` : '/api/projects';
@@ -2643,6 +2901,7 @@ async function submitPackage(e) {
     if (!title || !tier) { errEl.textContent = 'Title and tier category are required.'; errEl.style.display='block'; return; }
 
     try {
+        const businessType = document.getElementById('pk_business_type') ? document.getElementById('pk_business_type').value : (currentDivision || 'construction');
         const payload = {
             division,
             tier:            tier.toLowerCase(),
@@ -2656,6 +2915,7 @@ async function submitPackage(e) {
             features:        features.length   ? features   : null,
             inclusions:      inclusions.length ? inclusions : null,
             exclusions:      exclusions.length ? exclusions : null,
+            business_type:   businessType
         };
 
         const url    = editId ? `/api/packages/${editId}` : '/api/packages';
@@ -2672,6 +2932,78 @@ async function submitPackage(e) {
         switchAdminTab('packages');
         location.reload();
     } catch (err) {
+        errEl.textContent = '❌ ' + err.message;
+        errEl.style.display = 'block';
+    }
+}
+
+// ── SUBMIT SERVICE (CREATE / UPDATE) ─────────────────────────────
+function autoGenerateServiceSlug(val) {
+    const slugInput = document.getElementById('s_slug');
+    if (slugInput && !document.getElementById('s_editing_id').value) {
+        slugInput.value = val.toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+    }
+}
+
+async function submitService(e) {
+    e.preventDefault();
+    const errEl = document.getElementById('serviceModalError');
+    errEl.style.display = 'none';
+
+    const editId       = document.getElementById('s_editing_id').value;
+    const businessType = document.getElementById('s_business_type') ? document.getElementById('s_business_type').value : (currentDivision || 'construction');
+    const name         = document.getElementById('s_name').value.trim();
+    const slug         = document.getElementById('s_slug').value.trim();
+    const category     = document.getElementById('s_category').value.trim();
+    const overview     = document.getElementById('s_overview').value.trim();
+    const imageFile    = document.getElementById('s_image_file').files[0];
+    const imageUrl     = document.getElementById('s_image_url').value.trim();
+
+    if (!name || !slug) {
+        errEl.textContent = 'Service name and slug are required.';
+        errEl.style.display = 'block';
+        return;
+    }
+
+    const indicator = document.getElementById('uploadingIndicator');
+    indicator.style.display = 'block';
+    document.getElementById('modalUploadTitle').textContent = imageFile ? 'UPLOADING SERVICE IMAGE...' : 'SAVING SERVICE...';
+    document.getElementById('formService').style.display = 'none';
+
+    try {
+        let finalImageUrl = imageUrl;
+        if (imageFile) {
+            finalImageUrl = await uploadFile(imageFile);
+        }
+
+        const payload = {
+            name,
+            slug,
+            category: category || null,
+            overview: overview || null,
+            image_url: finalImageUrl || null,
+            business_type: businessType
+        };
+
+        const url    = editId ? `/api/services/${editId}` : '/api/services';
+        const method = editId ? 'PUT' : 'POST';
+
+        const res = await fetch(url, {
+            method: method,
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF(), 'Accept': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (!res.ok) { const d = await res.json().catch(()=>{}); throw new Error(d?.message || 'Save failed'); }
+        closeUploadModal();
+        switchAdminTab('services');
+        location.reload();
+    } catch (err) {
+        indicator.style.display = 'none';
+        document.getElementById('formService').style.display = 'block';
         errEl.textContent = '❌ ' + err.message;
         errEl.style.display = 'block';
     }

@@ -11,7 +11,7 @@ class PackageDetail extends Model
     protected $fillable = [
         'division', 'tier', 'title', 'subtitle', 'price_per_sqft',
         'description', 'features', 'inclusions', 'exclusions',
-        'is_highlighted', 'warranty_years', 'delivery_months'
+        'is_highlighted', 'warranty_years', 'delivery_months', 'business_type'
     ];
 
     protected $casts = [

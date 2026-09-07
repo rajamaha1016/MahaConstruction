@@ -44,10 +44,11 @@ Route::get('/stats',                 [ApiController::class, 'getStats']);
 Route::get('/youtube/channel-videos',[ApiController::class, 'getYoutubeVideos']);
 
 // ─── PUBLIC LEAD-CAPTURE FORMS (write, but anonymous by design) ─────────────
-Route::post('/leads/contact',        [ApiController::class, 'submitContact']);
-Route::post('/leads/quote',          [ApiController::class, 'submitQuote']);
-Route::post('/leads/guidebook',      [ApiController::class, 'submitGuidebookLead']);
-Route::post('/newsletter/subscribe', [ApiController::class, 'subscribeNewsletter']);
+Route::post('/leads/contact',          [ApiController::class, 'submitContact']);
+Route::post('/leads/quote',            [ApiController::class, 'submitQuote']);
+Route::post('/leads/interior/enquiry', [ApiController::class, 'submitInteriorEnquiry']);
+Route::post('/leads/guidebook',        [ApiController::class, 'submitGuidebookLead']);
+Route::post('/newsletter/subscribe',   [ApiController::class, 'subscribeNewsletter']);
 
 // ─── ADMIN-ONLY (content management, leads inbox, uploads, settings) ───────
 // Uses admin.api.session to share session state without re-enforcing CSRF on API routes

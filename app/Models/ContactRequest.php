@@ -8,7 +8,7 @@ class ContactRequest extends Model
 {
     protected $table = 'contact_requests';
 
-    protected $fillable = ['name', 'email', 'phone', 'message', 'is_read'];
+    protected $fillable = ['name', 'email', 'phone', 'message', 'is_read', 'business_type'];
 
     protected $casts = ['is_read' => 'boolean'];
 }

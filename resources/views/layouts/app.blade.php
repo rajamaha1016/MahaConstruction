@@ -18,7 +18,42 @@
     <!-- Main Navigation Bar -->
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
-            <!-- EXCLUSIVE ATTRACTIVE LOGO -->
+            @if(request()->routeIs('interior'))
+            <!-- INTERIOR LOGO & BRAND -->
+            <a href="{{ route('interior') }}" class="nav-logo" style="display:inline-flex;align-items:center;gap:16px;text-decoration:none;">
+                <div style="background:#FFFFFF;padding:6px 14px;border-radius:14px;border:2px solid #D4AF37;box-shadow:0 4px 22px rgba(0,0,0,0.5),0 0 25px rgba(212,175,55,0.45);display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);" onmouseover="this.style.boxShadow='0 6px 28px rgba(212,175,55,0.7),0 0 30px rgba(212,175,55,0.6)';this.style.transform='scale(1.04)';" onmouseout="this.style.boxShadow='0 4px 22px rgba(0,0,0,0.5),0 0 25px rgba(212,175,55,0.45)';this.style.transform='scale(1)';">
+                    <img src="{{ asset('logo.jpg') }}"
+                         alt="Maha Interior Logo"
+                         style="height:54px;width:auto;object-fit:contain;display:block;">
+                </div>
+                <div style="display:flex;flex-direction:column;justify-content:center;">
+                    <span style="font-size:1.35rem;font-weight:900;letter-spacing:0.07em;line-height:1.15;font-family:var(--font-heading);background:linear-gradient(135deg,#FFFFFF 15%,#FFFDF0 45%,#FFD700 80%,#D4AF37 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 8px rgba(212,175,55,0.35));">MAHA INTERIOR</span>
+                    <span style="font-size:0.68rem;font-weight:800;letter-spacing:0.24em;color:#D4AF37;text-transform:uppercase;margin-top:4px;font-family:var(--font-heading);text-shadow:0 0 10px rgba(212,175,55,0.4);">DESIGNING BEAUTIFUL LIVING</span>
+                </div>
+            </a>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="#interior-intro" class="nav-item">HOME</a>
+                <a href="#interior-services" class="nav-item">SERVICES</a>
+                <a href="#interior-projects" class="nav-item">PROJECTS</a>
+                <a href="#interior-testimonials" class="nav-item">TESTIMONIALS</a>
+                <a href="#interior-packages" class="nav-item">PACKAGES</a>
+                <a href="#interior-enquiry" class="nav-item">CONTACT</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="{{ route('home') }}" class="division-switch-btn" title="Switch to Construction Website" style="display:inline-flex;align-items:center;gap:6px;background:rgba(212,175,55,0.12);color:#D4AF37;border:1.5px solid #D4AF37;padding:7px 15px;border-radius:20px;font-size:0.75rem;font-weight:800;letter-spacing:0.08em;text-decoration:none;transition:all 0.3s ease;text-transform:uppercase;font-family:var(--font-heading);" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';" onmouseout="this.style.background='rgba(212,175,55,0.12)';this.style.color='#D4AF37';">
+                    <i class="fas fa-building" style="font-size:0.75rem;"></i> CONSTRUCTION
+                </a>
+                <button class="nav-search-btn" id="searchToggleBtn" title="Search">
+                    <i class="fas fa-search" style="font-size:16px;"></i>
+                </button>
+                <button class="nav-mobile-toggle" id="navMobileToggle" aria-label="Toggle Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            @else
+            <!-- CONSTRUCTION LOGO & BRAND -->
             <a href="{{ route('home') }}" class="nav-logo" style="display:inline-flex;align-items:center;gap:16px;text-decoration:none;">
                 <div style="background:#FFFFFF;padding:6px 14px;border-radius:14px;border:2px solid #D4AF37;box-shadow:0 4px 22px rgba(0,0,0,0.5),0 0 25px rgba(212,175,55,0.45);display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);" onmouseover="this.style.boxShadow='0 6px 28px rgba(212,175,55,0.7),0 0 30px rgba(212,175,55,0.6)';this.style.transform='scale(1.04)';" onmouseout="this.style.boxShadow='0 4px 22px rgba(0,0,0,0.5),0 0 25px rgba(212,175,55,0.45)';this.style.transform='scale(1)';">
                     <img src="{{ asset('logo.jpg') }}"
@@ -38,6 +73,9 @@
             </div>
 
             <div class="nav-actions">
+                <a href="{{ route('interior') }}" class="division-switch-btn" title="Explore Maha Interior Showcase" style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.08) 100%);color:#FFD700;border:1.5px solid #D4AF37;padding:7px 15px;border-radius:20px;font-size:0.75rem;font-weight:800;letter-spacing:0.08em;text-decoration:none;transition:all 0.3s ease;text-transform:uppercase;font-family:var(--font-heading);box-shadow:0 0 14px rgba(212,175,55,0.3);" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';this.style.boxShadow='0 0 20px rgba(212,175,55,0.6)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.08) 100%)';this.style.color='#FFD700';this.style.boxShadow='0 0 14px rgba(212,175,55,0.3)';">
+                    <i class="fas fa-couch" style="font-size:0.75rem;"></i> INTERIOR
+                </a>
                 <button class="nav-search-btn" id="searchToggleBtn" title="Search">
                     <i class="fas fa-search" style="font-size:16px;"></i>
                 </button>
@@ -45,6 +83,7 @@
                     <span></span><span></span><span></span>
                 </button>
             </div>
+            @endif
         </div>
     </nav>
 
@@ -80,6 +119,88 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container footer-container">
+            @if(request()->routeIs('interior'))
+            <!-- INTERIOR FOOTER CONTENT -->
+            <div class="footer-top-grid">
+                <div class="footer-brand-col">
+                    <div class="footer-logo">
+                        <div class="logo-badge" style="background:#FFFFFF;padding:4px 10px;border-radius:10px;border:1.5px solid #D4AF37;box-shadow:0 4px 14px rgba(0,0,0,0.4),0 0 12px rgba(212,175,55,0.25);">
+                            <img src="{{ asset('logo.jpg') }}" alt="Maha Interior Logo" style="height:36px;width:auto;object-fit:contain;display:block;">
+                        </div>
+                        <div class="logo-text-group">
+                            <span class="logo-brand">MAHA INTERIOR</span>
+                            <span class="logo-tagline">DESIGNING BEAUTIFUL LIVING</span>
+                        </div>
+                    </div>
+                    <p class="footer-desc">
+                        Tamil Nadu's premier interior architecture and execution studio. Delivering bespoke modular kitchens, luxury wardrobes, acoustic living spaces, and turnkey interior fitouts with structural engineering precision.
+                    </p>
+                    <div class="footer-social-row">
+                        <a href="https://www.instagram.com/mahaconstructions_2013" target="_blank" class="social-icon-btn" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/mahaconstructions" target="_blank" class="social-icon-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="{{ $yt_channel_url }}" target="_blank" class="social-icon-btn" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4 class="footer-heading">ON-PAGE SECTIONS</h4>
+                    <ul class="footer-nav">
+                        <li><a href="#interior-intro">Home / Intro</a></li>
+                        <li><a href="#interior-services">Our Services</a></li>
+                        <li><a href="#interior-projects">Completed Projects</a></li>
+                        <li><a href="#interior-testimonials">Client Testimonials</a></li>
+                        <li><a href="#interior-packages">Interior Packages</a></li>
+                        <li><a href="#interior-enquiry">Book Consultation</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4 class="footer-heading">INTERIOR SERVICES</h4>
+                    <ul class="footer-nav">
+                        <li>Interior Design & Planning</li>
+                        <li>Turnkey Interior Execution</li>
+                        <li>Modular Kitchen Solutions</li>
+                        <li>Wardrobe & Storage Systems</li>
+                        <li>Living Room Interiors</li>
+                        <li>Bedroom Suites</li>
+                        <li>Gypsum False Ceiling</li>
+                        <li>Architectural Lighting</li>
+                        <li>Renovation & Remodeling</li>
+                    </ul>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-top:14px;line-height:1.45;font-family:var(--font-body);">Factory-finished precision joinery with 10-year hardware warranty.</p>
+                </div>
+
+                <div class="footer-contact-col">
+                    <h4 class="footer-heading">CONTACT US</h4>
+                    <div class="footer-contact-item">
+                        <span class="contact-label">Office:</span>
+                        <span><a href="tel:+{{ $raw_phone }}" style="color:inherit;text-decoration:none;">{{ $company_phone }}</a> @if(!empty($company_phone_sec)) / Engr: <a href="tel:+{{ preg_replace('/[^0-9]/', '', $company_phone_sec) }}" style="color:inherit;text-decoration:none;">{{ $company_phone_sec }}</a> @endif</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="contact-label">Email:</span>
+                        <span><a href="mailto:{{ $company_email }}" style="color:inherit;">{{ $company_email }}</a></span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="contact-label">Web:</span>
+                        <span>www.mahaconstructions.in/interior</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="contact-label">Address:</span>
+                        <span>{{ $company_address }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-location-strip">
+                <span><i class="fas fa-map-marker-alt" style="margin-right:6px;color:var(--gold);"></i> <strong>Studio Location:</strong> Nagercoil, Kanyakumari, Tamil Nadu</span>
+                <a href="https://maps.google.com" target="_blank" class="map-link">VIEW ON GOOGLE MAPS <i class="fas fa-arrow-right" style="margin-left:6px;"></i></a>
+            </div>
+
+            <div class="footer-bottom-bar" style="justify-content:center;text-align:center;">
+                <p>© {{ date('Y') }} MAHA INTERIOR • Division of Maha Construction. Er. Maha Rajan (Government Registered Engineer). All rights reserved.</p>
+            </div>
+            @else
+            <!-- CONSTRUCTION FOOTER CONTENT -->
             <div class="footer-top-grid">
                 <div class="footer-brand-col">
                     <div class="footer-logo">
@@ -156,6 +277,7 @@
             <div class="footer-bottom-bar" style="justify-content:center;text-align:center;">
                 <p>© {{ date('Y') }} MAHA CONSTRUCTIONS. Er. Maha Rajan (Government Registered Engineer). All rights reserved.</p>
             </div>
+            @endif
         </div>
     </footer>
 

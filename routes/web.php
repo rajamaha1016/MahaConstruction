@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminController;
 
 // ─── PUBLIC PAGES ───────────────────────────────────────────────────────────
 Route::get('/',               [PageController::class, 'home'])->name('home');
+Route::get('/interior',       [PageController::class, 'interior'])->name('interior');
 Route::get('/projects',       [PageController::class, 'projects'])->name('projects');
 Route::get('/testimonials',   [PageController::class, 'testimonials'])->name('testimonials');
 Route::redirect('/calculator', '/pricing')->name('calculator');

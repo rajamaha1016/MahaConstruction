@@ -22,23 +22,31 @@ use App\Services\PackageMatrixService;
 class ApiController extends Controller
 {
     // --- TESTIMONIALS ---
-    public function getTestimonials()
+    public function getTestimonials(Request $request)
     {
-        return response()->json(Testimonial::orderBy('id', 'desc')->get());
+        $query = Testimonial::orderBy('id', 'desc');
+        if ($request->filled('business_type')) {
+            $query->where('business_type', $request->query('business_type'));
+        }
+        return response()->json($query->get());
     }
 
     public function createTestimonial(Request $request)
     {
         $data = $request->validate([
-            'client_name'  => 'required|string',
-            'client_role'  => 'nullable|string',
-            'rating'       => 'nullable|integer',
-            'feedback'     => 'nullable|string',
-            'image_url'    => 'nullable|string',
-            'video_url'    => 'nullable|string',
-            'project_name' => 'nullable|string',
-            'duration'     => 'nullable|string',
+            'client_name'   => 'required|string',
+            'client_role'   => 'nullable|string',
+            'rating'        => 'nullable|integer',
+            'feedback'      => 'nullable|string',
+            'image_url'     => 'nullable|string',
+            'video_url'     => 'nullable|string',
+            'project_name'  => 'nullable|string',
+            'duration'      => 'nullable|string',
+            'business_type' => 'nullable|string|in:construction,interior',
         ]);
+        if (empty($data['business_type'])) {
+            $data['business_type'] = 'construction';
+        }
         return response()->json(Testimonial::create($data), 201);
     }
 
@@ -56,9 +64,13 @@ class ApiController extends Controller
     }
 
     // --- PROJECTS ---
-    public function getProjects()
+    public function getProjects(Request $request)
     {
-        return response()->json(Project::orderBy('id', 'desc')->get());
+        $query = Project::orderBy('id', 'desc');
+        if ($request->filled('business_type')) {
+            $query->where('business_type', $request->query('business_type'));
+        }
+        return response()->json($query->get());
     }
 
     public function getProject($id)
@@ -81,7 +93,11 @@ class ApiController extends Controller
             'video_url'          => 'nullable|string',
             'category'           => 'nullable|string',
             'is_featured'        => 'nullable|boolean',
+            'business_type'      => 'nullable|string|in:construction,interior',
         ]);
+        if (empty($data['business_type'])) {
+            $data['business_type'] = 'construction';
+        }
         return response()->json(Project::create($data), 201);
     }
 
@@ -99,9 +115,13 @@ class ApiController extends Controller
     }
 
     // --- SERVICES ---
-    public function getServices()
+    public function getServices(Request $request)
     {
-        return response()->json(Service::all());
+        $query = Service::query();
+        if ($request->filled('business_type')) {
+            $query->where('business_type', $request->query('business_type'));
+        }
+        return response()->json($query->get());
     }
 
     public function getService($slug)
@@ -112,14 +132,18 @@ class ApiController extends Controller
     public function createService(Request $request)
     {
         $data = $request->validate([
-            'name'     => 'required|string|unique:services,name',
-            'slug'     => 'required|string|unique:services,slug',
-            'overview' => 'nullable|string',
-            'benefits' => 'nullable|array',
-            'process'  => 'nullable|array',
-            'image_url'=> 'nullable|string',
-            'category' => 'nullable|string',
+            'name'          => 'required|string|unique:services,name',
+            'slug'          => 'required|string|unique:services,slug',
+            'overview'      => 'nullable|string',
+            'benefits'      => 'nullable|array',
+            'process'       => 'nullable|array',
+            'image_url'     => 'nullable|string',
+            'category'      => 'nullable|string',
+            'business_type' => 'nullable|string|in:construction,interior',
         ]);
+        if (empty($data['business_type'])) {
+            $data['business_type'] = 'construction';
+        }
         return response()->json(Service::create($data), 201);
     }
 
@@ -137,21 +161,29 @@ class ApiController extends Controller
     }
 
     // --- GALLERY ---
-    public function getGallery()
+    public function getGallery(Request $request)
     {
-        return response()->json(GalleryItem::orderBy('id', 'desc')->get());
+        $query = GalleryItem::orderBy('id', 'desc');
+        if ($request->filled('business_type')) {
+            $query->where('business_type', $request->query('business_type'));
+        }
+        return response()->json($query->get());
     }
 
     public function createGallery(Request $request)
     {
         $data = $request->validate([
-            'title'         => 'required|string',
-            'category'      => 'required|string',
-            'image_url'     => 'required|string',
-            'is_video'      => 'nullable|boolean',
-            'video_url'     => 'nullable|string',
+            'title'           => 'required|string',
+            'category'        => 'required|string',
+            'image_url'       => 'required|string',
+            'is_video'        => 'nullable|boolean',
+            'video_url'       => 'nullable|string',
             'three_sixty_url' => 'nullable|string',
+            'business_type'   => 'nullable|string|in:construction,interior',
         ]);
+        if (empty($data['business_type'])) {
+            $data['business_type'] = 'construction';
+        }
         return response()->json(GalleryItem::create($data), 201);
     }
 
@@ -237,14 +269,22 @@ class ApiController extends Controller
     }
 
     // --- PACKAGES ---
-    public function getPackages()
+    public function getPackages(Request $request)
     {
-        return response()->json(PackageDetail::all());
+        $query = PackageDetail::query();
+        if ($request->filled('business_type')) {
+            $query->where('business_type', $request->query('business_type'));
+        }
+        return response()->json($query->get());
     }
 
     public function createPackage(Request $request)
     {
-        return response()->json(PackageDetail::create($request->all()), 201);
+        $data = $request->all();
+        if (empty($data['business_type'])) {
+            $data['business_type'] = 'construction';
+        }
+        return response()->json(PackageDetail::create($data), 201);
     }
 
     public function updatePackage(Request $request, $id)
@@ -385,13 +425,19 @@ class ApiController extends Controller
             'phone'   => 'nullable|string',
             'message' => 'required|string',
         ]);
+        // SERVER-ENFORCED: Construction contact submissions are always construction
+        $data['business_type'] = 'construction';
         $contact = ContactRequest::create($data);
         return response()->json(['message' => 'Contact lead submitted successfully', 'lead' => $contact], 201);
     }
 
-    public function getContacts()
+    public function getContacts(Request $request)
     {
-        return response()->json(ContactRequest::orderBy('id', 'desc')->get());
+        $query = ContactRequest::orderBy('id', 'desc');
+        if ($request->filled('business_type')) {
+            $query->where('business_type', $request->query('business_type'));
+        }
+        return response()->json($query->get());
     }
 
     public function markContactRead($id)
@@ -417,13 +463,38 @@ class ApiController extends Controller
             'budget_range' => 'nullable|string',
             'message'      => 'nullable|string',
         ]);
+        // SERVER-ENFORCED: Construction proposal requests are always construction
+        $data['business_type'] = 'construction';
         $quote = QuoteRequest::create($data);
         return response()->json(['message' => 'Quote request submitted', 'lead' => $quote], 201);
     }
 
-    public function getQuotes()
+    public function submitInteriorEnquiry(Request $request)
     {
-        return response()->json(QuoteRequest::orderBy('id', 'desc')->get());
+        $data = $request->validate([
+            'name'         => 'required|string',
+            'email'        => 'required|email',
+            'phone'        => 'nullable|string',
+            'project_type' => 'nullable|string',
+            'budget_range' => 'nullable|string',
+            'message'      => 'nullable|string',
+        ]);
+        // SERVER-ENFORCED: Interior enquiries are always interior, client input cannot override
+        $data['business_type'] = 'interior';
+        if (empty($data['project_type'])) {
+            $data['project_type'] = 'Interior Design & Execution';
+        }
+        $quote = QuoteRequest::create($data);
+        return response()->json(['message' => 'Interior enquiry submitted successfully', 'lead' => $quote], 201);
+    }
+
+    public function getQuotes(Request $request)
+    {
+        $query = QuoteRequest::orderBy('id', 'desc');
+        if ($request->filled('business_type')) {
+            $query->where('business_type', $request->query('business_type'));
+        }
+        return response()->json($query->get());
     }
 
     public function markQuoteRead($id)

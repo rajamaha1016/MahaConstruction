@@ -94,7 +94,7 @@
         <!-- RESIDENTIAL PRICING CARDS -->
         <div class="pricing-grid-3 package-group" id="pricingResGroup">
             @php
-                $resDbPackages = \App\Models\PackageDetail::where('division', 'residential')->get();
+                $resDbPackages = (isset($residential) && $residential->isNotEmpty()) ? $residential : \App\Models\PackageDetail::where('business_type', 'construction')->where('division', 'residential')->get();
                 $resFallbacks = [
                     [
                         'tier'=>'basic', 'title'=>'BASIC PLAN', 'subtitle'=>'Solid & Affordable', 'price'=>1999, 'warranty'=>10, 'delivery'=>12,
@@ -208,7 +208,7 @@
         <!-- COMMERCIAL PRICING CARDS -->
         <div class="pricing-grid-3 package-group" id="pricingComGroup" style="display:none;">
             @php
-                $comDbPackages = \App\Models\PackageDetail::where('division', 'commercial')->get();
+                $comDbPackages = (isset($commercial) && $commercial->isNotEmpty()) ? $commercial : \App\Models\PackageDetail::where('business_type', 'construction')->where('division', 'commercial')->get();
                 $comFallbacks = [
                     [
                         'tier'=>'basic', 'title'=>'STANDARD SHELL', 'subtitle'=>'Functional & Efficient', 'price'=>2199, 'warranty'=>10, 'delivery'=>14, 'highlighted'=>false,

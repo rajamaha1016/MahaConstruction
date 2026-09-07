@@ -9,7 +9,7 @@ class Service extends Model
     protected $table = 'services';
 
     protected $fillable = [
-        'name', 'slug', 'overview', 'benefits', 'process', 'image_url', 'category'
+        'name', 'slug', 'overview', 'benefits', 'process', 'image_url', 'category', 'business_type'
     ];
 
     protected $casts = [
