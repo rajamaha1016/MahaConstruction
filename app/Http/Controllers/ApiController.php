@@ -775,20 +775,71 @@ class ApiController extends Controller
     public function deleteYouTubeVideo($id)
     {
         $setting = Setting::where('key', 'youtube_synced_videos')->first();
-        if ($setting && $setting->value) {
+        $videos = [];
+        if ($setting && !empty($setting->value)) {
             $videos = json_decode($setting->value, true) ?: [];
-            $filtered = array_values(array_filter($videos, function ($v) use ($id) {
-                return ($v['id'] ?? $v['youtubeId'] ?? '') !== $id;
-            }));
-            $setting->update(['value' => json_encode($filtered)]);
-            Setting::updateOrCreate(['key' => 'youtube_video_count'], ['value' => count($filtered)]);
-            return response()->json([
-                'success' => true,
-                'message' => 'Video removed from synced list',
-                'count'   => count($filtered)
-            ]);
         }
-        return response()->json(['success' => false, 'message' => 'No synced videos found'], 404);
+
+        if (empty($videos)) {
+            try {
+                $ytService = app(YouTubeSyncService::class);
+                $targetUrl = YouTubeSyncService::getActiveChannelUrl();
+                $videos = $ytService->getVideos($targetUrl)['videos'] ?? [];
+            } catch (\Throwable $e) {}
+        }
+
+        // Add to persistent hidden video blacklist
+        $hiddenIds = YouTubeSyncService::getHiddenVideoIds();
+        if (!in_array($id, $hiddenIds)) {
+            $hiddenIds[] = $id;
+            Setting::updateOrCreate(
+                ['key' => 'youtube_hidden_video_ids'],
+                ['value' => json_encode(array_values($hiddenIds))]
+            );
+        }
+
+        $filtered = array_values(array_filter($videos, function ($v) use ($id, $hiddenIds) {
+            $vidId = $v['id'] ?? $v['youtubeId'] ?? '';
+            return $vidId !== $id && !in_array($vidId, $hiddenIds);
+        }));
+
+        Setting::updateOrCreate(['key' => 'youtube_synced_videos'], ['value' => json_encode($filtered)]);
+        Setting::updateOrCreate(['key' => 'youtube_video_count'], ['value' => (string)count($filtered)]);
+
+        // Invalidate cache so both construction and interior pages update in real-time
+        try {
+            $activeUrl = YouTubeSyncService::getActiveChannelUrl();
+            \Illuminate\Support\Facades\Cache::forget('yt_live_videos_' . md5($activeUrl));
+            \Illuminate\Support\Facades\Cache::flush();
+        } catch (\Throwable $e) {}
+
+        return response()->json([
+            'success'    => true,
+            'message'    => 'Video successfully removed from website showcase',
+            'count'      => count($filtered),
+            'deleted_id' => $id
+        ]);
+    }
+
+    public function restoreYouTubeVideo($id)
+    {
+        $hiddenIds = YouTubeSyncService::getHiddenVideoIds();
+        $hiddenIds = array_values(array_filter($hiddenIds, fn($v) => $v !== $id));
+        Setting::updateOrCreate(
+            ['key' => 'youtube_hidden_video_ids'],
+            ['value' => json_encode($hiddenIds)]
+        );
+
+        try {
+            $activeUrl = YouTubeSyncService::getActiveChannelUrl();
+            \Illuminate\Support\Facades\Cache::forget('yt_live_videos_' . md5($activeUrl));
+            \Illuminate\Support\Facades\Cache::flush();
+        } catch (\Throwable $e) {}
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Video restored to website showcase'
+        ]);
     }
 
     // --- ADMIN CREDENTIALS ---
