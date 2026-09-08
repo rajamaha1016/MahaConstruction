@@ -3,6 +3,749 @@
 @section('title', 'Maha Interior | Designing Beautiful Living | Luxury Interior Design & Turnkey Execution')
 @section('description', 'Maha Interior is Tamil Nadu\'s premier interior design and execution studio. Delivering bespoke modular kitchens, luxury wardrobes, living spaces, and turnkey interior fitouts.')
 
+@push('styles')
+<style>
+/* ==========================================================================
+   MAHA INTERIOR — BRIGHT LUXURY ARCHITECTURAL ATELIER THEME
+   Completely distinct from Maha Construction's dark midnight palette:
+   Luminous Alabaster & Warm Ivory Surfaces, Champagne Bronze, Warm Amber Gold,
+   Crisp Deep Charcoal Typography, and Engaging Micro-Animations.
+   ========================================================================== */
+
+body.interior-body {
+    --int-bg-base: #FAF8F5;
+    --int-bg-white: #FFFFFF;
+    --int-bg-cream: #F5F1E8;
+    --int-bg-warm: #FBF9F6;
+    --int-gold: #C8952B;
+    --int-gold-hover: #DFAC3E;
+    --int-gold-light: #FBF4E6;
+    --int-gold-glow: rgba(200, 149, 43, 0.35);
+    --int-gold-border: rgba(200, 149, 43, 0.28);
+    --int-charcoal: #161922;
+    --int-charcoal-sub: #374151;
+    --int-slate-muted: #64748B;
+    --int-card-border: rgba(200, 149, 43, 0.20);
+    --int-shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.04);
+    --int-shadow-card: 0 10px 32px rgba(0, 0, 0, 0.06), 0 2px 10px rgba(200, 149, 43, 0.08);
+    --int-shadow-hover: 0 20px 48px rgba(200, 149, 43, 0.22), 0 8px 24px rgba(0, 0, 0, 0.08);
+
+    background-color: var(--int-bg-base) !important;
+    color: var(--int-charcoal) !important;
+    font-family: var(--font-body);
+    overflow-x: hidden;
+}
+
+/* ─── BRIGHT FROSTED NAVBAR OVERRIDE ───────────────────────── */
+body.interior-body .interior-navbar {
+    background: rgba(255, 255, 255, 0.94) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(179, 130, 34, 0.2) !important;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+body.interior-body .interior-navbar.is-scrolled {
+    background: rgba(255, 255, 255, 0.98) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08) !important;
+    padding: 10px 0 !important;
+}
+body.interior-body .interior-brand-title {
+    color: #161922 !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.06em !important;
+}
+body.interior-body .interior-brand-tagline {
+    color: var(--int-gold) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.2em !important;
+}
+body.interior-body .interior-nav-item {
+    color: #374151 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    transition: color 0.25s ease !important;
+}
+body.interior-body .interior-nav-item:hover,
+body.interior-body .interior-nav-item.active {
+    color: var(--int-gold) !important;
+}
+body.interior-body .interior-nav-item::after {
+    background: var(--int-gold) !important;
+}
+body.interior-body .interior-switch-btn {
+    background: rgba(179, 130, 34, 0.08) !important;
+    border: 1.5px solid var(--int-gold) !important;
+    color: var(--int-gold) !important;
+    font-weight: 800 !important;
+    border-radius: 4px !important;
+    transition: all 0.25s ease !important;
+}
+body.interior-body .interior-switch-btn:hover {
+    background: var(--int-gold) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 18px rgba(179, 130, 34, 0.35) !important;
+    transform: translateY(-1px);
+}
+body.interior-body .nav-search-btn {
+    color: #161922 !important;
+}
+body.interior-body .nav-mobile-toggle span {
+    background: #161922 !important;
+}
+
+/* ─── SECTION 1: BRIGHT SUNLIT HERO (#interior-intro) ──────── */
+body.interior-body .int-hero-section {
+    background: #FAF8F5 !important;
+    color: #161922 !important;
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    padding: 130px 0 60px;
+    overflow: hidden;
+}
+body.interior-body .int-hero-bg-img {
+    filter: brightness(0.98) contrast(1.05) saturate(1.15) !important;
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+body.interior-body .int-hero-overlay {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(253, 250, 245, 0.72) 45%, rgba(246, 238, 224, 0.65) 100%) !important;
+    backdrop-filter: blur(2px) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
+}
+body.interior-body .int-hero-bottom-fade {
+    background: linear-gradient(to bottom, transparent 0%, rgba(250, 248, 245, 0.92) 80%, #FAF8F5 100%) !important;
+}
+body.interior-body .int-tag-pill {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border: 1px solid var(--int-gold-border) !important;
+    border-radius: 50px !important;
+    padding: 7px 18px !important;
+    box-shadow: var(--int-shadow-subtle) !important;
+    color: var(--int-gold) !important;
+    margin-bottom: 22px !important;
+}
+body.interior-body .int-tag-dot {
+    background: var(--int-gold) !important;
+    box-shadow: 0 0 10px var(--int-gold) !important;
+    animation: luxDotPulse 2s ease-in-out infinite;
+}
+body.interior-body .int-hero-title {
+    color: #161922 !important;
+    text-shadow: none !important;
+    font-size: clamp(2.8rem, 5.2vw, 4.6rem) !important;
+    font-weight: 900 !important;
+    line-height: 1.08 !important;
+    margin-bottom: 20px !important;
+}
+body.interior-body .int-hero-title .gold-word {
+    color: var(--int-gold) !important;
+    font-family: var(--font-serif) !important;
+    font-style: italic !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 14px rgba(200, 149, 43, 0.25) !important;
+}
+body.interior-body .int-hero-desc {
+    color: #374151 !important;
+    text-shadow: none !important;
+    font-size: clamp(1rem, 1.35vw, 1.15rem) !important;
+    line-height: 1.75 !important;
+    margin-bottom: 32px !important;
+    max-width: 720px;
+}
+body.interior-body .int-hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 40px;
+}
+body.interior-body .int-btn-gold {
+    background: linear-gradient(135deg, #C8952B 0%, #DFAC3E 50%, #F5CE74 100%) !important;
+    color: #161922 !important;
+    font-family: var(--font-heading);
+    font-weight: 800 !important;
+    font-size: 0.84rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 15px 32px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    box-shadow: 0 8px 26px rgba(200, 149, 43, 0.42) !important;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+body.interior-body .int-btn-gold::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 40%;
+    height: 200%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: rotate(30deg);
+    animation: luxBtnShimmer 4s infinite;
+}
+body.interior-body .int-btn-gold:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 14px 34px rgba(197, 147, 45, 0.5) !important;
+    color: #161922 !important;
+}
+body.interior-body .int-btn-outline {
+    background: rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1.5px solid #161922 !important;
+    color: #161922 !important;
+    font-family: var(--font-heading);
+    font-weight: 800 !important;
+    font-size: 0.84rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--int-shadow-subtle) !important;
+    transition: all 0.3s ease !important;
+}
+body.interior-body .int-btn-outline:hover {
+    background: #161922 !important;
+    color: #FFFFFF !important;
+    transform: translateY(-2px) !important;
+    box-shadow: var(--int-shadow-card) !important;
+}
+body.interior-body .int-hero-stats-strip {
+    border-top: none !important;
+    padding-top: 0 !important;
+    margin-top: 10px !important;
+}
+body.interior-body .int-hero-stats-grid {
+    background: rgba(255, 255, 255, 0.88) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid var(--int-gold-border) !important;
+    border-radius: 12px !important;
+    padding: 24px 32px !important;
+    box-shadow: var(--int-shadow-card) !important;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 20px;
+}
+body.interior-body .int-hero-stat-card {
+    position: relative;
+    padding-right: 16px;
+}
+body.interior-body .int-hero-stat-card:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 15%;
+    height: 70%;
+    width: 1px;
+    background: rgba(179, 130, 34, 0.22) !important;
+}
+body.interior-body .int-hero-stat-val {
+    color: var(--int-gold) !important;
+    text-shadow: none !important;
+    font-size: clamp(1.8rem, 2.6vw, 2.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+body.interior-body .int-hero-stat-label {
+    color: #4B5563 !important;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* ─── SECTION 2: COMPLETED PROJECTS (#interior-projects) ──── */
+body.interior-body .int-projects-section {
+    background: #FFFFFF !important;
+    color: #161922 !important;
+    padding: 100px 0 90px !important;
+    position: relative;
+}
+body.interior-body .int-sec-header-editorial {
+    margin-bottom: 44px;
+    max-width: 820px;
+}
+body.interior-body .int-sec-tag {
+    color: var(--int-gold) !important;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+body.interior-body .int-sec-title-light {
+    color: #161922 !important;
+    font-size: clamp(2rem, 3.6vw, 3rem);
+    font-weight: 900;
+    line-height: 1.12;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+body.interior-body .int-sec-sub-light {
+    color: #4B5563 !important;
+    font-size: 1rem;
+    line-height: 1.65;
+}
+body.interior-body .int-editorial-filters {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 22px;
+    align-items: center;
+    margin: 28px 0 36px;
+    padding: 0 4px 14px;
+    border-bottom: 1px solid rgba(179, 130, 34, 0.2) !important;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+body.interior-body .int-filter-link {
+    color: #64748B !important;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    padding: 6px 4px;
+    transition: color 0.25s ease;
+}
+body.interior-body .int-filter-link:hover {
+    color: #161922 !important;
+}
+body.interior-body .int-filter-link.active {
+    color: var(--int-gold) !important;
+    font-weight: 900 !important;
+}
+body.interior-body .int-filter-link::after {
+    background: var(--int-gold) !important;
+}
+
+/* Projects Slideshow Cards */
+body.interior-body .int-video-slide-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(179, 130, 34, 0.22) !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    box-shadow: var(--int-shadow-card) !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+body.interior-body .int-video-slide-card:hover {
+    transform: translateY(-8px) !important;
+    border-color: var(--int-gold) !important;
+    box-shadow: var(--int-shadow-hover) !important;
+}
+body.interior-body .int-video-card-shade {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.0) 35%, rgba(15, 23, 42, 0.88) 100%) !important;
+}
+body.interior-body .int-video-card-tag {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border: 1px solid var(--int-gold-border) !important;
+    color: var(--int-gold) !important;
+    box-shadow: var(--int-shadow-subtle) !important;
+    border-radius: 4px;
+}
+body.interior-body .int-video-card-badge {
+    background: rgba(179, 130, 34, 0.92) !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 2px 10px rgba(179, 130, 34, 0.3) !important;
+    border-radius: 4px;
+}
+body.interior-body .int-video-play-btn {
+    background: linear-gradient(135deg, #DFAB3E, #B38222) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 0 24px rgba(179, 130, 34, 0.6) !important;
+}
+body.interior-body .int-video-play-btn::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid var(--int-gold);
+    opacity: 0.8;
+    animation: luxPulseWave 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+body.interior-body .int-carousel-progress-track {
+    background: rgba(179, 130, 34, 0.18) !important;
+}
+body.interior-body .int-carousel-progress-fill {
+    background: linear-gradient(90deg, #B38222, #DFAB3E) !important;
+}
+body.interior-body .int-carousel-arrow-btn {
+    background: #FFFFFF !important;
+    border: 1.5px solid var(--int-gold-border) !important;
+    color: var(--int-gold) !important;
+    box-shadow: var(--int-shadow-subtle) !important;
+}
+body.interior-body .int-carousel-arrow-btn:hover {
+    background: var(--int-gold) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 18px rgba(179, 130, 34, 0.4) !important;
+}
+body.interior-body .int-carousel-dot {
+    background: rgba(179, 130, 34, 0.3) !important;
+}
+body.interior-body .int-carousel-dot.active {
+    background: var(--int-gold) !important;
+}
+
+/* ─── SECTION 3: CLIENT TESTIMONIALS (#interior-testimonials) */
+body.interior-body .int-testimonials-section {
+    background: #F8F6F2 !important;
+    color: #161922 !important;
+    padding: 100px 0 90px !important;
+}
+body.interior-body .int-sec-title-dark {
+    color: #161922 !important;
+    font-size: clamp(2rem, 3.6vw, 3rem);
+    font-weight: 900;
+    line-height: 1.12;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+body.interior-body .int-sec-sub-dark {
+    color: #4B5563 !important;
+    font-size: 1rem;
+    line-height: 1.65;
+}
+body.interior-body .int-pullquote-box {
+    background: #FFFFFF !important;
+    border-left: 4px solid var(--int-gold) !important;
+    border-radius: 8px !important;
+    box-shadow: var(--int-shadow-card) !important;
+    padding: 36px 44px;
+    margin-bottom: 40px;
+    position: relative;
+}
+body.interior-body .int-pullquote-text {
+    color: #161922 !important;
+    font-family: var(--font-serif);
+    font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+    font-weight: 600;
+    font-style: italic;
+    line-height: 1.35;
+    margin-bottom: 18px;
+}
+body.interior-body .int-author-name {
+    color: #161922 !important;
+    font-weight: 800;
+}
+body.interior-body .int-author-role {
+    color: var(--int-gold) !important;
+    font-weight: 700;
+}
+body.interior-body .int-video-card-stars {
+    color: #D97706 !important;
+}
+
+/* ─── SECTION 4: ENGINEER (#interior-engineer) ────────────── */
+body.interior-body .int-engineer-section {
+    background: #FFFFFF !important;
+    color: #161922 !important;
+    padding: 100px 0 90px !important;
+    position: relative;
+}
+body.interior-body .int-eng-portrait-card {
+    background: #FFFFFF !important;
+    border: 1.5px solid var(--int-gold-border) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--int-shadow-card) !important;
+    overflow: hidden;
+}
+body.interior-body .int-eng-gradient {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(15, 23, 42, 0.75) 100%) !important;
+}
+body.interior-body .int-eng-play-badge {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border: 1px solid var(--int-gold) !important;
+    color: var(--int-gold) !important;
+    border-radius: 4px;
+}
+body.interior-body .int-eng-play-btn {
+    background: linear-gradient(135deg, #DFAB3E, #B38222) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 0 26px rgba(179, 130, 34, 0.65) !important;
+}
+body.interior-body .int-engineer-section p {
+    color: #4B5563 !important;
+}
+body.interior-body .int-principle-box {
+    background: #FAF8F5 !important;
+    border: 1px solid rgba(179, 130, 34, 0.22) !important;
+    border-radius: 8px !important;
+    box-shadow: var(--int-shadow-subtle) !important;
+    transition: all 0.3s ease !important;
+}
+body.interior-body .int-principle-box:hover {
+    background: #FFFFFF !important;
+    border-color: var(--int-gold) !important;
+    transform: translateY(-4px) !important;
+    box-shadow: var(--int-shadow-hover) !important;
+}
+body.interior-body .int-principle-num {
+    color: var(--int-gold) !important;
+    font-weight: 900;
+}
+body.interior-body .int-principle-title {
+    color: #161922 !important;
+    font-weight: 800;
+}
+body.interior-body .int-principle-desc {
+    color: #4B5563 !important;
+}
+
+/* ─── SECTION 5: INTERIOR PACKAGES (#interior-packages) ───── */
+body.interior-body .int-packages-section {
+    background: #FAF8F5 !important;
+    color: #161922 !important;
+    padding: 100px 0 90px !important;
+}
+body.interior-body .int-pkg-panel {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(179, 130, 34, 0.22) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--int-shadow-card) !important;
+    transition: all 0.35s ease !important;
+}
+body.interior-body .int-pkg-panel:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: var(--int-shadow-hover) !important;
+}
+/* Highlighted card in warm champagne white with gold glow */
+body.interior-body .int-pkg-panel.highlighted {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FDFBF6 100%) !important;
+    border: 2px solid var(--int-gold) !important;
+    box-shadow: 0 20px 50px rgba(179, 130, 34, 0.22), 0 0 25px rgba(179, 130, 34, 0.12) !important;
+    color: #161922 !important;
+}
+body.interior-body .int-pkg-popular-tag {
+    background: linear-gradient(135deg, #DFAB3E, #B38222) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(179, 130, 34, 0.35) !important;
+    border-radius: 4px !important;
+}
+body.interior-body .int-pkg-tier {
+    color: var(--int-gold) !important;
+}
+body.interior-body .int-pkg-title {
+    color: #161922 !important;
+}
+body.interior-body .int-pkg-subtitle {
+    color: #4B5563 !important;
+}
+body.interior-body .int-pkg-panel.highlighted .int-pkg-title {
+    color: #161922 !important;
+}
+body.interior-body .int-pkg-panel.highlighted .int-pkg-subtitle {
+    color: #4B5563 !important;
+}
+body.interior-body .int-pkg-price-row {
+    border-color: rgba(179, 130, 34, 0.18) !important;
+}
+body.interior-body .int-pkg-price-val {
+    color: var(--int-gold) !important;
+}
+body.interior-body .int-pkg-price-unit {
+    color: #4B5563 !important;
+}
+body.interior-body .int-pkg-panel.highlighted .int-pkg-price-unit {
+    color: #4B5563 !important;
+}
+body.interior-body .int-pkg-chip {
+    background: rgba(179, 130, 34, 0.1) !important;
+    color: #161922 !important;
+}
+body.interior-body .int-pkg-panel.highlighted .int-pkg-chip {
+    background: rgba(179, 130, 34, 0.15) !important;
+    color: var(--int-gold) !important;
+}
+body.interior-body .int-pkg-feature-item {
+    color: #374151 !important;
+}
+body.interior-body .int-pkg-btn-book {
+    background: linear-gradient(135deg, #C5932D, #DFAB3E) !important;
+    color: #161922 !important;
+    box-shadow: 0 4px 16px rgba(179, 130, 34, 0.3) !important;
+}
+body.interior-body .int-pkg-btn-book:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(179, 130, 34, 0.45) !important;
+}
+body.interior-body .int-pkg-btn-specs {
+    border: 1px solid rgba(179, 130, 34, 0.35) !important;
+    color: #161922 !important;
+}
+body.interior-body .int-pkg-btn-specs:hover {
+    border-color: var(--int-gold) !important;
+    color: var(--int-gold) !important;
+    background: rgba(179, 130, 34, 0.06) !important;
+}
+
+/* ─── SECTION 6: CONSULTATION (#interior-enquiry) ─────────── */
+body.interior-body .int-enquiry-section {
+    background: linear-gradient(135deg, #F4EFE6 0%, #FAF8F4 50%, #F5F1E8 100%) !important;
+    color: #161922 !important;
+    padding: 100px 0 90px !important;
+}
+body.interior-body .int-enquiry-section .int-sec-title-light {
+    color: #161922 !important;
+}
+body.interior-body .int-enquiry-section .int-sec-sub-light {
+    color: #4B5563 !important;
+}
+body.interior-body .int-contact-row {
+    color: #374151 !important;
+}
+body.interior-body .int-contact-icon {
+    background: #FFFFFF !important;
+    border: 1.5px solid var(--int-gold-border) !important;
+    color: var(--int-gold) !important;
+    box-shadow: var(--int-shadow-subtle) !important;
+}
+body.interior-body .int-enquiry-form-card {
+    background: #FFFFFF !important;
+    border: 1.5px solid var(--int-gold-border) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--int-shadow-card) !important;
+}
+body.interior-body .int-form-label {
+    color: #161922 !important;
+    font-weight: 800 !important;
+}
+body.interior-body .int-form-input,
+body.interior-body .int-form-select,
+body.interior-body .int-form-textarea {
+    background: #FAF8F5 !important;
+    border: 1.5px solid #E2D9C8 !important;
+    color: #161922 !important;
+    border-radius: 6px !important;
+}
+body.interior-body .int-form-input:focus,
+body.interior-body .int-form-select:focus,
+body.interior-body .int-form-textarea:focus {
+    border-color: var(--int-gold) !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 0 0 3px rgba(179, 130, 34, 0.16) !important;
+    outline: none !important;
+}
+
+/* ─── PACKAGE MODAL OVERRIDE ──────────────────────────────── */
+body.interior-body #interiorPackageDetailsModal.modal-overlay {
+    background: rgba(22, 25, 34, 0.65) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
+body.interior-body #interiorPackageDetailsModal .modal-container {
+    background: #FFFFFF !important;
+    border: 1.5px solid var(--int-gold-border) !important;
+    border-radius: 12px !important;
+    color: #161922 !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15) !important;
+}
+body.interior-body #intModalPkgTitle {
+    color: #161922 !important;
+}
+body.interior-body #intModalPkgSubtitle {
+    color: #4B5563 !important;
+}
+body.interior-body #intModalPkgPrice {
+    color: var(--int-gold) !important;
+}
+body.interior-body #intModalPkgDescription {
+    color: #374151 !important;
+}
+body.interior-body #intModalPkgInclusions {
+    color: #1E293B !important;
+}
+body.interior-body #intModalPkgExclusions {
+    color: #64748B !important;
+}
+body.interior-body #intModalPkgFeatures {
+    color: #374151 !important;
+}
+body.interior-body #interiorPackageDetailsModal .modal-box > div:last-child {
+    background: #FAF8F5 !important;
+    border-top: 1px solid rgba(179, 130, 34, 0.2) !important;
+}
+body.interior-body #interiorPackageDetailsModal .modal-box > div:last-child button:first-child {
+    background: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+    color: #161922 !important;
+}
+
+/* ─── INTERIOR FOOTER OVERRIDE ────────────────────────────── */
+body.interior-body .interior-footer {
+    background: #161922 !important;
+    border-top: 2px solid var(--int-gold) !important;
+    color: #E2E8F0 !important;
+    padding: 70px 0 30px !important;
+}
+body.interior-body .interior-footer-brand-name {
+    color: #FFFFFF !important;
+}
+body.interior-body .interior-footer-tagline {
+    color: var(--int-gold) !important;
+}
+body.interior-body .interior-footer-desc {
+    color: #94A3B8 !important;
+}
+body.interior-body .interior-footer-heading {
+    color: var(--int-gold) !important;
+}
+body.interior-body .interior-footer-nav a {
+    color: #CBD5E1 !important;
+}
+body.interior-body .interior-footer-nav a:hover {
+    color: var(--int-gold) !important;
+}
+
+/* ─── ANIMATION KEYFRAMES ─────────────────────────────────── */
+@keyframes luxHeroZoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.06); }
+}
+@keyframes luxDotPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.7; }
+}
+@keyframes luxBtnShimmer {
+    0% { left: -60%; }
+    25%, 100% { left: 140%; }
+}
+@keyframes luxPulseWave {
+    0% { transform: scale(1); opacity: 0.85; }
+    100% { transform: scale(1.65); opacity: 0; }
+}
+.lux-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.lux-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+</style>
+@endpush
+
 @section('content')
 
 <!-- =======================================================
@@ -12,15 +755,16 @@
 <section class="int-hero-section" id="interior-intro">
     <!-- Full-Bleed Background Media Cover -->
     <div class="int-hero-bg-media">
-        <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85"
+        <img src="{{ asset('images/interior-hero-2.gif') }}"
              alt="Maha Interior Architectural Living Space"
-             class="int-hero-bg-img">
+             class="int-hero-bg-img"
+             onerror="this.src='https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85'">
     </div>
     <div class="int-hero-overlay"></div>
     <div class="int-hero-bottom-fade"></div>
 
     <div class="container" style="position:relative;z-index:3;">
-        <div class="int-hero-content-wrap">
+        <div class="int-hero-content-wrap lux-reveal">
             <div class="int-tag-pill">
                 <span class="int-tag-dot"></span>
                 <span>MAHA INTERIOR • ARCHITECTURAL STUDIO</span>
@@ -48,11 +792,12 @@
         </div>
 
         <!-- Integrated Hero Statistics Strip -->
-        <div class="int-hero-stats-strip">
+        <div class="int-hero-stats-strip lux-reveal">
             <div class="int-hero-stats-grid">
                 <div class="int-hero-stat-card">
                     <div class="int-hero-stat-val">150+</div>
                     <div class="int-hero-stat-label">Interiors Handed Over</div>
+                </div>
                 <div class="int-hero-stat-card">
                     <div class="int-hero-stat-val">10 Years</div>
                     <div class="int-hero-stat-label">Hardware & Plywood Warranty</div>
@@ -74,7 +819,7 @@
 <section class="int-projects-section" id="interior-projects">
     <div class="container">
         <!-- Section Header -->
-        <div class="int-sec-header-editorial">
+        <div class="int-sec-header-editorial lux-reveal">
             <span class="int-sec-tag">01 — COMPLETED PROJECTS</span>
             <h2 class="int-sec-title-light">
                 COMPLETED <span style="color:var(--int-gold);">INTERIOR PROJECTS</span>
@@ -85,7 +830,7 @@
         </div>
 
         <!-- Minimal Editorial Category Filter (Text with Gold Underline) -->
-        <div class="int-editorial-filters">
+        <div class="int-editorial-filters lux-reveal">
             <button type="button" class="int-filter-link interior-filter-btn active" data-category="all">ALL SPACES</button>
             <button type="button" class="int-filter-link interior-filter-btn" data-category="living-room">LIVING ROOM</button>
             <button type="button" class="int-filter-link interior-filter-btn" data-category="modular-kitchen">MODULAR KITCHEN</button>
@@ -96,7 +841,7 @@
         </div>
 
         <!-- Unified Video Slideshow Carousel for Projects -->
-        <div class="int-carousel-wrapper">
+        <div class="int-carousel-wrapper lux-reveal">
             <div class="int-carousel-track" id="interiorProjectsTrack">
                 @forelse($projects as $i => $project)
                 @php
@@ -151,16 +896,16 @@
                     </div>
                 </div>
                 @empty
-                <div style="width:100%;text-align:center;padding:40px;color:var(--int-text-muted);">
+                <div style="width:100%;text-align:center;padding:40px;color:var(--int-slate-muted);">
                     Interior projects showcase is being updated.
                 </div>
                 @endforelse
             </div>
 
-            <div id="noFilteredProjectsMsg" style="display:none;text-align:center;padding:40px 20px;color:var(--int-text-muted);">
+            <div id="noFilteredProjectsMsg" style="display:none;text-align:center;padding:40px 20px;color:var(--int-slate-muted);">
                 <i class="fas fa-couch" style="font-size:2rem;color:var(--int-gold);margin-bottom:12px;display:block;"></i>
-                <p style="font-size:1rem;color:#FFF;margin-bottom:6px;">No projects currently listed in this space.</p>
-                <p style="font-size:0.85rem;color:var(--int-text-muted);">Browse other spaces above or consult Er. Maha Rajan for custom projects.</p>
+                <p style="font-size:1rem;color:#161922;margin-bottom:6px;font-weight:700;">No projects currently listed in this space.</p>
+                <p style="font-size:0.85rem;color:var(--int-slate-muted);">Browse other spaces above or consult Er. Maha Rajan for custom projects.</p>
             </div>
 
             <!-- Progress Bar Tracker -->
@@ -181,7 +926,7 @@
         </div>
 
         <!-- Footer Action -->
-        <div style="text-align:center;margin-top:40px;">
+        <div style="text-align:center;margin-top:40px;" class="lux-reveal">
             <a href="#interior-enquiry" class="int-btn-outline">
                 <i class="fas fa-paper-plane" style="margin-right:8px;color:var(--int-gold);"></i> REQUEST ESTIMATE FOR YOUR SPACE
             </a>
@@ -197,7 +942,7 @@
 <section class="int-testimonials-section" id="interior-testimonials">
     <div class="container">
         <!-- Section Header -->
-        <div class="int-sec-header-editorial">
+        <div class="int-sec-header-editorial lux-reveal">
             <span class="int-sec-tag">02 — CLIENT STORIES</span>
             <h2 class="int-sec-title-dark">
                 CLIENT <span style="color:var(--int-gold);">TESTIMONIALS</span>
@@ -209,7 +954,7 @@
 
         @if($testimonials->count() > 0)
         <!-- Featured Magazine Pull-Quote -->
-        <div class="int-pullquote-box">
+        <div class="int-pullquote-box lux-reveal">
             <div class="int-quote-glyph">“</div>
             <div class="int-pullquote-text">
                 “THE SPACE FINALLY FEELS LIKE HOME — FUNCTIONAL, ELEGANT, AND DELIVERED EXACTLY ON SCHEDULE.”
@@ -226,7 +971,7 @@
         </div>
 
         <!-- Unified Video Slideshow Carousel for Testimonials -->
-        <div class="int-carousel-wrapper">
+        <div class="int-carousel-wrapper lux-reveal">
             <div class="int-carousel-track" id="interiorTestimonialsTrack">
                 @foreach($testimonials as $i => $t)
                 <div class="int-video-slide-card"
@@ -313,7 +1058,7 @@
     <div class="container">
         <div class="int-engineer-grid">
             <!-- Left: Engineer Portrait & 60-Sec Intro Video Trigger -->
-            <div class="int-eng-portrait-card">
+            <div class="int-eng-portrait-card lux-reveal">
                 <div class="int-eng-video-thumb" onclick="window.playVideoModal('{{ $intro_video_url }}', 'Er. Maha Rajan - 60-Second Video Introduction')">
                     <img src="{{ asset('maha-rajan.png') }}"
                          alt="Er. Maha Rajan"
@@ -332,17 +1077,17 @@
             </div>
 
             <!-- Right: Technical Principles & Executive Info -->
-            <div>
+            <div class="lux-reveal">
                 <span class="int-sec-tag">03 — ENGINEER-LED INTERIORS</span>
                 <h2 class="int-sec-title-light" style="font-size:clamp(1.8rem, 3.4vw, 2.6rem);margin-bottom:8px;">
                     DESIGNED WITH PRECISION.<br>
                     <span style="color:var(--int-gold);">EXECUTED WITH CARE.</span>
                 </h2>
-                <div style="font-size:0.85rem;color:#25D366;font-weight:700;letter-spacing:0.08em;margin-bottom:18px;">
+                <div style="font-size:0.85rem;color:#16A34A;font-weight:800;letter-spacing:0.08em;margin-bottom:18px;">
                     Er. Maha Rajan (B.E. Civil) • GOVERNMENT REGISTERED ENGINEER • 12+ YEARS STRUCTURAL EXCELLENCE
                 </div>
 
-                <p style="font-size:0.92rem;color:#CBD5E1;line-height:1.7;margin-bottom:24px;">
+                <p style="font-size:0.92rem;color:#4B5563;line-height:1.75;margin-bottom:24px;">
                     Most interior failures occur because non-technical contractors cut into load-bearing RCC elements, create hazardous electrical overloads, or use sub-standard commercial ply that bends and warps in humid environments. We engineer every joint from the inside out.
                 </p>
 
@@ -385,7 +1130,7 @@
 <section class="int-packages-section" id="interior-packages">
     <div class="container">
         <!-- Section Header -->
-        <div class="int-sec-header-editorial">
+        <div class="int-sec-header-editorial lux-reveal">
             <span class="int-sec-tag">04 — INTERIOR PACKAGES</span>
             <h2 class="int-sec-title-dark">
                 INTERIOR <span style="color:var(--int-gold);">PACKAGES</span>
@@ -396,7 +1141,7 @@
         </div>
 
         <!-- 3 Architectural Package Panels -->
-        <div class="int-packages-grid">
+        <div class="int-packages-grid lux-reveal">
             @forelse($packages as $pkg)
             <div class="int-pkg-panel {{ $pkg->is_highlighted ? 'highlighted' : '' }}">
                 @if($pkg->is_highlighted)
@@ -444,7 +1189,7 @@
                 </div>
             </div>
             @empty
-            <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--int-text-dark-sub);">
+            <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--int-slate-muted);">
                 Interior packages are currently being updated.
             </div>
             @endforelse
@@ -468,7 +1213,7 @@
     <div class="container">
         <div class="int-enquiry-grid">
             <!-- Left: Studio Manifesto & Direct Contacts -->
-            <div class="int-enquiry-info-box">
+            <div class="int-enquiry-info-box lux-reveal">
                 <span class="int-sec-tag">06 — DIRECT STUDIO CONSULTATION</span>
                 <h2 class="int-sec-title-light">
                     BOOK A FREE<br>
@@ -482,21 +1227,21 @@
                     <div class="int-contact-row">
                         <div class="int-contact-icon"><i class="fas fa-phone"></i></div>
                         <div>
-                            <span style="display:block;font-size:0.75rem;color:var(--int-gold);font-weight:700;text-transform:uppercase;">Call Studio Directly</span>
+                            <span style="display:block;font-size:0.75rem;color:var(--int-gold);font-weight:800;text-transform:uppercase;">Call Studio Directly</span>
                             <a href="tel:+{{ $raw_phone }}">{{ $company_phone }}</a>
                         </div>
                     </div>
                     <div class="int-contact-row">
                         <div class="int-contact-icon" style="color:#25D366;background:rgba(37,211,102,0.1);border-color:rgba(37,211,102,0.3);"><i class="fab fa-whatsapp"></i></div>
                         <div>
-                            <span style="display:block;font-size:0.75rem;color:#25D366;font-weight:700;text-transform:uppercase;">WhatsApp Chat</span>
+                            <span style="display:block;font-size:0.75rem;color:#25D366;font-weight:800;text-transform:uppercase;">WhatsApp Chat</span>
                             <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20Interior%20Space." target="_blank">+{{ $raw_whatsapp }}</a>
                         </div>
                     </div>
                     <div class="int-contact-row">
                         <div class="int-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
                         <div>
-                            <span style="display:block;font-size:0.75rem;color:var(--int-gold);font-weight:700;text-transform:uppercase;">Design Studio</span>
+                            <span style="display:block;font-size:0.75rem;color:var(--int-gold);font-weight:800;text-transform:uppercase;">Design Studio</span>
                             <span>{{ $company_address }}</span>
                         </div>
                     </div>
@@ -504,7 +1249,7 @@
             </div>
 
             <!-- Right: Dedicated Interior Consultation Form -->
-            <form id="interiorEnquiryForm" class="int-enquiry-form-card">
+            <form id="interiorEnquiryForm" class="int-enquiry-form-card lux-reveal">
                 @csrf
                 <!-- Hidden UI aid: Server forces business_type = 'interior' -->
                 <input type="hidden" name="business_type" value="interior">
@@ -562,7 +1307,7 @@
                 </div>
 
                 <!-- Success Box -->
-                <div id="interiorSuccessMessage" class="form-success-box" style="display:none;background:rgba(37,211,102,0.15);border:1px solid #25D366;color:#86EFAC;padding:16px;border-radius:4px;text-align:center;font-weight:700;margin-top:16px;">
+                <div id="interiorSuccessMessage" class="form-success-box" style="display:none;background:rgba(37,211,102,0.15);border:1px solid #25D366;color:#16A34A;padding:16px;border-radius:6px;text-align:center;font-weight:700;margin-top:16px;">
                     <i class="fas fa-circle-check" style="margin-right:6px;color:#25D366;"></i>
                     Interior Consultation Request Submitted! Er. Maha Rajan's interior studio will contact you within 24 hours.
                 </div>
@@ -575,41 +1320,41 @@
      INTERIOR PACKAGE DETAILS MODAL (Scoped Unique IDs)
 ======================================================= -->
 <div class="modal-overlay" id="interiorPackageDetailsModal" role="dialog" aria-modal="true" aria-labelledby="intModalPkgTitle">
-    <div class="modal-box modal-container" style="max-width:760px;background:#071A2B;border:1px solid rgba(201,162,39,0.35);border-radius:6px;">
+    <div class="modal-box modal-container" style="max-width:760px;border-radius:12px;">
         <button class="modal-close" onclick="document.getElementById('interiorPackageDetailsModal').classList.remove('open')" aria-label="Close modal" style="color:var(--int-gold);">✕</button>
 
-        <div style="padding:28px 28px 20px;border-bottom:1px solid rgba(201,162,39,0.2);">
+        <div style="padding:28px 28px 20px;border-bottom:1px solid rgba(179,130,34,0.2);">
             <span id="intModalPkgTierLabel" style="font-size:0.75rem;font-weight:800;letter-spacing:0.18em;color:var(--int-gold);text-transform:uppercase;font-family:var(--font-heading);"></span>
-            <h3 id="intModalPkgTitle" style="font-size:1.8rem;font-weight:900;color:#FFFFFF;margin-top:4px;font-family:var(--font-heading);"></h3>
-            <p id="intModalPkgSubtitle" style="color:var(--int-text-muted);font-size:0.9rem;margin-top:4px;"></p>
+            <h3 id="intModalPkgTitle" style="font-size:1.8rem;font-weight:900;color:#161922;margin-top:4px;font-family:var(--font-heading);"></h3>
+            <p id="intModalPkgSubtitle" style="color:#4B5563;font-size:0.9rem;margin-top:4px;"></p>
 
             <div style="display:flex;align-items:baseline;gap:8px;margin-top:16px;">
                 <div id="intModalPkgPrice" style="font-size:2.2rem;font-weight:900;color:var(--int-gold);font-family:var(--font-heading);"></div>
             </div>
 
             <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;">
-                <span id="intModalPkgWarranty" style="font-size:0.75rem;color:var(--int-gold);background:rgba(201,162,39,0.15);padding:4px 10px;border-radius:2px;font-weight:700;"></span>
-                <span id="intModalPkgDelivery" style="font-size:0.75rem;color:#86EFAC;background:rgba(37,211,102,0.15);padding:4px 10px;border-radius:2px;font-weight:700;"></span>
+                <span id="intModalPkgWarranty" style="font-size:0.75rem;color:var(--int-gold);background:rgba(179,130,34,0.12);padding:4px 10px;border-radius:4px;font-weight:700;"></span>
+                <span id="intModalPkgDelivery" style="font-size:0.75rem;color:#16A34A;background:rgba(22,163,74,0.12);padding:4px 10px;border-radius:4px;font-weight:700;"></span>
             </div>
         </div>
 
         <div style="padding:24px 28px;max-height:55vh;overflow-y:auto;">
-            <p id="intModalPkgDescription" style="color:#CBD5E1;font-size:0.92rem;line-height:1.6;margin-bottom:20px;"></p>
+            <p id="intModalPkgDescription" style="color:#374151;font-size:0.92rem;line-height:1.65;margin-bottom:20px;"></p>
 
             <!-- Inclusions -->
             <div style="margin-bottom:24px;">
                 <h4 style="font-size:0.82rem;font-weight:800;color:var(--int-gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-heading);">
-                    <i class="fas fa-circle-check" style="margin-right:6px;color:#25D366;"></i> WHAT'S INCLUDED
+                    <i class="fas fa-circle-check" style="margin-right:6px;color:#16A34A;"></i> WHAT'S INCLUDED
                 </h4>
-                <ul id="intModalPkgInclusions" style="list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.84rem;color:#E2E8F0;"></ul>
+                <ul id="intModalPkgInclusions" style="list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.84rem;color:#1F2937;"></ul>
             </div>
 
             <!-- Exclusions -->
             <div style="margin-bottom:24px;">
-                <h4 style="font-size:0.82rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-heading);">
-                    <i class="fas fa-circle-xmark" style="margin-right:6px;color:#FF3B30;"></i> EXCLUDED / OPTIONAL ADD-ONS
+                <h4 style="font-size:0.82rem;font-weight:800;color:#64748B;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-heading);">
+                    <i class="fas fa-circle-xmark" style="margin-right:6px;color:#EF4444;"></i> EXCLUDED / OPTIONAL ADD-ONS
                 </h4>
-                <ul id="intModalPkgExclusions" style="list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.84rem;color:#94A3B8;"></ul>
+                <ul id="intModalPkgExclusions" style="list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.84rem;color:#64748B;"></ul>
             </div>
 
             <!-- Features / Specifications -->
@@ -621,8 +1366,8 @@
             </div>
         </div>
 
-        <div style="padding:18px 28px;border-top:1px solid rgba(201,162,39,0.2);display:flex;justify-content:flex-end;gap:12px;background:#040D16;">
-            <button onclick="document.getElementById('interiorPackageDetailsModal').classList.remove('open')" style="padding:10px 20px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:#FFF;border-radius:4px;cursor:pointer;font-size:0.8rem;font-weight:700;">
+        <div style="padding:18px 28px;border-top:1px solid rgba(179,130,34,0.2);display:flex;justify-content:flex-end;gap:12px;background:#FAF8F5;">
+            <button onclick="document.getElementById('interiorPackageDetailsModal').classList.remove('open')" style="padding:10px 20px;background:#FFFFFF;border:1px solid #CBD5E1;color:#161922;border-radius:4px;cursor:pointer;font-size:0.8rem;font-weight:700;">
                 CLOSE
             </button>
             <button id="btnIntPkgRequestQuote" class="int-btn-gold" style="padding:10px 24px;font-size:0.8rem;">
@@ -688,8 +1433,8 @@
         document.getElementById('intModalPkgTitle').textContent = pkg.title;
         document.getElementById('intModalPkgSubtitle').textContent = pkg.subtitle || '';
         document.getElementById('intModalPkgPrice').innerHTML = '₹' + Number(pkg.price_per_sqft).toLocaleString() + ' <span>/ sq.ft</span>';
-        document.getElementById('intModalPkgWarranty').innerHTML = '<i class="fas fa-shield-halved" style="color:var(--gold);"></i> ' + (pkg.warranty_years || 10) + ' Yrs Hardware Warranty';
-        document.getElementById('intModalPkgDelivery').innerHTML = '<i class="fas fa-calendar-check" style="color:var(--gold);"></i> ' + (pkg.delivery_months || 2) + ' Mos Handover';
+        document.getElementById('intModalPkgWarranty').innerHTML = '<i class="fas fa-shield-halved" style="color:var(--int-gold);"></i> ' + (pkg.warranty_years || 10) + ' Yrs Hardware Warranty';
+        document.getElementById('intModalPkgDelivery').innerHTML = '<i class="fas fa-calendar-check" style="color:#16A34A;"></i> ' + (pkg.delivery_months || 2) + ' Mos Handover';
         document.getElementById('intModalPkgDescription').textContent = pkg.description || '';
 
         // Inclusions
@@ -699,11 +1444,11 @@
         if (inclusions.length > 0) {
             inclusions.forEach(item => {
                 const li = document.createElement('li');
-                li.innerHTML = '<i class="fas fa-check" style="color:#25D366;margin-right:8px;"></i>' + item;
+                li.innerHTML = '<i class="fas fa-check" style="color:#16A34A;margin-right:8px;"></i>' + item;
                 incList.appendChild(li);
             });
         } else {
-            incList.innerHTML = '<li style="color:#94A3B8;">Contact us for full custom inclusions checklist.</li>';
+            incList.innerHTML = '<li style="color:#64748B;">Contact us for full custom inclusions checklist.</li>';
         }
 
         // Exclusions
@@ -713,11 +1458,11 @@
         if (exclusions.length > 0) {
             exclusions.forEach(item => {
                 const li = document.createElement('li');
-                li.innerHTML = '<i class="fas fa-xmark" style="color:#FF3B30;margin-right:8px;"></i>' + item;
+                li.innerHTML = '<i class="fas fa-xmark" style="color:#EF4444;margin-right:8px;"></i>' + item;
                 excList.appendChild(li);
             });
         } else {
-            excList.innerHTML = '<li style="color:#94A3B8;">Optional add-ons available upon site assessment.</li>';
+            excList.innerHTML = '<li style="color:#64748B;">Optional add-ons available upon site assessment.</li>';
         }
 
         // Features / Specifications
@@ -730,13 +1475,13 @@
                 li.style.display = 'flex';
                 li.style.alignItems = 'center';
                 li.style.gap = '8px';
-                li.style.fontSize = '0.82rem';
-                li.style.color = '#CBD5E1';
-                li.innerHTML = '<i class="fas fa-layer-group" style="color:var(--gold);font-size:0.75rem;"></i>' + item;
+                li.style.fontSize = '0.84rem';
+                li.style.color = '#374151';
+                li.innerHTML = '<i class="fas fa-layer-group" style="color:var(--int-gold);font-size:0.75rem;"></i>' + item;
                 featList.appendChild(li);
             });
         } else {
-            featList.innerHTML = '<li style="color:#94A3B8;">Standard high-grade specifications apply.</li>';
+            featList.innerHTML = '<li style="color:#64748B;">Standard high-grade specifications apply.</li>';
         }
 
         // Action in modal scrolls to on-page enquiry
@@ -923,6 +1668,26 @@
 
     // On-Page Initialization
     document.addEventListener('DOMContentLoaded', function() {
+        // Scroll Reveal Observer
+        if ('IntersectionObserver' in window) {
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.12,
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            document.querySelectorAll('.lux-reveal').forEach(el => {
+                revealObserver.observe(el);
+            });
+        } else {
+            document.querySelectorAll('.lux-reveal').forEach(el => el.classList.add('is-visible'));
+        }
+
         // Enable Drag on Category Filters
         const editorialFilters = document.querySelector('.int-editorial-filters');
         if (editorialFilters) {
