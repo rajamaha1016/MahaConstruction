@@ -21,8 +21,8 @@ use App\Http\Controllers\MediaUploadController;
 // ─── AUTH ────────────────────────────────────────────────────────────────────
 Route::post('/auth/register',        [AuthController::class, 'register']);
 Route::post('/auth/login',           [AuthController::class, 'login']);
-Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
-Route::post('/auth/reset-password',  [AuthController::class, 'resetPassword']);
+Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:10,1');
+Route::post('/auth/reset-password',  [AuthController::class, 'resetPassword'])->middleware('throttle:10,1');
 Route::get('/auth/me',               [AuthController::class, 'me'])->middleware('auth:sanctum');
 
 // ─── PUBLIC READS ────────────────────────────────────────────────────────────
