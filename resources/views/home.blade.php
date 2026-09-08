@@ -815,11 +815,7 @@
                                     <button class="btn-whatsapp-outline" onclick="window.playVideoModal('{{ $v['videoUrl'] }}', '{{ addslashes($v['title']) }}')" style="padding:5px 12px;font-size:0.72rem;border-color:rgba(212,175,55,0.4);color:#D4AF37;cursor:pointer;">
                                         <i class="fas fa-play" style="margin-right:4px;"></i> WATCH ON SITE
                                     </button>
-                                    @if(session('admin_authenticated'))
-                                    <button type="button" onclick="adminQuickDeleteYtVideo('{{ $v['youtubeId'] }}', this)" title="Admin: Delete video from website showcase" style="padding:5px 8px;font-size:0.72rem;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);color:#F87171;border-radius:4px;cursor:pointer;line-height:1;" onmouseover="this.style.background='#EF4444';this.style.color='#FFF';" onmouseout="this.style.background='rgba(239,68,68,0.15)';this.style.color='#F87171';">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                    @endif
+
                                 </div>
                                 <a href="{{ $v['watchUrl'] ?? ('https://www.youtube.com/watch?v='.$v['youtubeId']) }}" target="_blank" style="font-size:0.72rem;color:#94A3B8;text-decoration:none;display:inline-flex;align-items:center;gap:4px;" onmouseover="this.style.color='#FF5555';" onmouseout="this.style.color='#94A3B8';">
                                     <i class="fab fa-youtube" style="color:#FF0000;"></i> YouTube <i class="fas fa-arrow-up-right-from-square" style="font-size:0.6rem;"></i>

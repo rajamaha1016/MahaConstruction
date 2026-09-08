@@ -2047,11 +2047,7 @@ body.interior-body .int-yt-dot.active {
                                         <button type="button" class="int-yt-watch-btn" onclick="window.playVideoModal('{{ $v['videoUrl'] }}', '{{ addslashes($v['title']) }}')">
                                             <i class="fas fa-play" style="font-size:0.68rem;margin-right:5px;"></i> WATCH ON SITE
                                         </button>
-                                        @if(session('admin_authenticated'))
-                                        <button type="button" onclick="adminQuickDeleteYtVideo('{{ $v['youtubeId'] }}', this)" title="Admin: Delete video from website showcase" style="padding:6px 10px;font-size:0.75rem;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.35);color:#EF4444;border-radius:6px;cursor:pointer;line-height:1;" onmouseover="this.style.background='#EF4444';this.style.color='#FFF';" onmouseout="this.style.background='rgba(239,68,68,0.12)';this.style.color='#EF4444';">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        @endif
+
                                     </div>
                                     <a href="{{ $v['watchUrl'] ?? ('https://www.youtube.com/watch?v='.$v['youtubeId']) }}" target="_blank" class="int-yt-ext-link">
                                         <i class="fab fa-youtube" style="color:#FF0000;font-size:0.85rem;"></i> YouTube <i class="fas fa-arrow-up-right-from-square" style="font-size:0.6rem;"></i>
@@ -2837,6 +2833,59 @@ body.interior-body .int-yt-dot.active {
         }, true);
     }
 
+    // ── ADMIN: Quick-Delete YouTube Video (scoped outside slider so always available) ──
+    window.adminQuickDeleteYtVideo = async function(videoId, btn) {
+        if (!confirm('⚠️ Admin Action\n\nRemove this video from the website showcase?\n\nThe video stays on YouTube — it will just be hidden from this site. You can restore it anytime in the Admin Dashboard → YouTube Videos tab.')) return;
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:4px;"></i>Removing…';
+        btn.style.pointerEvents = 'none';
+        try {
+            const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            const res = await fetch('/api/youtube/videos/' + videoId, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json' }
+            });
+            const data = await res.json();
+            if (data.success) {
+                // Animate the card out smoothly
+                const slide = btn.closest('.int-yt-slide');
+                if (slide) {
+                    slide.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+                    slide.style.opacity = '0';
+                    slide.style.transform = 'scale(0.85)';
+                    setTimeout(() => {
+                        slide.remove();
+                        // Refresh slider state if available
+                        const track = document.getElementById('interiorYtSliderTrack');
+                        const remaining = track ? track.querySelectorAll('.int-yt-slide').length : 0;
+                        if (remaining === 0) {
+                            const wrapper = document.getElementById('interiorYtSliderWrapper');
+                            if (wrapper) wrapper.closest('.int-yt-slider-container').innerHTML = '<div style="text-align:center;padding:40px;color:#888;"><i class="fab fa-youtube" style="font-size:2rem;color:#FF0000;display:block;margin-bottom:10px;"></i><p>All videos removed from showcase. Add new videos from the Admin Dashboard.</p></div>';
+                        }
+                    }, 350);
+                }
+                // Brief success toast instead of blocking alert
+                const toast = document.createElement('div');
+                toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#10B981;color:#FFF;padding:12px 24px;border-radius:12px;font-weight:700;font-size:0.88rem;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,0.3);display:flex;align-items:center;gap:8px;';
+                toast.innerHTML = '<i class="fas fa-check-circle"></i> Video removed from website showcase';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            } else {
+                alert('❌ Failed: ' + (data.message || 'Unknown error'));
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+                btn.style.pointerEvents = '';
+            }
+        } catch (e) {
+            alert('❌ Network Error: ' + e.message);
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+            btn.style.pointerEvents = '';
+        }
+    };
+
     // Interior YouTube Masterclasses Slider
     function initInteriorYtSlider() {
         const wrapper = document.getElementById('interiorYtSliderWrapper');
@@ -2940,46 +2989,6 @@ body.interior-body .int-yt-dot.active {
         }, { passive: true });
 
         window.addEventListener('resize', () => updateSlider(false));
-
-        window.adminQuickDeleteYtVideo = async function(videoId, btn) {
-            if (!confirm('Admin Action: Remove this video from the website showcase? You can restore it anytime in the Admin Dashboard.')) return;
-            const originalHtml = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            try {
-                const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-                const res = await fetch('/api/youtube/videos/' + videoId, {
-                    method: 'DELETE',
-                    credentials: 'include',
-                    headers: {
-                        'X-CSRF-TOKEN': csrf,
-                        'Accept': 'application/json'
-                    }
-                });
-                const data = await res.json();
-                if (data.success) {
-                    const slide = btn.closest('.int-yt-slide');
-                    if (slide) {
-                        slide.style.transition = 'all 0.35s ease';
-                        slide.style.opacity = '0';
-                        slide.style.transform = 'scale(0.85)';
-                        setTimeout(() => {
-                            slide.remove();
-                            updateSlider(false);
-                        }, 350);
-                    }
-                    alert('✅ Video removed from website showcase.');
-                } else {
-                    alert('Failed: ' + (data.message || 'Error'));
-                    btn.disabled = false;
-                    btn.innerHTML = originalHtml;
-                }
-            } catch (e) {
-                alert('Error: ' + e.message);
-                btn.disabled = false;
-                btn.innerHTML = originalHtml;
-            }
-        };
 
         updateSlider(false);
         startAutoPlay();
