@@ -406,6 +406,375 @@ body.interior-body .int-carousel-dot.active {
     background: var(--int-gold) !important;
 }
 
+/* ─── MULTI-IMAGE PROJECT CARD SLIDESHOW & BADGES ─── */
+body.interior-body .int-card-slideshow-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+body.interior-body .int-card-slide-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transform: scale(1);
+    transition: opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0, 0.2, 1);
+    pointer-events: none;
+}
+body.interior-body .int-card-slide-img.active {
+    opacity: 1;
+    z-index: 1;
+}
+body.interior-body .int-video-slide-card:hover .int-card-slide-img.active {
+    transform: scale(1.06);
+}
+
+body.interior-body .int-card-top-badges {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    z-index: 5;
+}
+body.interior-body .int-card-photos-badge {
+    background: rgba(11, 19, 43, 0.9);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    color: #FFFFFF;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    font-family: var(--font-heading);
+}
+body.interior-body .int-card-photos-badge:hover {
+    background: var(--int-gold);
+    color: #050B14;
+    border-color: var(--int-gold);
+    transform: translateY(-1px);
+}
+body.interior-body .int-card-photos-badge i {
+    color: var(--int-gold);
+    font-size: 0.72rem;
+}
+body.interior-body .int-card-photos-badge:hover i {
+    color: #050B14;
+}
+
+body.interior-body .int-card-slide-dots {
+    position: absolute;
+    bottom: 145px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    z-index: 5;
+    padding: 0 16px;
+    pointer-events: auto;
+}
+body.interior-body .int-card-mini-dot {
+    width: 14px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+body.interior-body .int-card-mini-dot.active {
+    background: var(--int-gold);
+    width: 24px;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+}
+
+body.interior-body .int-card-actions-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    width: 100%;
+}
+body.interior-body .int-card-action-btn {
+    padding: 8px 12px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    border-radius: 6px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.25s ease;
+    font-family: var(--font-heading);
+}
+body.interior-body .int-btn-view-photos {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.95);
+    color: #0B132B;
+    border: 1px solid rgba(212, 175, 55, 0.6);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+body.interior-body .int-btn-view-photos:hover {
+    background: var(--int-gold);
+    color: #050B14;
+    border-color: var(--int-gold);
+    box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+}
+body.interior-body .int-btn-watch-tour {
+    background: linear-gradient(135deg, #DFAB3E, #B38222);
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 12px;
+    box-shadow: 0 2px 8px rgba(179,130,34,0.4);
+}
+body.interior-body .int-btn-watch-tour:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+/* ─── FULL RESOLUTION LIGHTBOX GALLERY MODAL ─── */
+.int-gallery-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 7, 18, 0.96);
+    backdrop-filter: blur(20px);
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 28px;
+    color: #FFFFFF;
+    animation: intModalFadeIn 0.25s ease;
+}
+@keyframes intModalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.int-lightbox-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+    padding-bottom: 14px;
+    gap: 16px;
+}
+.int-lightbox-title-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.int-lightbox-tagline {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--int-gold);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-family: var(--font-heading);
+}
+.int-lightbox-title {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #FFFFFF;
+    letter-spacing: 0.04em;
+    font-family: var(--font-heading);
+    margin: 0;
+}
+.int-lightbox-counter-badge {
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    color: var(--int-gold);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+}
+.int-lightbox-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.int-lightbox-video-btn {
+    background: linear-gradient(135deg, #DFAB3E, #B38222);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-heading);
+    transition: all 0.2s ease;
+}
+.int-lightbox-video-btn:hover {
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+}
+.int-lightbox-close-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+}
+.int-lightbox-close-btn:hover {
+    background: #EF4444;
+    border-color: #EF4444;
+    color: #FFFFFF;
+    transform: rotate(90deg);
+}
+
+.int-lightbox-stage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 12px 0;
+    overflow: hidden;
+}
+.int-lightbox-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(11, 19, 43, 0.85);
+    border: 1.5px solid rgba(212, 175, 55, 0.5);
+    color: var(--int-gold);
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    z-index: 20;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+}
+.int-lightbox-arrow:hover {
+    background: var(--int-gold);
+    color: #050B14;
+    border-color: var(--int-gold);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.7);
+    transform: translateY(-50%) scale(1.1);
+}
+.int-lightbox-arrow.prev { left: 16px; }
+.int-lightbox-arrow.next { right: 16px; }
+
+.int-lightbox-img-wrap {
+    position: relative;
+    max-width: 88vw;
+    max-height: 64vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.int-lightbox-main-img {
+    max-width: 100%;
+    max-height: 64vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 30px rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.int-lightbox-footer {
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.int-lightbox-desc {
+    font-size: 0.82rem;
+    color: #94A3B8;
+    text-align: center;
+    max-width: 700px;
+    line-height: 1.4;
+}
+.int-lightbox-thumbs-track {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    max-width: 90vw;
+    padding: 6px 12px 10px;
+    scroll-behavior: smooth;
+}
+.int-lightbox-thumb {
+    position: relative;
+    width: 72px;
+    height: 50px;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    opacity: 0.55;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+    background: #0B132B;
+}
+.int-lightbox-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.int-lightbox-thumb:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
+.int-lightbox-thumb.active {
+    border-color: var(--int-gold);
+    opacity: 1;
+    transform: scale(1.08);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.6);
+}
+.int-lightbox-thumb-num {
+    position: absolute;
+    bottom: 2px;
+    right: 3px;
+    background: rgba(5, 11, 20, 0.85);
+    color: var(--int-gold);
+    font-size: 0.58rem;
+    font-weight: 800;
+    padding: 1px 4px;
+    border-radius: 3px;
+}
+
 /* ─── SECTION 3: CLIENT TESTIMONIALS (#interior-testimonials) */
 body.interior-body .int-testimonials-section {
     background: #F8F6F2 !important;
@@ -743,6 +1112,349 @@ body.interior-body .interior-footer-nav a:hover {
     opacity: 1;
     transform: translateY(0);
 }
+
+/* ─── SECTION: LEARN BEFORE YOU DESIGN (#interior-learn) ─── */
+body.interior-body .int-learn-section {
+    padding: 100px 0;
+    background: linear-gradient(180deg, #FAF8F4 0%, #FFFFFF 50%, #FAF8F4 100%);
+    position: relative;
+    border-bottom: 1px solid rgba(200, 149, 43, 0.18);
+}
+
+body.interior-body .int-yt-channel-banner {
+    background: #FFFFFF;
+    border: 1.5px solid var(--int-card-border);
+    border-radius: 20px;
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 32px auto 36px;
+    max-width: 860px;
+    box-shadow: var(--int-shadow-card);
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+body.interior-body .int-yt-avatar {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--int-gold);
+    box-shadow: 0 4px 14px rgba(200, 149, 43, 0.25);
+}
+
+body.interior-body .int-yt-ch-name {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--int-charcoal);
+}
+
+body.interior-body .int-yt-ch-meta {
+    font-size: 0.8rem;
+    color: var(--int-slate-muted);
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+body.interior-body .int-yt-live-pill {
+    background: rgba(37, 211, 102, 0.12);
+    border: 1px solid rgba(37, 211, 102, 0.35);
+    color: #128C7E;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+body.interior-body .int-yt-live-pill i {
+    font-size: 0.4rem;
+    animation: luxDotPulse 1.8s infinite;
+}
+
+body.interior-body .int-yt-sub-btn {
+    display: inline-flex;
+    align-items: center;
+    background: #FF0000;
+    color: #FFFFFF;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 10px 22px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(255, 0, 0, 0.25);
+}
+body.interior-body .int-yt-sub-btn:hover {
+    background: #D90000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(255, 0, 0, 0.4);
+    color: #FFFFFF;
+}
+
+/* Slider Track & Cards */
+body.interior-body .int-yt-slider-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 12px 4px 24px;
+}
+
+body.interior-body .int-yt-slider-track {
+    display: flex;
+    gap: 24px;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+}
+
+body.interior-body .int-yt-slide {
+    flex: 0 0 calc((100% - 48px) / 3);
+    min-width: 300px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+    body.interior-body .int-yt-slide {
+        flex: 0 0 calc((100% - 24px) / 2);
+    }
+}
+@media (max-width: 680px) {
+    body.interior-body .int-yt-slide {
+        flex: 0 0 100%;
+        min-width: 100%;
+    }
+}
+
+body.interior-body .int-yt-card {
+    background: #FFFFFF;
+    border: 1.5px solid var(--int-card-border);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--int-shadow-card);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+body.interior-body .int-yt-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--int-gold);
+    box-shadow: var(--int-shadow-hover);
+}
+
+body.interior-body .int-yt-thumb-box {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: #0F172A;
+    overflow: hidden;
+    cursor: pointer;
+}
+body.interior-body .int-yt-thumb-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+body.interior-body .int-yt-card:hover .int-yt-thumb-box img {
+    transform: scale(1.06);
+}
+
+body.interior-body .int-yt-duration-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(4px);
+    color: #F8FAFC;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+body.interior-body .int-yt-tag-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(4px);
+    color: #FFFFFF;
+    font-size: 0.62rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+}
+
+body.interior-body .int-yt-play-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+body.interior-body .int-yt-card:hover .int-yt-play-overlay {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+body.interior-body .int-yt-play-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--int-gold);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    box-shadow: 0 0 20px var(--int-gold-glow);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+body.interior-body .int-yt-play-circle i {
+    margin-left: 2px;
+}
+body.interior-body .int-yt-card:hover .int-yt-play-circle {
+    transform: scale(1.15);
+    background: var(--int-gold-hover);
+}
+
+body.interior-body .int-yt-content {
+    padding: 18px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+body.interior-body .int-yt-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.7rem;
+    color: var(--int-slate-muted);
+    margin-bottom: 8px;
+}
+
+body.interior-body .int-yt-card-title {
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--int-charcoal);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+body.interior-body .int-yt-action-row {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(200, 149, 43, 0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+body.interior-body .int-yt-watch-btn {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--int-gold-border);
+    background: rgba(200, 149, 43, 0.08);
+    color: var(--int-gold);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+body.interior-body .int-yt-watch-btn:hover {
+    background: var(--int-gold);
+    color: #FFFFFF;
+}
+
+body.interior-body .int-yt-ext-link {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--int-slate-muted);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s;
+}
+body.interior-body .int-yt-ext-link:hover {
+    color: #FF0000;
+}
+
+/* Slider Controls */
+body.interior-body .int-yt-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 28px;
+}
+
+body.interior-body .int-yt-arrow-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--int-gold-border);
+    background: #FFFFFF;
+    color: var(--int-gold);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--int-shadow-subtle);
+    transition: all 0.25s ease;
+}
+body.interior-body .int-yt-arrow-btn:hover {
+    background: var(--int-gold);
+    color: #FFFFFF;
+    border-color: var(--int-gold);
+    transform: scale(1.08);
+}
+
+body.interior-body .int-yt-dots {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+body.interior-body .int-yt-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(200, 149, 43, 0.25);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+body.interior-body .int-yt-dot.active {
+    width: 24px;
+    border-radius: 4px;
+    background: var(--int-gold);
+}
 </style>
 @endpush
 
@@ -845,30 +1557,71 @@ body.interior-body .interior-footer-nav a:hover {
             <div class="int-carousel-track" id="interiorProjectsTrack">
                 @forelse($projects as $i => $project)
                 @php
-                    $coverImg = ($project->image_urls && count($project->image_urls) > 0) ? $project->image_urls[0] : 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80';
+                    $allImages = [];
+                    if (is_array($project->image_urls) && count($project->image_urls) > 0) {
+                        $allImages = array_values(array_filter($project->image_urls));
+                    }
+                    if (empty($allImages)) {
+                        $allImages = ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80'];
+                    }
+                    $imageCount = count($allImages);
                 @endphp
                 <div class="int-video-slide-card interior-project-card"
+                     id="interiorProjectCard_{{ $i }}"
+                     data-card-index="{{ $i }}"
                      data-category="{{ $project->category }}"
-                     @if($project->video_url)
-                     onclick="window.playVideoModal('{{ $project->video_url }}', '{{ addslashes($project->name) }}')"
-                     @endif>
-                    <!-- Background Image -->
-                    <img src="{{ $coverImg }}" alt="{{ $project->name }}" class="int-video-card-bg" loading="lazy">
+                     data-slideshow="{{ $imageCount > 1 ? 'true' : 'false' }}"
+                     onclick="window.openInteriorGalleryModal(event, {{ $i }}, 0)">
+                    
+                    <!-- Multi-Image Automatic Slideshow Container -->
+                    <div class="int-card-slideshow-container" id="cardSlideshow_{{ $i }}">
+                        @foreach($allImages as $imgIdx => $imgSrc)
+                        <img src="{{ $imgSrc }}" 
+                             alt="{{ $project->name }} - Photo {{ $imgIdx + 1 }}" 
+                             class="int-card-slide-img {{ $imgIdx === 0 ? 'active' : '' }}" 
+                             data-slide-index="{{ $imgIdx }}"
+                             loading="lazy"
+                             onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80'">
+                        @endforeach
+                    </div>
+                    
+                    <!-- Ambient Shadow & Gradient Overlay for readability -->
                     <div class="int-video-card-shade"></div>
 
-                    <!-- Top Tag -->
+                    <!-- Top Left: Project Tag -->
                     <span class="int-video-card-tag">
                         PROJECT {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}
                     </span>
 
-                    <!-- Category Badge -->
-                    <span class="int-video-card-badge">
-                        {{ strtoupper(str_replace('-', ' ', $project->category)) }}
-                    </span>
+                    <!-- Top Right Badges: Photo Counter + Category -->
+                    <div class="int-card-top-badges">
+                        <span class="int-card-photos-badge" 
+                              onclick="event.stopPropagation(); window.openInteriorGalleryModal(event, {{ $i }}, 0);"
+                              title="Click to view all {{ $imageCount }} photos">
+                            <i class="fas fa-images"></i> 
+                            <span class="int-card-cur-slide-num">1</span>/{{ $imageCount }}
+                        </span>
+                        <span class="int-video-card-badge">
+                            {{ strtoupper(str_replace('-', ' ', $project->category)) }}
+                        </span>
+                    </div>
 
-                    <!-- Center Golden Play Button -->
+                    <!-- Slide Progress Dots (Only if multiple photos) -->
+                    @if($imageCount > 1)
+                    <div class="int-card-slide-dots" id="cardDots_{{ $i }}">
+                        @foreach($allImages as $dotIdx => $dotSrc)
+                        <span class="int-card-mini-dot {{ $dotIdx === 0 ? 'active' : '' }}" 
+                              onclick="event.stopPropagation(); window.setCardSlide({{ $i }}, {{ $dotIdx }})"
+                              title="Slide {{ $dotIdx + 1 }}"></span>
+                        @endforeach
+                    </div>
+                    @endif
+
+                    <!-- Center Video Play Button (if walkthrough video is attached) -->
                     @if($project->video_url)
-                    <div class="int-video-play-btn" title="Watch Video Tour">
+                    <div class="int-video-play-btn" 
+                         onclick="event.stopPropagation(); window.playVideoModal('{{ $project->video_url }}', '{{ addslashes($project->name) }}')" 
+                         title="Watch Video Tour">
                         <i class="fas fa-play" style="margin-left:3px;"></i>
                     </div>
                     @endif
@@ -884,15 +1637,21 @@ body.interior-body .interior-footer-nav a:hover {
                         <div class="int-video-card-snippet">{{ $project->description }}</div>
                         @endif
 
-                        @if($project->video_url)
-                        <div class="int-video-card-action">
-                            <i class="fas fa-play"></i> WATCH VIDEO TOUR
+                        <!-- Action Buttons: Both Video and View Photos -->
+                        <div class="int-card-actions-row">
+                            <button type="button" 
+                                    class="int-card-action-btn int-btn-view-photos" 
+                                    onclick="event.stopPropagation(); window.openInteriorGalleryModal(event, {{ $i }}, 0)">
+                                <i class="fas fa-expand-arrows-alt"></i> VIEW PHOTOS ({{ $imageCount }})
+                            </button>
+                            @if($project->video_url)
+                            <button type="button" 
+                                    class="int-card-action-btn int-btn-watch-tour" 
+                                    onclick="event.stopPropagation(); window.playVideoModal('{{ $project->video_url }}', '{{ addslashes($project->name) }}')">
+                                <i class="fas fa-play"></i> TOUR
+                            </button>
+                            @endif
                         </div>
-                        @else
-                        <div class="int-video-card-action">
-                            <i class="fas fa-couch"></i> {{ $project->duration ?: 'TURNKEY FITOUT' }}
-                        </div>
-                        @endif
                     </div>
                 </div>
                 @empty
@@ -1197,6 +1956,151 @@ body.interior-body .interior-footer-nav a:hover {
     </div>
 </section>
 
+<!-- =======================================================
+     SECTION: LEARN BEFORE YOU DESIGN (#interior-learn)
+======================================================= -->
+<section class="int-learn-section" id="interior-learn">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="int-sec-header-editorial lux-reveal" style="text-align:center;">
+            <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.3);border-radius:20px;padding:6px 18px;margin-bottom:14px;">
+                <i class="fab fa-youtube" style="color:#FF0000;font-size:0.95rem;"></i>
+                <span style="font-size:0.72rem;font-weight:800;letter-spacing:0.14em;color:#FF5555;text-transform:uppercase;">05 — YOUTUBE MASTERCLASSES & SITE TOURS</span>
+            </div>
+            <h2 class="int-sec-title-dark" style="margin-top:4px;">
+                LEARN BEFORE YOU <span style="color:var(--int-gold);">DESIGN</span> — MASTERCLASSES
+            </h2>
+            <p class="int-sec-sub-dark" style="max-width:700px;margin:10px auto 0;">
+                "Expert interior space planning, modular kitchen design guides, material selection secrets, and live site tour walk-throughs."
+            </p>
+        </div>
+
+        <!-- Channel Info Banner -->
+        <div class="int-yt-channel-banner lux-reveal">
+            <div style="display:flex;align-items:center;gap:16px;">
+                <img src="{{ $channelMeta['avatar'] ?? asset('logo.jpg') }}" alt="{{ $channelMeta['name'] ?? 'Maha Interior' }}"
+                     class="int-yt-avatar"
+                     onerror="this.src='{{ asset('logo.jpg') }}'">
+                <div style="text-align:left;">
+                    <div class="int-yt-ch-name">{{ $channelMeta['name'] ?? 'Maha Constructions & Interior' }}</div>
+                    <div class="int-yt-ch-meta">
+                        <span>{{ $yt_channel_handle ?? '@mahaconstructions2013' }}</span>
+                        @if(!empty($channelMeta['subs']))
+                        <span> • {{ $channelMeta['subs'] }} Subscribers</span>
+                        @endif
+                        <span class="int-yt-live-pill"><i class="fas fa-circle"></i> LIVE SYNC</span>
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <a href="{{ $yt_channel_url ?? 'https://www.youtube.com/@mahaconstructions2013' }}" target="_blank" class="int-yt-sub-btn">
+                    <i class="fab fa-youtube" style="margin-right:6px;"></i> SUBSCRIBE
+                </a>
+            </div>
+        </div>
+
+        <!-- Video Slider Container -->
+        <div class="int-yt-slider-container lux-reveal">
+            @if(!empty($syncedVideos) && count($syncedVideos) > 0)
+            <div class="int-yt-slider-wrapper" id="interiorYtSliderWrapper">
+                <div class="int-yt-slider-track" id="interiorYtSliderTrack">
+                    @foreach($syncedVideos as $v)
+                    <div class="int-yt-slide">
+                        <div class="int-yt-card">
+                            <!-- Thumbnail Frame with Overlay -->
+                            <div class="int-yt-thumb-box" onclick="window.playVideoModal('{{ $v['videoUrl'] }}', '{{ addslashes($v['title']) }}')">
+                                <img src="{{ $v['thumbnail'] }}" alt="{{ $v['title'] }}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/{{ $v['youtubeId'] }}/hqdefault.jpg'">
+                                
+                                <div class="int-yt-duration-badge">
+                                    <i class="fas fa-play" style="font-size:0.55rem;margin-right:4px;color:var(--int-gold);"></i>{{ $v['duration'] ?? 'Masterclass' }}
+                                </div>
+
+                                <div class="int-yt-tag-badge">
+                                    <i class="fab fa-youtube" style="color:#FF0000;margin-right:4px;"></i>
+                                    <span>MAHA INTERIOR</span>
+                                </div>
+
+                                <div class="int-yt-play-overlay">
+                                    <div class="int-yt-play-circle">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Content Info -->
+                            <div class="int-yt-content">
+                                <div>
+                                    <div class="int-yt-meta-row">
+                                        @if(!empty($v['views']))
+                                        <span style="color:var(--int-gold);font-weight:700;"><i class="fas fa-eye" style="margin-right:3px;"></i>{{ $v['views'] }}</span>
+                                        <span>•</span>
+                                        @endif
+                                        <span><i class="fas fa-clock" style="margin-right:3px;"></i>{{ $v['published'] ?? 'Recent' }}</span>
+                                    </div>
+                                    <h4 class="int-yt-card-title" title="{{ $v['title'] }}">
+                                        {{ $v['title'] }}
+                                    </h4>
+                                </div>
+
+                                <div class="int-yt-action-row" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+                                    <div style="display:flex;gap:6px;align-items:center;">
+                                        <button type="button" class="int-yt-watch-btn" onclick="window.playVideoModal('{{ $v['videoUrl'] }}', '{{ addslashes($v['title']) }}')">
+                                            <i class="fas fa-play" style="font-size:0.68rem;margin-right:5px;"></i> WATCH ON SITE
+                                        </button>
+                                        @if(session('admin_authenticated'))
+                                        <button type="button" onclick="adminQuickDeleteYtVideo('{{ $v['youtubeId'] }}', this)" title="Admin: Delete video from website showcase" style="padding:6px 10px;font-size:0.75rem;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.35);color:#EF4444;border-radius:6px;cursor:pointer;line-height:1;" onmouseover="this.style.background='#EF4444';this.style.color='#FFF';" onmouseout="this.style.background='rgba(239,68,68,0.12)';this.style.color='#EF4444';">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        @endif
+                                    </div>
+                                    <a href="{{ $v['watchUrl'] ?? ('https://www.youtube.com/watch?v='.$v['youtubeId']) }}" target="_blank" class="int-yt-ext-link">
+                                        <i class="fab fa-youtube" style="color:#FF0000;font-size:0.85rem;"></i> YouTube <i class="fas fa-arrow-up-right-from-square" style="font-size:0.6rem;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Slider Controls -->
+            <div class="int-yt-controls">
+                <button type="button" class="int-yt-arrow-btn" id="interiorYtPrevBtn" aria-label="Previous video">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="int-yt-dots" id="interiorYtDots"></div>
+                <button type="button" class="int-yt-arrow-btn" id="interiorYtNextBtn" aria-label="Next video">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            @else
+            <!-- Fallback Empty / Loading State -->
+            <div style="text-align:center;padding:50px 20px;background:#FFFFFF;border:1.5px dashed rgba(200,149,43,0.4);border-radius:24px;box-shadow:var(--int-shadow-card);">
+                <i class="fab fa-youtube" style="font-size:3rem;color:#FF0000;margin-bottom:12px;display:inline-block;"></i>
+                <h3 style="font-family:var(--font-heading);font-size:1.3rem;font-weight:800;color:var(--int-charcoal);margin-bottom:6px;">YouTube Channel Syncing</h3>
+                <p style="color:var(--int-slate-muted);font-size:0.88rem;max-width:520px;margin:0 auto 16px;">
+                    Interior masterclasses and walkthrough tours are syncing from {{ $yt_channel_handle ?? '@mahaconstructions2013' }}. Check back shortly or visit our YouTube channel directly.
+                </p>
+                <a href="{{ $yt_channel_url ?? 'https://www.youtube.com/@mahaconstructions2013' }}" target="_blank" class="int-btn-gold" style="display:inline-flex;">
+                    <i class="fab fa-youtube" style="margin-right:8px;"></i> VISIT YOUTUBE CHANNEL
+                </a>
+            </div>
+            @endif
+        </div>
+
+        <!-- Bottom CTA Row -->
+        <div style="text-align:center;margin-top:36px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;">
+            <a href="{{ $yt_channel_url ?? 'https://www.youtube.com/@mahaconstructions2013' }}" target="_blank" class="int-btn-gold" style="background:linear-gradient(135deg, #FF0000 0%, #CC0000 100%);border-color:#FF0000;color:#FFFFFF;box-shadow:0 8px 24px rgba(255,0,0,0.25);">
+                <i class="fab fa-youtube" style="margin-right:6px;"></i> SUBSCRIBE ON YOUTUBE
+            </a>
+            <a href="{{ rtrim($yt_channel_url ?? 'https://www.youtube.com/@mahaconstructions2013', '/') }}/videos" target="_blank" class="int-btn-outline" style="border-color:var(--int-gold);color:var(--int-charcoal);">
+                <i class="fas fa-video" style="margin-right:6px;color:var(--int-gold);"></i> EXPLORE ALL MASTERCLASSES & TOURS
+            </a>
+        </div>
+    </div>
+</section>
+
 
 <!-- Section 2: Services anchor (hidden stub to maintain isolation and test contracts) -->
 <div id="interior-services" style="display:none;" aria-hidden="true">
@@ -1377,6 +2281,57 @@ body.interior-body .interior-footer-nav a:hover {
     </div>
 </div>
 
+<!-- =======================================================
+     INTERIOR HIGH-RESOLUTION LIGHTBOX GALLERY MODAL
+======================================================= -->
+<div class="int-gallery-modal-overlay" id="interiorGalleryModal" role="dialog" aria-modal="true" aria-labelledby="intGalleryTitle" onclick="if(event.target===this) window.closeInteriorGalleryModal()">
+    <!-- Top Header Bar -->
+    <div class="int-lightbox-header">
+        <div class="int-lightbox-title-box">
+            <span class="int-lightbox-tagline" id="intGalleryTagline">
+                <span id="intGalleryCategory">LIVING ROOM</span> • <span id="intGalleryLocation">TAMIL NADU</span>
+            </span>
+            <h3 class="int-lightbox-title" id="intGalleryTitle">Project Gallery</h3>
+        </div>
+
+        <div class="int-lightbox-header-actions">
+            <span class="int-lightbox-counter-badge" id="intGalleryCounter">PHOTO 1 OF 1</span>
+            
+            <button type="button" class="int-lightbox-video-btn" id="intGalleryVideoBtn" style="display:none;" title="Watch Video Walkthrough">
+                <i class="fas fa-play"></i> <span>VIDEO TOUR</span>
+            </button>
+
+            <button type="button" class="int-lightbox-close-btn" onclick="window.closeInteriorGalleryModal()" aria-label="Close Lightbox (Esc)" title="Close Lightbox (Esc)">
+                ✕
+            </button>
+        </div>
+    </div>
+
+    <!-- Center Stage with Large Image & Prev/Next Arrows -->
+    <div class="int-lightbox-stage">
+        <!-- Prev Arrow -->
+        <button type="button" class="int-lightbox-arrow prev" onclick="window.changeInteriorGallerySlide(-1)" aria-label="Previous Photo (Left Arrow)" title="Previous (Left Arrow)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <!-- Main Photo Wrap -->
+        <div class="int-lightbox-img-wrap">
+            <img id="intGalleryMainImg" src="" alt="Project Photo" class="int-lightbox-main-img">
+        </div>
+
+        <!-- Next Arrow -->
+        <button type="button" class="int-lightbox-arrow next" onclick="window.changeInteriorGallerySlide(1)" aria-label="Next Photo (Right Arrow)" title="Next (Right Arrow)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Bottom Strip: Caption & Thumbnail Strip -->
+    <div class="int-lightbox-footer">
+        <div class="int-lightbox-desc" id="intGalleryDescription"></div>
+        <div class="int-lightbox-thumbs-track" id="intGalleryThumbsTrack"></div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -1404,6 +2359,222 @@ body.interior-body .interior-footer-nav a:hover {
 
     // Global Packages Data & Safe Parser
     window.interiorPackagesData = @json($packages);
+
+    // Global Projects Data for Gallery & Lightbox
+    window.interiorProjectsData = @json($projects);
+
+    let currentGalleryProjectIdx = 0;
+    let currentGalleryPhotoIdx = 0;
+
+    window.openInteriorGalleryModal = function(event, projectIdx, photoIdx = 0) {
+        if (event) event.stopPropagation();
+        currentGalleryProjectIdx = projectIdx;
+        currentGalleryPhotoIdx = photoIdx;
+
+        const project = window.interiorProjectsData[projectIdx];
+        if (!project) return;
+
+        const modal = document.getElementById('interiorGalleryModal');
+        if (!modal) return;
+
+        renderGallerySlide();
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeInteriorGalleryModal = function() {
+        const modal = document.getElementById('interiorGalleryModal');
+        if (modal) modal.style.display = 'none';
+        document.body.style.overflow = '';
+    };
+
+    window.changeInteriorGallerySlide = function(direction) {
+        const project = window.interiorProjectsData[currentGalleryProjectIdx];
+        if (!project) return;
+        const images = (project.image_urls && Array.isArray(project.image_urls) && project.image_urls.length > 0)
+            ? project.image_urls
+            : ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80'];
+
+        currentGalleryPhotoIdx += direction;
+        if (currentGalleryPhotoIdx < 0) currentGalleryPhotoIdx = images.length - 1;
+        if (currentGalleryPhotoIdx >= images.length) currentGalleryPhotoIdx = 0;
+
+        renderGallerySlide();
+    };
+
+    window.setInteriorGallerySlide = function(photoIdx) {
+        currentGalleryPhotoIdx = photoIdx;
+        renderGallerySlide();
+    };
+
+    function renderGallerySlide() {
+        const project = window.interiorProjectsData[currentGalleryProjectIdx];
+        if (!project) return;
+        const images = (project.image_urls && Array.isArray(project.image_urls) && project.image_urls.length > 0)
+            ? project.image_urls
+            : ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80'];
+
+        if (currentGalleryPhotoIdx < 0) currentGalleryPhotoIdx = 0;
+        if (currentGalleryPhotoIdx >= images.length) currentGalleryPhotoIdx = images.length - 1;
+
+        // Title and Meta
+        const titleEl = document.getElementById('intGalleryTitle');
+        const catEl = document.getElementById('intGalleryCategory');
+        const locEl = document.getElementById('intGalleryLocation');
+        const countEl = document.getElementById('intGalleryCounter');
+
+        if (titleEl) titleEl.textContent = project.name;
+        if (catEl) catEl.textContent = (project.category || 'Interior Space').replace(/-/g, ' ').toUpperCase();
+        if (locEl) locEl.textContent = project.location || 'Tamil Nadu';
+        if (countEl) countEl.textContent = `PHOTO ${currentGalleryPhotoIdx + 1} OF ${images.length}`;
+
+        // Description
+        const descEl = document.getElementById('intGalleryDescription');
+        if (descEl) {
+            descEl.textContent = project.description || `${project.name} - Designed and executed with bespoke luxury finishes by Maha Constructions.`;
+        }
+
+        // Walkthrough Video Button
+        const videoBtn = document.getElementById('intGalleryVideoBtn');
+        if (videoBtn) {
+            if (project.video_url) {
+                videoBtn.style.display = 'inline-flex';
+                videoBtn.onclick = function() {
+                    window.closeInteriorGalleryModal();
+                    window.playVideoModal(project.video_url, project.name);
+                };
+            } else {
+                videoBtn.style.display = 'none';
+            }
+        }
+
+        // Main Image with smooth crossfade
+        const mainImg = document.getElementById('intGalleryMainImg');
+        if (mainImg) {
+            mainImg.style.opacity = '0';
+            mainImg.style.transform = 'scale(0.97)';
+            setTimeout(() => {
+                mainImg.src = images[currentGalleryPhotoIdx];
+                mainImg.onload = () => {
+                    mainImg.style.opacity = '1';
+                    mainImg.style.transform = 'scale(1)';
+                };
+            }, 80);
+        }
+
+        // Thumbnails Strip
+        const thumbsTrack = document.getElementById('intGalleryThumbsTrack');
+        if (thumbsTrack) {
+            thumbsTrack.innerHTML = images.map((src, i) => `
+                <div class="int-lightbox-thumb ${i === currentGalleryPhotoIdx ? 'active' : ''}" 
+                     onclick="window.setInteriorGallerySlide(${i})"
+                     title="Photo ${i + 1}">
+                    <img src="${src}" alt="Thumb ${i + 1}" onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=300&q=80'">
+                    <span class="int-lightbox-thumb-num">${i + 1}</span>
+                </div>
+            `).join('');
+
+            const activeThumb = thumbsTrack.querySelector('.int-lightbox-thumb.active');
+            if (activeThumb) {
+                activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }
+    }
+
+    // Keyboard controls for Lightbox (Left / Right / Esc)
+    window.addEventListener('keydown', function(e) {
+        const modal = document.getElementById('interiorGalleryModal');
+        if (!modal || modal.style.display !== 'flex') return;
+
+        if (e.key === 'Escape') {
+            window.closeInteriorGalleryModal();
+        } else if (e.key === 'ArrowLeft') {
+            window.changeInteriorGallerySlide(-1);
+        } else if (e.key === 'ArrowRight') {
+            window.changeInteriorGallerySlide(1);
+        }
+    });
+
+    // Automatic Project Card Slideshow
+    function initProjectCardSlideshows() {
+        const cards = document.querySelectorAll('.interior-project-card[data-slideshow="true"]');
+        
+        cards.forEach((card, cardIndex) => {
+            if (card._slideshowInitialized) return;
+            card._slideshowInitialized = true;
+
+            const slides = card.querySelectorAll('.int-card-slide-img');
+            const dots = card.querySelectorAll('.int-card-mini-dot');
+            const countNum = card.querySelector('.int-card-cur-slide-num');
+            const total = slides.length;
+            if (total <= 1) return;
+
+            let curIdx = 0;
+            let timer = null;
+            let isHovered = false;
+
+            function showSlide(newIdx) {
+                slides.forEach((s, idx) => {
+                    s.classList.toggle('active', idx === newIdx);
+                });
+                if (dots.length > 0) {
+                    dots.forEach((d, idx) => {
+                        d.classList.toggle('active', idx === newIdx);
+                    });
+                }
+                if (countNum) {
+                    countNum.textContent = (newIdx + 1);
+                }
+                curIdx = newIdx;
+            }
+
+            function nextSlide() {
+                if (isHovered) return;
+                if (card.style.display === 'none' || card.offsetParent === null) return;
+                const next = (curIdx + 1) % total;
+                showSlide(next);
+            }
+
+            // Stagger each card timer so cards cycle naturally
+            const intervalDelay = 3600 + ((cardIndex % 4) * 700);
+
+            function startTimer() {
+                if (timer) clearInterval(timer);
+                timer = setInterval(nextSlide, intervalDelay);
+            }
+
+            function stopTimer() {
+                if (timer) {
+                    clearInterval(timer);
+                    timer = null;
+                }
+            }
+
+            card.addEventListener('mouseenter', () => {
+                isHovered = true;
+                stopTimer();
+            });
+
+            card.addEventListener('mouseleave', () => {
+                isHovered = false;
+                startTimer();
+            });
+
+            card._setCardSlide = function(slideIdx) {
+                showSlide(slideIdx);
+                startTimer();
+            };
+
+            startTimer();
+        });
+    }
+
+    window.setCardSlide = function(cardIndex, slideIndex) {
+        const card = document.getElementById('interiorProjectCard_' + cardIndex);
+        if (card && typeof card._setCardSlide === 'function') {
+            card._setCardSlide(slideIndex);
+        }
+    };
 
     function parseInteriorList(val) {
         if (!val) return [];
@@ -1666,6 +2837,154 @@ body.interior-body .interior-footer-nav a:hover {
         }, true);
     }
 
+    // Interior YouTube Masterclasses Slider
+    function initInteriorYtSlider() {
+        const wrapper = document.getElementById('interiorYtSliderWrapper');
+        const track = document.getElementById('interiorYtSliderTrack');
+        const prevBtn = document.getElementById('interiorYtPrevBtn');
+        const nextBtn = document.getElementById('interiorYtNextBtn');
+        const dotsContainer = document.getElementById('interiorYtDots');
+        if (!wrapper || !track) return;
+
+        let currentIndex = 0;
+        let isHovered = false;
+        let autoPlayTimer = null;
+
+        function getVisibleCount() {
+            if (window.innerWidth <= 680) return 1;
+            if (window.innerWidth <= 1024) return 2;
+            return 3;
+        }
+
+        function updateSlider(animate = true) {
+            const slides = track.querySelectorAll('.int-yt-slide');
+            if (slides.length === 0) return;
+            const visibleCount = getVisibleCount();
+            const maxIndex = Math.max(0, slides.length - visibleCount);
+            if (currentIndex > maxIndex) currentIndex = maxIndex;
+            if (currentIndex < 0) currentIndex = 0;
+
+            const slideWidth = slides[0].offsetWidth;
+            const gap = 24;
+            const offset = currentIndex * (slideWidth + gap);
+
+            track.style.transition = animate ? 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
+            track.style.transform = `translateX(-${offset}px)`;
+
+            if (dotsContainer) {
+                dotsContainer.innerHTML = '';
+                for (let i = 0; i <= maxIndex; i++) {
+                    const dot = document.createElement('span');
+                    dot.className = `int-yt-dot ${i === currentIndex ? 'active' : ''}`;
+                    dot.addEventListener('click', () => {
+                        currentIndex = i;
+                        updateSlider(true);
+                        resetAutoPlay();
+                    });
+                    dotsContainer.appendChild(dot);
+                }
+            }
+        }
+
+        function move(dir) {
+            const slides = track.querySelectorAll('.int-yt-slide');
+            const visibleCount = getVisibleCount();
+            const maxIndex = Math.max(0, slides.length - visibleCount);
+
+            currentIndex += dir;
+            if (currentIndex > maxIndex) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = maxIndex;
+
+            updateSlider(true);
+            resetAutoPlay();
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', () => move(-1));
+        if (nextBtn) nextBtn.addEventListener('click', () => move(1));
+
+        function startAutoPlay() {
+            stopAutoPlay();
+            autoPlayTimer = setInterval(() => {
+                if (!isHovered && !document.hidden) {
+                    move(1);
+                }
+            }, 4000);
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayTimer) clearInterval(autoPlayTimer);
+            autoPlayTimer = null;
+        }
+
+        function resetAutoPlay() {
+            stopAutoPlay();
+            startAutoPlay();
+        }
+
+        wrapper.addEventListener('mouseenter', () => { isHovered = true; });
+        wrapper.addEventListener('mouseleave', () => { isHovered = false; });
+
+        let touchStartX = 0;
+        wrapper.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            isHovered = true;
+        }, { passive: true });
+        wrapper.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            isHovered = false;
+            if (touchStartX - touchEndX > 50) {
+                move(1);
+            } else if (touchEndX - touchStartX > 50) {
+                move(-1);
+            }
+        }, { passive: true });
+
+        window.addEventListener('resize', () => updateSlider(false));
+
+        window.adminQuickDeleteYtVideo = async function(videoId, btn) {
+            if (!confirm('Admin Action: Remove this video from the website showcase? You can restore it anytime in the Admin Dashboard.')) return;
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            try {
+                const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+                const res = await fetch('/api/youtube/videos/' + videoId, {
+                    method: 'DELETE',
+                    credentials: 'include',
+                    headers: {
+                        'X-CSRF-TOKEN': csrf,
+                        'Accept': 'application/json'
+                    }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const slide = btn.closest('.int-yt-slide');
+                    if (slide) {
+                        slide.style.transition = 'all 0.35s ease';
+                        slide.style.opacity = '0';
+                        slide.style.transform = 'scale(0.85)';
+                        setTimeout(() => {
+                            slide.remove();
+                            updateSlider(false);
+                        }, 350);
+                    }
+                    alert('✅ Video removed from website showcase.');
+                } else {
+                    alert('Failed: ' + (data.message || 'Error'));
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }
+            } catch (e) {
+                alert('Error: ' + e.message);
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        };
+
+        updateSlider(false);
+        startAutoPlay();
+    }
+
     // On-Page Initialization
     document.addEventListener('DOMContentLoaded', function() {
         // Scroll Reveal Observer
@@ -1704,6 +3023,9 @@ body.interior-body .interior-footer-nav a:hover {
             '.interior-project-card'
         );
 
+        // Initialize Card Image Automatic Slideshows
+        initProjectCardSlideshows();
+
         // Initialize Testimonials Carousel
         setupInteriorCarousel(
             'interiorTestimonialsTrack',
@@ -1712,6 +3034,9 @@ body.interior-body .interior-footer-nav a:hover {
             'interiorTestimonialsProgressFill',
             'interiorTestimonialsDots'
         );
+
+        // Initialize Learn Before You Design YouTube Slider
+        initInteriorYtSlider();
 
         // On-Page Project Category Filtering (Zero Page Reload)
         const filterBtns = document.querySelectorAll('.interior-filter-btn');
@@ -1811,6 +3136,7 @@ body.interior-body .interior-footer-nav a:hover {
                 'interior-testimonials',
                 'interior-engineer',
                 'interior-packages',
+                'interior-learn',
                 'interior-services',
                 'interior-enquiry'
             ];

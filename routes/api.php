@@ -109,6 +109,7 @@ Route::middleware(['admin.api.session', 'admin.auth'])->group(function () {
     Route::post('/youtube/sync',         [ApiController::class, 'syncYouTubeVideos']);
     Route::post('/youtube/settings',     [ApiController::class, 'saveYouTubeSettings']);
     Route::delete('/youtube/videos/{id}', [ApiController::class, 'deleteYouTubeVideo']);
+    Route::post('/youtube/videos/{id}/restore', [ApiController::class, 'restoreYouTubeVideo']);
 
     // Leads inbox (reading/managing submitted leads is admin-only)
     Route::get('/leads/contact',           [ApiController::class, 'getContacts']);

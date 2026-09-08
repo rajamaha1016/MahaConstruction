@@ -45,7 +45,7 @@ class PageController extends Controller
         ));
     }
 
-    public function interior()
+    public function interior(YouTubeSyncService $ytService)
     {
         $services     = Service::where('business_type', 'interior')->get();
         $projects     = Project::where('business_type', 'interior')->orderBy('id', 'desc')->get();
@@ -53,8 +53,21 @@ class PageController extends Controller
         $packages     = PackageDetail::where('business_type', 'interior')->orderBy('price_per_sqft', 'asc')->get();
         $intro_video_url = Setting::where('key', 'intro_video_url')->value('value') ?: '/uploads/1785711422_WhatsApp Video 2026-07-30 at 10.50.53 AM.mp4';
 
+        $yt_channel_url    = YouTubeSyncService::getActiveChannelUrl();
+        $ytData            = $ytService->getVideos($yt_channel_url);
+        $syncedVideos      = $ytData['videos'] ?? [];
+        $channelMeta       = [
+            'name'   => $ytData['channel_name'] ?? 'Maha Constructions',
+            'url'    => $ytData['channel_url'] ?? $yt_channel_url,
+            'avatar' => $ytData['channel_avatar'] ?? asset('logo.jpg'),
+            'subs'   => $ytData['channel_subs'] ?? '',
+            'count'  => $ytData['count'] ?? count($syncedVideos),
+        ];
+        $yt_channel_handle = YouTubeSyncService::getChannelHandle();
+
         return view('interior', compact(
-            'services', 'projects', 'testimonials', 'packages', 'intro_video_url'
+            'services', 'projects', 'testimonials', 'packages', 'intro_video_url',
+            'syncedVideos', 'channelMeta', 'yt_channel_url', 'yt_channel_handle'
         ));
     }
 

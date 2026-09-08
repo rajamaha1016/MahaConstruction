@@ -128,6 +128,35 @@ class YouTubeSyncService
     }
 
     /**
+     * Get list of excluded/hidden YouTube video IDs.
+     */
+    public static function getHiddenVideoIds(): array
+    {
+        $setting = Setting::where('key', 'youtube_hidden_video_ids')->first();
+        if ($setting && !empty($setting->value)) {
+            $ids = json_decode($setting->value, true);
+            return is_array($ids) ? array_values(array_unique($ids)) : [];
+        }
+        return [];
+    }
+
+    /**
+     * Exclude hidden/deleted videos from an array result.
+     */
+    public static function filterHiddenVideos(array $result): array
+    {
+        $hiddenIds = self::getHiddenVideoIds();
+        if (!empty($hiddenIds) && !empty($result['videos'])) {
+            $result['videos'] = array_values(array_filter($result['videos'], function($v) use ($hiddenIds) {
+                $vidId = $v['youtubeId'] ?? $v['id'] ?? '';
+                return !in_array($vidId, $hiddenIds);
+            }));
+            $result['count'] = count($result['videos']);
+        }
+        return $result;
+    }
+
+    /**
      * Fetch live channel videos with caching, multi-tier sync, and database persistence.
      */
     public function getVideos(?string $channelUrl = null, bool $forceRefresh = false): array
@@ -136,10 +165,11 @@ class YouTubeSyncService
         $cacheKey = 'yt_live_videos_' . md5($targetUrl);
 
         if (!$forceRefresh && Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
+            return self::filterHiddenVideos(Cache::get($cacheKey));
         }
 
         $result = $this->syncVideos($targetUrl);
+        $result = self::filterHiddenVideos($result);
 
         if ($result['count'] > 0) {
             Cache::put($cacheKey, $result, self::CACHE_TTL_SECONDS);
@@ -816,7 +846,7 @@ class YouTubeSyncService
             $videos = json_decode($setting->value, true) ?: [];
         }
 
-        return [
+        return self::filterHiddenVideos([
             'success'        => count($videos) > 0,
             'channel_url'    => $targetUrl,
             'channel_id'     => $channelId,
@@ -826,7 +856,7 @@ class YouTubeSyncService
             'count'          => count($videos),
             'last_synced_at' => $lastSynced,
             'videos'         => $videos,
-        ];
+        ]);
     }
 
     /**

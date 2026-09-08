@@ -862,6 +862,14 @@
                                 <span style="position:absolute;top:10px;right:10px;z-index:2;background:rgba(5,11,20,0.85);color:{{ ($project->business_type ?? 'construction') === 'interior' ? '#D4AF37' : '#25D366' }};border:1px solid rgba(212,175,55,0.3);padding:3px 8px;border-radius:6px;font-size:0.68rem;font-weight:700;text-transform:uppercase;">
                                     {{ $project->business_type ?? 'construction' }}
                                 </span>
+                                @php
+                                    $pImgCount = is_array($project->image_urls) ? count($project->image_urls) : 0;
+                                @endphp
+                                @if($pImgCount > 1)
+                                <span style="position:absolute;bottom:10px;left:10px;z-index:2;background:rgba(5,11,20,0.88);color:#F0EBE0;border:1px solid rgba(212,175,55,0.4);padding:2px 8px;border-radius:4px;font-size:0.68rem;font-weight:800;backdrop-filter:blur(4px);">
+                                    <i class="fas fa-images" style="color:#D4AF37;margin-right:4px;"></i> {{ $pImgCount }} Photos
+                                </span>
+                                @endif
                                 @if($project->video_url)
                                 <div class="video-play-overlay" onclick="window.playVideoModal('{{ $project->video_url }}')">
                                     <div class="play-btn-circle" style="width:48px;height:48px;font-size:1rem;"><i class="fas fa-play" style="margin-left:2px;"></i></div>
@@ -1258,6 +1266,13 @@
                     $ytApiKey     = ($settings['youtube_api_key'] ?? null)?->value ?? '';
                     $ytSyncedRaw  = ($settings['youtube_synced_videos'] ?? null)?->value ?? '[]';
                     $ytVideosList = json_decode($ytSyncedRaw, true) ?: [];
+                    if (empty($ytVideosList)) {
+                        try {
+                            $ytService = app(\App\Services\YouTubeSyncService::class);
+                            $ytVideosList = $ytService->getVideos($ytChannelUrl)['videos'] ?? [];
+                        } catch (\Throwable $e) {}
+                    }
+                    $ytHiddenIds  = \App\Services\YouTubeSyncService::getHiddenVideoIds();
                     $ytLastSync   = ($settings['youtube_last_synced_at'] ?? null)?->value ?? null;
                     $ytCount      = ($settings['youtube_video_count'] ?? null)?->value ?? count($ytVideosList);
                     $ytChannelName= ($settings['youtube_channel_name'] ?? null)?->value ?? 'Maha Constructions';
@@ -1345,13 +1360,13 @@
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
                         <div>
                             <h2 class="panel-header-title">CURRENTLY SYNCED VIDEOS (<span id="ytGridCount">{{ count($ytVideosList) }}</span>)</h2>
-                            <p class="panel-header-sub">These live videos are automatically visible to visitors in the "Learn Before You Build" section on the homepage.</p>
+                            <p class="panel-header-sub">These live videos are visible to visitors on both the Construction & Interior pages. Click "Delete" on any video to remove it from your site.</p>
                         </div>
                     </div>
 
                     <div id="ytVideosGrid" class="projects-grid-2">
                         @forelse($ytVideosList as $vid)
-                        <div class="project-video-card">
+                        <div class="project-video-card" id="yt-card-{{ $vid['youtubeId'] }}">
                             <div class="video-thumb-frame">
                                 <img src="{{ $vid['thumbnail'] ?? 'https://img.youtube.com/vi/'.$vid['youtubeId'].'/hqdefault.jpg' }}"
                                      alt="{{ $vid['title'] }}"
@@ -1374,16 +1389,16 @@
                                         {{ $vid['title'] }}
                                     </h4>
                                 </div>
-                                <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(212,175,55,0.12);display:flex;justify-content:space-between;align-items:center;">
-                                    <div style="display:flex;gap:6px;align-items:center;">
-                                        <button type="button" class="btn-whatsapp-outline" onclick="window.playVideoModal('{{ $vid['videoUrl'] }}', '{{ addslashes($vid['title']) }}')" style="padding:5px 10px;font-size:0.72rem;border-color:rgba(212,175,55,0.4);color:#D4AF37;cursor:pointer;">
-                                            <i class="fas fa-play" style="margin-right:4px;"></i> Preview
+                                <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(212,175,55,0.12);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                                    <div style="display:flex;gap:8px;align-items:center;">
+                                        <button type="button" class="btn-whatsapp-outline" onclick="window.playVideoModal('{{ $vid['videoUrl'] }}', '{{ addslashes($vid['title']) }}')" style="padding:6px 12px;font-size:0.75rem;border-color:rgba(212,175,55,0.4);color:#D4AF37;cursor:pointer;border-radius:6px;display:inline-flex;align-items:center;gap:5px;">
+                                            <i class="fas fa-play" style="font-size:0.7rem;"></i> Preview
                                         </button>
-                                        <button type="button" class="action-del-btn" onclick="deleteYouTubeVideoItem(event, '{{ $vid['youtubeId'] }}', this)" title="Remove Video from Website" style="padding:5px 9px;font-size:0.72rem;">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="action-del-btn" onclick="deleteYouTubeVideoItem(event, '{{ $vid['youtubeId'] }}', this)" title="Delete video from website" style="padding:6px 12px;font-size:0.75rem;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);color:#F87171;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.background='#EF4444';this.style.color='#FFF';" onmouseout="this.style.background='rgba(239,68,68,0.15)';this.style.color='#F87171';">
+                                            <i class="fas fa-trash-alt"></i> Delete
                                         </button>
                                     </div>
-                                    <a href="{{ $vid['watchUrl'] ?? 'https://www.youtube.com/watch?v='.$vid['youtubeId'] }}" target="_blank" style="font-size:0.72rem;color:#FF5555;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
+                                    <a href="{{ $vid['watchUrl'] ?? 'https://www.youtube.com/watch?v='.$vid['youtubeId'] }}" target="_blank" style="font-size:0.75rem;color:#FF5555;text-decoration:none;display:inline-flex;align-items:center;gap:5px;">
                                         <i class="fab fa-youtube"></i> Watch <i class="fas fa-arrow-up-right-from-square" style="font-size:0.6rem;"></i>
                                     </a>
                                 </div>
@@ -1392,9 +1407,32 @@
                         @empty
                         <div style="grid-column:1/-1;text-align:center;padding:40px;color:#94A3B8;">
                             <i class="fab fa-youtube" style="font-size:2.5rem;color:#FF0000;margin-bottom:10px;display:block;"></i>
-                            No videos synced yet. Click "SYNC LIVE VIDEOS NOW" to fetch your channel videos.
+                            No videos currently displayed. Click "SYNC LIVE VIDEOS NOW" to fetch your channel videos.
                         </div>
                         @endforelse
+                    </div>
+                </div>
+
+                <!-- Excluded / Removed Videos Panel -->
+                <div class="card-dark-panel" id="ytExcludedVideosPanel" style="margin-top:24px;border-color:rgba(239,68,68,0.25);{{ empty($ytHiddenIds) ? 'display:none;' : '' }}">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+                        <div>
+                            <h3 style="color:#FFF;font-size:0.95rem;margin:0 0 4px;font-weight:800;display:flex;align-items:center;gap:8px;">
+                                <i class="fas fa-ban" style="color:#EF4444;"></i> EXCLUDED / REMOVED VIDEOS (<span id="ytExcludedCount">{{ count($ytHiddenIds) }}</span>)
+                            </h3>
+                            <p style="color:#94A3B8;font-size:0.75rem;margin:0;">These videos are currently hidden from the live website. Click "Restore" on any video to place it back onto your showcase.</p>
+                        </div>
+                    </div>
+                    <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:10px;" id="ytExcludedVideosList">
+                        @foreach($ytHiddenIds as $hid)
+                        <div class="yt-excluded-badge" id="yt-excluded-{{ $hid }}" style="background:#0F172A;border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:6px 12px;display:inline-flex;align-items:center;gap:8px;font-size:0.75rem;color:#E2E8F0;">
+                            <span><i class="fab fa-youtube" style="color:#FF0000;margin-right:4px;"></i>ID: <strong>{{ $hid }}</strong></span>
+                            <a href="https://www.youtube.com/watch?v={{ $hid }}" target="_blank" style="color:#94A3B8;text-decoration:none;" title="View on YouTube"><i class="fas fa-external-link-alt" style="font-size:0.65rem;"></i></a>
+                            <button type="button" onclick="restoreYouTubeVideoItem('{{ $hid }}', this)" class="btn-gold-pill" style="padding:3px 10px;font-size:0.7rem;line-height:1;margin-left:4px;cursor:pointer;" title="Restore to Website">
+                                <i class="fas fa-undo" style="margin-right:3px;"></i> Restore
+                            </button>
+                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -1828,25 +1866,48 @@
                     <input id="p_video_url" type="text" placeholder="Or paste video / YouTube URL here" class="input-dark" style="width:100%;box-sizing:border-box;margin-top:6px;" oninput="onProjectVideoUrlChanged(this.value)">
                 </div>
 
-                <!-- Cover Image & Auto Video Frame Extractor -->
-                <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:14px;padding:14px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <label style="font-size:0.72rem;font-weight:700;color:#D4AF37;text-transform:uppercase;margin:0;">
-                            <i class="fas fa-image" style="margin-right:4px;"></i> COVER PHOTO (AUTO-EXTRACTED FROM VIDEO IF EMPTY)
-                        </label>
-                        <button type="button" onclick="captureProjectFrame()" id="btnCapturePFrame" style="display:none;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.68rem;font-weight:800;padding:3px 8px;border-radius:8px;cursor:pointer;">
+                <!-- Project Photos (Multiple Images & Slideshow Gallery Support) -->
+                <div style="background:#050B14;border:1px solid rgba(212,175,55,0.25);border-radius:14px;padding:16px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+                        <div>
+                            <label style="font-size:0.75rem;font-weight:800;color:#D4AF37;text-transform:uppercase;margin:0;display:flex;align-items:center;gap:6px;">
+                                <i class="fas fa-images"></i> PROJECT PHOTOS & GALLERY (MULTIPLE IMAGES SUPPORTED)
+                            </label>
+                            <span style="font-size:0.68rem;color:#94A3B8;display:block;margin-top:2px;">
+                                Select multiple images in a single upload. They will automatically slideshow and be viewable in full resolution!
+                            </span>
+                        </div>
+                        <button type="button" onclick="captureProjectFrame()" id="btnCapturePFrame" style="display:none;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.68rem;font-weight:800;padding:4px 10px;border-radius:8px;cursor:pointer;">
                             📸 CAPTURE FROM VIDEO
                         </button>
                     </div>
-                    <input id="p_image_file" type="file" accept="image/*" class="input-dark" style="width:100%;box-sizing:border-box;padding:8px;" onchange="previewSelectedImage(event, 'p_cover_preview_img')">
-                    <input id="p_image_url" type="text" placeholder="Or cover photo URL" class="input-dark" style="width:100%;box-sizing:border-box;margin-top:6px;">
 
-                    <!-- Live Cover Frame Preview -->
-                    <div id="p_cover_preview_box" style="margin-top:10px;display:none;align-items:center;gap:12px;background:rgba(212,175,55,0.06);padding:8px 12px;border-radius:10px;border:1px dashed rgba(212,175,55,0.3);">
-                        <img id="p_cover_preview_img" src="" style="width:70px;height:50px;object-fit:cover;border-radius:6px;border:1px solid #D4AF37;" alt="Cover Preview">
-                        <div style="font-size:0.72rem;color:#94A3B8;">
-                            <span id="p_cover_preview_status" style="color:#25D366;font-weight:700;">✓ Active Cover Frame</span>
-                            <div style="font-size:0.65rem;color:#64748b;margin-top:2px;">Will be used as project thumbnail across site</div>
+                    <!-- Multiple File Picker -->
+                    <div style="position:relative;margin-top:8px;">
+                        <input id="p_image_files" type="file" accept="image/*" multiple class="input-dark" style="width:100%;box-sizing:border-box;padding:10px;border:1px dashed rgba(212,175,55,0.4);background:rgba(212,175,55,0.03);cursor:pointer;" onchange="onProjectImagesSelected(event)">
+                        <span style="font-size:0.68rem;color:#D4AF37;margin-top:4px;display:block;">Tip: Hold Ctrl / Cmd or Shift to select multiple photos at once in the file picker.</span>
+                    </div>
+
+                    <!-- Or Paste Direct URL / Add URL -->
+                    <div style="display:flex;gap:8px;margin-top:10px;">
+                        <input id="p_single_url_input" type="text" placeholder="Or paste photo URL (https://...)" class="input-dark" style="flex:1;box-sizing:border-box;font-size:0.8rem;">
+                        <button type="button" onclick="addProjectImageUrl()" class="btn-whatsapp-outline" style="padding:6px 14px;font-size:0.75rem;white-space:nowrap;border-color:rgba(212,175,55,0.4);color:#D4AF37;cursor:pointer;">
+                            <i class="fas fa-plus"></i> ADD URL
+                        </button>
+                    </div>
+
+                    <!-- Live Gallery Preview Grid -->
+                    <div id="p_gallery_preview_container" style="margin-top:14px;display:none;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                            <span style="font-size:0.7rem;font-weight:700;color:#94A3B8;text-transform:uppercase;">
+                                SELECTED PHOTOS (<span id="p_gallery_count">0</span>) • First photo is Primary Cover
+                            </span>
+                            <button type="button" onclick="clearAllProjectImages()" style="background:none;border:none;color:#EF4444;font-size:0.68rem;font-weight:700;cursor:pointer;">
+                                <i class="fas fa-trash-alt"></i> Clear All
+                            </button>
+                        </div>
+                        <div id="p_gallery_grid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(95px, 1fr));gap:10px;">
+                            <!-- Dynamically populated thumbnails -->
                         </div>
                     </div>
                 </div>
@@ -3083,6 +3144,7 @@ async function deleteQuoteLead(event, id, btnEl) {
 // ── MODAL MANAGEMENT (CREATE & EDIT MODES) ────────────────────────
 let autoExtractedTestimonialBlob = null;
 let autoExtractedProjectBlob     = null;
+let projectGalleryItems          = [];
 
 function resetAllForms() {
     ['formTestimonial','formProject','formPackage','formPartner','formService'].forEach(id => {
@@ -3094,9 +3156,8 @@ function resetAllForms() {
         if (el) { el.style.display = 'none'; el.textContent = ''; }
     });
     document.getElementById('uploadingIndicator').style.display = 'none';
-    document.getElementById('t_cover_preview_box').style.display = 'none';
-    document.getElementById('p_cover_preview_box').style.display = 'none';
-    document.getElementById('pt_logo_preview_box').style.display = 'none';
+    const _tBox = document.getElementById('t_cover_preview_box'); if (_tBox) _tBox.style.display = 'none';
+    const _ptBox = document.getElementById('pt_logo_preview_box'); if (_ptBox) _ptBox.style.display = 'none';
     if (document.getElementById('s_cover_preview_box')) document.getElementById('s_cover_preview_box').style.display = 'none';
     document.getElementById('btnCaptureTFrame').style.display = 'none';
     document.getElementById('btnCapturePFrame').style.display = 'none';
@@ -3110,6 +3171,8 @@ function resetAllForms() {
     if (document.getElementById('pk_highlighted')) document.getElementById('pk_highlighted').checked = false;
     autoExtractedTestimonialBlob = null;
     autoExtractedProjectBlob     = null;
+    projectGalleryItems          = [];
+    if (typeof renderProjectGalleryGrid === 'function') renderProjectGalleryGrid();
 }
 
 function onProjectDivisionChanged(div) {
@@ -3129,7 +3192,7 @@ function openUploadModal(type) {
 
     const titles = {
         testimonial: ['UPLOAD NEW VIDEO REVIEW', 'Add a client testimonial video & auto-captured cover image', 'formTestimonial', 'btnSubmitTestimonial', '💾 SAVE VIDEO REVIEW'],
-        project:     ['UPLOAD COMPLETED PROJECT', 'Add a luxury project walkthrough video & cover image', 'formProject', 'btnSubmitProject', '💾 SAVE PROJECT'],
+        project:     ['UPLOAD COMPLETED PROJECT', 'Add a luxury project walkthrough video & multi-photo gallery', 'formProject', 'btnSubmitProject', '💾 SAVE PROJECT'],
         package:     ['ADD NEW PACKAGE', 'Create a per sq.ft package for Construction or Interior', 'formPackage', 'btnSubmitPackage', '💾 SAVE PACKAGE'],
         partner:     ['ADD NEW PARTNER / VENDOR', 'Add a banking partner for loans or a certified material vendor', 'formPartner', 'btnSubmitPartner', '💾 SAVE PARTNER'],
         service:     ['ADD NEW SERVICE', 'Create a new service offering for Construction or Interior', 'formService', 'btnSubmitService', '💾 SAVE SERVICE'],
@@ -3150,7 +3213,11 @@ function openUploadModal(type) {
     if (document.getElementById('p_business_type')) document.getElementById('p_business_type').value = curDiv;
     if (document.getElementById('pk_business_type')) document.getElementById('pk_business_type').value = curDiv;
     if (document.getElementById('s_business_type')) document.getElementById('s_business_type').value = curDiv;
-    if (type === 'project') onProjectDivisionChanged(curDiv);
+    if (type === 'project') {
+        onProjectDivisionChanged(curDiv);
+        projectGalleryItems = [];
+        renderProjectGalleryGrid();
+    }
 }
 
 function openEditModal(type, item) {
@@ -3182,7 +3249,7 @@ function openEditModal(type, item) {
         }
     } else if (type === 'project') {
         document.getElementById('modalTitle').textContent = 'EDIT COMPLETED PROJECT';
-        document.getElementById('modalSub').textContent   = 'Update project specs, video walkthrough, or cover photo';
+        document.getElementById('modalSub').textContent   = 'Update project specs, video walkthrough, or photo gallery';
         document.getElementById('formProject').style.display = 'block';
         document.getElementById('btnSubmitProject').textContent = '💾 UPDATE PROJECT';
 
@@ -3196,13 +3263,23 @@ function openEditModal(type, item) {
         document.getElementById('p_description').value   = item.description || '';
         document.getElementById('p_video_url').value     = item.video_url || '';
 
-        const coverImg = (item.image_urls && item.image_urls.length > 0) ? item.image_urls[0] : (item.image_url || '');
-        document.getElementById('p_image_url').value     = coverImg;
+        projectGalleryItems = [];
+        const existingImages = (item.image_urls && Array.isArray(item.image_urls) && item.image_urls.length > 0)
+            ? item.image_urls
+            : (item.image_url ? [item.image_url] : []);
 
-        if (coverImg) {
-            document.getElementById('p_cover_preview_img').src = coverImg;
-            document.getElementById('p_cover_preview_box').style.display = 'flex';
-        }
+        existingImages.forEach((imgUrl, i) => {
+            if (imgUrl) {
+                projectGalleryItems.push({
+                    type: 'url',
+                    url: imgUrl,
+                    preview: imgUrl,
+                    name: 'Photo ' + (i + 1)
+                });
+            }
+        });
+        renderProjectGalleryGrid();
+
         if (item.video_url) {
             document.getElementById('btnCapturePFrame').style.display = 'inline-block';
         }
@@ -3284,9 +3361,7 @@ function previewSelectedImage(e, imgId, boxId) {
             const box = document.getElementById(boxId);
             if (box) box.style.display = 'flex';
         } else if (imgId === 't_cover_preview_img') {
-            document.getElementById('t_cover_preview_box').style.display = 'flex';
-        } else if (imgId === 'p_cover_preview_img') {
-            document.getElementById('p_cover_preview_box').style.display = 'flex';
+            const b = document.getElementById('t_cover_preview_box'); if (b) b.style.display = 'flex';
         }
     };
     reader.readAsDataURL(file);
@@ -3392,13 +3467,21 @@ function onProjectVideoChosen(event) {
     const file = event.target.files[0];
     if (!file) return;
     document.getElementById('btnCapturePFrame').style.display = 'inline-block';
+    // Auto-extract a preview frame from the video and add it to the gallery as the cover photo
     extractFrameFromVideoSource(file, (blob, dataUrl) => {
-        if (dataUrl) {
-            autoExtractedProjectBlob = blob;
-            document.getElementById('p_cover_preview_img').src = dataUrl;
-            document.getElementById('p_cover_preview_box').style.display = 'flex';
-            document.getElementById('p_cover_preview_status').textContent = '✓ Auto-Extracted Frame from Video';
+        if (!dataUrl) return;
+        autoExtractedProjectBlob = blob;
+        // Remove any previous auto-extracted frame (type === 'blob') at index 0
+        if (projectGalleryItems.length > 0 && projectGalleryItems[0].type === 'blob') {
+            projectGalleryItems.shift();
         }
+        projectGalleryItems.unshift({
+            type: 'blob',
+            blob: blob,
+            preview: dataUrl,
+            name: 'Auto-Extracted Video Frame (Cover)'
+        });
+        renderProjectGalleryGrid();
     });
 }
 
@@ -3408,9 +3491,13 @@ function onProjectVideoUrlChanged(url) {
     extractFrameFromVideoSource(url, (blob, dataUrl) => {
         if (dataUrl) {
             autoExtractedProjectBlob = blob;
-            document.getElementById('p_cover_preview_img').src = dataUrl;
-            document.getElementById('p_cover_preview_box').style.display = 'flex';
-            document.getElementById('p_cover_preview_status').textContent = '✓ Auto-Extracted Frame from Video';
+            projectGalleryItems.unshift({
+                type: 'blob',
+                blob: blob,
+                preview: dataUrl,
+                name: 'Auto-Extracted Video Frame'
+            });
+            renderProjectGalleryGrid();
         }
     });
 }
@@ -3421,9 +3508,13 @@ function captureProjectFrame() {
     extractFrameFromVideoSource(file || url, (blob, dataUrl) => {
         if (dataUrl) {
             autoExtractedProjectBlob = blob;
-            document.getElementById('p_cover_preview_img').src = dataUrl;
-            document.getElementById('p_cover_preview_box').style.display = 'flex';
-            document.getElementById('p_cover_preview_status').textContent = '✓ Captured Frame from Video';
+            projectGalleryItems.unshift({
+                type: 'blob',
+                blob: blob,
+                preview: dataUrl,
+                name: 'Captured Frame from Video'
+            });
+            renderProjectGalleryGrid();
         }
     });
 }
@@ -3440,6 +3531,76 @@ function previewSelectedImage(event, targetImgId) {
         }
     };
     reader.readAsDataURL(file);
+}
+
+// ── MULTI-IMAGE PROJECT GALLERY HELPERS ─────────────────────────
+function onProjectImagesSelected(e) {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    files.forEach(f => {
+        projectGalleryItems.push({
+            type: 'file',
+            file: f,
+            preview: URL.createObjectURL(f),
+            name: f.name
+        });
+    });
+    renderProjectGalleryGrid();
+    e.target.value = '';
+}
+
+function addProjectImageUrl() {
+    const inp = document.getElementById('p_single_url_input');
+    const url = inp ? inp.value.trim() : '';
+    if (!url) return;
+    projectGalleryItems.push({
+        type: 'url',
+        url: url,
+        preview: url,
+        name: 'URL Image'
+    });
+    if (inp) inp.value = '';
+    renderProjectGalleryGrid();
+}
+
+function removeProjectGalleryItem(idx) {
+    projectGalleryItems.splice(idx, 1);
+    renderProjectGalleryGrid();
+}
+
+function clearAllProjectImages() {
+    projectGalleryItems = [];
+    renderProjectGalleryGrid();
+}
+
+function renderProjectGalleryGrid() {
+    const container = document.getElementById('p_gallery_preview_container');
+    const grid = document.getElementById('p_gallery_grid');
+    const countEl = document.getElementById('p_gallery_count');
+    if (!container || !grid) return;
+
+    if (projectGalleryItems.length === 0) {
+        container.style.display = 'none';
+        grid.innerHTML = '';
+        if (countEl) countEl.textContent = '0';
+        return;
+    }
+
+    container.style.display = 'block';
+    if (countEl) countEl.textContent = projectGalleryItems.length;
+
+    grid.innerHTML = projectGalleryItems.map((item, idx) => `
+        <div style="position:relative;border-radius:8px;overflow:hidden;border:1.5px solid ${idx === 0 ? '#D4AF37' : 'rgba(212,175,55,0.25)'};background:#0B132B;box-shadow:0 2px 8px rgba(0,0,0,0.4);">
+            <img src="${item.preview}" style="width:100%;height:75px;object-fit:cover;display:block;" alt="Photo ${idx+1}" onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=300&q=80'">
+            <span style="position:absolute;top:4px;left:4px;background:rgba(5,11,20,0.85);color:${idx === 0 ? '#D4AF37' : '#FFFFFF'};padding:1px 5px;border-radius:4px;font-size:0.6rem;font-weight:800;border:1px solid rgba(212,175,55,0.3);">
+                ${idx === 0 ? '★ COVER' : '#' + (idx + 1)}
+            </span>
+            <button type="button" onclick="removeProjectGalleryItem(${idx})" style="position:absolute;top:4px;right:4px;background:rgba(239,68,68,0.9);color:#FFF;border:none;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.6rem;line-height:1;" title="Remove Photo">
+                ✕
+            </button>
+        </div>
+    `).join('');
 }
 
 // ── FORMAT HELPERS & ABORT ENGINE ────────────────────────────────
@@ -3784,8 +3945,6 @@ async function submitProject(e) {
     const duration    = document.getElementById('p_duration').value.trim();
     const budget      = document.getElementById('p_budget').value.trim();
     const description = document.getElementById('p_description').value.trim();
-    const imageFile   = document.getElementById('p_image_file').files[0];
-    const imageUrl    = document.getElementById('p_image_url').value.trim();
     const videoFile   = document.getElementById('p_video_file').files[0];
     const videoUrl    = document.getElementById('p_video_url').value.trim();
 
@@ -3798,20 +3957,33 @@ async function submitProject(e) {
 
     try {
         let finalVideoUrl = videoUrl;
-        let finalImageUrl = imageUrl;
 
         if (videoFile) {
             finalVideoUrl = await uploadFile(videoFile, videoFile.name, updateModalProgress);
         }
-        if (imageFile) {
-            finalImageUrl = await uploadFile(imageFile);
-        } else if (!finalImageUrl && autoExtractedProjectBlob) {
-            finalImageUrl = await uploadFile(autoExtractedProjectBlob, 'project_cover_' + Date.now() + '.jpg');
-        } else if (!finalImageUrl && finalVideoUrl && (finalVideoUrl.includes('youtube.com') || finalVideoUrl.includes('youtu.be'))) {
+
+        // Upload any file or blob items from projectGalleryItems
+        const finalImageUrls = [];
+        for (let i = 0; i < projectGalleryItems.length; i++) {
+            const item = projectGalleryItems[i];
+            if (item.type === 'url' && item.url) {
+                finalImageUrls.push(item.url);
+            } else if (item.type === 'file' && item.file) {
+                const uploaded = await uploadFile(item.file, item.file.name);
+                if (uploaded) finalImageUrls.push(uploaded);
+            } else if (item.type === 'blob' && item.blob) {
+                const blobName = (item.name ? item.name.replace(/\s+/g, '_') : 'project_photo_' + Date.now()) + '.jpg';
+                const uploaded = await uploadFile(item.blob, blobName);
+                if (uploaded) finalImageUrls.push(uploaded);
+            }
+        }
+
+        // Fallback: If no photos uploaded but we have YouTube video, extract YouTube thumbnail
+        if (finalImageUrls.length === 0 && finalVideoUrl && (finalVideoUrl.includes('youtube.com') || finalVideoUrl.includes('youtu.be'))) {
             let ytId = '';
             if (finalVideoUrl.includes('watch?v=')) ytId = finalVideoUrl.split('watch?v=')[1]?.split('&')[0];
             else if (finalVideoUrl.includes('youtu.be/')) ytId = finalVideoUrl.split('youtu.be/')[1]?.split('?')[0];
-            if (ytId) finalImageUrl = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+            if (ytId) finalImageUrls.push(`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`);
         }
 
         const businessType = document.getElementById('p_business_type') ? document.getElementById('p_business_type').value : (currentDivision || 'construction');
@@ -3822,7 +3994,7 @@ async function submitProject(e) {
             duration: duration || null,
             budget: budget || null,
             description: description || null,
-            image_urls: finalImageUrl ? [finalImageUrl] : [],
+            image_urls: finalImageUrls,
             video_url: finalVideoUrl || null,
             business_type: businessType
         };
@@ -4194,12 +4366,12 @@ function renderYouTubeVideoGrid(videos) {
     const grid = document.getElementById('ytVideosGrid');
     if (!grid) return;
     if (!videos || videos.length === 0) {
-        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94A3B8;"><i class="fab fa-youtube" style="font-size:2.5rem;color:#FF0000;margin-bottom:10px;display:block;"></i>No videos synced yet. Click "SYNC LIVE VIDEOS NOW" to fetch your channel videos.</div>';
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94A3B8;"><i class="fab fa-youtube" style="font-size:2.5rem;color:#FF0000;margin-bottom:10px;display:block;"></i>No videos currently displayed. Click "SYNC LIVE VIDEOS NOW" to fetch your channel videos.</div>';
         return;
     }
 
     grid.innerHTML = videos.map(vid => `
-        <div class="project-video-card">
+        <div class="project-video-card" id="yt-card-${vid.youtubeId}">
             <div class="video-thumb-frame">
                 <img src="${vid.thumbnail || 'https://img.youtube.com/vi/' + vid.youtubeId + '/hqdefault.jpg'}"
                      alt="${escapeHtml(vid.title)}"
@@ -4222,17 +4394,144 @@ function renderYouTubeVideoGrid(videos) {
                         ${escapeHtml(vid.title)}
                     </h4>
                 </div>
-                <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(212,175,55,0.12);display:flex;justify-content:space-between;align-items:center;">
-                    <button class="btn-whatsapp-outline" onclick="window.playVideoModal('${vid.videoUrl}', '${escapeHtml(vid.title)}')" style="padding:5px 12px;font-size:0.72rem;border-color:rgba(212,175,55,0.4);color:#D4AF37;cursor:pointer;">
-                        <i class="fas fa-play" style="margin-right:4px;"></i> Preview
-                    </button>
-                    <a href="${vid.watchUrl || 'https://www.youtube.com/watch?v=' + vid.youtubeId}" target="_blank" style="font-size:0.72rem;color:#FF5555;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
+                <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(212,175,55,0.12);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <button type="button" class="btn-whatsapp-outline" onclick="window.playVideoModal('${vid.videoUrl}', '${escapeHtml(vid.title)}')" style="padding:6px 12px;font-size:0.75rem;border-color:rgba(212,175,55,0.4);color:#D4AF37;cursor:pointer;border-radius:6px;display:inline-flex;align-items:center;gap:5px;">
+                            <i class="fas fa-play" style="font-size:0.7rem;"></i> Preview
+                        </button>
+                        <button type="button" class="action-del-btn" onclick="deleteYouTubeVideoItem(event, '${vid.youtubeId}', this)" title="Delete video from website" style="padding:6px 12px;font-size:0.75rem;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);color:#F87171;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.background='#EF4444';this.style.color='#FFF';" onmouseout="this.style.background='rgba(239,68,68,0.15)';this.style.color='#F87171';">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
+                    </div>
+                    <a href="${vid.watchUrl || 'https://www.youtube.com/watch?v=' + vid.youtubeId}" target="_blank" style="font-size:0.75rem;color:#FF5555;text-decoration:none;display:inline-flex;align-items:center;gap:5px;">
                         <i class="fab fa-youtube"></i> Watch <i class="fas fa-arrow-up-right-from-square" style="font-size:0.6rem;"></i>
                     </a>
                 </div>
             </div>
         </div>
     `).join('');
+}
+
+async function deleteYouTubeVideoItem(e, videoId, btn) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    if (!confirm('Remove this video from your live website showcase? You can restore it anytime.')) {
+        return;
+    }
+
+    const originalHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+
+    try {
+        const res = await fetch(`/api/youtube/videos/${videoId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'X-CSRF-TOKEN': CSRF(),
+                'Accept': 'application/json'
+            }
+        });
+        const json = await res.json();
+        if (!res.ok || !json.success) {
+            throw new Error(json.message || 'Failed to remove video');
+        }
+
+        // Animate card removal
+        const card = btn.closest('.project-video-card') || document.getElementById('yt-card-' + videoId);
+        if (card) {
+            card.style.transition = 'all 0.35s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                card.remove();
+                const grid = document.getElementById('ytVideosGrid');
+                const remaining = grid ? grid.querySelectorAll('.project-video-card').length : 0;
+                const gridCountEl = document.getElementById('ytGridCount');
+                const countDisplayEl = document.getElementById('ytVideoCountDisplay');
+                const sidebarCountEl = document.getElementById('sidebarYtCount');
+
+                if (gridCountEl) gridCountEl.textContent = remaining;
+                if (countDisplayEl) countDisplayEl.textContent = remaining + ' Videos';
+                if (sidebarCountEl) sidebarCountEl.textContent = remaining;
+
+                if (remaining === 0 && grid) {
+                    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94A3B8;"><i class="fab fa-youtube" style="font-size:2.5rem;color:#FF0000;margin-bottom:10px;display:block;"></i>No videos currently displayed. All videos have been removed or channel has no public videos.</div>';
+                }
+            }, 350);
+        }
+
+        // Append to Excluded Videos list
+        const excludedPanel = document.getElementById('ytExcludedVideosPanel');
+        const excludedList = document.getElementById('ytExcludedVideosList');
+        const excludedCountEl = document.getElementById('ytExcludedCount');
+        if (excludedPanel && excludedList) {
+            excludedPanel.style.display = 'block';
+            if (!document.getElementById('yt-excluded-' + videoId)) {
+                const badge = document.createElement('div');
+                badge.className = 'yt-excluded-badge';
+                badge.id = 'yt-excluded-' + videoId;
+                badge.style.cssText = 'background:#0F172A;border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:6px 12px;display:inline-flex;align-items:center;gap:8px;font-size:0.75rem;color:#E2E8F0;';
+                badge.innerHTML = `
+                    <span><i class="fab fa-youtube" style="color:#FF0000;margin-right:4px;"></i>ID: <strong>${videoId}</strong></span>
+                    <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" style="color:#94A3B8;text-decoration:none;" title="View on YouTube"><i class="fas fa-external-link-alt" style="font-size:0.65rem;"></i></a>
+                    <button type="button" onclick="restoreYouTubeVideoItem('${videoId}', this)" class="btn-gold-pill" style="padding:3px 10px;font-size:0.7rem;line-height:1;margin-left:4px;cursor:pointer;" title="Restore to Website">
+                        <i class="fas fa-undo" style="margin-right:3px;"></i> Restore
+                    </button>
+                `;
+                excludedList.appendChild(badge);
+            }
+            if (excludedCountEl) {
+                excludedCountEl.textContent = excludedList.querySelectorAll('.yt-excluded-badge').length;
+            }
+        }
+
+        alert('✅ Video removed from website showcase!');
+    } catch (err) {
+        alert('❌ Error: ' + err.message);
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+    }
+}
+
+async function restoreYouTubeVideoItem(videoId, btn) {
+    const originalHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+    try {
+        const res = await fetch(`/api/youtube/videos/${videoId}/restore`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'X-CSRF-TOKEN': CSRF(),
+                'Accept': 'application/json'
+            }
+        });
+        const json = await res.json();
+        if (!res.ok || !json.success) {
+            throw new Error(json.message || 'Failed to restore video');
+        }
+
+        // Remove from excluded badges
+        const badge = document.getElementById('yt-excluded-' + videoId);
+        if (badge) badge.remove();
+        const excludedList = document.getElementById('ytExcludedVideosList');
+        const excludedPanel = document.getElementById('ytExcludedVideosPanel');
+        const count = excludedList ? excludedList.querySelectorAll('.yt-excluded-badge').length : 0;
+        const countEl = document.getElementById('ytExcludedCount');
+        if (countEl) countEl.textContent = count;
+        if (count === 0 && excludedPanel) excludedPanel.style.display = 'none';
+
+        alert('✅ Video restored! Triggering live sync to refresh grid...');
+        triggerLiveYouTubeSync();
+    } catch (err) {
+        alert('❌ Error: ' + err.message);
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+    }
 }
 
 function escapeHtml(str) {

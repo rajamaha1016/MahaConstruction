@@ -215,8 +215,105 @@
     </div>
 </section>
 
+<!-- CLIENT SATISFACTION STORIES (HIREANDBUILD MODEL) -->
+<section class="section-pad" id="client-stories-section" style="background:var(--dark-surface);">
+    <div class="container">
+        <div style="text-align:center;">
+            <span class="pill-badge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.75rem;padding:6px 16px;letter-spacing:0.15em;">
+                WHAT OUR CLIENTS SAY
+            </span>
+            <h2 class="sec-title" style="margin-top:12px;">
+                Client <span class="gold" style="position:relative;display:inline-block;">Satisfaction<span style="position:absolute;bottom:-6px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#D4AF37,#FFD700,#D4AF37,transparent);"></span></span> Stories
+            </h2>
+            <p class="sec-sub" style="margin:12px auto 0;max-width:640px;">
+                Hear directly from the families whose lives and luxury residences we've had the privilege to build across Tamil Nadu.
+            </p>
+        </div>
+
+        @if($testimonials->count() > 0)
+        <!-- Metric Stats Bar (HireAndBuild 3-Stat Model) -->
+        <div class="stories-stats-row" style="display:flex;justify-content:center;gap:0;margin:32px 0 16px;flex-wrap:wrap;">
+            <div class="stories-stat" style="padding:0 32px;text-align:center;border-right:1px solid rgba(212,175,55,0.25);">
+                <div class="stories-stat-num" style="font-size:1.8rem;font-weight:900;color:#D4AF37;">{{ $testimonials->count() }}+</div>
+                <div class="stories-stat-label" style="font-size:0.7rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Stories Shared</div>
+            </div>
+            <div class="stories-stat" style="padding:0 32px;text-align:center;border-right:1px solid rgba(212,175,55,0.25);">
+                <div class="stories-stat-num" style="font-size:1.8rem;font-weight:900;color:#25D366;">100%</div>
+                <div class="stories-stat-label" style="font-size:0.7rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Client Satisfaction</div>
+            </div>
+            <div class="stories-stat" style="padding:0 32px;text-align:center;">
+                <div class="stories-stat-num" style="font-size:1.8rem;font-weight:900;color:#FFD700;">{{ number_format($testimonials->avg('rating') ?: 5, 1) }}<i class="fas fa-star" style="font-size:1.4rem;"></i></div>
+                <div class="stories-stat-label" style="font-size:0.7rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Avg Rating</div>
+            </div>
+        </div>
+
+        <!-- Reel Cards Carousel Track -->
+        <div class="stories-carousel-wrap" style="position:relative;margin-top:36px;">
+            <div class="stories-track" id="storiesTrack" style="display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:16px 8px 32px;scrollbar-width:none;">
+                @foreach($testimonials as $i => $t)
+                <div class="story-card {{ $i === 0 ? 'is-active' : '' }}"
+                     style="flex:0 0 auto;width:240px;aspect-ratio:9/15;scroll-snap-align:center;position:relative;border-radius:20px;overflow:hidden;cursor:pointer;background:#111C38;border:2px solid {{ $i === 0 ? '#D4AF37' : 'rgba(255,255,255,0.1)' }};transition:all 0.3s ease;box-shadow:0 12px 30px rgba(0,0,0,0.5);"
+                     @if($t->video_url) data-video-url="{{ $t->video_url }}" data-story-index="{{ $i }}" data-client-name="{{ $t->client_name }}" @endif
+                     onclick="window.playStoryIndex({{ $i }})">
+                    <!-- Photo Background -->
+                    <img src="{{ $t->image_url ?? 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80' }}"
+                         alt="{{ $t->client_name }}"
+                         style="width:100%;height:100%;object-fit:cover;display:block;"
+                         loading="lazy">
+
+                    <!-- Dark Shade Gradient -->
+                    <div class="story-card-shade" style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 40%, rgba(5,11,20,0.92) 100%);"></div>
+
+                    <!-- Top Left Pill: STORY 01 -->
+                    <span class="story-card-tag" style="position:absolute;top:14px;left:14px;background:rgba(5,11,20,0.75);backdrop-filter:blur(4px);border:1px solid rgba(212,175,55,0.5);color:#D4AF37;font-size:0.65rem;font-weight:800;letter-spacing:0.1em;padding:4px 10px;border-radius:20px;text-transform:uppercase;">
+                        STORY {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                    </span>
+
+                    <!-- Glowing Center Play Circle -->
+                    @if($t->video_url)
+                    <div class="story-card-play" style="position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:54px;height:54px;background:#D4AF37;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#050B14;font-size:1.1rem;box-shadow:0 0 24px rgba(212,175,55,0.7);">
+                        <i class="fas fa-play" style="margin-left:2px;"></i>
+                    </div>
+                    @endif
+
+                    <!-- Bottom Info -->
+                    <div class="story-card-info" style="position:absolute;left:16px;right:16px;bottom:16px;">
+                        <div class="story-card-name" style="color:#FFFFFF;font-weight:800;font-size:0.95rem;text-shadow:0 2px 6px rgba(0,0,0,0.8);">{{ $t->client_name }}</div>
+                        <div style="font-size:0.75rem;color:#D4AF37;font-weight:600;margin-top:2px;"><i class="fas fa-map-marker-alt" style="margin-right:3px;"></i>{{ $t->project_name ?? 'Maha Construction' }}</div>
+                        @if($t->video_url)
+                        <div class="story-card-watch" style="display:inline-flex;align-items:center;gap:6px;color:#D4AF37;font-size:0.72rem;font-weight:800;letter-spacing:0.08em;margin-top:8px;text-transform:uppercase;background:rgba(212,175,55,0.15);padding:3px 10px;border-radius:12px;border:1px solid rgba(212,175,55,0.3);">
+                            <i class="fas fa-play"></i> WATCH STORY
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+            <!-- Progress Bar Tracker -->
+            <div class="stories-progress-track" style="height:3px;background:rgba(255,255,255,0.1);border-radius:4px;max-width:480px;margin:0 auto;overflow:hidden;">
+                <div class="stories-progress-fill" id="storiesProgressFill" style="height:100%;background:linear-gradient(90deg,#D4AF37,#FFD700);border-radius:4px;width:0%;transition:width 0.2s ease;"></div>
+            </div>
+
+            <!-- Navigation Controls: Arrows & Dots -->
+            <div class="stories-controls" style="display:flex;align-items:center;justify-content:center;gap:18px;margin-top:24px;">
+                <button class="stories-arrow-btn" id="storiesPrevBtn" aria-label="Previous story" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(212,175,55,0.4);background:rgba(11,19,43,0.8);color:#D4AF37;font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';" onmouseout="this.style.background='rgba(11,19,43,0.8)';this.style.color='#D4AF37';"><i class="fas fa-arrow-left"></i></button>
+                <div class="stories-dots" id="storiesDots" style="display:flex;gap:6px;"></div>
+                <button class="stories-arrow-btn" id="storiesNextBtn" aria-label="Next story" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(212,175,55,0.4);background:rgba(11,19,43,0.8);color:#D4AF37;font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';" onmouseout="this.style.background='rgba(11,19,43,0.8)';this.style.color='#D4AF37';"><i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+        @endif
+
+        <div style="text-align:center;margin-top:40px;">
+            <a href="{{ route('testimonials') }}" class="btn-gold-pill" style="padding:14px 32px;font-size:0.88rem;font-weight:800;letter-spacing:0.06em;">
+                WATCH ALL CLIENT STORIES IN TAMIL NADU <i class="fas fa-arrow-right" style="margin-left:6px;"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
 <!-- TURNKEY PACKAGES SECTION -->
-<section class="section-pad" style="background:var(--dark-surface);">
+<section class="section-pad" style="background:var(--dark-bg);">
     <div class="container">
         <div style="text-align:center;">
             <span class="sec-tag">TURNKEY PACKAGES</span>
@@ -510,102 +607,7 @@
         </div>
     </div>
 </section>
-<!-- CLIENT SATISFACTION STORIES (HIREANDBUILD MODEL) -->
-<section class="section-pad" id="client-stories-section" style="background:var(--dark-surface);">
-    <div class="container">
-        <div style="text-align:center;">
-            <span class="pill-badge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.75rem;padding:6px 16px;letter-spacing:0.15em;">
-                WHAT OUR CLIENTS SAY
-            </span>
-            <h2 class="sec-title" style="margin-top:12px;">
-                Client <span class="gold" style="position:relative;display:inline-block;">Satisfaction<span style="position:absolute;bottom:-6px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#D4AF37,#FFD700,#D4AF37,transparent);"></span></span> Stories
-            </h2>
-            <p class="sec-sub" style="margin:12px auto 0;max-width:640px;">
-                Hear directly from the families whose lives and luxury residences we've had the privilege to build across Tamil Nadu.
-            </p>
-        </div>
 
-        @if($testimonials->count() > 0)
-        <!-- Metric Stats Bar (HireAndBuild 3-Stat Model) -->
-        <div class="stories-stats-row" style="display:flex;justify-content:center;gap:0;margin:32px 0 16px;flex-wrap:wrap;">
-            <div class="stories-stat" style="padding:0 32px;text-align:center;border-right:1px solid rgba(212,175,55,0.25);">
-                <div class="stories-stat-num" style="font-size:1.8rem;font-weight:900;color:#D4AF37;">{{ $testimonials->count() }}+</div>
-                <div class="stories-stat-label" style="font-size:0.7rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Stories Shared</div>
-            </div>
-            <div class="stories-stat" style="padding:0 32px;text-align:center;border-right:1px solid rgba(212,175,55,0.25);">
-                <div class="stories-stat-num" style="font-size:1.8rem;font-weight:900;color:#25D366;">100%</div>
-                <div class="stories-stat-label" style="font-size:0.7rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Client Satisfaction</div>
-            </div>
-            <div class="stories-stat" style="padding:0 32px;text-align:center;">
-                <div class="stories-stat-num" style="font-size:1.8rem;font-weight:900;color:#FFD700;">{{ number_format($testimonials->avg('rating') ?: 5, 1) }}<i class="fas fa-star" style="font-size:1.4rem;"></i></div>
-                <div class="stories-stat-label" style="font-size:0.7rem;font-weight:800;color:#94A3B8;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Avg Rating</div>
-            </div>
-        </div>
-
-        <!-- Reel Cards Carousel Track -->
-        <div class="stories-carousel-wrap" style="position:relative;margin-top:36px;">
-            <div class="stories-track" id="storiesTrack" style="display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:16px 8px 32px;scrollbar-width:none;">
-                @foreach($testimonials as $i => $t)
-                <div class="story-card {{ $i === 0 ? 'is-active' : '' }}"
-                     style="flex:0 0 auto;width:240px;aspect-ratio:9/15;scroll-snap-align:center;position:relative;border-radius:20px;overflow:hidden;cursor:pointer;background:#111C38;border:2px solid {{ $i === 0 ? '#D4AF37' : 'rgba(255,255,255,0.1)' }};transition:all 0.3s ease;box-shadow:0 12px 30px rgba(0,0,0,0.5);"
-                     @if($t->video_url) data-video-url="{{ $t->video_url }}" data-story-index="{{ $i }}" data-client-name="{{ $t->client_name }}" @endif
-                     onclick="window.playStoryIndex({{ $i }})">
-                    <!-- Photo Background -->
-                    <img src="{{ $t->image_url ?? 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80' }}"
-                         alt="{{ $t->client_name }}"
-                         style="width:100%;height:100%;object-fit:cover;display:block;"
-                         loading="lazy">
-
-                    <!-- Dark Shade Gradient -->
-                    <div class="story-card-shade" style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 40%, rgba(5,11,20,0.92) 100%);"></div>
-
-                    <!-- Top Left Pill: STORY 01 -->
-                    <span class="story-card-tag" style="position:absolute;top:14px;left:14px;background:rgba(5,11,20,0.75);backdrop-filter:blur(4px);border:1px solid rgba(212,175,55,0.5);color:#D4AF37;font-size:0.65rem;font-weight:800;letter-spacing:0.1em;padding:4px 10px;border-radius:20px;text-transform:uppercase;">
-                        STORY {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
-                    </span>
-
-                    <!-- Glowing Center Play Circle -->
-                    @if($t->video_url)
-                    <div class="story-card-play" style="position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:54px;height:54px;background:#D4AF37;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#050B14;font-size:1.1rem;box-shadow:0 0 24px rgba(212,175,55,0.7);">
-                        <i class="fas fa-play" style="margin-left:2px;"></i>
-                    </div>
-                    @endif
-
-                    <!-- Bottom Info -->
-                    <div class="story-card-info" style="position:absolute;left:16px;right:16px;bottom:16px;">
-                        <div class="story-card-name" style="color:#FFFFFF;font-weight:800;font-size:0.95rem;text-shadow:0 2px 6px rgba(0,0,0,0.8);">{{ $t->client_name }}</div>
-                        <div style="font-size:0.75rem;color:#D4AF37;font-weight:600;margin-top:2px;"><i class="fas fa-map-marker-alt" style="margin-right:3px;"></i>{{ $t->project_name ?? 'Maha Construction' }}</div>
-                        @if($t->video_url)
-                        <div class="story-card-watch" style="display:inline-flex;align-items:center;gap:6px;color:#D4AF37;font-size:0.72rem;font-weight:800;letter-spacing:0.08em;margin-top:8px;text-transform:uppercase;background:rgba(212,175,55,0.15);padding:3px 10px;border-radius:12px;border:1px solid rgba(212,175,55,0.3);">
-                            <i class="fas fa-play"></i> WATCH STORY
-                        </div>
-                        @endif
-                    </div>
-                </div>
-                @endforeach
-            </div>
-
-            <!-- Progress Bar Tracker -->
-            <div class="stories-progress-track" style="height:3px;background:rgba(255,255,255,0.1);border-radius:4px;max-width:480px;margin:0 auto;overflow:hidden;">
-                <div class="stories-progress-fill" id="storiesProgressFill" style="height:100%;background:linear-gradient(90deg,#D4AF37,#FFD700);border-radius:4px;width:0%;transition:width 0.2s ease;"></div>
-            </div>
-
-            <!-- Navigation Controls: Arrows & Dots -->
-            <div class="stories-controls" style="display:flex;align-items:center;justify-content:center;gap:18px;margin-top:24px;">
-                <button class="stories-arrow-btn" id="storiesPrevBtn" aria-label="Previous story" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(212,175,55,0.4);background:rgba(11,19,43,0.8);color:#D4AF37;font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';" onmouseout="this.style.background='rgba(11,19,43,0.8)';this.style.color='#D4AF37';"><i class="fas fa-arrow-left"></i></button>
-                <div class="stories-dots" id="storiesDots" style="display:flex;gap:6px;"></div>
-                <button class="stories-arrow-btn" id="storiesNextBtn" aria-label="Next story" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(212,175,55,0.4);background:rgba(11,19,43,0.8);color:#D4AF37;font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';" onmouseout="this.style.background='rgba(11,19,43,0.8)';this.style.color='#D4AF37';"><i class="fas fa-arrow-right"></i></button>
-            </div>
-        </div>
-        @endif
-
-        <div style="text-align:center;margin-top:40px;">
-            <a href="{{ route('testimonials') }}" class="btn-gold-pill" style="padding:14px 32px;font-size:0.88rem;font-weight:800;letter-spacing:0.06em;">
-                WATCH ALL CLIENT STORIES IN TAMIL NADU <i class="fas fa-arrow-right" style="margin-left:6px;"></i>
-            </a>
-        </div>
-    </div>
-</section>
 
 @push('styles')
 <style>
@@ -808,10 +810,17 @@
                                 </h4>
                             </div>
 
-                            <div style="margin-top:14px;padding-top:10px;border-top:1px solid rgba(212,175,55,0.12);display:flex;justify-content:space-between;align-items:center;">
-                                <button class="btn-whatsapp-outline" onclick="window.playVideoModal('{{ $v['videoUrl'] }}', '{{ addslashes($v['title']) }}')" style="padding:5px 12px;font-size:0.72rem;border-color:rgba(212,175,55,0.4);color:#D4AF37;cursor:pointer;">
-                                    <i class="fas fa-play" style="margin-right:4px;"></i> WATCH ON SITE
-                                </button>
+                            <div style="margin-top:14px;padding-top:10px;border-top:1px solid rgba(212,175,55,0.12);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+                                <div style="display:flex;gap:6px;align-items:center;">
+                                    <button class="btn-whatsapp-outline" onclick="window.playVideoModal('{{ $v['videoUrl'] }}', '{{ addslashes($v['title']) }}')" style="padding:5px 12px;font-size:0.72rem;border-color:rgba(212,175,55,0.4);color:#D4AF37;cursor:pointer;">
+                                        <i class="fas fa-play" style="margin-right:4px;"></i> WATCH ON SITE
+                                    </button>
+                                    @if(session('admin_authenticated'))
+                                    <button type="button" onclick="adminQuickDeleteYtVideo('{{ $v['youtubeId'] }}', this)" title="Admin: Delete video from website showcase" style="padding:5px 8px;font-size:0.72rem;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);color:#F87171;border-radius:4px;cursor:pointer;line-height:1;" onmouseover="this.style.background='#EF4444';this.style.color='#FFF';" onmouseout="this.style.background='rgba(239,68,68,0.15)';this.style.color='#F87171';">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                    @endif
+                                </div>
                                 <a href="{{ $v['watchUrl'] ?? ('https://www.youtube.com/watch?v='.$v['youtubeId']) }}" target="_blank" style="font-size:0.72rem;color:#94A3B8;text-decoration:none;display:inline-flex;align-items:center;gap:4px;" onmouseover="this.style.color='#FF5555';" onmouseout="this.style.color='#94A3B8';">
                                     <i class="fab fa-youtube" style="color:#FF0000;"></i> YouTube <i class="fas fa-arrow-up-right-from-square" style="font-size:0.6rem;"></i>
                                 </a>
@@ -1074,6 +1083,46 @@
             stopAutoPlay();
         }
     });
+
+    window.adminQuickDeleteYtVideo = async function(videoId, btn) {
+        if (!confirm('Admin Action: Remove this video from the website showcase? You can restore it anytime in the Admin Dashboard.')) return;
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        try {
+            const csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
+            const res = await fetch('/api/youtube/videos/' + videoId, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'X-CSRF-TOKEN': csrf,
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await res.json();
+            if (data.success) {
+                const slide = btn.closest('.yt-slide');
+                if (slide) {
+                    slide.style.transition = 'all 0.35s ease';
+                    slide.style.opacity = '0';
+                    slide.style.transform = 'scale(0.85)';
+                    setTimeout(() => {
+                        slide.remove();
+                        updateSlider(false);
+                    }, 350);
+                }
+                alert('✅ Video removed from website showcase.');
+            } else {
+                alert('Failed: ' + (data.message || 'Error'));
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        } catch (e) {
+            alert('Error: ' + e.message);
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        }
+    };
 })();
 </script>
 @endpush
