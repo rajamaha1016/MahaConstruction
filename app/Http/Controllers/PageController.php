@@ -18,23 +18,25 @@ class PageController extends Controller
 {
     public function home(YouTubeSyncService $ytService)
     {
-        $services       = Service::where('business_type', 'construction')->get();
-        $projects       = Project::where('business_type', 'construction')->orderBy('id', 'desc')->take(12)->get();
-        $testimonials   = Testimonial::where('business_type', 'construction')->orderBy('id', 'desc')->take(12)->get();
-        $partners       = Partner::where('is_active', true)->get();
-        $yt_channel_url = YouTubeSyncService::getActiveChannelUrl();
-        $ytData         = $ytService->getVideos($yt_channel_url);
-        $syncedVideos   = $ytData['videos'] ?? [];
-        $channelMeta    = [
+        $services          = Service::where('business_type', 'construction')->get();
+        $projects          = Project::where('business_type', 'construction')->orderBy('id', 'desc')->take(12)->get();
+        $testimonials      = Testimonial::where('business_type', 'construction')->orderBy('id', 'desc')->take(12)->get();
+        $partners          = Partner::where('is_active', true)->get();
+        $yt_channel_url    = YouTubeSyncService::getActiveChannelUrl('construction');
+        $ytData            = $ytService->getVideos($yt_channel_url, false, 'construction');
+        $syncedVideos      = $ytData['videos'] ?? [];
+        $channelMeta       = [
             'name'   => $ytData['channel_name'] ?? 'Maha Constructions',
             'url'    => $ytData['channel_url'] ?? $yt_channel_url,
             'avatar' => $ytData['channel_avatar'] ?? asset('logo.jpg'),
             'subs'   => $ytData['channel_subs'] ?? '',
             'count'  => $ytData['count'] ?? count($syncedVideos),
         ];
-        $yt_channel_handle = YouTubeSyncService::getChannelHandle();
+        $yt_channel_handle = YouTubeSyncService::getChannelHandle('construction');
         $guidebook_pdf_url = Setting::where('key', 'guidebook_pdf_url')->value('value') ?: '/uploads/1785792673_new book.pdf';
-        $intro_video_url   = Setting::where('key', 'intro_video_url')->value('value') ?: '/uploads/1785711422_WhatsApp Video 2026-07-30 at 10.50.53 AM.mp4';
+        $intro_video_url   = Setting::where('key', 'intro_video_url_construction')->value('value')
+            ?: Setting::where('key', 'intro_video_url')->value('value')
+            ?: '/uploads/1785711422_WhatsApp Video 2026-07-30 at 10.50.53 AM.mp4';
         $residential       = PackageDetail::where('business_type', 'construction')->where('division', 'residential')->orderBy('price_per_sqft', 'asc')->get();
         $commercial        = PackageDetail::where('business_type', 'construction')->where('division', 'commercial')->orderBy('price_per_sqft', 'asc')->get();
 
@@ -47,23 +49,25 @@ class PageController extends Controller
 
     public function interior(YouTubeSyncService $ytService)
     {
-        $services     = Service::where('business_type', 'interior')->get();
-        $projects     = Project::where('business_type', 'interior')->orderBy('id', 'desc')->get();
-        $testimonials = Testimonial::where('business_type', 'interior')->orderBy('id', 'desc')->get();
-        $packages     = PackageDetail::where('business_type', 'interior')->orderBy('price_per_sqft', 'asc')->get();
-        $intro_video_url = Setting::where('key', 'intro_video_url')->value('value') ?: '/uploads/1785711422_WhatsApp Video 2026-07-30 at 10.50.53 AM.mp4';
+        $services          = Service::where('business_type', 'interior')->get();
+        $projects          = Project::where('business_type', 'interior')->orderBy('id', 'desc')->get();
+        $testimonials      = Testimonial::where('business_type', 'interior')->orderBy('id', 'desc')->get();
+        $packages          = PackageDetail::where('business_type', 'interior')->orderBy('price_per_sqft', 'asc')->get();
+        $intro_video_url   = Setting::where('key', 'intro_video_url_interior')->value('value')
+            ?: Setting::where('key', 'intro_video_url')->value('value')
+            ?: '/uploads/1785711422_WhatsApp Video 2026-07-30 at 10.50.53 AM.mp4';
 
-        $yt_channel_url    = YouTubeSyncService::getActiveChannelUrl();
-        $ytData            = $ytService->getVideos($yt_channel_url);
+        $yt_channel_url    = YouTubeSyncService::getActiveChannelUrl('interior');
+        $ytData            = $ytService->getVideos($yt_channel_url, false, 'interior');
         $syncedVideos      = $ytData['videos'] ?? [];
         $channelMeta       = [
-            'name'   => $ytData['channel_name'] ?? 'Maha Constructions',
+            'name'   => $ytData['channel_name'] ?? 'Maha Interiors',
             'url'    => $ytData['channel_url'] ?? $yt_channel_url,
             'avatar' => $ytData['channel_avatar'] ?? asset('logo.jpg'),
             'subs'   => $ytData['channel_subs'] ?? '',
             'count'  => $ytData['count'] ?? count($syncedVideos),
         ];
-        $yt_channel_handle = YouTubeSyncService::getChannelHandle();
+        $yt_channel_handle = YouTubeSyncService::getChannelHandle('interior');
 
         return view('interior', compact(
             'services', 'projects', 'testimonials', 'packages', 'intro_video_url',
@@ -74,18 +78,27 @@ class PageController extends Controller
     public function projects(Request $request)
     {
         $category = $request->get('category', 'all');
-        $query    = Project::where('business_type', 'construction')->orderBy('id', 'desc');
+        $division = $request->get('division', 'construction');
+        $query    = Project::orderBy('id', 'desc');
+        if ($division !== 'all') {
+            $query->where('business_type', $division);
+        }
         if ($category !== 'all') {
             $query->where('category', $category);
         }
         $projects = $query->get();
-        return view('projects', compact('projects', 'category'));
+        return view('projects', compact('projects', 'category', 'division'));
     }
 
-    public function testimonials()
+    public function testimonials(Request $request)
     {
-        $testimonials = Testimonial::where('business_type', 'construction')->orderBy('id', 'desc')->get();
-        return view('testimonials', compact('testimonials'));
+        $division = $request->get('division', 'construction');
+        $query    = Testimonial::orderBy('id', 'desc');
+        if ($division !== 'all') {
+            $query->where('business_type', $division);
+        }
+        $testimonials = $query->get();
+        return view('testimonials', compact('testimonials', 'division'));
     }
 
     public function calculator()

@@ -107,6 +107,8 @@ class InteriorDataIsolationTest extends TestCase
         $homeRes->assertOk();
         $homeRes->assertSee('Const Villa Alpha');
         $homeRes->assertDontSee('Interior Penthouse Beta');
+        $homeRes->assertSee('CONST STANDARD PACKAGE');
+        $homeRes->assertDontSee('Interior Royal Living Package');
 
         // 2. Visit /projects (Construction Projects)
         $projRes = $this->get('/projects');
@@ -203,5 +205,53 @@ class InteriorDataIsolationTest extends TestCase
         $resConst->assertOk();
         $resConst->assertJsonFragment(['name' => 'Const Villa']);
         $resConst->assertJsonMissing(['name' => 'Interior Flat']);
+    }
+
+    public function test_package_separation_between_construction_and_interior_pages(): void
+    {
+        $constPackage = PackageDetail::create([
+            'business_type'   => 'construction',
+            'division'        => 'residential',
+            'tier'            => 'standard',
+            'title'           => 'Structural Civil Masterpiece',
+            'subtitle'        => 'Pure Construction Plan',
+            'price_per_sqft'  => 2250,
+            'features'        => ['Fe-550 TMT Steel', 'Ready Mix Concrete'],
+            'inclusions'      => ['Site supervision & structural inspection', 'Complete civil structural RCC frame'],
+            'exclusions'      => ['Compound wall & designer main gate', 'Elevator / lift installation'],
+        ]);
+
+        $intPackage = PackageDetail::create([
+            'business_type'   => 'interior',
+            'division'        => 'interior',
+            'tier'            => 'premium',
+            'title'           => 'Bespoke Atelier Woodwork',
+            'subtitle'        => 'Pure Interior Plan',
+            'price_per_sqft'  => 1850,
+            'features'        => ['BWP 710 Calibrated Ply', 'Soft-Close Tandem Boxes'],
+            'inclusions'      => ['Modular Kitchen cabinets & loft cupboards', 'Master bedroom wardrobes'],
+            'exclusions'      => ['Kitchen chimney & appliances', 'Loose movable furniture'],
+        ]);
+
+        // 1. Home page must show construction package and NEVER interior package or its details
+        $homeRes = $this->get('/');
+        $homeRes->assertOk();
+        $homeRes->assertSee('STRUCTURAL CIVIL MASTERPIECE');
+        $homeRes->assertDontSee('Bespoke Atelier Woodwork');
+        $homeRes->assertDontSee('Modular Kitchen cabinets & loft cupboards');
+
+        // 2. Pricing page must show construction package and NEVER interior package or its details
+        $priceRes = $this->get('/pricing');
+        $priceRes->assertOk();
+        $priceRes->assertSee('STRUCTURAL CIVIL MASTERPIECE');
+        $priceRes->assertDontSee('Bespoke Atelier Woodwork');
+        $priceRes->assertDontSee('Modular Kitchen cabinets & loft cupboards');
+
+        // 3. Interior page must show interior package and NEVER construction package or its details
+        $intRes = $this->get('/interior');
+        $intRes->assertOk();
+        $intRes->assertSee('Bespoke Atelier Woodwork');
+        $intRes->assertDontSee('Structural Civil Masterpiece');
+        $intRes->assertDontSee('Complete civil structural RCC frame');
     }
 }

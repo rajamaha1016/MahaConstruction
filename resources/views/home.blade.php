@@ -329,28 +329,28 @@
         <!-- Residential Group -->
         <div class="pricing-grid-3 package-group" id="residentialGroup">
             @php
-                $resDbPackages = \App\Models\PackageDetail::where('division', 'residential')->get();
+                $resDbPackages = (isset($residential) && $residential->isNotEmpty()) ? $residential : \App\Models\PackageDetail::where('business_type', 'construction')->where('division', 'residential')->orderBy('price_per_sqft', 'asc')->get();
                 $resFallbacks = [
                     [
                         'tier'=>'basic', 'title'=>'BASIC PLAN', 'subtitle'=>'Solid & Affordable', 'price'=>1999, 'warranty'=>10, 'delivery'=>12, 'highlighted'=>false,
                         'description'=>'A solid, cost-effective residential build using quality materials, standard-grade finishes, and proven structural systems — ideal for budget-conscious homeowners.',
                         'features'=>['Fe-500 TMT steel','Coromandel / ACC cement','M-Sand blockwork','Vitrified floor tiles (2\'×2\')','Parryware CP fittings','Kundan / Anchor concealed wiring','Flush door entry system','Asian Paints Emulsion finish'],
-                        'inclusions'=>['Site supervision','Civil structural work','Plastering & waterproofing','Electrical wiring (concealed)','Plumbing works','Toilet sanitary fixtures','Main door with frame'],
-                        'exclusions'=>['Interior design','Modular kitchen','Landscaping','Smart home systems']
+                        'inclusions'=>['Site supervision & structural inspection','Complete civil structural RCC frame','Plastering & structural waterproofing','Concealed electrical conduit & wiring','Complete plumbing & drainage network','Standard sanitaryware & CP bathroom fixtures','Main entrance door with solid frame'],
+                        'exclusions'=>['Compound wall & designer main gate','Elevator / lift installation','Rooftop solar energy system','Deep borewell drilling & EB line charges']
                     ],
                     [
                         'tier'=>'premium', 'title'=>'PREMIUM PLAN', 'subtitle'=>'Quality & Elegance', 'price'=>2399, 'warranty'=>15, 'delivery'=>14, 'highlighted'=>true,
                         'description'=>'A premium residential construction package with superior materials, polished finishes, and enhanced structural systems — built for growing families seeking elevated quality.',
                         'features'=>['Fe-550 TMT (JSW / Vizag Steel)','Ultratech Premium / Dalmia cement','Double-washed M-Sand','Kajaria double charged tiles (4\'×2\')','Jaquar sanitary & CP sets','Polycab wires & Roma switches','Teak wood entry door','Asian Paints Apex Ultima'],
-                        'inclusions'=>['All Basic inclusions','Modular kitchen carcass','Premium tile work','CCTV provision','Power backup provision','Gypsum ceiling in living areas'],
-                        'exclusions'=>['Interior furniture','Landscaping','Smart automation']
+                        'inclusions'=>['All Basic structural inclusions','Polished granite kitchen counter with SS sink provision','Premium double-charged vitrified floor tiling','CCTV security conduit & surveillance provision','Inverter & power backup wiring provision','Smooth ceiling plastering & acrylic primer finish','Anti-termite foundation soil treatment'],
+                        'exclusions'=>['Exterior landscaped gardens & paving','Private swimming pool construction','Rooftop solar panel array','High-end home automation hardware']
                     ],
                     [
                         'tier'=>'luxury', 'title'=>'LUXURY PLAN', 'subtitle'=>'Elite Craftsmanship', 'price'=>2999, 'warranty'=>20, 'delivery'=>18, 'highlighted'=>false,
                         'description'=>'A fully bespoke luxury residential build using world-class materials, custom architectural details, and premium brand fixtures — crafted for discerning homeowners.',
                         'features'=>['Fe-550 TMT (Tata Tiscon / JSPL)','Birla Super / ACC Gold cement','River sand / premium concrete sand','Italian Travertine / marble slabs','Kohler / Grohe collection','Finolex cables & Legrand switches','First-grade carved teak doors','Royale textured / custom panel finish'],
-                        'inclusions'=>['All Premium inclusions','Full modular kitchen','Smart home pre-wiring','Home theatre provision','Landscape design (basic)','Custom ceiling designs','Premium bathroom accessories'],
-                        'exclusions'=>['Smart home devices','Furniture & furnishings']
+                        'inclusions'=>['All Premium structural inclusions','Imported Italian marble / grand travertine flooring','Premium polished granite kitchen counter with double sink','Double-height grand ceiling structural framing','Thermal terrace insulation & weatherproofing','Home theatre acoustic civil wall provision','Smart home automation conduit pre-wiring','Premium Kohler / Grohe sanitary & CP collections'],
+                        'exclusions'=>['Smart home automation devices & sensors','Specialized home theatre AV electronic equipment','Loose structural terrace pergola & jacuzzi setup']
                     ],
                 ];
                 $activeResPackages = $resDbPackages->isNotEmpty() ? $resDbPackages : collect($resFallbacks);
@@ -410,28 +410,28 @@
         <!-- Commercial Group -->
         <div class="pricing-grid-3 package-group" id="commercialGroup" style="display:none;">
             @php
-                $comDbPackages = \App\Models\PackageDetail::where('division', 'commercial')->get();
+                $comDbPackages = (isset($commercial) && $commercial->isNotEmpty()) ? $commercial : \App\Models\PackageDetail::where('business_type', 'construction')->where('division', 'commercial')->orderBy('price_per_sqft', 'asc')->get();
                 $comFallbacks = [
                     [
                         'tier'=>'basic', 'title'=>'STANDARD SHELL', 'subtitle'=>'Functional & Efficient', 'price'=>2199, 'warranty'=>10, 'delivery'=>14, 'highlighted'=>false,
                         'description'=>'A functional, code-compliant commercial shell ideal for office spaces, retail outlets, and light commercial use — efficient and cost-effective at scale.',
                         'features'=>['Fe-500 TMT structural steel','OPC 53 grade cement','RCC framed structure','Vitrified floor tiles','Standard plumbing systems','Industrial-grade electrical wiring','Aluminium doors & windows','Exterior cement texture paint'],
-                        'inclusions'=>['Core structural work','Basic MEP (electrical & plumbing)','Slab & column concrete','External plastering','Staircase with MS railing','Commercial-grade flooring','Waterproofing of terrace'],
-                        'exclusions'=>['Interior partitions','HVAC systems','False ceiling','Fire safety systems']
+                        'inclusions'=>['Core structural work & RCC framed structure','Basic MEP (electrical & plumbing) risers','Slab & column reinforced concrete','External weather-resistant plastering','Staircase with MS industrial railing','Commercial-grade heavy traffic flooring','Comprehensive terrace waterproofing'],
+                        'exclusions'=>['Tenant non-structural internal partitions','Central HVAC chilling plant','Suspended ceiling grid systems','Dedicated fire hydrant network']
                     ],
                     [
                         'tier'=>'premium', 'title'=>'PREMIUM CORPORATE', 'subtitle'=>'Professional & Polished', 'price'=>2799, 'warranty'=>15, 'delivery'=>18, 'highlighted'=>true,
                         'description'=>'A professional-grade commercial building with premium structural detailing, enhanced MEP systems, and modern facade finishes — suited for corporate offices and retail centers.',
                         'features'=>['Fe-550 TMT (JSW Steel)','Ultratech / Ambuja cement','RCC frame + shear walls','Granite / double charged vitrified','Jaquar / Hindware fixtures','Polycab wires + RCCB MCB panel','Anodized aluminium UPVC systems','Texture + reflective glass curtain'],
-                        'inclusions'=>['All Shell inclusions','False ceiling provision','Lift pit & motor room','HVAC duct provision','Fire hydrant system','CCTV & access control provision','DG set provision'],
-                        'exclusions'=>['Fit-out interiors','IT infrastructure','Furniture']
+                        'inclusions'=>['All Standard Shell structural inclusions','Suspended ceiling framing provision','Passenger elevator shaft & machine room','Central HVAC duct routing shaft','Fire hydrant system civil infrastructure','CCTV & biometric access control cabling','Diesel generator power backup foundation'],
+                        'exclusions'=>['Tenant office furniture & workstations','Dedicated server room IT infrastructure','Tenant-specific loose equipment']
                     ],
                     [
                         'tier'=>'luxury', 'title'=>'ELITE COMMERCIAL', 'subtitle'=>'Iconic Architecture', 'price'=>3499, 'warranty'=>20, 'delivery'=>24, 'highlighted'=>false,
                         'description'=>'An iconic high-end commercial tower built to global standards — with curtain wall facades, high-capacity MEP systems, and architectural features that define city skylines.',
                         'features'=>['Fe-550D TMT (SAIL / JSPL)','Birla Aditya / ACC Gold cement','Post-tensioned slabs','Stone cladding / premium marble','Geberit / TOTO commercial fixtures','Legrand Mosaic / Schneider systems','Structural glazing curtain wall','EIFS / metal composite facade'],
-                        'inclusions'=>['All Premium inclusions','Intelligent BMS system','Full fire suppression system','VRF HVAC system','High-speed elevator system','Basement parking structure','Green building LEED compliance','Architectural lighting design'],
-                        'exclusions'=>['Tenant fit-out works','IT & AV systems']
+                        'inclusions'=>['All Premium Corporate structural inclusions','Intelligent BMS system conduits','Full automated fire suppression piping','VRF HVAC outdoor deck & piping shafts','High-speed elevator structural shaft & pit','Multi-level basement parking RCC structure','Green building LEED compliance standards','Architectural facade lighting integration'],
+                        'exclusions'=>['Tenant interior retail fit-outs','Private IT networking & AV studio setup']
                     ],
                 ];
                 $activeComPackages = $comDbPackages->isNotEmpty() ? $comDbPackages : collect($comFallbacks);
@@ -573,7 +573,7 @@
                     </div>
 
                     <blockquote style="font-size: 0.88rem; color: var(--text-cream); font-style: italic; line-height: 1.6; border-left: 3px solid var(--gold); padding: 6px 0 6px 14px; margin: 0 0 18px 0; background: rgba(5,11,20,0.3); border-radius: 0 8px 8px 0;">
-                        "Building a luxury home is a once-in-a-lifetime milestone. My team and I take complete personal responsibility for structural safety, itemized cost transparency, and on-time handover."
+                        "Building your dream home is a once-in-a-lifetime journey. My team and I personally oversee every important detail — ensuring structural safety, transparent costs, quality workmanship, and a smooth handover."
                     </blockquote>
 
                     <!-- 3 Compact Metrics Badges -->
@@ -742,26 +742,7 @@
             </p>
         </div>
 
-        <!-- Channel Info Banner -->
-        <div id="ytChannelBanner" style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:28px;flex-wrap:wrap;">
-            <img id="ytChannelAvatar" src="{{ $channelMeta['avatar'] ?? asset('logo.jpg') }}" alt="{{ $channelMeta['name'] ?? 'Maha Constructions' }}"
-                 style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid rgba(212,175,55,0.5);"
-                 onerror="this.src='{{ asset('logo.jpg') }}'">
-            <div style="text-align:left;">
-                <div id="ytChannelName" style="font-size:1rem;font-weight:800;color:#FFF;">{{ $channelMeta['name'] ?? 'Maha Constructions' }}</div>
-                <div style="font-size:0.78rem;color:#94A3B8;margin-top:2px;">
-                    <span id="ytChannelHandle">{{ $yt_channel_handle ?? '@mahaconstructions2013' }}</span>
-                    @if(!empty($channelMeta['subs']))
-                    <span id="ytChannelSubs"> • {{ $channelMeta['subs'] }}</span>
-                    @else
-                    <span id="ytChannelSubs"></span>
-                    @endif
-                    <span id="ytLiveIndicator" style="margin-left:8px;color:#25D366;font-weight:700;"><i class="fas fa-circle" style="font-size:0.45rem;vertical-align:middle;margin-right:4px;"></i>LIVE SYNC</span>
-                </div>
-            </div>
-        </div>
-
-        <div id="ytVideosContainer">
+        <div id="ytVideosContainer" style="margin-top:32px;">
         @if(!empty($syncedVideos) && count($syncedVideos) > 0)
         <!-- Slider Track Wrapper -->
         <div class="yt-slider-wrapper" id="ytSliderWrapper">

@@ -28,7 +28,7 @@
                 </div>
                 <div class="interior-logo-text">
                     <span class="interior-brand-title">MAHA INTERIOR</span>
-                    <span class="interior-brand-tagline">DESIGNING BEAUTIFUL LIVING</span>
+                    <span class="interior-brand-tagline">YOUR DREAM. OUR DESIGN.</span>
                 </div>
             </a>
 
@@ -41,9 +41,6 @@
             </div>
 
             <div class="nav-actions interior-nav-actions">
-                <a href="{{ route('home') }}" class="division-switch-btn interior-switch-btn" title="Switch to Construction Website">
-                    <i class="fas fa-building" style="font-size:0.75rem;"></i> CONSTRUCTION
-                </a>
                 <button class="nav-search-btn" id="searchToggleBtn" title="Search">
                     <i class="fas fa-search" style="font-size:16px;"></i>
                 </button>
@@ -72,9 +69,6 @@
             </div>
 
             <div class="nav-actions">
-                <a href="{{ route('interior') }}" class="division-switch-btn" title="Explore Maha Interior Showcase" style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.08) 100%);color:#FFD700;border:1.5px solid #D4AF37;padding:7px 15px;border-radius:20px;font-size:0.75rem;font-weight:800;letter-spacing:0.08em;text-decoration:none;transition:all 0.3s ease;text-transform:uppercase;font-family:var(--font-heading);box-shadow:0 0 14px rgba(212,175,55,0.3);" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';this.style.boxShadow='0 0 20px rgba(212,175,55,0.6)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.08) 100%)';this.style.color='#FFD700';this.style.boxShadow='0 0 14px rgba(212,175,55,0.3)';">
-                    <i class="fas fa-couch" style="font-size:0.75rem;"></i> INTERIOR
-                </a>
                 <button class="nav-search-btn" id="searchToggleBtn" title="Search">
                     <i class="fas fa-search" style="font-size:16px;"></i>
                 </button>
@@ -130,7 +124,7 @@
                         </div>
                         <div class="logo-text-group">
                             <span class="logo-brand interior-footer-brand-name">MAHA INTERIOR</span>
-                            <span class="logo-tagline interior-footer-tagline">DESIGNING BEAUTIFUL LIVING</span>
+                            <span class="logo-tagline interior-footer-tagline">YOUR DREAM. OUR DESIGN.</span>
                         </div>
                     </div>
                     <p class="footer-desc interior-footer-desc">
@@ -189,9 +183,9 @@
                         <span class="contact-label">Studio Address:</span>
                         <span>{{ $company_address }}</span>
                     </div>
-                    <div style="margin-top:16px;">
-                        <a href="{{ route('home') }}" class="division-switch-btn interior-switch-btn" title="Switch to Construction Website" style="display:inline-flex;">
-                            <i class="fas fa-building" style="font-size:0.75rem;"></i> SWITCH TO CONSTRUCTION
+                    <div style="margin-top:18px;">
+                        <a href="{{ route('home') }}" class="division-switch-btn" title="Switch to Construction Website" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.08) 100%);color:#FFD700;border:1.5px solid #D4AF37;padding:8px 18px;border-radius:20px;font-size:0.75rem;font-weight:800;letter-spacing:0.08em;text-decoration:none;transition:all 0.3s ease;text-transform:uppercase;font-family:var(--font-heading);box-shadow:0 0 14px rgba(212,175,55,0.3);" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';this.style.boxShadow='0 0 20px rgba(212,175,55,0.6)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.08) 100%)';this.style.color='#FFD700';this.style.boxShadow='0 0 14px rgba(212,175,55,0.3)';">
+                            <i class="fas fa-building" style="font-size:0.75rem;"></i> CONSTRUCTION
                         </a>
                     </div>
                 </div>
@@ -215,7 +209,7 @@
                         </div>
                         <div class="logo-text-group">
                             <span class="logo-brand">MAHA CONSTRUCTIONS</span>
-                            <span class="logo-tagline">WE BUILD YOUR DREAM HOME</span>
+                            <span class="logo-tagline">YOUR DREAM. WE BUILD.</span>
                         </div>
                     </div>
                     <p class="footer-desc">
@@ -271,6 +265,11 @@
                     <div class="footer-contact-item">
                         <span class="contact-label">Address:</span>
                         <span>{{ $company_address }}</span>
+                    </div>
+                    <div style="margin-top:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                        <a href="{{ route('interior') }}" class="division-switch-btn" title="Explore Maha Interior Showcase" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.08) 100%);color:#FFD700;border:1.5px solid #D4AF37;padding:8px 18px;border-radius:20px;font-size:0.75rem;font-weight:800;letter-spacing:0.08em;text-decoration:none;transition:all 0.3s ease;text-transform:uppercase;font-family:var(--font-heading);box-shadow:0 0 14px rgba(212,175,55,0.3);" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';this.style.boxShadow='0 0 20px rgba(212,175,55,0.6)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.08) 100%)';this.style.color='#FFD700';this.style.boxShadow='0 0 14px rgba(212,175,55,0.3)';">
+                            <i class="fas fa-couch" style="font-size:0.75rem;"></i> INTERIOR
+                        </a>
                     </div>
                 </div>
             </div>
@@ -421,7 +420,7 @@
                         <span>EXCLUSIONS (CUSTOM ADD-ONS)</span>
                     </div>
                     <div style="font-size:0.72rem;color:#94A3B8;margin:-8px 0 12px;line-height:1.4;">
-                        Available upon request as custom add-ons or interior upgrades.
+                        Available upon request as custom structural additions or site-specific options.
                     </div>
                     <ul class="pkg-item-list" id="modalPkgExclusions">
                         <!-- Populated dynamically -->

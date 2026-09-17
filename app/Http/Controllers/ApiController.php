@@ -617,25 +617,28 @@ class ApiController extends Controller
     // --- YOUTUBE SYNC ---
     public function getYoutubeVideos(Request $request, YouTubeSyncService $syncService)
     {
-        $targetUrl = $request->query('url') ?: YouTubeSyncService::getActiveChannelUrl();
-        $force = $request->boolean('force');
-        $result = $syncService->getVideos($targetUrl, $force);
+        $division  = YouTubeSyncService::normalizeDivision($request->input('division', $request->query('division', 'construction')));
+        $targetUrl = $request->query('url') ?: YouTubeSyncService::getActiveChannelUrl($division);
+        $force     = $request->boolean('force');
+        $result    = $syncService->getVideos($targetUrl, $force, $division);
         return response()->json($result);
     }
 
     public function syncYouTubeVideos(Request $request, YouTubeSyncService $syncService)
     {
-        $targetUrl = $request->input('url') ?: YouTubeSyncService::getActiveChannelUrl();
+        $division  = YouTubeSyncService::normalizeDivision($request->input('division', 'construction'));
+        $targetUrl = $request->input('url') ?: YouTubeSyncService::getActiveChannelUrl($division);
         if ($request->filled('url')) {
-            YouTubeSyncService::setActiveChannelUrl($targetUrl);
+            YouTubeSyncService::setActiveChannelUrl($targetUrl, $division);
         }
-        $result = $syncService->getVideos($targetUrl, true);
+        $result = $syncService->getVideos($targetUrl, true, $division);
         return response()->json([
-            'success' => $result['count'] > 0,
-            'message' => $result['count'] > 0
-                ? "Successfully synced {$result['count']} videos from {$result['channel_name']}!"
+            'success'  => $result['count'] > 0,
+            'division' => $division,
+            'message'  => $result['count'] > 0
+                ? "Successfully synced {$result['count']} videos for " . ucfirst($division) . " from {$result['channel_name']}!"
                 : "No videos found for this channel URL. Please check the handle or URL.",
-            'data'    => $result,
+            'data'     => $result,
         ]);
     }
 
@@ -644,25 +647,29 @@ class ApiController extends Controller
         $request->validate([
             'channel_url' => 'nullable|string',
             'api_key'     => 'nullable|string',
+            'division'    => 'nullable|string',
         ]);
 
+        $division = YouTubeSyncService::normalizeDivision($request->input('division', 'construction'));
+
         if ($request->has('channel_url')) {
-            YouTubeSyncService::setActiveChannelUrl($request->input('channel_url'));
+            YouTubeSyncService::setActiveChannelUrl($request->input('channel_url'), $division);
         }
 
         if ($request->has('api_key')) {
-            YouTubeSyncService::setApiKey($request->input('api_key'));
+            YouTubeSyncService::setApiKey($request->input('api_key'), $division);
         }
 
-        $targetUrl = YouTubeSyncService::getActiveChannelUrl();
-        $result = $syncService->getVideos($targetUrl, true);
+        $targetUrl = YouTubeSyncService::getActiveChannelUrl($division);
+        $result = $syncService->getVideos($targetUrl, true, $division);
 
         return response()->json([
-            'success' => $result['count'] > 0,
-            'message' => $result['count'] > 0
-                ? "YouTube settings saved! Synced {$result['count']} videos from {$result['channel_name']}."
-                : 'Settings saved, but no videos could be fetched. Check the channel URL or try again later.',
-            'data'    => $result,
+            'success'  => $result['count'] > 0,
+            'division' => $division,
+            'message'  => $result['count'] > 0
+                ? ucfirst($division) . " YouTube settings saved! Synced {$result['count']} videos from {$result['channel_name']}."
+                : ucfirst($division) . ' settings saved, but no videos could be fetched. Check the channel URL or try again later.',
+            'data'     => $result,
         ]);
     }
 
@@ -772,9 +779,15 @@ class ApiController extends Controller
     }
 
     // --- YOUTUBE VIDEO MANAGEMENT ---
-    public function deleteYouTubeVideo($id)
+    public function deleteYouTubeVideo($id, Request $request)
     {
-        $setting = Setting::where('key', 'youtube_synced_videos')->first();
+        $division = YouTubeSyncService::normalizeDivision($request->input('division', $request->query('division', 'construction')));
+        $key      = "youtube_synced_videos_{$division}";
+        $setting  = Setting::where('key', $key)->first();
+        if ((!$setting || empty($setting->value)) && $division === 'construction') {
+            $setting = Setting::where('key', 'youtube_synced_videos')->first();
+        }
+
         $videos = [];
         if ($setting && !empty($setting->value)) {
             $videos = json_decode($setting->value, true) ?: [];
@@ -783,62 +796,57 @@ class ApiController extends Controller
         if (empty($videos)) {
             try {
                 $ytService = app(YouTubeSyncService::class);
-                $targetUrl = YouTubeSyncService::getActiveChannelUrl();
-                $videos = $ytService->getVideos($targetUrl)['videos'] ?? [];
+                $targetUrl = YouTubeSyncService::getActiveChannelUrl($division);
+                $videos = $ytService->getVideos($targetUrl, false, $division)['videos'] ?? [];
             } catch (\Throwable $e) {}
         }
 
-        // Add to persistent hidden video blacklist
-        $hiddenIds = YouTubeSyncService::getHiddenVideoIds();
-        if (!in_array($id, $hiddenIds)) {
-            $hiddenIds[] = $id;
-            Setting::updateOrCreate(
-                ['key' => 'youtube_hidden_video_ids'],
-                ['value' => json_encode(array_values($hiddenIds))]
-            );
-        }
+        // Add to persistent hidden video blacklist for division
+        $hiddenIds = YouTubeSyncService::hideVideoId($id, $division);
 
         $filtered = array_values(array_filter($videos, function ($v) use ($id, $hiddenIds) {
             $vidId = $v['id'] ?? $v['youtubeId'] ?? '';
             return $vidId !== $id && !in_array($vidId, $hiddenIds);
         }));
 
-        Setting::updateOrCreate(['key' => 'youtube_synced_videos'], ['value' => json_encode($filtered)]);
-        Setting::updateOrCreate(['key' => 'youtube_video_count'], ['value' => (string)count($filtered)]);
+        Setting::updateOrCreate(['key' => "youtube_synced_videos_{$division}"], ['value' => json_encode($filtered)]);
+        Setting::updateOrCreate(['key' => "youtube_video_count_{$division}"], ['value' => (string)count($filtered)]);
+        if ($division === 'construction') {
+            Setting::updateOrCreate(['key' => 'youtube_synced_videos'], ['value' => json_encode($filtered)]);
+            Setting::updateOrCreate(['key' => 'youtube_video_count'], ['value' => (string)count($filtered)]);
+        }
 
-        // Invalidate cache so both construction and interior pages update in real-time
+        // Invalidate cache so live pages update in real-time
         try {
-            $activeUrl = YouTubeSyncService::getActiveChannelUrl();
+            $activeUrl = YouTubeSyncService::getActiveChannelUrl($division);
+            \Illuminate\Support\Facades\Cache::forget('yt_live_videos_' . $division . '_' . md5($activeUrl));
             \Illuminate\Support\Facades\Cache::forget('yt_live_videos_' . md5($activeUrl));
-            \Illuminate\Support\Facades\Cache::flush();
         } catch (\Throwable $e) {}
 
         return response()->json([
             'success'    => true,
-            'message'    => 'Video successfully removed from website showcase',
+            'division'   => $division,
+            'message'    => 'Video successfully removed from ' . ucfirst($division) . ' showcase',
             'count'      => count($filtered),
             'deleted_id' => $id
         ]);
     }
 
-    public function restoreYouTubeVideo($id)
+    public function restoreYouTubeVideo($id, Request $request)
     {
-        $hiddenIds = YouTubeSyncService::getHiddenVideoIds();
-        $hiddenIds = array_values(array_filter($hiddenIds, fn($v) => $v !== $id));
-        Setting::updateOrCreate(
-            ['key' => 'youtube_hidden_video_ids'],
-            ['value' => json_encode($hiddenIds)]
-        );
+        $division = YouTubeSyncService::normalizeDivision($request->input('division', $request->query('division', 'construction')));
+        YouTubeSyncService::restoreVideoId($id, $division);
 
         try {
-            $activeUrl = YouTubeSyncService::getActiveChannelUrl();
+            $activeUrl = YouTubeSyncService::getActiveChannelUrl($division);
+            \Illuminate\Support\Facades\Cache::forget('yt_live_videos_' . $division . '_' . md5($activeUrl));
             \Illuminate\Support\Facades\Cache::forget('yt_live_videos_' . md5($activeUrl));
-            \Illuminate\Support\Facades\Cache::flush();
         } catch (\Throwable $e) {}
 
         return response()->json([
-            'success' => true,
-            'message' => 'Video restored to website showcase'
+            'success'  => true,
+            'division' => $division,
+            'message'  => 'Video restored to ' . ucfirst($division) . ' showcase'
         ]);
     }
 

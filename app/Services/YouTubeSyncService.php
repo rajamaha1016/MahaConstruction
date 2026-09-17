@@ -12,59 +12,114 @@ class YouTubeSyncService
     const CACHE_TTL_SECONDS   = 1800; // 30 minutes
 
     /**
-     * Get the active channel URL from settings or default.
+     * Normalize division identifier.
      */
-    public static function getActiveChannelUrl(): string
+    public static function normalizeDivision(?string $division): string
     {
-        $setting = Setting::where('key', 'youtube_channel_url')->first();
+        return ($division && strtolower(trim($division)) === 'interior') ? 'interior' : 'construction';
+    }
+
+    /**
+     * Get the active channel URL from settings or default for the given division.
+     */
+    public static function getActiveChannelUrl(string $division = 'construction'): string
+    {
+        $div = self::normalizeDivision($division);
+        
+        // Check division-specific key first
+        $setting = Setting::where('key', "youtube_channel_url_{$div}")->first();
         if ($setting && !empty(trim($setting->value))) {
             return trim($setting->value);
         }
+
+        // For construction, fallback to legacy key
+        if ($div === 'construction') {
+            $legacy = Setting::where('key', 'youtube_channel_url')->first();
+            if ($legacy && !empty(trim($legacy->value))) {
+                return trim($legacy->value);
+            }
+        }
+
+        // For interior, fallback to legacy if set, or default
+        $legacy = Setting::where('key', 'youtube_channel_url')->first();
+        if ($legacy && !empty(trim($legacy->value))) {
+            return trim($legacy->value);
+        }
+
         return self::DEFAULT_CHANNEL_URL;
     }
 
     /**
-     * Update the active channel URL in settings.
+     * Update the active channel URL in settings for the given division.
      */
-    public static function setActiveChannelUrl(string $url): string
+    public static function setActiveChannelUrl(string $url, string $division = 'construction'): string
     {
+        $div = self::normalizeDivision($division);
         $url = trim($url);
         if (empty($url)) {
             $url = self::DEFAULT_CHANNEL_URL;
         }
 
         Setting::updateOrCreate(
-            ['key' => 'youtube_channel_url'],
+            ['key' => "youtube_channel_url_{$div}"],
             ['value' => $url]
         );
 
+        if ($div === 'construction') {
+            Setting::updateOrCreate(
+                ['key' => 'youtube_channel_url'],
+                ['value' => $url]
+            );
+        }
+
         // Clear stored channel ID so it can be re-resolved for the new URL
-        Setting::where('key', 'youtube_channel_id')->delete();
+        Setting::where('key', "youtube_channel_id_{$div}")->delete();
+        if ($div === 'construction') {
+            Setting::where('key', 'youtube_channel_id')->delete();
+        }
+
+        // Invalidate cache
+        Cache::forget('yt_live_videos_' . $div . '_' . md5($url));
 
         return $url;
     }
 
     /**
-     * Get optional YouTube API key from settings or env.
+     * Get optional YouTube API key from settings or env for division.
      */
-    public static function getApiKey(): ?string
+    public static function getApiKey(?string $division = 'construction'): ?string
     {
-        $setting = Setting::where('key', 'youtube_api_key')->first();
+        $div = self::normalizeDivision($division);
+        $setting = Setting::where('key', "youtube_api_key_{$div}")->first();
         if ($setting && !empty(trim($setting->value))) {
             return trim($setting->value);
         }
+
+        $legacy = Setting::where('key', 'youtube_api_key')->first();
+        if ($legacy && !empty(trim($legacy->value))) {
+            return trim($legacy->value);
+        }
+
         return config('services.youtube.api_key') ?: (env('YOUTUBE_API_KEY') ?: null);
     }
 
     /**
-     * Update the YouTube API key in settings.
+     * Update the YouTube API key in settings for division.
      */
-    public static function setApiKey(?string $apiKey): void
+    public static function setApiKey(?string $apiKey, string $division = 'construction'): void
     {
+        $div = self::normalizeDivision($division);
+        $val = trim($apiKey ?? '');
         Setting::updateOrCreate(
-            ['key' => 'youtube_api_key'],
-            ['value' => trim($apiKey ?? '')]
+            ['key' => "youtube_api_key_{$div}"],
+            ['value' => $val]
         );
+        if ($div === 'construction') {
+            Setting::updateOrCreate(
+                ['key' => 'youtube_api_key'],
+                ['value' => $val]
+            );
+        }
     }
 
     /**
@@ -77,39 +132,68 @@ class YouTubeSyncService
     }
 
     /**
-     * Extract @handle from channel URL for display.
+     * Extract @handle from channel URL for display for division.
      */
-    public static function getChannelHandle(): string
+    public static function getChannelHandle(string $division = 'construction'): string
     {
-        $url = self::getActiveChannelUrl();
+        $div = self::normalizeDivision($division);
+        $url = self::getActiveChannelUrl($div);
         if (preg_match('/@([\w.-]+)/', $url, $m)) {
             return '@' . $m[1];
         }
-        return '@mahaconstructions2013';
+        return $div === 'interior' ? '@mahainteriors' : '@mahaconstructions2013';
     }
 
     /**
      * Get persisted channel metadata without triggering a sync.
      */
-    public static function getChannelMeta(): array
+    public static function getChannelMeta(string $division = 'construction'): array
     {
+        $div = self::normalizeDivision($division);
+        $defaultName = ($div === 'interior') ? 'Maha Interiors' : 'Maha Constructions';
+
+        $name = self::getSetting("youtube_channel_name_{$div}", '');
+        if (empty($name) && $div === 'construction') {
+            $name = self::getSetting('youtube_channel_name', $defaultName);
+        } elseif (empty($name)) {
+            $name = $defaultName;
+        }
+
+        $avatar = self::getSetting("youtube_channel_avatar_{$div}", '');
+        if (empty($avatar) && $div === 'construction') {
+            $avatar = self::getSetting('youtube_channel_avatar', asset('logo.jpg'));
+        } elseif (empty($avatar)) {
+            $avatar = asset('logo.jpg');
+        }
+
+        $subs = self::getSetting("youtube_channel_subs_{$div}", '');
+        if (empty($subs) && $div === 'construction') {
+            $subs = self::getSetting('youtube_channel_subs', '');
+        }
+
+        $count = (int) self::getSetting("youtube_video_count_{$div}", 0);
+        if ($count === 0 && $div === 'construction') {
+            $count = (int) self::getSetting('youtube_video_count', 0);
+        }
+
         return [
-            'name'   => self::getSetting('youtube_channel_name', 'Maha Constructions'),
-            'url'    => self::getActiveChannelUrl(),
-            'avatar' => self::getSetting('youtube_channel_avatar', asset('logo.jpg')),
-            'subs'   => self::getSetting('youtube_channel_subs', ''),
-            'count'  => (int) self::getSetting('youtube_video_count', 0),
+            'name'     => $name,
+            'url'      => self::getActiveChannelUrl($div),
+            'avatar'   => $avatar,
+            'subs'     => $subs,
+            'count'    => $count,
+            'division' => $div,
         ];
     }
 
     /**
      * Normalize various inputs (@handle, handle, URL, channel ID) into a full YouTube URL.
      */
-    public static function normalizeUrl(?string $input): string
+    public static function normalizeUrl(?string $input, string $division = 'construction'): string
     {
         $input = trim($input ?? '');
         if (empty($input)) {
-            $input = self::getActiveChannelUrl();
+            $input = self::getActiveChannelUrl($division);
         }
 
         if (str_starts_with($input, 'http://') || str_starts_with($input, 'https://')) {
@@ -128,24 +212,38 @@ class YouTubeSyncService
     }
 
     /**
-     * Get list of excluded/hidden YouTube video IDs.
+     * Get list of excluded/hidden YouTube video IDs for division.
      */
-    public static function getHiddenVideoIds(): array
+    public static function getHiddenVideoIds(string $division = 'construction'): array
     {
-        $setting = Setting::where('key', 'youtube_hidden_video_ids')->first();
+        $div = self::normalizeDivision($division);
+        $setting = Setting::where('key', "youtube_hidden_video_ids_{$div}")->first();
         if ($setting && !empty($setting->value)) {
             $ids = json_decode($setting->value, true);
-            return is_array($ids) ? array_values(array_unique($ids)) : [];
+            if (is_array($ids)) {
+                return array_values(array_unique($ids));
+            }
         }
+
+        if ($div === 'construction') {
+            $legacy = Setting::where('key', 'youtube_hidden_video_ids')->first();
+            if ($legacy && !empty($legacy->value)) {
+                $ids = json_decode($legacy->value, true);
+                if (is_array($ids)) {
+                    return array_values(array_unique($ids));
+                }
+            }
+        }
+
         return [];
     }
 
     /**
-     * Exclude hidden/deleted videos from an array result.
+     * Exclude hidden/deleted videos from an array result for division.
      */
-    public static function filterHiddenVideos(array $result): array
+    public static function filterHiddenVideos(array $result, string $division = 'construction'): array
     {
-        $hiddenIds = self::getHiddenVideoIds();
+        $hiddenIds = self::getHiddenVideoIds($division);
         if (!empty($hiddenIds) && !empty($result['videos'])) {
             $result['videos'] = array_values(array_filter($result['videos'], function($v) use ($hiddenIds) {
                 $vidId = $v['youtubeId'] ?? $v['id'] ?? '';
@@ -157,63 +255,122 @@ class YouTubeSyncService
     }
 
     /**
-     * Fetch live channel videos with caching, multi-tier sync, and database persistence.
+     * Add video ID to division's hidden list.
      */
-    public function getVideos(?string $channelUrl = null, bool $forceRefresh = false): array
+    public static function hideVideoId(string $id, string $division = 'construction'): array
     {
-        $targetUrl = self::normalizeUrl($channelUrl);
-        $cacheKey = 'yt_live_videos_' . md5($targetUrl);
+        $div = self::normalizeDivision($division);
+        $hidden = self::getHiddenVideoIds($div);
+        if (!in_array($id, $hidden)) {
+            $hidden[] = $id;
+            Setting::updateOrCreate(
+                ['key' => "youtube_hidden_video_ids_{$div}"],
+                ['value' => json_encode(array_values($hidden))]
+            );
+            if ($div === 'construction') {
+                Setting::updateOrCreate(
+                    ['key' => 'youtube_hidden_video_ids'],
+                    ['value' => json_encode(array_values($hidden))]
+                );
+            }
+        }
+        return $hidden;
+    }
+
+    /**
+     * Remove video ID from division's hidden list (restore).
+     */
+    public static function restoreVideoId(string $id, string $division = 'construction'): array
+    {
+        $div = self::normalizeDivision($division);
+        $hidden = self::getHiddenVideoIds($div);
+        $hidden = array_values(array_filter($hidden, fn($v) => $v !== $id));
+        Setting::updateOrCreate(
+            ['key' => "youtube_hidden_video_ids_{$div}"],
+            ['value' => json_encode($hidden)]
+        );
+        if ($div === 'construction') {
+            Setting::updateOrCreate(
+                ['key' => 'youtube_hidden_video_ids'],
+                ['value' => json_encode($hidden)]
+            );
+        }
+        return $hidden;
+    }
+
+    /**
+     * Fetch live channel videos with caching, multi-tier sync, and database persistence per division.
+     */
+    public function getVideos(?string $channelUrl = null, bool $forceRefresh = false, string $division = 'construction'): array
+    {
+        $div = self::normalizeDivision($division);
+        $targetUrl = self::normalizeUrl($channelUrl ?: self::getActiveChannelUrl($div), $div);
+        $cacheKey = 'yt_live_videos_' . $div . '_' . md5($targetUrl);
 
         if (!$forceRefresh && Cache::has($cacheKey)) {
-            return self::filterHiddenVideos(Cache::get($cacheKey));
+            return self::filterHiddenVideos(Cache::get($cacheKey), $div);
         }
 
-        $result = $this->syncVideos($targetUrl);
-        $result = self::filterHiddenVideos($result);
+        $result = $this->syncVideos($targetUrl, $div);
+        $result = self::filterHiddenVideos($result, $div);
 
         if ($result['count'] > 0) {
             Cache::put($cacheKey, $result, self::CACHE_TTL_SECONDS);
 
-            // Persist to settings table for offline durability (Only if it corresponds to the active channel)
-            if ($targetUrl === self::getActiveChannelUrl()) {
-                try {
+            // Persist to settings table for offline durability
+            try {
+                Setting::updateOrCreate(
+                    ['key' => "youtube_synced_videos_{$div}"],
+                    ['value' => json_encode($result['videos'])]
+                );
+                Setting::updateOrCreate(
+                    ['key' => "youtube_last_synced_at_{$div}"],
+                    ['value' => now()->toIso8601String()]
+                );
+                Setting::updateOrCreate(
+                    ['key' => "youtube_video_count_{$div}"],
+                    ['value' => (string)$result['count']]
+                );
+                if (!empty($result['channel_name'])) {
                     Setting::updateOrCreate(
-                        ['key' => 'youtube_synced_videos'],
-                        ['value' => json_encode($result['videos'])]
+                        ['key' => "youtube_channel_name_{$div}"],
+                        ['value' => $result['channel_name']]
                     );
+                }
+                if (!empty($result['channel_avatar'])) {
                     Setting::updateOrCreate(
-                        ['key' => 'youtube_last_synced_at'],
-                        ['value' => now()->toIso8601String()]
+                        ['key' => "youtube_channel_avatar_{$div}"],
+                        ['value' => $result['channel_avatar']]
                     );
+                }
+                if (!empty($result['channel_subs'])) {
                     Setting::updateOrCreate(
-                        ['key' => 'youtube_video_count'],
-                        ['value' => (string)$result['count']]
+                        ['key' => "youtube_channel_subs_{$div}"],
+                        ['value' => $result['channel_subs']]
                     );
+                }
+
+                // If construction, also keep legacy keys populated for backward compatibility
+                if ($div === 'construction') {
+                    Setting::updateOrCreate(['key' => 'youtube_synced_videos'], ['value' => json_encode($result['videos'])]);
+                    Setting::updateOrCreate(['key' => 'youtube_last_synced_at'], ['value' => now()->toIso8601String()]);
+                    Setting::updateOrCreate(['key' => 'youtube_video_count'], ['value' => (string)$result['count']]);
                     if (!empty($result['channel_name'])) {
-                        Setting::updateOrCreate(
-                            ['key' => 'youtube_channel_name'],
-                            ['value' => $result['channel_name']]
-                        );
+                        Setting::updateOrCreate(['key' => 'youtube_channel_name'], ['value' => $result['channel_name']]);
                     }
                     if (!empty($result['channel_avatar'])) {
-                        Setting::updateOrCreate(
-                            ['key' => 'youtube_channel_avatar'],
-                            ['value' => $result['channel_avatar']]
-                        );
+                        Setting::updateOrCreate(['key' => 'youtube_channel_avatar'], ['value' => $result['channel_avatar']]);
                     }
                     if (!empty($result['channel_subs'])) {
-                        Setting::updateOrCreate(
-                            ['key' => 'youtube_channel_subs'],
-                            ['value' => $result['channel_subs']]
-                        );
+                        Setting::updateOrCreate(['key' => 'youtube_channel_subs'], ['value' => $result['channel_subs']]);
                     }
-                } catch (\Throwable $e) {
-                    Log::warning('YouTube persistence error: ' . $e->getMessage());
                 }
+            } catch (\Throwable $e) {
+                Log::warning("YouTube persistence error ({$div}): " . $e->getMessage());
             }
         } else {
             // Fallback to persisted data in database
-            $fallback = $this->getPersistedFallback($targetUrl);
+            $fallback = $this->getPersistedFallback($targetUrl, $div);
             if (!empty($fallback['videos'])) {
                 return $fallback;
             }
@@ -225,11 +382,12 @@ class YouTubeSyncService
     /**
      * Multi-tier synchronization engine.
      */
-    public function syncVideos(string $targetUrl): array
+    public function syncVideos(string $targetUrl, string $division = 'construction'): array
     {
+        $div = self::normalizeDivision($division);
         $videos = [];
         $channelMeta = [
-            'name'        => 'Maha Constructions',
+            'name'        => ($div === 'interior') ? 'Maha Interiors' : 'Maha Constructions',
             'avatar'      => asset('logo.jpg'),
             'subscribers' => '',
             'channel_id'  => '',
@@ -242,7 +400,7 @@ class YouTubeSyncService
         }
 
         // TIER 1: YouTube Data API v3 (if API key is configured)
-        $apiKey = self::getApiKey();
+        $apiKey = self::getApiKey($div);
         if ($apiKey && $channelId) {
             $this->fetchChannelMetadataViaApi($channelId, $apiKey, $channelMeta);
             $apiVideos = $this->fetchViaYouTubeApi($channelId, $apiKey, $channelMeta);
@@ -830,18 +988,45 @@ class YouTubeSyncService
     }
 
     /**
-     * Tier 4: Retrieve persisted fallback from settings table.
+     * Tier 4: Retrieve persisted fallback from settings table per division.
      */
-    protected function getPersistedFallback(string $targetUrl): array
+    protected function getPersistedFallback(string $targetUrl, string $division = 'construction'): array
     {
-        $setting = Setting::where('key', 'youtube_synced_videos')->first();
-        $lastSynced = Setting::where('key', 'youtube_last_synced_at')->first()?->value ?? null;
-        $channelName   = self::getSetting('youtube_channel_name', 'Maha Constructions');
-        $channelId     = self::getSetting('youtube_channel_id', '');
-        $channelAvatar = self::getSetting('youtube_channel_avatar', asset('logo.jpg'));
-        $channelSubs   = self::getSetting('youtube_channel_subs', '');
-        $videos = [];
+        $div = self::normalizeDivision($division);
+        $setting = Setting::where('key', "youtube_synced_videos_{$div}")->first();
+        if ((!$setting || empty($setting->value)) && $div === 'construction') {
+            $setting = Setting::where('key', 'youtube_synced_videos')->first();
+        }
 
+        $lastSynced = Setting::where('key', "youtube_last_synced_at_{$div}")->first()?->value
+            ?? ($div === 'construction' ? Setting::where('key', 'youtube_last_synced_at')->first()?->value : null);
+
+        $defaultName = ($div === 'interior') ? 'Maha Interiors' : 'Maha Constructions';
+        $channelName = self::getSetting("youtube_channel_name_{$div}", '');
+        if (empty($channelName) && $div === 'construction') {
+            $channelName = self::getSetting('youtube_channel_name', $defaultName);
+        } elseif (empty($channelName)) {
+            $channelName = $defaultName;
+        }
+
+        $channelId = self::getSetting("youtube_channel_id_{$div}", '');
+        if (empty($channelId) && $div === 'construction') {
+            $channelId = self::getSetting('youtube_channel_id', '');
+        }
+
+        $channelAvatar = self::getSetting("youtube_channel_avatar_{$div}", '');
+        if (empty($channelAvatar) && $div === 'construction') {
+            $channelAvatar = self::getSetting('youtube_channel_avatar', asset('logo.jpg'));
+        } elseif (empty($channelAvatar)) {
+            $channelAvatar = asset('logo.jpg');
+        }
+
+        $channelSubs = self::getSetting("youtube_channel_subs_{$div}", '');
+        if (empty($channelSubs) && $div === 'construction') {
+            $channelSubs = self::getSetting('youtube_channel_subs', '');
+        }
+
+        $videos = [];
         if ($setting && !empty($setting->value)) {
             $videos = json_decode($setting->value, true) ?: [];
         }
@@ -855,8 +1040,9 @@ class YouTubeSyncService
             'channel_subs'   => $channelSubs,
             'count'          => count($videos),
             'last_synced_at' => $lastSynced,
+            'division'       => $div,
             'videos'         => $videos,
-        ]);
+        ], $div);
     }
 
     /**

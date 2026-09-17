@@ -94,38 +94,38 @@
         <!-- RESIDENTIAL PRICING CARDS -->
         <div class="pricing-grid-3 package-group" id="pricingResGroup">
             @php
-                $resDbPackages = (isset($residential) && $residential->isNotEmpty()) ? $residential : \App\Models\PackageDetail::where('business_type', 'construction')->where('division', 'residential')->get();
+                $resDbPackages = (isset($residential) && $residential->isNotEmpty()) ? $residential : \App\Models\PackageDetail::where('business_type', 'construction')->where('division', 'residential')->orderBy('price_per_sqft', 'asc')->get();
                 $resFallbacks = [
                     [
                         'tier'=>'basic', 'title'=>'BASIC PLAN', 'subtitle'=>'Solid & Affordable', 'price'=>1999, 'warranty'=>10, 'delivery'=>12,
                         'description'=>'A solid, cost-effective residential build using quality materials, standard-grade finishes, and proven structural systems — ideal for budget-conscious homeowners.',
                         'features'=>['Fe-500 TMT steel','Coromandel / ACC cement','M-Sand blockwork','Vitrified floor tiles (2\'×2\')','Parryware CP fittings','Kundan / Anchor concealed wiring','Flush door entry system','Asian Paints Emulsion finish'],
-                        'inclusions'=>['Site supervision','Civil structural work','Plastering & waterproofing','Electrical wiring (concealed)','Plumbing works','Toilet sanitary fixtures','Main door with frame'],
-                        'exclusions'=>['Interior design','Modular kitchen','Landscaping','Smart home systems'],
+                        'inclusions'=>['Site supervision & structural inspection','Complete civil structural RCC frame','Plastering & structural waterproofing','Concealed electrical conduit & wiring','Complete plumbing & drainage network','Standard sanitaryware & CP bathroom fixtures','Main entrance door with solid frame'],
+                        'exclusions'=>['Compound wall & designer main gate','Elevator / lift installation','Rooftop solar energy system','Deep borewell drilling & EB line charges'],
                         'highlighted'=>false
                     ],
                     [
                         'tier'=>'standard', 'title'=>'STANDARD PLAN', 'subtitle'=>'Value & Performance', 'price'=>2199, 'warranty'=>12, 'delivery'=>13,
                         'description'=>'An upgraded residential package with reinforced materials, enhanced bath fixtures, and premium electrical fittings for enhanced comfort.',
                         'features'=>['Fe-500D TMT steel','ACC / Ramco cement','Washed M-Sand','Vitrified tiles (2\'×4\')','Cera CP fittings','Finolex wiring','Flush door','Asian Paints Ace finish'],
-                        'inclusions'=>['Site supervision','Complete civil structure','Waterproofing','Underground sump & overhead tank','Concealed wiring & plumbing','Parryware / Cera sanitaryware'],
-                        'exclusions'=>['Interior false ceiling','Modular kitchen','Exterior paving & landscaping'],
+                        'inclusions'=>['Site supervision & structural inspection','Complete civil RCC frame','Plastering & waterproofing','Underground sump & overhead water tank','Concealed wiring & plumbing lines','Parryware / Cera sanitaryware'],
+                        'exclusions'=>['Compound wall & gate','Elevator / lift installation','Rooftop solar system','Landscaped exterior paving'],
                         'highlighted'=>false
                     ],
                     [
                         'tier'=>'premium', 'title'=>'PREMIUM PLAN', 'subtitle'=>'Quality & Elegance', 'price'=>2399, 'warranty'=>15, 'delivery'=>14,
                         'description'=>'A premium residential construction package with superior materials, polished finishes, and enhanced structural systems — built for growing families seeking elevated quality.',
                         'features'=>['Fe-550 TMT (JSW / Vizag Steel)','Ultratech Premium / Dalmia cement','Double-washed M-Sand','Kajaria double charged tiles (4\'×2\')','Jaquar sanitary & CP sets','Polycab wires & Roma switches','Teak wood entry door','Asian Paints Apex Ultima'],
-                        'inclusions'=>['All Basic inclusions','Modular kitchen carcass','Premium tile work','CCTV provision','Power backup provision','Gypsum ceiling in living areas'],
-                        'exclusions'=>['Interior furniture','Landscaping','Smart automation'],
+                        'inclusions'=>['All Basic structural inclusions','Polished granite kitchen counter with SS sink provision','Premium double-charged vitrified floor tiling','CCTV security conduit & surveillance provision','Inverter & power backup wiring provision','Smooth ceiling plastering & acrylic primer finish','Anti-termite foundation soil treatment'],
+                        'exclusions'=>['Exterior landscaped gardens & paving','Private swimming pool construction','Rooftop solar panel array','High-end home automation hardware'],
                         'highlighted'=>true
                     ],
                     [
                         'tier'=>'luxury', 'title'=>'LUXURY PLAN', 'subtitle'=>'Elite Craftsmanship', 'price'=>2999, 'warranty'=>20, 'delivery'=>18,
                         'description'=>'A fully bespoke luxury residential build using world-class materials, custom architectural details, and premium brand fixtures — crafted for discerning homeowners.',
                         'features'=>['Fe-550 TMT (Tata Tiscon / JSPL)','Birla Super / ACC Gold cement','River sand / premium concrete sand','Italian Travertine / marble slabs','Kohler / Grohe collection','Finolex cables & Legrand switches','First-grade carved teak doors','Royale textured / custom panel finish'],
-                        'inclusions'=>['All Premium inclusions','Full modular kitchen','Smart home pre-wiring','Home theatre provision','Landscape design (basic)','Custom ceiling designs','Premium bathroom accessories'],
-                        'exclusions'=>['Smart home devices','Furniture & furnishings'],
+                        'inclusions'=>['All Premium structural inclusions','Imported Italian marble / grand travertine flooring','Premium polished granite kitchen counter with double sink','Double-height grand ceiling structural framing','Thermal terrace insulation & weatherproofing','Home theatre acoustic civil wall provision','Smart home automation conduit pre-wiring','Premium Kohler / Grohe sanitary & CP collections'],
+                        'exclusions'=>['Smart home automation devices & sensors','Specialized home theatre AV electronic equipment','Loose structural terrace pergola & jacuzzi setup'],
                         'highlighted'=>false
                     ],
                 ];
@@ -208,35 +208,35 @@
         <!-- COMMERCIAL PRICING CARDS -->
         <div class="pricing-grid-3 package-group" id="pricingComGroup" style="display:none;">
             @php
-                $comDbPackages = (isset($commercial) && $commercial->isNotEmpty()) ? $commercial : \App\Models\PackageDetail::where('business_type', 'construction')->where('division', 'commercial')->get();
+                $comDbPackages = (isset($commercial) && $commercial->isNotEmpty()) ? $commercial : \App\Models\PackageDetail::where('business_type', 'construction')->where('division', 'commercial')->orderBy('price_per_sqft', 'asc')->get();
                 $comFallbacks = [
                     [
                         'tier'=>'basic', 'title'=>'STANDARD SHELL', 'subtitle'=>'Functional & Efficient', 'price'=>2199, 'warranty'=>10, 'delivery'=>14, 'highlighted'=>false,
                         'description'=>'A functional, code-compliant commercial shell ideal for office spaces, retail outlets, and light commercial use — efficient and cost-effective at scale.',
                         'features'=>['Fe-500 TMT structural steel','OPC 53 grade cement','RCC framed structure','Vitrified floor tiles'],
-                        'inclusions'=>['Core structural work','Basic MEP (electrical & plumbing)','Slab & column concrete','External plastering','Staircase with MS railing','Commercial-grade flooring','Waterproofing of terrace'],
-                        'exclusions'=>['Interior partitions','HVAC systems','False ceiling','Fire safety systems']
+                        'inclusions'=>['Core structural work & RCC framed structure','Basic MEP (electrical & plumbing) risers','Slab & column reinforced concrete','External weather-resistant plastering','Staircase with MS industrial railing','Commercial-grade heavy traffic flooring','Comprehensive terrace waterproofing'],
+                        'exclusions'=>['Tenant non-structural internal partitions','Central HVAC chilling plant','Suspended ceiling grid systems','Dedicated fire hydrant network']
                     ],
                     [
                         'tier'=>'standard', 'title'=>'ENHANCED SHELL', 'subtitle'=>'Commercial Value', 'price'=>2499, 'warranty'=>12, 'delivery'=>16, 'highlighted'=>false,
                         'description'=>'Enhanced commercial core & shell with improved structural capacity, higher grade steel, and commercial plumbing provisions.',
                         'features'=>['Fe-500D TMT steel','Ultratech cement','RCC frame','Granito tiles'],
-                        'inclusions'=>['Structural framing','Common area flooring','Main electrical riser','Plumbing shaft provisions','External facade base plaster'],
-                        'exclusions'=>['Tenant interior fitouts','Elevator cabins','Air conditioning']
+                        'inclusions'=>['Reinforced structural framing','Common area vitrified flooring','Main electrical riser busduct','Plumbing shaft provisions','External facade base plaster & primer'],
+                        'exclusions'=>['Tenant non-structural additions','Elevator cabin fixtures','Dedicated air conditioning machinery']
                     ],
                     [
                         'tier'=>'premium', 'title'=>'PREMIUM CORPORATE', 'subtitle'=>'Professional & Polished', 'price'=>2799, 'warranty'=>15, 'delivery'=>18, 'highlighted'=>true,
                         'description'=>'A professional-grade commercial building with premium structural detailing, enhanced MEP systems, and modern facade finishes — suited for corporate offices and retail centers.',
                         'features'=>['Fe-550 TMT (JSW Steel)','Ultratech / Ambuja cement','RCC frame + shear walls','Granite / double charged vitrified'],
-                        'inclusions'=>['All Shell inclusions','False ceiling provision','Lift pit & motor room','HVAC duct provision','Fire hydrant system','CCTV & access control provision','DG set provision'],
-                        'exclusions'=>['Fit-out interiors','IT infrastructure','Furniture']
+                        'inclusions'=>['All Standard Shell structural inclusions','Suspended ceiling framing provision','Passenger elevator shaft & machine room','Central HVAC duct routing shaft','Fire hydrant system civil infrastructure','CCTV & biometric access control cabling','Diesel generator power backup foundation'],
+                        'exclusions'=>['Tenant office furniture & workstations','Dedicated server room IT infrastructure','Tenant-specific loose equipment']
                     ],
                     [
                         'tier'=>'luxury', 'title'=>'ELITE COMMERCIAL', 'subtitle'=>'Iconic Architecture', 'price'=>3499, 'warranty'=>20, 'delivery'=>24, 'highlighted'=>false,
                         'description'=>'An iconic high-end commercial tower built to global standards — with curtain wall facades, high-capacity MEP systems, and architectural features that define city skylines.',
                         'features'=>['Fe-550D TMT (SAIL / JSPL)','Birla Aditya / ACC Gold cement','Post-tensioned slabs','Stone cladding / premium marble'],
-                        'inclusions'=>['All Premium inclusions','Intelligent BMS system','Full fire suppression system','VRF HVAC system','High-speed elevator system','Basement parking structure','Green building LEED compliance','Architectural lighting design'],
-                        'exclusions'=>['Tenant fit-out works','IT & AV systems']
+                        'inclusions'=>['All Premium Corporate structural inclusions','Intelligent BMS system conduits','Full automated fire suppression piping','VRF HVAC outdoor deck & piping shafts','High-speed elevator structural shaft & pit','Multi-level basement parking RCC structure','Green building LEED compliance standards','Architectural facade lighting integration'],
+                        'exclusions'=>['Tenant interior retail fit-outs','Private IT networking & AV studio setup']
                     ],
                 ];
                 $activeComPackages = $comDbPackages->isNotEmpty() ? $comDbPackages : collect($comFallbacks);

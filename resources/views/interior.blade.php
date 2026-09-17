@@ -94,78 +94,167 @@ body.interior-body .nav-mobile-toggle span {
     background: #161922 !important;
 }
 
-/* ─── SECTION 1: BRIGHT SUNLIT HERO (#interior-intro) ──────── */
+/* ─── SECTION 1: CINEMATIC FULL-SCREEN VIDEO HERO (#interior-intro) ──── */
 body.interior-body .int-hero-section {
-    background: #FAF8F5 !important;
-    color: #161922 !important;
+    background: #080E0B !important;
+    color: #FFFFFF !important;
     position: relative;
-    min-height: 92vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
-    padding: 130px 0 60px;
+    padding: 130px 0 70px !important;
     overflow: hidden;
 }
-body.interior-body .int-hero-bg-img {
-    filter: brightness(0.98) contrast(1.05) saturate(1.15) !important;
-    object-fit: cover !important;
-    width: 100% !important;
-    height: 100% !important;
+
+/* Full-screen video container */
+body.interior-body .int-hero-video-wrap {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
 }
+body.interior-body .int-hero-video-wrap video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    filter: brightness(0.88) contrast(1.02) saturate(1.08);
+    transition: filter 0.5s ease;
+}
+/* Fallback poster img when video fails */
+body.interior-body .int-hero-video-wrap img.int-hero-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.85) contrast(1.02);
+}
+
+/* Cinematic dark overlay — subtle left-weighted for text legibility while revealing the room */
 body.interior-body .int-hero-overlay {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(253, 250, 245, 0.72) 45%, rgba(246, 238, 224, 0.65) 100%) !important;
-    backdrop-filter: blur(2px) !important;
-    -webkit-backdrop-filter: blur(2px) !important;
+    background: linear-gradient(
+        105deg,
+        rgba(6, 12, 9, 0.78) 0%,
+        rgba(8, 15, 12, 0.58) 45%,
+        rgba(8, 15, 12, 0.22) 100%
+    ),
+    linear-gradient(
+        to bottom,
+        rgba(6, 12, 9, 0.35) 0%,
+        transparent 35%,
+        rgba(6, 12, 9, 0.40) 75%,
+        #FAF8F5 100%
+    ) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
+/* Bottom vignette into next section */
 body.interior-body .int-hero-bottom-fade {
-    background: linear-gradient(to bottom, transparent 0%, rgba(250, 248, 245, 0.92) 80%, #FAF8F5 100%) !important;
+    background: linear-gradient(to bottom, transparent 40%, rgba(250, 248, 245, 0.85) 85%, #FAF8F5 100%) !important;
+    height: 180px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    pointer-events: none;
 }
+
+/* Content wrapper — centered with natural breathing room */
+body.interior-body .int-hero-content-outer {
+    position: relative;
+    z-index: 4;
+    width: 100%;
+    padding: 0 24px;
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Studio label pill — elegant champagne gold chip */
 body.interior-body .int-tag-pill {
-    background: rgba(255, 255, 255, 0.94) !important;
-    border: 1px solid var(--int-gold-border) !important;
+    background: rgba(212, 175, 55, 0.14) !important;
+    border: 1px solid rgba(212, 175, 55, 0.45) !important;
     border-radius: 50px !important;
     padding: 7px 18px !important;
-    box-shadow: var(--int-shadow-subtle) !important;
-    color: var(--int-gold) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25) !important;
+    color: #F7D488 !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.2em !important;
     margin-bottom: 22px !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 body.interior-body .int-tag-dot {
-    background: var(--int-gold) !important;
-    box-shadow: 0 0 10px var(--int-gold) !important;
+    background: #E5B869 !important;
+    box-shadow: 0 0 10px #E5B869 !important;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
     animation: luxDotPulse 2s ease-in-out infinite;
 }
+
+/* Main hero headline — refined Title Case, high contrast */
 body.interior-body .int-hero-title {
-    color: #161922 !important;
-    text-shadow: none !important;
-    font-size: clamp(2.8rem, 5.2vw, 4.6rem) !important;
-    font-weight: 900 !important;
-    line-height: 1.08 !important;
-    margin-bottom: 20px !important;
+    color: #FFFFFF !important;
+    font-family: var(--font-heading) !important;
+    font-size: clamp(2.4rem, 4.8vw, 4.4rem) !important;
+    font-weight: 800 !important;
+    line-height: 1.12 !important;
+    text-transform: none !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 16px !important;
+    text-shadow: 0 4px 28px rgba(0, 0, 0, 0.65) !important;
+    max-width: 860px;
 }
-body.interior-body .int-hero-title .gold-word {
-    color: var(--int-gold) !important;
+
+/* Gold serif italic emphasis line */
+body.interior-body .int-hero-emphasis {
+    display: block;
     font-family: var(--font-serif) !important;
     font-style: italic !important;
-    font-weight: 700 !important;
-    text-shadow: 0 2px 14px rgba(200, 149, 43, 0.25) !important;
+    font-weight: 500 !important;
+    font-size: clamp(1.2rem, 1.9vw, 1.8rem) !important;
+    color: #F5D38A !important;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.6) !important;
+    letter-spacing: 0.01em !important;
+    line-height: 1.45 !important;
+    margin-bottom: 34px !important;
+    max-width: 740px;
 }
+
 body.interior-body .int-hero-desc {
-    color: #374151 !important;
-    text-shadow: none !important;
-    font-size: clamp(1rem, 1.35vw, 1.15rem) !important;
-    line-height: 1.75 !important;
-    margin-bottom: 32px !important;
-    max-width: 720px;
+    display: none;
 }
 body.interior-body .int-hero-actions {
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 44px !important;
 }
+
+/* Radiant gold primary CTA */
 body.interior-body .int-btn-gold {
-    background: linear-gradient(135deg, #C8952B 0%, #DFAC3E 50%, #F5CE74 100%) !important;
-    color: #161922 !important;
+    background: linear-gradient(135deg, #C8952B 0%, #E2B24A 50%, #F8D888 100%) !important;
+    color: #0E1410 !important;
     font-family: var(--font-heading);
     font-weight: 800 !important;
     font-size: 0.84rem;
@@ -178,7 +267,7 @@ body.interior-body .int-btn-gold {
     align-items: center;
     gap: 10px;
     border: none;
-    box-shadow: 0 8px 26px rgba(200, 149, 43, 0.42) !important;
+    box-shadow: 0 8px 26px rgba(200, 149, 43, 0.45) !important;
     position: relative;
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -196,46 +285,105 @@ body.interior-body .int-btn-gold::after {
 }
 body.interior-body .int-btn-gold:hover {
     transform: translateY(-3px) !important;
-    box-shadow: 0 14px 34px rgba(197, 147, 45, 0.5) !important;
-    color: #161922 !important;
+    box-shadow: 0 14px 36px rgba(200, 149, 43, 0.6) !important;
+    color: #0E1410 !important;
 }
+
+/* ─── SECONDARY OUTLINE BUTTON (LIGHT SECTIONS) ─────────── */
 body.interior-body .int-btn-outline {
-    background: rgba(255, 255, 255, 0.92) !important;
-    backdrop-filter: blur(10px) !important;
-    border: 1.5px solid #161922 !important;
+    background: #FFFFFF !important;
+    border: 1.5px solid var(--int-gold) !important;
     color: #161922 !important;
     font-family: var(--font-heading);
     font-weight: 800 !important;
-    font-size: 0.84rem;
-    letter-spacing: 0.1em;
+    font-size: 0.82rem;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
     padding: 14px 28px;
     border-radius: 6px;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    box-shadow: var(--int-shadow-subtle) !important;
-    transition: all 0.3s ease !important;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(200, 149, 43, 0.12) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    cursor: pointer;
 }
 body.interior-body .int-btn-outline:hover {
     background: #161922 !important;
+    border-color: #161922 !important;
     color: #FFFFFF !important;
     transform: translateY(-2px) !important;
-    box-shadow: var(--int-shadow-card) !important;
+    box-shadow: 0 8px 24px rgba(22, 25, 34, 0.2) !important;
 }
+body.interior-body .int-btn-outline:hover i {
+    color: var(--int-gold) !important;
+}
+
+/* ─── SECONDARY OUTLINE BUTTON (HERO DARK VIDEO OVERRIDE) ── */
+body.interior-body .int-hero-section .int-btn-outline {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+body.interior-body .int-hero-section .int-btn-outline:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+    border-color: #FFFFFF !important;
+    color: #FFFFFF !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 26px rgba(255, 255, 255, 0.25) !important;
+}
+body.interior-body .int-hero-section .int-btn-outline:hover i {
+    color: var(--int-gold) !important;
+}
+
+/* Scroll cue indicator at bottom */
+body.interior-body .int-hero-scroll-cue {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.65rem;
+    font-family: var(--font-heading);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    animation: intScrollCueFade 2.5s ease-in-out infinite;
+}
+@keyframes intScrollCueFade {
+    0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
+    50%       { opacity: 1;   transform: translateX(-50%) translateY(5px); }
+}
+body.interior-body .int-hero-scroll-cue i {
+    font-size: 0.95rem;
+}
+
+/* Stats strip — slim architectural glass ribbon with proper spacing */
 body.interior-body .int-hero-stats-strip {
-    border-top: none !important;
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 860px;
+    margin-top: 0 !important;
     padding-top: 0 !important;
-    margin-top: 10px !important;
 }
 body.interior-body .int-hero-stats-grid {
-    background: rgba(255, 255, 255, 0.88) !important;
-    backdrop-filter: blur(16px) !important;
-    border: 1px solid var(--int-gold-border) !important;
+    background: rgba(8, 14, 11, 0.65) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(212, 175, 55, 0.30) !important;
     border-radius: 12px !important;
-    padding: 24px 32px !important;
-    box-shadow: var(--int-shadow-card) !important;
+    padding: 18px 28px !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
     display: grid;
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 20px;
@@ -251,22 +399,46 @@ body.interior-body .int-hero-stat-card:not(:last-child)::after {
     top: 15%;
     height: 70%;
     width: 1px;
-    background: rgba(179, 130, 34, 0.22) !important;
+    background: rgba(212, 175, 55, 0.25) !important;
 }
 body.interior-body .int-hero-stat-val {
-    color: var(--int-gold) !important;
-    text-shadow: none !important;
-    font-size: clamp(1.8rem, 2.6vw, 2.5rem);
-    font-weight: 900;
+    color: #F7D488 !important;
+    text-shadow: 0 2px 16px rgba(212, 175, 55, 0.4) !important;
+    font-size: clamp(1.55rem, 2.2vw, 2.1rem);
+    font-weight: 800;
     line-height: 1.1;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 body.interior-body .int-hero-stat-label {
-    color: #4B5563 !important;
+    color: rgba(255, 255, 255, 0.78) !important;
     font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    line-height: 1.35;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    body.interior-body .int-hero-section {
+        padding: 110px 0 50px !important;
+        min-height: auto !important;
+    }
+    body.interior-body .int-hero-content-outer {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+    body.interior-body .int-hero-stats-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px;
+        padding: 16px 20px !important;
+    }
+    body.interior-body .int-hero-stat-card:not(:last-child)::after {
+        display: none !important;
+    }
+    body.interior-body .int-hero-actions {
+        margin-bottom: 32px !important;
+    }
 }
 
 /* ─── SECTION 2: COMPLETED PROJECTS (#interior-projects) ──── */
@@ -302,39 +474,94 @@ body.interior-body .int-sec-sub-light {
     font-size: 1rem;
     line-height: 1.65;
 }
-body.interior-body .int-editorial-filters {
+/* ─── HIGHLIGHTED LUXURY CAPSULE CATEGORY FILTER BAR ────── */
+body.interior-body .int-editorial-filters-wrapper {
     display: flex;
-    flex-wrap: nowrap;
-    gap: 22px;
     align-items: center;
-    margin: 28px 0 36px;
-    padding: 0 4px 14px;
-    border-bottom: 1px solid rgba(179, 130, 34, 0.2) !important;
+    margin: 24px 0 38px;
+    width: 100%;
     overflow-x: auto;
-    white-space: nowrap;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
+body.interior-body .int-editorial-filters-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+body.interior-body .int-editorial-filters {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    align-items: center;
+    padding: 7px 9px;
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(200, 149, 43, 0.35) !important;
+    border-radius: 50px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 2px 12px rgba(200, 149, 43, 0.12) !important;
+    overflow-x: auto;
+    max-width: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    position: relative;
+    z-index: 5;
+    border-bottom: none !important;
+}
+body.interior-body .int-editorial-filters::-webkit-scrollbar {
+    display: none;
+}
+
 body.interior-body .int-filter-link {
-    color: #64748B !important;
+    color: #475569 !important;
     font-size: 0.76rem;
     font-weight: 800;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    background: none;
-    border: none;
+    background: transparent !important;
+    border: 1px solid transparent !important;
     cursor: pointer;
     position: relative;
-    padding: 6px 4px;
-    transition: color 0.25s ease;
+    padding: 10px 20px !important;
+    border-radius: 50px !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
-body.interior-body .int-filter-link:hover {
+body.interior-body .int-filter-link i {
+    font-size: 0.82rem;
+    color: var(--int-gold);
+    transition: transform 0.25s ease, color 0.25s ease;
+}
+
+body.interior-body .int-filter-link:not(.active):hover {
     color: #161922 !important;
+    background: rgba(200, 149, 43, 0.12) !important;
+    border-color: rgba(200, 149, 43, 0.28) !important;
+    transform: translateY(-1px);
 }
+body.interior-body .int-filter-link:not(.active):hover i {
+    transform: scale(1.15);
+    color: #B38222;
+}
+
 body.interior-body .int-filter-link.active {
-    color: var(--int-gold) !important;
+    background: linear-gradient(135deg, #C8952B 0%, #E2B24A 50%, #F5CE76 100%) !important;
+    color: #0E1410 !important;
     font-weight: 900 !important;
+    border-color: var(--int-gold) !important;
+    box-shadow: 0 6px 20px rgba(200, 149, 43, 0.45) !important;
+    transform: scale(1.02);
 }
+body.interior-body .int-filter-link.active i {
+    color: #0E1410 !important;
+    transform: scale(1.1);
+}
+
 body.interior-body .int-filter-link::after {
-    background: var(--int-gold) !important;
+    display: none !important;
 }
 
 /* Projects Slideshow Cards */
@@ -830,6 +1057,7 @@ body.interior-body .int-engineer-section {
     color: #161922 !important;
     padding: 100px 0 90px !important;
     position: relative;
+    scroll-margin-top: 90px;
 }
 body.interior-body .int-eng-portrait-card {
     background: #FFFFFF !important;
@@ -855,6 +1083,218 @@ body.interior-body .int-eng-play-btn {
 body.interior-body .int-engineer-section p {
     color: #4B5563 !important;
 }
+
+/* ─── SIGNATURE 3-STEP PRINCIPLES PIPELINE ─────────────────── */
+body.interior-body .int-principles-flow {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 28px 0 34px;
+}
+
+/* Subtle Gold Connecting Line on Desktop */
+body.interior-body .int-principles-flow::before {
+    content: '';
+    position: absolute;
+    top: 44px;
+    left: 45px;
+    right: 45px;
+    height: 2px;
+    background: linear-gradient(90deg,
+        rgba(200, 149, 43, 0.25) 0%,
+        rgba(200, 149, 43, 0.85) 30%,
+        rgba(200, 149, 43, 0.85) 70%,
+        rgba(200, 149, 43, 0.25) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
+}
+
+body.interior-body .int-flow-step {
+    position: relative;
+    z-index: 2;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(200, 149, 43, 0.26) !important;
+    border-radius: 12px !important;
+    padding: 22px 18px 24px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+body.interior-body .int-flow-step:hover {
+    background: #FFFFFF !important;
+    border-color: var(--int-gold) !important;
+    transform: translateY(-5px) !important;
+    box-shadow: 0 16px 36px rgba(200, 149, 43, 0.18), 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Connecting Arrow Badge Between Steps on Desktop */
+body.interior-body .int-flow-step:not(:last-child)::after {
+    content: '\f061';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: -15px;
+    top: 31px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 1.5px solid var(--int-gold);
+    color: var(--int-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.68rem;
+    z-index: 4;
+    box-shadow: 0 2px 10px rgba(200, 149, 43, 0.25);
+    transition: all 0.3s ease;
+}
+
+body.interior-body .int-flow-step:hover::after {
+    background: var(--int-gold);
+    color: #FFFFFF;
+    transform: scale(1.15);
+    box-shadow: 0 4px 14px rgba(200, 149, 43, 0.45);
+}
+
+/* Step Header (Icon & Step Number) */
+body.interior-body .int-flow-step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+body.interior-body .int-flow-icon-circle {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FBF4E6, #FFFFFF);
+    border: 1.5px solid var(--int-gold);
+    color: var(--int-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: 0 3px 12px rgba(200, 149, 43, 0.18);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+body.interior-body .int-flow-step:hover .int-flow-icon-circle {
+    background: var(--int-gold);
+    color: #FFFFFF;
+    transform: scale(1.08) rotate(3deg);
+    box-shadow: 0 6px 18px rgba(200, 149, 43, 0.4);
+}
+
+body.interior-body .int-flow-step-num {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    color: var(--int-gold) !important;
+    text-transform: uppercase;
+}
+
+body.interior-body .int-flow-step-title {
+    font-family: var(--font-heading);
+    font-size: 0.98rem;
+    font-weight: 800;
+    color: #161922 !important;
+    line-height: 1.35;
+    margin-bottom: 8px;
+    transition: color 0.25s ease;
+}
+
+body.interior-body .int-flow-step:hover .int-flow-step-title {
+    color: var(--int-gold) !important;
+}
+
+body.interior-body .int-flow-step-desc {
+    font-size: 0.84rem;
+    color: #4B5563 !important;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Action Row */
+body.interior-body .int-flow-action-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+body.interior-body .int-flow-trust-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #374151;
+    background: rgba(200, 149, 43, 0.08);
+    border: 1px solid rgba(200, 149, 43, 0.25);
+    padding: 12px 20px;
+    border-radius: 6px;
+    letter-spacing: 0.02em;
+}
+
+/* Mobile & Tablet Responsiveness: Vertical Flow on Mobile */
+@media (max-width: 768px) {
+    body.interior-body .int-principles-flow {
+        grid-template-columns: 1fr !important;
+        gap: 26px !important;
+        margin: 24px 0 28px !important;
+    }
+    body.interior-body .int-principles-flow::before {
+        display: none !important;
+    }
+    body.interior-body .int-flow-step:not(:last-child)::after {
+        content: '\f063' !important;
+        right: auto !important;
+        left: 50% !important;
+        top: auto !important;
+        bottom: -16px !important;
+        transform: translateX(-50%) !important;
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.65rem !important;
+    }
+    body.interior-body .int-flow-step:not(:last-child)::before {
+        content: '' !important;
+        position: absolute !important;
+        bottom: -26px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 2px !important;
+        height: 26px !important;
+        background: linear-gradient(180deg, var(--int-gold), rgba(200, 149, 43, 0.4)) !important;
+        z-index: 1 !important;
+    }
+    body.interior-body .int-flow-action-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+    body.interior-body .int-flow-action-row .int-btn-gold {
+        justify-content: center !important;
+        width: 100% !important;
+        text-align: center !important;
+    }
+    body.interior-body .int-flow-trust-pill {
+        justify-content: center !important;
+        text-align: center !important;
+    }
+}
+
+/* Backward compatibility */
 body.interior-body .int-principle-box {
     background: #FAF8F5 !important;
     border: 1px solid rgba(179, 130, 34, 0.22) !important;
@@ -980,7 +1420,17 @@ body.interior-body .int-enquiry-section .int-sec-sub-light {
     color: #4B5563 !important;
 }
 body.interior-body .int-contact-row {
-    color: #374151 !important;
+    color: #161922 !important;
+}
+body.interior-body .int-contact-row a,
+body.interior-body .int-contact-row span {
+    color: #161922 !important;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+body.interior-body .int-contact-row a:hover {
+    color: var(--int-gold) !important;
 }
 body.interior-body .int-contact-icon {
     background: #FFFFFF !important;
@@ -997,21 +1447,37 @@ body.interior-body .int-enquiry-form-card {
 body.interior-body .int-form-label {
     color: #161922 !important;
     font-weight: 800 !important;
+    font-size: 0.74rem !important;
+    letter-spacing: 0.08em !important;
+    display: block;
+    margin-bottom: 6px;
 }
 body.interior-body .int-form-input,
 body.interior-body .int-form-select,
 body.interior-body .int-form-textarea {
-    background: #FAF8F5 !important;
-    border: 1.5px solid #E2D9C8 !important;
+    background: #FFFFFF !important;
+    border: 1.5px solid #D8CEBE !important;
     color: #161922 !important;
     border-radius: 6px !important;
+    font-size: 0.92rem !important;
+    font-family: inherit;
+    transition: all 0.25s ease !important;
+}
+body.interior-body .int-form-input::placeholder,
+body.interior-body .int-form-textarea::placeholder {
+    color: #64748B !important;
+    opacity: 1;
+}
+body.interior-body .int-form-select option {
+    background: #FFFFFF !important;
+    color: #161922 !important;
 }
 body.interior-body .int-form-input:focus,
 body.interior-body .int-form-select:focus,
 body.interior-body .int-form-textarea:focus {
     border-color: var(--int-gold) !important;
     background: #FFFFFF !important;
-    box-shadow: 0 0 0 3px rgba(179, 130, 34, 0.16) !important;
+    box-shadow: 0 0 0 3px rgba(179, 130, 34, 0.2) !important;
     outline: none !important;
 }
 
@@ -1119,86 +1585,6 @@ body.interior-body .int-learn-section {
     background: linear-gradient(180deg, #FAF8F4 0%, #FFFFFF 50%, #FAF8F4 100%);
     position: relative;
     border-bottom: 1px solid rgba(200, 149, 43, 0.18);
-}
-
-body.interior-body .int-yt-channel-banner {
-    background: #FFFFFF;
-    border: 1.5px solid var(--int-card-border);
-    border-radius: 20px;
-    padding: 16px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 32px auto 36px;
-    max-width: 860px;
-    box-shadow: var(--int-shadow-card);
-    flex-wrap: wrap;
-    gap: 16px;
-}
-
-body.interior-body .int-yt-avatar {
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--int-gold);
-    box-shadow: 0 4px 14px rgba(200, 149, 43, 0.25);
-}
-
-body.interior-body .int-yt-ch-name {
-    font-family: var(--font-heading);
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: var(--int-charcoal);
-}
-
-body.interior-body .int-yt-ch-meta {
-    font-size: 0.8rem;
-    color: var(--int-slate-muted);
-    margin-top: 3px;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-body.interior-body .int-yt-live-pill {
-    background: rgba(37, 211, 102, 0.12);
-    border: 1px solid rgba(37, 211, 102, 0.35);
-    color: #128C7E;
-    font-size: 0.65rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    padding: 2px 8px;
-    border-radius: 12px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-body.interior-body .int-yt-live-pill i {
-    font-size: 0.4rem;
-    animation: luxDotPulse 1.8s infinite;
-}
-
-body.interior-body .int-yt-sub-btn {
-    display: inline-flex;
-    align-items: center;
-    background: #FF0000;
-    color: #FFFFFF;
-    font-size: 0.76rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    padding: 10px 22px;
-    border-radius: 50px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 16px rgba(255, 0, 0, 0.25);
-}
-body.interior-body .int-yt-sub-btn:hover {
-    background: #D90000;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(255, 0, 0, 0.4);
-    color: #FFFFFF;
 }
 
 /* Slider Track & Cards */
@@ -1461,49 +1847,71 @@ body.interior-body .int-yt-dot.active {
 @section('content')
 
 <!-- =======================================================
-     SECTION 1: INTRO / HERO (#interior-intro)
-     Full-Bleed Architectural Background Cover
+     SECTION 1: CINEMATIC VIDEO HERO (#interior-intro)
+     Full-Screen Luxury Interior Video Background
 ======================================================= -->
 <section class="int-hero-section" id="interior-intro">
-    <!-- Full-Bleed Background Media Cover -->
-    <div class="int-hero-bg-media">
-        <img src="{{ asset('images/interior-hero-2.gif') }}"
-             alt="Maha Interior Architectural Living Space"
-             class="int-hero-bg-img"
-             onerror="this.src='https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85'">
+
+    <!-- ── Cinematic Full-Screen Video Background ── -->
+    <div class="int-hero-video-wrap">
+        <video
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            poster="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85"
+            onerror="this.parentElement.querySelector('img').style.display='block';this.style.display='none';"
+        >
+            {{-- Verified genuine luxury interior living room walkthrough --}}
+            <source src="{{ asset('videos/interior-luxury-living.mp4') }}" type="video/mp4">
+            <source src="{{ asset('videos/interior-luxury-living-2.mp4') }}" type="video/mp4">
+        </video>
+        {{-- High-resolution architectural living room fallback poster --}}
+        <img
+            class="int-hero-poster"
+            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85"
+            alt="Maha Luxury Interior Living Space"
+            style="display:none;"
+        >
     </div>
+
+    <!-- Cinematic dark gradient overlay -->
     <div class="int-hero-overlay"></div>
+    <!-- Soft vignette into section below -->
     <div class="int-hero-bottom-fade"></div>
 
-    <div class="container" style="position:relative;z-index:3;">
-        <div class="int-hero-content-wrap lux-reveal">
+    <!-- Content -->
+    <div class="int-hero-content-outer">
+        <div class="lux-reveal">
+            <!-- Studio Label -->
             <div class="int-tag-pill">
                 <span class="int-tag-dot"></span>
-                <span>MAHA INTERIOR • ARCHITECTURAL STUDIO</span>
+                <span>MAHA INTERIORS &bull; ARCHITECTURAL STUDIO</span>
             </div>
 
+            <!-- Primary Headline -->
             <h1 class="int-hero-title">
-                BEAUTIFUL<br>
-                <span class="gold-word">INTERIORS.</span><br>
-                BETTER LIVING.
+                We don’t just design spaces.
             </h1>
 
-            <p class="int-hero-desc">
-                Tamil Nadu’s premier interior architecture and turnkey execution studio. Crafting bespoke modular kitchens, luxury wardrobes, acoustic living spaces, and atmospheric lighting with registered civil engineering precision.
+            <!-- Gold Serif Emphasis Line -->
+            <p class="int-hero-emphasis">
+                We understand you, design for you, and transform your space.
             </p>
 
             <!-- Primary CTAs -->
             <div class="int-hero-actions">
                 <a href="#interior-enquiry" class="int-btn-gold">
-                    <i class="fas fa-calendar-check"></i> BOOK A FREE CONSULTATION
+                    <i class="fas fa-calendar-check"></i> BOOK A FREE CONSULTATION <i class="fas fa-arrow-right" style="font-size:0.75rem;margin-left:4px;"></i>
                 </a>
                 <a href="#interior-projects" class="int-btn-outline">
-                    VIEW OUR WORK <i class="fas fa-arrow-down" style="font-size:0.75rem;"></i>
+                    SEE OUR WORK <i class="fas fa-chevron-down" style="font-size:0.75rem;"></i>
                 </a>
             </div>
         </div>
 
-        <!-- Integrated Hero Statistics Strip -->
+        <!-- Glass Statistics Ribbon -->
         <div class="int-hero-stats-strip lux-reveal">
             <div class="int-hero-stats-grid">
                 <div class="int-hero-stat-card">
@@ -1512,7 +1920,7 @@ body.interior-body .int-yt-dot.active {
                 </div>
                 <div class="int-hero-stat-card">
                     <div class="int-hero-stat-val">10 Years</div>
-                    <div class="int-hero-stat-label">Hardware & Plywood Warranty</div>
+                    <div class="int-hero-stat-label">Hardware &amp; Plywood Warranty</div>
                 </div>
                 <div class="int-hero-stat-card">
                     <div class="int-hero-stat-val">100%</div>
@@ -1521,6 +1929,13 @@ body.interior-body .int-yt-dot.active {
             </div>
         </div>
     </div>
+
+    <!-- Scroll cue -->
+    <div class="int-hero-scroll-cue" aria-hidden="true">
+        <span>Scroll</span>
+        <i class="fas fa-chevron-down"></i>
+    </div>
+
 </section>
 
 
@@ -1541,15 +1956,31 @@ body.interior-body .int-yt-dot.active {
             </p>
         </div>
 
-        <!-- Minimal Editorial Category Filter (Text with Gold Underline) -->
-        <div class="int-editorial-filters lux-reveal">
-            <button type="button" class="int-filter-link interior-filter-btn active" data-category="all">ALL SPACES</button>
-            <button type="button" class="int-filter-link interior-filter-btn" data-category="living-room">LIVING ROOM</button>
-            <button type="button" class="int-filter-link interior-filter-btn" data-category="modular-kitchen">MODULAR KITCHEN</button>
-            <button type="button" class="int-filter-link interior-filter-btn" data-category="bedroom">BEDROOM</button>
-            <button type="button" class="int-filter-link interior-filter-btn" data-category="office-interior">OFFICE INTERIOR</button>
-            <button type="button" class="int-filter-link interior-filter-btn" data-category="full-home-interior">FULL HOME</button>
-            <button type="button" class="int-filter-link interior-filter-btn" data-category="commercial-interior">COMMERCIAL</button>
+        <!-- Highlighted Architectural Capsule Category Filter Bar -->
+        <div class="int-editorial-filters-wrapper lux-reveal">
+            <div class="int-editorial-filters" role="tablist" aria-label="Interior Spaces Filter">
+                <button type="button" class="int-filter-link interior-filter-btn active" data-category="all">
+                    <i class="fas fa-layer-group"></i> <span>ALL SPACES</span>
+                </button>
+                <button type="button" class="int-filter-link interior-filter-btn" data-category="living-room">
+                    <i class="fas fa-couch"></i> <span>LIVING ROOM</span>
+                </button>
+                <button type="button" class="int-filter-link interior-filter-btn" data-category="modular-kitchen">
+                    <i class="fas fa-kitchen-set"></i> <span>MODULAR KITCHEN</span>
+                </button>
+                <button type="button" class="int-filter-link interior-filter-btn" data-category="bedroom">
+                    <i class="fas fa-bed"></i> <span>BEDROOM</span>
+                </button>
+                <button type="button" class="int-filter-link interior-filter-btn" data-category="office-interior">
+                    <i class="fas fa-briefcase"></i> <span>OFFICE INTERIOR</span>
+                </button>
+                <button type="button" class="int-filter-link interior-filter-btn" data-category="full-home-interior">
+                    <i class="fas fa-house-chimney"></i> <span>FULL HOME</span>
+                </button>
+                <button type="button" class="int-filter-link interior-filter-btn" data-category="commercial-interior">
+                    <i class="fas fa-building"></i> <span>COMMERCIAL</span>
+                </button>
+            </div>
         </div>
 
         <!-- Unified Video Slideshow Carousel for Projects -->
@@ -1837,46 +2268,68 @@ body.interior-body .int-yt-dot.active {
 
             <!-- Right: Technical Principles & Executive Info -->
             <div class="lux-reveal">
-                <span class="int-sec-tag">03 — ENGINEER-LED INTERIORS</span>
+                <span class="int-sec-tag">03 — MEET YOUR DESIGNER</span>
                 <h2 class="int-sec-title-light" style="font-size:clamp(1.8rem, 3.4vw, 2.6rem);margin-bottom:8px;">
-                    DESIGNED WITH PRECISION.<br>
+                    Engineering Precision. Interior Creativity. Professional Execution<br>
                     <span style="color:var(--int-gold);">EXECUTED WITH CARE.</span>
                 </h2>
                 <div style="font-size:0.85rem;color:#16A34A;font-weight:800;letter-spacing:0.08em;margin-bottom:18px;">
-                    Er. Maha Rajan (B.E. Civil) • GOVERNMENT REGISTERED ENGINEER • 12+ YEARS STRUCTURAL EXCELLENCE
+                    Er. Maha Rajan (B.E. MBA) • GOVERNMENT REGISTERED ENGINEER • 12+ YEARS STRUCTURAL EXCELLENCE
                 </div>
 
-                <p style="font-size:0.92rem;color:#4B5563;line-height:1.75;margin-bottom:24px;">
-                    Most interior failures occur because non-technical contractors cut into load-bearing RCC elements, create hazardous electrical overloads, or use sub-standard commercial ply that bends and warps in humid environments. We engineer every joint from the inside out.
+                <p style="font-size:0.95rem;color:#4B5563;line-height:1.75;margin-bottom:26px;">
+                    An engineer who understands the space, a designer who understands the client, and a professional who brings the vision to reality.
                 </p>
 
-                <!-- 4 Numbered Technical Principles -->
-                <div class="int-principles-grid">
-                    <div class="int-principle-box">
-                        <div class="int-principle-num">01 // PRECISION</div>
-                        <div class="int-principle-title">Structural Alignment</div>
-                        <p class="int-principle-desc">Laser-leveled wall measurements ensuring zero load-bearing column cuts and millimeter-accurate joinery.</p>
+                <!-- Signature 3-Step Principle Pipeline: 01 UNDERSTAND -> 02 DESIGN -> 03 TRANSFORM -->
+                <div class="int-principles-flow">
+                    <!-- Step 1: UNDERSTAND -->
+                    <div class="int-flow-step" data-step="1">
+                        <div class="int-flow-step-header">
+                            <div class="int-flow-icon-circle">
+                                <i class="fa-solid fa-ear-listen"></i>
+                            </div>
+                            <span class="int-flow-step-num">01 // UNDERSTAND</span>
+                        </div>
+                        <h3 class="int-flow-step-title">We Listen Before We Design.</h3>
+                        <p class="int-flow-step-desc">Your lifestyle, needs, taste, budget and the way you want to experience your space.</p>
                     </div>
-                    <div class="int-principle-box">
-                        <div class="int-principle-num">02 // MATERIALS</div>
-                        <div class="int-principle-title">100% BWP Marine Ply</div>
-                        <p class="int-principle-desc">IS:710 boiling water proof certified cores with zero hollow voids and German hardware fixtures.</p>
+
+                    <!-- Step 2: DESIGN -->
+                    <div class="int-flow-step" data-step="2">
+                        <div class="int-flow-step-header">
+                            <div class="int-flow-icon-circle">
+                                <i class="fa-solid fa-compass-drafting"></i>
+                            </div>
+                            <span class="int-flow-step-num">02 // DESIGN</span>
+                        </div>
+                        <h3 class="int-flow-step-title">We turn your ideas into thoughtful spaces.</h3>
+                        <p class="int-flow-step-desc">Creative design, 3D visualization and precise technical planning come together to create a space that feels uniquely yours.</p>
                     </div>
-                    <div class="int-principle-box">
-                        <div class="int-principle-num">03 // COORDINATION</div>
-                        <div class="int-principle-title">MEP & Conduiting Safety</div>
-                        <p class="int-principle-desc">Fire-safe constant-voltage LED drivers, separate circuit balancing, and concealed plumbing routes.</p>
-                    </div>
-                    <div class="int-principle-box">
-                        <div class="int-principle-num">04 // EXECUTION</div>
-                        <div class="int-principle-title">Zero Hidden Costs</div>
-                        <p class="int-principle-desc">100% itemized BOQ contracts with strict milestone guarantees and registered engineer sign-offs.</p>
+
+                    <!-- Step 3: TRANSFORM -->
+                    <div class="int-flow-step" data-step="3">
+                        <div class="int-flow-step-header">
+                            <div class="int-flow-icon-circle">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </div>
+                            <span class="int-flow-step-num">03 // TRANSFORM</span>
+                        </div>
+                        <h3 class="int-flow-step-title">We bring the design to life.</h3>
+                        <p class="int-flow-step-desc">Professional execution, quality materials and attention to every detail turn the design into a finished space you can truly live in.</p>
                     </div>
                 </div>
 
-                <a href="#interior-enquiry" class="int-btn-gold">
-                    CONSULT ER. MAHA RAJAN DIRECTLY <i class="fas fa-arrow-right"></i>
-                </a>
+                <!-- Executive Consultation Action Row -->
+                <div class="int-flow-action-row">
+                    <a href="#interior-enquiry" class="int-btn-gold">
+                        CONSULT ER. MAHA RAJAN DIRECTLY <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <div class="int-flow-trust-pill">
+                        <i class="fas fa-shield-halved" style="color:var(--int-gold);"></i>
+                        <span>100% Engineer-Verified Execution &bull; Transparent BOQ</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1900,35 +2353,179 @@ body.interior-body .int-yt-dot.active {
         </div>
 
         <!-- 3 Architectural Package Panels -->
+        @php
+            $intFallbacks = [
+                [
+                    'id'              => 7,
+                    'division'        => 'interior',
+                    'tier'            => 'essential',
+                    'title'           => 'Essential Interior',
+                    'subtitle'        => 'Elegant & Smart Turnkey Solution',
+                    'price_per_sqft'  => 1250,
+                    'is_highlighted'  => false,
+                    'warranty_years'  => 5,
+                    'delivery_months' => 2,
+                    'description'     => 'Ideal for 2BHK and 3BHK homeowners seeking dependable quality, high-pressure laminate finishes, and modular functionality at transparent pricing.',
+                    'features'        => [
+                        'ISI-grade BWR Marine Plywood (IS:303)',
+                        '0.8mm High-Pressure Matte Laminates (Century / Greenlam)',
+                        'Hettich / Ebco Soft-Close Hinges & Drawer Runners',
+                        'Modular L-Shape / Straight Kitchen with SS 304 Baskets',
+                        '2 Full-Height Swing Wardrobes with internal drawers',
+                        'Floating TV Unit with concealed cable routing',
+                        'Saint-Gobain Gypsum False Ceiling with LED Cob cutouts',
+                        'Asian Paints Royale Luxury Interior Emulsion'
+                    ],
+                    'inclusions'      => [
+                        'Modular Kitchen cabinets & loft cupboards',
+                        'Master & Guest bedroom wardrobes (Swing Door)',
+                        'Living room floating TV entertainment backdrop',
+                        'Gypsum false ceiling in Living & Dining',
+                        'Concealed electrical wiring for LED cove & spots',
+                        '5 Years comprehensive warranty on hardware'
+                    ],
+                    'exclusions'      => [
+                        'Kitchen chimney & built-in appliances',
+                        'Loose movable furniture (sofa, dining chairs)',
+                        'Curtains & soft furnishings',
+                        'Smart home home automation switches'
+                    ],
+                    'business_type'   => 'interior',
+                ],
+                [
+                    'id'              => 8,
+                    'division'        => 'interior',
+                    'tier'            => 'premium',
+                    'title'           => 'Premium Interior',
+                    'subtitle'        => 'Elevated Aesthetics & Soft-Close Luxury',
+                    'price_per_sqft'  => 1750,
+                    'is_highlighted'  => true,
+                    'warranty_years'  => 10,
+                    'delivery_months' => 3,
+                    'description'     => 'Our most popular comprehensive interior solution featuring 1.0mm anti-fingerprint acrylic/PU finishes, German Hafele hardware, quartz counter, and ambient lighting.',
+                    'features'        => [
+                        '100% Boiling Water Proof (BWP 710) Calibrated Ply',
+                        '1.0mm Anti-Fingerprint Acrylic / Ultra-Matte Finish',
+                        'Hafele / Blum Soft-Close Tandem Boxes & Lift-Ups',
+                        'Parallel / Island Modular Kitchen with Quartz Counter',
+                        'Floor-to-Ceiling Sliding Wardrobes with tinted glass accent',
+                        'Living Room Fluted Louver Panel + Marble Sheet Backdrop',
+                        'False Ceiling in all rooms with magnetic track lighting',
+                        'Profile LED lighting in wardrobes and kitchen base'
+                    ],
+                    'inclusions'      => [
+                        'Full Kitchen with tall pantry unit & tandem organizers',
+                        'Master bedroom walk-in / sliding wardrobe with sensor LED',
+                        'Kids & Guest room wardrobes with study tables',
+                        'Designer TV wall with charcoal fluted louvers & storage',
+                        'Foyer shoe rack with cushioned seating niche',
+                        'Complete false ceiling across entire home with LED channels',
+                        '10 Years hardware warranty with engineer supervision'
+                    ],
+                    'exclusions'      => [
+                        'Movable living room sofa and mattress sets',
+                        'Heavy kitchen appliances (refrigerator, microwave)',
+                        'Balcony planter setups'
+                    ],
+                    'business_type'   => 'interior',
+                ],
+                [
+                    'id'              => 9,
+                    'division'        => 'interior',
+                    'tier'            => 'luxury',
+                    'title'           => 'Luxury Interior',
+                    'subtitle'        => 'Bespoke Architectural Grandeur',
+                    'price_per_sqft'  => 2450,
+                    'is_highlighted'  => false,
+                    'warranty_years'  => 15,
+                    'delivery_months' => 4,
+                    'description'     => 'Uncompromising elite craftsmanship using imported natural veneers, Italian PU lacquered surfaces, motorized Blum Aventos, and integrated smart scenes.',
+                    'features'        => [
+                        'Birla / Century Club Prime 710 Gold BWP Plywood',
+                        'Natural Smoked Oak / Teak Veneer with PU Polish & Italian Gloss',
+                        'Blum Servo-Drive Motorized Opening System',
+                        'Bespoke Island Kitchen with Kalinga Stone / Italian Marble',
+                        'Walk-In Wardrobes with sensor illumination & velvet jewelry trays',
+                        'Acoustic Fabric & Brass Inlay Panelling in Master Suite',
+                        'Full Smart Architectural Lighting with automated dimming',
+                        'Italian Travertine cladding on entrance and TV console'
+                    ],
+                    'inclusions'      => [
+                        'Complete bespoke interior fitment from entrance to terrace',
+                        'Island kitchen with motorized drawers & corner le-mans',
+                        'Full walk-in dressing suite with glass aluminum profile shutters',
+                        'Acoustic ceiling and home theatre wall treatments',
+                        'Designer vanity counters in all bathrooms with mirrors',
+                        'Smart ambient scene lighting throughout home',
+                        '15 Years warranty with bi-annual maintenance checkup'
+                    ],
+                    'exclusions'      => [
+                        'Art collection and specialized antique purchases',
+                        'Smart TV / Soundbar electronics'
+                    ],
+                    'business_type'   => 'interior',
+                ],
+            ];
+            $activeInteriorPackages = (isset($packages) && $packages->isNotEmpty()) ? $packages : collect($intFallbacks);
+        @endphp
         <div class="int-packages-grid lux-reveal">
-            @forelse($packages as $pkg)
-            <div class="int-pkg-panel {{ $pkg->is_highlighted ? 'highlighted' : '' }}">
-                @if($pkg->is_highlighted)
+            @foreach($activeInteriorPackages as $pkg)
+            @php
+                $isModel = $pkg instanceof \App\Models\PackageDetail;
+                $pkgId = $isModel ? $pkg->id : ($pkg['id'] ?? null);
+                $pkgTier = $isModel ? $pkg->tier : ($pkg['tier'] ?? 'Plan');
+                $pkgTitle = $isModel ? $pkg->title : ($pkg['title'] ?? '');
+                $pkgSubtitle = $isModel ? $pkg->subtitle : ($pkg['subtitle'] ?? '');
+                $pkgPrice = $isModel ? $pkg->price_per_sqft : ($pkg['price_per_sqft'] ?? 0);
+                $pkgWarranty = $isModel ? ($pkg->warranty_years ?? 10) : ($pkg['warranty_years'] ?? 10);
+                $pkgDelivery = $isModel ? ($pkg->delivery_months ?? 2) : ($pkg['delivery_months'] ?? 2);
+                $pkgHL = $isModel ? $pkg->is_highlighted : ($pkg['is_highlighted'] ?? false);
+                $pkgFeatures = $isModel ? ((is_array($pkg->features) && count($pkg->features)) ? $pkg->features : []) : ($pkg['features'] ?? []);
+                $pkgInclusions = $isModel ? ((is_array($pkg->inclusions) && count($pkg->inclusions)) ? $pkg->inclusions : []) : ($pkg['inclusions'] ?? []);
+                $pkgExclusions = $isModel ? ((is_array($pkg->exclusions) && count($pkg->exclusions)) ? $pkg->exclusions : []) : ($pkg['exclusions'] ?? []);
+                $pkgDesc = $isModel ? $pkg->description : ($pkg['description'] ?? '');
+                $pkgPayload = [
+                    'id' => $pkgId,
+                    'tier' => $pkgTier,
+                    'title' => $pkgTitle,
+                    'subtitle' => $pkgSubtitle,
+                    'price_per_sqft' => $pkgPrice,
+                    'warranty_years' => $pkgWarranty,
+                    'delivery_months' => $pkgDelivery,
+                    'features' => $pkgFeatures,
+                    'inclusions' => $pkgInclusions,
+                    'exclusions' => $pkgExclusions,
+                    'description' => $pkgDesc,
+                    'business_type' => 'interior',
+                ];
+            @endphp
+            <div class="int-pkg-panel {{ $pkgHL ? 'highlighted' : '' }}">
+                @if($pkgHL)
                 <div class="int-pkg-popular-tag">MOST POPULAR CHOICE</div>
                 @endif
 
                 <div>
-                    <span class="int-pkg-tier">{{ strtoupper($pkg->tier) }} PLAN</span>
-                    <h3 class="int-pkg-title">{{ $pkg->title }}</h3>
-                    <p class="int-pkg-subtitle">{{ $pkg->subtitle }}</p>
+                    <span class="int-pkg-tier">{{ strtoupper($pkgTier) }} PLAN</span>
+                    <h3 class="int-pkg-title">{{ $pkgTitle }}</h3>
+                    <p class="int-pkg-subtitle">{{ $pkgSubtitle }}</p>
 
                     <div class="int-pkg-price-row">
-                        <span class="int-pkg-price-val">₹{{ number_format($pkg->price_per_sqft) }}</span>
+                        <span class="int-pkg-price-val">₹{{ number_format($pkgPrice) }}</span>
                         <span class="int-pkg-price-unit">/ sq.ft turnkey</span>
                     </div>
 
                     <div class="int-pkg-chips">
                         <span class="int-pkg-chip">
-                            <i class="fas fa-shield-alt" style="color:var(--int-gold);"></i> {{ $pkg->warranty_years ?? 10 }} Yrs Warranty
+                            <i class="fas fa-shield-alt" style="color:var(--int-gold);"></i> {{ $pkgWarranty }} Yrs Hardware Warranty
                         </span>
                         <span class="int-pkg-chip">
-                            <i class="fas fa-calendar-check" style="color:var(--int-gold);"></i> {{ $pkg->delivery_months ?? 2 }} Mos Handover
+                            <i class="fas fa-calendar-check" style="color:var(--int-gold);"></i> {{ $pkgDelivery }} Mos Handover
                         </span>
                     </div>
 
                     <ul class="int-pkg-features-list">
-                        @if(!empty($pkg->features) && is_array($pkg->features))
-                            @foreach(array_slice($pkg->features, 0, 6) as $feat)
+                        @if(!empty($pkgFeatures) && is_array($pkgFeatures))
+                            @foreach(array_slice($pkgFeatures, 0, 6) as $feat)
                             <li class="int-pkg-feature-item">
                                 <i class="fas fa-check"></i>
                                 <span>{{ $feat }}</span>
@@ -1939,19 +2536,15 @@ body.interior-body .int-yt-dot.active {
                 </div>
 
                 <div>
-                    <a href="#interior-enquiry" onclick="preselectInteriorPackage('{{ addslashes($pkg->title) }}')" class="int-pkg-btn-book">
+                    <a href="#interior-enquiry" onclick="preselectInteriorPackage('{{ addslashes($pkgTitle) }}')" class="int-pkg-btn-book">
                         <i class="fas fa-paper-plane"></i> BOOK THIS PACKAGE
                     </a>
-                    <button type="button" onclick="openInteriorPackageDetailsModalById({{ $pkg->id }})" class="int-pkg-btn-specs">
+                    <button type="button" onclick='openInteriorPackageDetailsModal(@json($pkgPayload))' class="int-pkg-btn-specs">
                         <i class="fas fa-list-check" style="margin-right:4px;"></i> VIEW FULL INCLUSIONS & SPECS
                     </button>
                 </div>
             </div>
-            @empty
-            <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--int-slate-muted);">
-                Interior packages are currently being updated.
-            </div>
-            @endforelse
+            @endforeach
         </div>
     </div>
 </section>
@@ -1975,32 +2568,8 @@ body.interior-body .int-yt-dot.active {
             </p>
         </div>
 
-        <!-- Channel Info Banner -->
-        <div class="int-yt-channel-banner lux-reveal">
-            <div style="display:flex;align-items:center;gap:16px;">
-                <img src="{{ $channelMeta['avatar'] ?? asset('logo.jpg') }}" alt="{{ $channelMeta['name'] ?? 'Maha Interior' }}"
-                     class="int-yt-avatar"
-                     onerror="this.src='{{ asset('logo.jpg') }}'">
-                <div style="text-align:left;">
-                    <div class="int-yt-ch-name">{{ $channelMeta['name'] ?? 'Maha Constructions & Interior' }}</div>
-                    <div class="int-yt-ch-meta">
-                        <span>{{ $yt_channel_handle ?? '@mahaconstructions2013' }}</span>
-                        @if(!empty($channelMeta['subs']))
-                        <span> • {{ $channelMeta['subs'] }} Subscribers</span>
-                        @endif
-                        <span class="int-yt-live-pill"><i class="fas fa-circle"></i> LIVE SYNC</span>
-                    </div>
-                </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;">
-                <a href="{{ $yt_channel_url ?? 'https://www.youtube.com/@mahaconstructions2013' }}" target="_blank" class="int-yt-sub-btn">
-                    <i class="fab fa-youtube" style="margin-right:6px;"></i> SUBSCRIBE
-                </a>
-            </div>
-        </div>
-
         <!-- Video Slider Container -->
-        <div class="int-yt-slider-container lux-reveal">
+        <div class="int-yt-slider-container lux-reveal" style="margin-top:36px;">
             @if(!empty($syncedVideos) && count($syncedVideos) > 0)
             <div class="int-yt-slider-wrapper" id="interiorYtSliderWrapper">
                 <div class="int-yt-slider-track" id="interiorYtSliderTrack">
@@ -2354,7 +2923,7 @@ body.interior-body .int-yt-dot.active {
     }
 
     // Global Packages Data & Safe Parser
-    window.interiorPackagesData = @json($packages);
+    window.interiorPackagesData = @json($activeInteriorPackages);
 
     // Global Projects Data for Gallery & Lightbox
     window.interiorProjectsData = @json($projects);
