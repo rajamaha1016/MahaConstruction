@@ -50,10 +50,10 @@
 
             <div class="hero-image-col">
                 <div style="text-align:center;position:relative;">
-                    <img src="{{ asset('maha-rajan.png') }}" alt="Er. Maha Rajan" style="width:100%;max-width:420px;height:auto;object-fit:cover;display:block;margin:0 auto;position:relative;z-index:1;">
+                    <img src="{{ asset('maha-rajan.png') }}" alt="Er. Maha Rajan" class="engineer-hero-float" style="width:100%;max-width:420px;height:auto;object-fit:cover;display:block;margin:0 auto;position:relative;z-index:1;">
 
                     <!-- Engineer Name Card (Overlapping bottom of image with 0 gap) -->
-                    <div style="margin-top:-65px;position:relative;z-index:5;max-width:380px;margin-left:auto;margin-right:auto;padding:15px 18px 14px;background:linear-gradient(135deg,rgba(11,19,43,0.96),rgba(5,11,20,0.98));backdrop-filter:blur(10px);border:1.5px solid rgba(212,175,55,0.6);border-radius:18px;box-shadow:0 0 35px rgba(212,175,55,0.25),0 12px 35px rgba(0,0,0,0.7);overflow:hidden;">
+                    <div class="engineer-namecard-glow" style="margin-top:-65px;position:relative;z-index:5;max-width:380px;margin-left:auto;margin-right:auto;padding:15px 18px 14px;background:linear-gradient(135deg,rgba(11,19,43,0.96),rgba(5,11,20,0.98));backdrop-filter:blur(10px);border:1.5px solid rgba(212,175,55,0.6);border-radius:18px;box-shadow:0 0 35px rgba(212,175,55,0.25),0 12px 35px rgba(0,0,0,0.7);overflow:hidden;">
                         <!-- Glow top line -->
                         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#D4AF37,#FFD700,#D4AF37,transparent);"></div>
 
@@ -83,26 +83,26 @@
 </section>
 
 <!-- 5 STATS METRICS BAR -->
-<section class="stats-metrics-bar">
+<section class="stats-metrics-bar construct-reveal">
     <div class="container">
         <div class="stats-grid-5">
-            <div class="metric-card">
+            <div class="metric-card construct-reveal-scale stagger-1">
                 <div class="metric-number">12+</div>
                 <div class="metric-label">Years Experience</div>
             </div>
-            <div class="metric-card">
+            <div class="metric-card construct-reveal-scale stagger-2">
                 <div class="metric-number">150+</div>
                 <div class="metric-label">Happy Families</div>
             </div>
-            <div class="metric-card">
+            <div class="metric-card construct-reveal-scale stagger-3">
                 <div class="metric-number">100+</div>
                 <div class="metric-label">Completed Projects</div>
             </div>
-            <div class="metric-card">
+            <div class="metric-card construct-reveal-scale stagger-4">
                 <div class="metric-number">15-Yr</div>
                 <div class="metric-label">Structural Warranty</div>
             </div>
-            <div class="metric-card">
+            <div class="metric-card construct-reveal-scale stagger-5">
                 <div class="metric-number">100%</div>
                 <div class="metric-label">Quality Audit Guarantee</div>
             </div>
@@ -111,9 +111,9 @@
 </section>
 
 <!-- HOMES WE'VE PROUDLY DELIVERED (AUTO-SCROLLING PORTFOLIO CAROUSEL — HIREANDBUILD MODEL) -->
-<section class="section-pad" id="delivered-homes-section">
+<section class="section-pad construct-reveal" id="delivered-homes-section">
     <div class="container">
-        <div style="text-align:center;">
+        <div style="text-align:center;" class="construct-reveal">
             <span class="pill-badge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.75rem;padding:6px 16px;letter-spacing:0.15em;">
                 OUR COMPLETED PROJECTS
             </span>
@@ -125,7 +125,7 @@
             </p>
         </div>
 
-        <div class="projects-carousel-wrap" style="position:relative;margin-top:36px;">
+        <div class="projects-carousel-wrap construct-reveal" style="position:relative;margin-top:36px;">
             <!-- Auto-Scrolling Track -->
             <div class="projects-track" id="projectsTrack" style="display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;padding:16px 8px 32px;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
                 @forelse($projects as $i => $project)
@@ -1332,5 +1332,51 @@
         </div>
     </div>
 </section>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ── Architectural Construction Scroll Reveal Observer ──
+    if ('IntersectionObserver' in window) {
+        const constructObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, {
+            threshold: 0.08,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        document.querySelectorAll('.construct-reveal, .construct-reveal-left, .construct-reveal-right, .construct-reveal-scale').forEach(el => {
+            constructObserver.observe(el);
+        });
+    } else {
+        document.querySelectorAll('.construct-reveal, .construct-reveal-left, .construct-reveal-right, .construct-reveal-scale').forEach(el => {
+            el.classList.add('is-visible');
+        });
+    }
+
+    // ── Smooth Scroll Parallax for Engineer Hero Column ──
+    const heroImgCol = document.querySelector('.hero-image-col');
+    if (heroImgCol && window.innerWidth > 768) {
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+                    if (scrollY < 700) {
+                        heroImgCol.style.transform = `translate3d(0, ${scrollY * 0.10}px, 0)`;
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+    }
+});
+</script>
+@endpush
 
 @endsection

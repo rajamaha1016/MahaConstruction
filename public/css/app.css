@@ -4162,5 +4162,205 @@ body.interior-body .floating-actions-bar {
   background: #FFD700;
 }
 
+/* ==========================================================================
+   ARCHITECTURAL CONSTRUCTION SCROLL ANIMATIONS & MOTION SYSTEM
+   ========================================================================== */
 
+/* ── Base Scroll Reveal Classes ── */
+.construct-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
 
+.construct-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.construct-reveal-left {
+  opacity: 0;
+  transform: translateX(-36px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.construct-reveal-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.construct-reveal-right {
+  opacity: 0;
+  transform: translateX(36px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.construct-reveal-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.construct-reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.construct-reveal-scale.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Cascading Stagger Delays ── */
+.stagger-1 { transition-delay: 0.08s !important; }
+.stagger-2 { transition-delay: 0.16s !important; }
+.stagger-3 { transition-delay: 0.24s !important; }
+.stagger-4 { transition-delay: 0.32s !important; }
+.stagger-5 { transition-delay: 0.40s !important; }
+.stagger-6 { transition-delay: 0.48s !important; }
+
+/* ── Construction Hero Keyframe Animations ── */
+.hero-section .hero-marquee-badge {
+  animation: heroPillSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.hero-section .hero-title {
+  animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
+}
+
+.hero-section .hero-subtitle {
+  animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+}
+
+.hero-section .hero-checklist .check-item {
+  animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.hero-section .hero-checklist .check-item:nth-child(1) { animation-delay: 0.28s; }
+.hero-section .hero-checklist .check-item:nth-child(2) { animation-delay: 0.34s; }
+.hero-section .hero-checklist .check-item:nth-child(3) { animation-delay: 0.40s; }
+.hero-section .hero-checklist .check-item:nth-child(4) { animation-delay: 0.46s; }
+.hero-section .hero-checklist .check-item:nth-child(5) { animation-delay: 0.52s; }
+
+.hero-section .hero-cta-group {
+  animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s backwards;
+}
+
+.hero-section .hero-image-col {
+  animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.25s backwards;
+}
+
+.hero-image-col .engineer-hero-float {
+  animation: heroPortraitFloat 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.hero-image-col .engineer-namecard-glow {
+  animation: goldGlowPulse 4s ease-in-out infinite;
+}
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroPillSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroPortraitFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes goldGlowPulse {
+  0%, 100% {
+    box-shadow: 0 0 35px rgba(212, 175, 55, 0.25), 0 12px 35px rgba(0, 0, 0, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(212, 175, 55, 0.45), 0 16px 45px rgba(0, 0, 0, 0.85);
+  }
+}
+
+/* ── Gold Shimmer Light Sweep ── */
+.btn-gold-pill, .int-btn-gold {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gold-pill::after, .int-btn-gold::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  animation: buttonShimmer 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes buttonShimmer {
+  0% {
+    left: -70%;
+  }
+  30%, 100% {
+    left: 140%;
+  }
+}
+
+/* ── 5 Metric Cards Hover & Scroll Scale ── */
+.stats-metrics-bar .metric-card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.stats-metrics-bar .metric-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.25);
+  border-color: rgba(212, 175, 55, 0.6);
+}
+
+/* ── Accessibility: Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .construct-reveal,
+  .construct-reveal-left,
+  .construct-reveal-right,
+  .construct-reveal-scale,
+  .lux-reveal,
+  .hero-section .hero-marquee-badge,
+  .hero-section .hero-title,
+  .hero-section .hero-subtitle,
+  .hero-section .hero-checklist .check-item,
+  .hero-section .hero-cta-group,
+  .hero-section .hero-image-col {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

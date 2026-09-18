@@ -119,7 +119,7 @@ body.interior-body .int-hero-video-wrap video {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(var(--int-hero-scale, 1)) translateY(var(--int-hero-shift, 0px));
     min-width: 100%;
     min-height: 100%;
     width: auto;
@@ -127,6 +127,7 @@ body.interior-body .int-hero-video-wrap video {
     object-fit: cover;
     filter: brightness(0.88) contrast(1.02) saturate(1.08);
     transition: filter 0.5s ease;
+    will-change: transform;
 }
 /* Fallback poster img when video fails */
 body.interior-body .int-hero-video-wrap img.int-hero-poster {
@@ -1551,7 +1552,16 @@ body.interior-body .interior-footer-nav a:hover {
     color: var(--int-gold) !important;
 }
 
-/* ─── ANIMATION KEYFRAMES ─────────────────────────────────── */
+/* ─── LIVARTA INTERIORS MOTION KEYFRAMES & REVEALS ────────── */
+@keyframes livartaPillFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+@keyframes livartaGlowDot {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 184, 105, 0.85); }
+    70% { transform: scale(1.18); box-shadow: 0 0 0 10px rgba(229, 184, 105, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 184, 105, 0); }
+}
 @keyframes luxHeroZoom {
     0% { transform: scale(1); }
     100% { transform: scale(1.06); }
@@ -1568,15 +1578,56 @@ body.interior-body .interior-footer-nav a:hover {
     0% { transform: scale(1); opacity: 0.85; }
     100% { transform: scale(1.65); opacity: 0; }
 }
+
+body.interior-body .int-tag-pill {
+    animation: livartaPillFloat 4s ease-in-out infinite;
+}
+body.interior-body .int-tag-dot {
+    animation: livartaGlowDot 2.2s infinite cubic-bezier(0.66, 0, 0, 1) !important;
+}
+
 .lux-reveal {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(28px);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: opacity, transform;
 }
 .lux-reveal.is-visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+.lux-reveal-left {
+    opacity: 0;
+    transform: translateX(-32px);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.lux-reveal-left.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.lux-reveal-right {
+    opacity: 0;
+    transform: translateX(32px);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.lux-reveal-right.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.lux-reveal-scale {
+    opacity: 0;
+    transform: scale(0.94);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.lux-reveal-scale.is-visible {
+    opacity: 1;
+    transform: scale(1);
 }
 
 /* ─── SECTION: LEARN BEFORE YOU DESIGN (#interior-learn) ─── */
@@ -3867,6 +3918,40 @@ body.interior-body .int-yt-dot.active {
                     console.warn("Video error event triggered", e);
                     if (p) p.style.display = 'block';
                 });
+            }
+
+            // ── Livarta Interiors Video Background & Hero Content Scroll Parallax ──
+            const heroBgVideo = document.getElementById('intHeroBgVideo');
+            const heroOuter = document.querySelector('.int-hero-content-outer');
+            const heroSection = document.getElementById('interior-intro');
+
+            if (heroSection && (heroBgVideo || heroOuter)) {
+                let ticking = false;
+                window.addEventListener('scroll', () => {
+                    if (!ticking) {
+                        window.requestAnimationFrame(() => {
+                            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+                            const heroH = heroSection.offsetHeight || 800;
+                            if (scrollY <= heroH + 100) {
+                                const progress = Math.min(1, Math.max(0, scrollY / heroH));
+                                if (heroBgVideo) {
+                                    // Smooth scale from 1.0 to 1.14 with downward parallax glide
+                                    const scale = (1 + (progress * 0.14)).toFixed(4);
+                                    const shift = (scrollY * 0.28).toFixed(1);
+                                    heroBgVideo.style.setProperty('--int-hero-scale', scale);
+                                    heroBgVideo.style.setProperty('--int-hero-shift', `${shift}px`);
+                                }
+                                if (heroOuter && window.innerWidth > 768) {
+                                    // Subtle lift & soft fade on hero text during scroll
+                                    heroOuter.style.transform = `translate3d(0, ${(scrollY * 0.16).toFixed(1)}px, 0)`;
+                                    heroOuter.style.opacity = Math.max(0.12, 1 - (progress * 1.25)).toFixed(3);
+                                }
+                            }
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
             }
         })();
     });
