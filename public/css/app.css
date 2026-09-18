@@ -185,10 +185,16 @@ input, select, textarea { font-family: var(--font-body); font-weight: 400; outli
 
 /* Mobile: still 100vh so GSAP pinning works — content is compact inside */
 @media (max-width: 768px) {
+  .construction-scroll-hero-section {
+    overflow: hidden; /* Strictly clip — nothing bleeds into stats section */
+  }
   .construction-hero-sticky {
-    padding-top: 68px;
-    padding-bottom: 8px;
-    align-items: flex-start;
+    padding-top: 70px;
+    padding-bottom: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    align-items: center;
+    overflow: hidden;
   }
 }
 
@@ -401,40 +407,63 @@ input, select, textarea { font-family: var(--font-body); font-weight: 400; outli
   justify-content: center;
 }
 
-/* ── Mobile Hero Grid: compact two-column with scroll animation enabled ── */
+/* ── Mobile Hero Grid: stacked — text first, person image below ── */
 @media (max-width: 768px) {
   .construction-hero-content-layer {
     padding: 4px 0 6px;
     align-items: flex-start;
+    justify-content: flex-start;
+    overflow-y: hidden;
   }
 
-  /* Keep two columns side by side on mobile: text 58% | image 42% */
+  /* Single stacked column on mobile */
   .hero-grid {
-    grid-template-columns: 58% 42%;
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 10px;
     align-items: center;
+    text-align: center;
   }
 
+  /* Text column first */
   .hero-text-col {
     order: 1;
-    align-items: flex-start;
+    align-items: center;
+    width: 100%;
   }
 
+  /* Person image below — compact, not hidden */
   .hero-image-col {
     order: 2;
+    display: flex !important;
     align-items: center;
     justify-content: center;
   }
+
+  /* Compact person image — fits below content */
+  .engineer-hero-float {
+    max-width: 130px !important;
+    max-height: 170px !important;
+    height: auto !important;
+    object-fit: contain !important;
+    object-position: top center !important;
+  }
+
+  .engineer-namecard-glow {
+    max-width: 170px !important;
+    margin-top: -35px !important;
+    padding: 7px 10px !important;
+  }
 }
 
-/* ── Very small phones: single column compact ── */
+/* ── Very small phones ── */
 @media (max-width: 380px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 8px;
+  .engineer-hero-float {
+    max-width: 110px !important;
+    max-height: 140px !important;
   }
-  .hero-text-col { order: 1; align-items: center; text-align: center; }
-  .hero-image-col { order: 2; }
+  .engineer-namecard-glow {
+    max-width: 140px !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -531,68 +560,61 @@ input, select, textarea { font-family: var(--font-body); font-weight: 400; outli
 }
 .btn-whatsapp-outline:hover { background: rgba(37, 211, 102, 0.15); transform: translateY(-2px); }
 
-/* ─── MOBILE HERO RESPONSIVE FIXES (compact for 100vh pinning) ─── */
+/* ─── MOBILE HERO RESPONSIVE FIXES (stacked compact for 100vh) ─── */
 @media (max-width: 768px) {
   .hero-title {
-    font-size: clamp(1.1rem, 4.5vw, 1.6rem);
+    font-size: clamp(1.3rem, 5.5vw, 1.8rem);
     margin-bottom: 8px;
     line-height: 1.2;
   }
   .hero-subtitle {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     margin-bottom: 10px;
-    max-width: 100%;
+    max-width: 90%;
     line-height: 1.5;
+    margin-left: auto;
+    margin-right: auto;
   }
   .hero-checklist {
-    gap: 6px 10px;
+    gap: 6px 12px;
     margin-bottom: 12px;
+    justify-content: center;
   }
   .check-item {
-    font-size: 0.72rem;
+    font-size: 0.78rem;
   }
   .hero-cta-group {
     flex-direction: column;
     gap: 8px;
     width: 100%;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: stretch;
   }
   .btn-gold-pill,
   .btn-whatsapp-outline {
     width: 100%;
     justify-content: center;
-    padding: 10px 14px;
-    font-size: 0.78rem;
-    border-radius: 24px;
+    padding: 11px 16px;
+    font-size: 0.82rem;
+    border-radius: 26px;
   }
   .pill-badge {
     margin-bottom: 10px;
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     padding: 4px 10px;
   }
   .hero-marquee-badge {
     margin-bottom: 10px;
   }
-  /* Compact person image on mobile — no height crop, full figure visible */
-  .engineer-hero-float {
-    max-width: 150px !important;
-    height: auto !important;
-    object-fit: contain !important;
-    object-position: top center !important;
-  }
-  .engineer-namecard-glow {
-    max-width: 160px !important;
-    margin-top: -40px !important;
-    padding: 8px 10px 8px !important;
-  }
-  /* Shrink text inside the namecard for mobile */
-  .engineer-namecard-glow div:first-child + div {
-    font-size: 0.55rem !important;
+  /* Namecard text compact */
+  .engineer-namecard-glow [style*="0.68rem"],
+  .engineer-namecard-glow [style*="0.85rem"] {
+    font-size: 0.6rem !important;
   }
   .engineer-namecard-glow [style*="1.65rem"] {
-    font-size: 1rem !important;
-  }
-  .engineer-namecard-glow [style*="0.85rem"] {
-    font-size: 0.68rem !important;
+    font-size: 0.95rem !important;
   }
 }
 
