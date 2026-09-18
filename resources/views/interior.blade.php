@@ -1855,20 +1855,30 @@ body.interior-body .int-yt-dot.active {
     <!-- ── Cinematic Full-Screen Video Background ── -->
     <div class="int-hero-video-wrap">
         <video
+            id="intHeroBgVideo"
             autoplay
             muted
             loop
             playsinline
+            webkit-playsinline
+            x5-playsinline
             preload="auto"
             poster="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85"
-            onerror="this.parentElement.querySelector('img').style.display='block';this.style.display='none';"
+            style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;"
         >
-            {{-- Verified genuine luxury interior living room walkthrough --}}
+            @if(!empty($interior_hero_video_url))
+                <source src="{{ $interior_hero_video_url }}" type="video/mp4">
+            @endif
             <source src="{{ asset('videos/interior-luxury-living.mp4') }}" type="video/mp4">
-            <source src="{{ asset('videos/interior-luxury-living-2.mp4') }}" type="video/mp4">
+            <source src="/videos/interior-luxury-living.mp4" type="video/mp4">
+            <source src="{{ url('videos/interior-luxury-living.mp4') }}" type="video/mp4">
+            <source src="{{ asset('videos/interior-hero.mp4') }}" type="video/mp4">
+            <source src="/videos/interior-hero.mp4" type="video/mp4">
+            <source src="{{ url('videos/interior-hero.mp4') }}" type="video/mp4">
         </video>
         {{-- High-resolution architectural living room fallback poster --}}
         <img
+            id="intHeroPoster"
             class="int-hero-poster"
             src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85"
             alt="Maha Luxury Interior Living Space"
@@ -3770,6 +3780,92 @@ body.interior-body .int-yt-dot.active {
                 sectionIds.forEach(id => {
                     const el = document.getElementById(id);
                     if (el) observer.observe(el);
+                });
+            }
+
+            // ── Ultra-Robust Interior Hero Video Playback Controller ──
+            const v = document.getElementById('intHeroBgVideo');
+            const p = document.getElementById('intHeroPoster');
+            if (v) {
+                // Ensure strict autoplay attributes
+                v.muted = true;
+                v.defaultMuted = true;
+                v.playsInline = true;
+                v.setAttribute('muted', '');
+                v.setAttribute('playsinline', '');
+                v.setAttribute('webkit-playsinline', '');
+                v.setAttribute('x5-playsinline', '');
+
+                let isPlaying = false;
+                let interactionBound = false;
+
+                const onVideoPlaying = () => {
+                    isPlaying = true;
+                    if (p) p.style.display = 'none';
+                    v.style.opacity = '1';
+                };
+
+                const tryPlay = () => {
+                    v.muted = true;
+                    const prom = v.play();
+                    if (prom !== undefined) {
+                        prom.then(() => {
+                            onVideoPlaying();
+                        }).catch(() => {
+                            // Autoplay restricted by browser policy; wait for first user interaction
+                            if (!interactionBound) {
+                                interactionBound = true;
+                                const triggerPlay = () => {
+                                    v.muted = true;
+                                    v.play().then(() => {
+                                        onVideoPlaying();
+                                    }).catch(() => {});
+                                };
+                                ['pointerdown', 'touchstart', 'click', 'scroll'].forEach(evt => {
+                                    window.addEventListener(evt, triggerPlay, { once: true, passive: true });
+                                });
+                            }
+                        });
+                    }
+                };
+
+                v.addEventListener('playing', onVideoPlaying);
+                v.addEventListener('timeupdate', () => {
+                    if (v.currentTime > 0.1 && !isPlaying) {
+                        onVideoPlaying();
+                    }
+                });
+
+                // Attempt playback immediately and on metadata lifecycle
+                tryPlay();
+                v.addEventListener('loadedmetadata', tryPlay, { once: true });
+                v.addEventListener('loadeddata', tryPlay, { once: true });
+                v.addEventListener('canplay', tryPlay, { once: true });
+                v.addEventListener('canplaythrough', tryPlay, { once: true });
+
+                window.addEventListener('pageshow', tryPlay);
+                document.addEventListener('visibilitychange', () => {
+                    if (!document.hidden && !isPlaying) {
+                        tryPlay();
+                    }
+                });
+
+                // Monitor source errors: fall back to poster only if all sources fail
+                const sources = v.querySelectorAll('source');
+                let failedSources = 0;
+                sources.forEach(src => {
+                    src.addEventListener('error', () => {
+                        failedSources++;
+                        if (failedSources >= sources.length) {
+                            console.warn("All video sources failed to load. Falling back to architectural poster.");
+                            if (p) p.style.display = 'block';
+                        }
+                    });
+                });
+
+                v.addEventListener('error', function(e) {
+                    console.warn("Video error event triggered", e);
+                    if (p) p.style.display = 'block';
                 });
             }
         })();

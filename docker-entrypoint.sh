@@ -34,6 +34,7 @@ mkdir -p storage/framework/cache/data \
          storage/app/chunks \
          storage/logs \
          public/uploads \
+         public/videos \
          bootstrap/cache \
          database
 
@@ -84,8 +85,9 @@ if [ "$DB_CONN" = "sqlite" ]; then
 fi
 
 # Set broad read/write permissions for web server
-chown -R www-data:www-data storage bootstrap/cache public/uploads database 2>/dev/null || true
+chown -R www-data:www-data storage bootstrap/cache public/uploads public/videos database 2>/dev/null || true
 chmod -R 777 storage bootstrap/cache public/uploads database 2>/dev/null || true
+chmod -R 755 public/videos 2>/dev/null || true
 
 # Link public storage
 php artisan storage:link --no-interaction || true

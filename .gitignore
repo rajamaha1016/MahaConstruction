@@ -85,12 +85,17 @@
 /private key.pub
 auth.json
 
-# Large Raw Media Files
+# Large Raw Media Files (Ignore arbitrary large uploads, but track essential public assets)
 *.mp4
 *.mov
 *.webm
 *.avi
 *.mkv
+!/public/videos/
+!/public/videos/*
+!/public/videos/*.mp4
+!/public/videos/*.webm
+!/public/videos/*.mov
 
 # Logs & Debug
 npm-debug.log*

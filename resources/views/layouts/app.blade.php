@@ -38,9 +38,17 @@
                 <a href="#interior-testimonials" class="nav-item interior-nav-item">TESTIMONIALS</a>
                 <a href="#interior-packages" class="nav-item interior-nav-item">PACKAGES</a>
                 <a href="#interior-enquiry" class="nav-item interior-nav-item">CONTACT</a>
+                <a href="{{ route('home') }}" class="nav-item interior-nav-item mobile-only-link" style="color:#C8952B!important;font-weight:800;border-top:1px solid rgba(200,149,43,0.25);margin-top:6px;padding-top:10px;">
+                    <i class="fas fa-building" style="margin-right:6px;"></i> VISIT CONSTRUCTION
+                </a>
             </div>
 
             <div class="nav-actions interior-nav-actions">
+                <a href="{{ route('home') }}" class="division-switch-pill" title="Switch to Construction Division" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:#161922;border:1.5px solid #C8952B;color:#FFFFFF;border-radius:30px;font-size:0.74rem;font-weight:700;letter-spacing:0.06em;text-decoration:none;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);box-shadow:0 2px 10px rgba(0,0,0,0.15);margin-right:8px;">
+                    <i class="fas fa-building" style="color:#E5B869;"></i>
+                    <span>CONSTRUCTION</span>
+                    <i class="fas fa-arrow-right" style="font-size:0.65rem;opacity:0.8;"></i>
+                </a>
                 <button class="nav-search-btn" id="searchToggleBtn" title="Search">
                     <i class="fas fa-search" style="font-size:16px;"></i>
                 </button>
@@ -66,9 +74,17 @@
                 <a href="{{ route('home') }}" class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">HOME</a>
                 <a href="{{ route('pricing') }}" class="nav-item {{ request()->routeIs('pricing') ? 'active' : '' }}">PACKAGES</a>
                 <a href="{{ route('projects') }}" class="nav-item {{ request()->routeIs('projects') ? 'active' : '' }}">PROJECTS</a>
+                <a href="{{ route('interior') }}" class="nav-item mobile-only-link" style="color:#FFD700!important;font-weight:800;border-top:1px solid rgba(212,175,55,0.25);margin-top:6px;padding-top:10px;">
+                    <i class="fas fa-couch" style="margin-right:6px;"></i> EXPLORE MAHA INTERIOR
+                </a>
             </div>
 
             <div class="nav-actions">
+                <a href="{{ route('interior') }}" class="division-switch-pill" title="Explore Maha Interior Studio" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:rgba(15,23,42,0.85);border:1.5px solid #D4AF37;color:#FFFFFF;border-radius:30px;font-size:0.74rem;font-weight:700;letter-spacing:0.06em;text-decoration:none;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);box-shadow:0 0 16px rgba(212,175,55,0.25);margin-right:8px;">
+                    <i class="fas fa-couch" style="color:#FFD700;"></i>
+                    <span>MAHA INTERIOR</span>
+                    <i class="fas fa-arrow-right" style="font-size:0.65rem;opacity:0.8;"></i>
+                </a>
                 <button class="nav-search-btn" id="searchToggleBtn" title="Search">
                     <i class="fas fa-search" style="font-size:16px;"></i>
                 </button>

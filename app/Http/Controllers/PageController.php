@@ -57,6 +57,8 @@ class PageController extends Controller
             ?: Setting::where('key', 'intro_video_url')->value('value')
             ?: '/uploads/1785711422_WhatsApp Video 2026-07-30 at 10.50.53 AM.mp4';
 
+        $interior_hero_video_url = Setting::where('key', 'interior_hero_video_url')->value('value') ?: null;
+
         $yt_channel_url    = YouTubeSyncService::getActiveChannelUrl('interior');
         $ytData            = $ytService->getVideos($yt_channel_url, false, 'interior');
         $syncedVideos      = $ytData['videos'] ?? [];
@@ -70,7 +72,7 @@ class PageController extends Controller
         $yt_channel_handle = YouTubeSyncService::getChannelHandle('interior');
 
         return view('interior', compact(
-            'services', 'projects', 'testimonials', 'packages', 'intro_video_url',
+            'services', 'projects', 'testimonials', 'packages', 'intro_video_url', 'interior_hero_video_url',
             'syncedVideos', 'channelMeta', 'yt_channel_url', 'yt_channel_handle'
         ));
     }

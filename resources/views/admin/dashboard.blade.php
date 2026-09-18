@@ -549,51 +549,81 @@
             transform: translateY(-1px) !important;
         }
 
-        /* ── Division Sub-Toggle Control ── */
-        .division-sub-toggle {
-            display: inline-flex;
-            background: var(--slate-100);
-            padding: 4px;
-            border-radius: var(--radius-md);
+        /* ── STRUCTURAL DIVISION WORKSPACE & SCOPE CONTROL ── */
+        .division-scope-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: #FFFFFF;
             border: 1px solid var(--slate-200);
-            gap: 4px;
+            border-left: 4px solid var(--navy-900);
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            margin: 16px 0 22px 0;
+            box-shadow: var(--shadow-xs);
+            animation: divisionBannerEnter 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .sub-toggle-btn {
+        .division-scope-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .division-scope-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 7px 16px;
+            gap: 7px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: var(--navy-900);
+            color: #FFFFFF;
+            box-shadow: 0 2px 6px rgba(15,23,42,0.18);
+        }
+
+        .division-scope-badge .scope-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10B981;
+            box-shadow: 0 0 6px #10B981;
+            animation: pulseGlow 1.8s ease-in-out infinite;
+        }
+
+        .division-scope-desc {
             font-size: 0.8rem;
-            font-weight: 700;
-            border-radius: var(--radius-sm);
-            border: none;
-            background: transparent;
             color: var(--slate-600);
+            font-weight: 500;
+        }
+
+        .division-scope-switch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 14px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--navy-900);
+            background: var(--slate-100);
+            border: 1px solid var(--slate-300);
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             font-family: var(--font-main);
         }
 
-        .sub-toggle-btn:hover {
-            color: var(--navy-900);
-            background: rgba(255,255,255,0.6);
-        }
-
-        .sub-toggle-btn.active {
-            background: #FFFFFF;
-            color: var(--navy-950);
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-        }
-
-        body.theme-construction .sub-toggle-btn.active {
-            color: #1D4ED8;
-            background: #FFFFFF;
-        }
-
-        body.theme-interior .sub-toggle-btn.active {
-            color: #D97706;
-            background: #FFFFFF;
+        .division-scope-switch-btn:hover {
+            background: var(--navy-900);
+            color: #FFFFFF;
+            border-color: var(--navy-900);
+            box-shadow: 0 3px 10px rgba(15,23,42,0.2);
+            transform: translateY(-1px);
         }
 
         .btn-text-danger {
@@ -631,7 +661,18 @@
         @keyframes tabFadeSlideIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(12px) scale(0.995);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes cardEnterCascade {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
             }
             to {
                 opacity: 1;
@@ -639,19 +680,49 @@
             }
         }
 
+        @keyframes pulseGlow {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.55;
+                transform: scale(1.25);
+            }
+        }
+
+        @keyframes divisionBannerEnter {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes badgeBounce {
+            0%, 100% { transform: scale(1); }
+            40% { transform: scale(1.18); }
+            70% { transform: scale(0.95); }
+        }
+
         .admin-tab-pane.active {
-            animation: tabFadeSlideIn 0.25s ease-out forwards;
+            animation: tabFadeSlideIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .card-dark-panel,
         .project-video-card,
-        .stat-card-custom {
+        .stat-card-custom,
+        .package-card {
             transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease !important;
         }
 
-        .project-video-card:hover {
-            transform: translateY(-4px) scale(1.008) !important;
-            box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.12), 0 4px 8px -4px rgba(0, 0, 0, 0.06) !important;
+        .project-video-card:hover,
+        .package-card:hover {
+            transform: translateY(-5px) scale(1.008) !important;
+            box-shadow: 0 14px 28px -6px rgba(15, 23, 42, 0.12), 0 6px 12px -4px rgba(15, 23, 42, 0.06) !important;
         }
 
         .sidebar-nav-link {
@@ -666,45 +737,42 @@
             transform: translateX(4px) !important;
         }
 
-        /* ── DIVISION THEMES ── */
-        body.theme-construction .admin-header-bar {
-            border-top: 3px solid #2563EB !important;
+        /* ── WORKSPACE DIVISION SWITCHER IN TOP HEADER ── */
+        .division-switcher {
+            display: inline-flex;
+            background: var(--slate-100);
+            padding: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--slate-200);
+            gap: 4px;
         }
 
-        body.theme-construction #btnDivConstruction {
-            background: linear-gradient(135deg, #2563EB, #1D4ED8) !important;
-            color: #FFFFFF !important;
-            box-shadow: 0 2px 10px rgba(37,99,235,0.35) !important;
-            border-color: #2563EB !important;
+        .division-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 16px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: transparent;
+            color: var(--slate-600);
+            cursor: pointer;
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            font-family: var(--font-main);
+            letter-spacing: 0.03em;
         }
 
-        body.theme-construction #btnDivInterior {
-            background: transparent !important;
-            color: var(--slate-600) !important;
-            border-color: var(--slate-200) !important;
-            box-shadow: none !important;
+        .division-btn:hover {
+            color: var(--navy-900);
+            background: rgba(255, 255, 255, 0.85);
         }
 
-        body.theme-interior .admin-header-bar {
-            border-top: 3px solid #D97706 !important;
-        }
-
-        body.theme-interior #btnDivInterior {
-            background: linear-gradient(135deg, #F59E0B, #D97706) !important;
-            color: #FFFFFF !important;
-            box-shadow: 0 2px 10px rgba(217,119,6,0.35) !important;
-            border-color: #D97706 !important;
-        }
-
-        body.theme-interior #btnDivConstruction {
-            background: transparent !important;
-            color: var(--slate-600) !important;
-            border-color: var(--slate-200) !important;
-            box-shadow: none !important;
-        }
-
-        body.theme-interior .admin-sidebar {
-            background: linear-gradient(180deg, #1C1007 0%, #0F172A 100%) !important;
+        .division-btn.active {
+            background: var(--navy-900);
+            color: #FFFFFF;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
         }
 
         /* ── Tables ── */
@@ -1156,40 +1224,57 @@
                 </div>
             </div>
         </div>
+
+        <!-- Sidebar Workspace Division Selector -->
+        <div style="padding:12px 16px 10px;border-bottom:1px solid var(--navy-800);">
+            <div style="font-size:0.62rem;font-weight:800;color:var(--slate-400);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
+                <span>ACTIVE WORKSPACE</span>
+                <span id="sidebarActiveDivisionIndicator" style="color:#10B981;font-size:0.6rem;font-weight:700;">● CONST</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;background:rgba(15,23,42,0.9);padding:3px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);">
+                <button type="button" id="sideDivConst" onclick="setAdminDivision('construction')" style="border:none;background:#FFFFFF;color:var(--navy-900);padding:6px 8px;font-size:0.72rem;font-weight:800;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s cubic-bezier(0.16,1,0.3,1);box-shadow:0 1px 4px rgba(0,0,0,0.15);">
+                    <i class="fa-solid fa-building" style="color:var(--navy-900);"></i> <span>Const.</span>
+                </button>
+                <button type="button" id="sideDivInt" onclick="setAdminDivision('interior')" style="border:none;background:transparent;color:var(--slate-400);padding:6px 8px;font-size:0.72rem;font-weight:800;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s cubic-bezier(0.16,1,0.3,1);">
+                    <i class="fa-solid fa-couch" style="color:var(--slate-400);"></i> <span>Interior</span>
+                </button>
+            </div>
+        </div>
+
         <ul class="sidebar-nav-list">
-            <li class="sidebar-section-title">OPERATIONS</li>
+            <li class="sidebar-section-title" id="sidebarSectionOperations">CONSTRUCTION OPERATIONS</li>
             <li>
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('analytics', this)">
                     <i class="fa-solid fa-chart-line nav-icon icon-analytics"></i>
-                    <span>Analytics</span>
+                    <span id="sidebarLabelAnalytics">Analytics</span>
                     <span class="badge-count live-pill">LIVE</span>
                 </a>
             </li>
             <li>
                 <a href="#" class="sidebar-nav-link active" onclick="switchAdminTab('reviews', this)">
                     <i class="fa-solid fa-video nav-icon icon-video"></i>
-                    <span>Video Reviews</span>
+                    <span id="sidebarLabelReviews">Video Reviews</span>
                     <span class="badge-count bc-rose" id="sidebarReviewsCount">{{ \App\Models\Testimonial::count() }}</span>
                 </a>
             </li>
             <li>
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('projects', this)">
                     <i class="fa-solid fa-building-circle-check nav-icon icon-projects"></i>
-                    <span>Completed Projects</span>
+                    <span id="sidebarLabelProjects">Completed Projects</span>
                     <span class="badge-count bc-blue" id="sidebarProjectsCount">{{ \App\Models\Project::count() }}</span>
                 </a>
             </li>
             <li>
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('packages', this)">
                     <i class="fa-solid fa-cubes nav-icon icon-packages"></i>
-                    <span>Packages &amp; Pricing</span>
+                    <span id="sidebarLabelPackages">Packages &amp; Pricing</span>
                     <span class="badge-count bc-violet" id="sidebarPackagesCount">{{ \App\Models\PackageDetail::count() }}</span>
                 </a>
             </li>
             <li>
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('quotes', this)">
                     <i class="fa-solid fa-inbox nav-icon icon-leads"></i>
-                    <span>Consultations &amp; Leads</span>
+                    <span id="sidebarLabelQuotes">Consultations &amp; Leads</span>
                     <span class="badge-count bc-amber" id="sidebarQuotesCount">{{ \App\Models\QuoteRequest::count() }}</span>
                 </a>
             </li>
@@ -1198,7 +1283,7 @@
             <li>
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('youtube', this)">
                     <i class="fa-brands fa-youtube nav-icon icon-youtube"></i>
-                    <span>YouTube Channels</span>
+                    <span id="sidebarLabelYoutube">YouTube Channels</span>
                     <span class="badge-count bc-red" id="sidebarYtCount">{{ ($settings['youtube_video_count'] ?? null)?->value ?? '0' }}</span>
                 </a>
             </li>
@@ -1588,15 +1673,23 @@
                             <h2 class="panel-header-title" id="title-reviews"><i class="fa-solid fa-video" style="margin-right:8px;color:var(--navy-900);"></i> Client Video Testimonials</h2>
                             <p class="panel-header-sub" id="sub-reviews">Upload video files or video links from verified homeowners.</p>
                         </div>
-                        <button class="btn-gold-pill" onclick="openUploadModal('testimonial')"><i class="fa-solid fa-plus" style="margin-right:6px;"></i> Upload Video Review</button>
+                        <button class="btn-gold-pill" id="action-btn-reviews" onclick="openUploadModal('testimonial')"><i class="fa-solid fa-plus" style="margin-right:6px;"></i> Upload Video Review</button>
                     </div>
 
-                    <div class="division-sub-toggle" style="margin:16px 0 20px 0;">
-                        <button type="button" class="sub-toggle-btn active" data-division="construction" onclick="setAdminDivision('construction')">
-                            <i class="fa-solid fa-building"></i> Construction Reviews
-                        </button>
-                        <button type="button" class="sub-toggle-btn" data-division="interior" onclick="setAdminDivision('interior')">
-                            <i class="fa-solid fa-couch"></i> Interior Reviews
+                    <!-- Division Scope Banner -->
+                    <div class="division-scope-banner" id="banner-reviews">
+                        <div class="division-scope-info">
+                            <span class="division-scope-badge" id="badge-reviews">
+                                <span class="scope-dot"></span>
+                                <span id="badge-text-reviews">CONSTRUCTION DIVISION</span>
+                            </span>
+                            <span class="division-scope-desc" id="desc-reviews">
+                                Showing video reviews from verified home building clients.
+                            </span>
+                        </div>
+                        <button type="button" class="division-scope-switch-btn" id="switch-btn-reviews" onclick="toggleDivisionQuickly()">
+                            <span>Switch to Interior Studio</span>
+                            <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>
                         </button>
                     </div>
 
@@ -1637,15 +1730,23 @@
                             <h2 class="panel-header-title" id="title-projects"><i class="fa-solid fa-building-circle-check" style="margin-right:8px;color:var(--navy-900);"></i> Completed Projects Walkthroughs</h2>
                             <p class="panel-header-sub" id="sub-projects">Manage walkthrough videos, full-resolution photos & project specifications.</p>
                         </div>
-                        <button class="btn-gold-pill" onclick="openUploadModal('project')"><i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Completed Project</button>
+                        <button class="btn-gold-pill" id="action-btn-projects" onclick="openUploadModal('project')"><i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Completed Project</button>
                     </div>
 
-                    <div class="division-sub-toggle" style="margin:16px 0 20px 0;">
-                        <button type="button" class="sub-toggle-btn active" data-division="construction" onclick="setAdminDivision('construction')">
-                            <i class="fa-solid fa-building"></i> Construction Projects
-                        </button>
-                        <button type="button" class="sub-toggle-btn" data-division="interior" onclick="setAdminDivision('interior')">
-                            <i class="fa-solid fa-couch"></i> Interior Projects
+                    <!-- Division Scope Banner -->
+                    <div class="division-scope-banner" id="banner-projects">
+                        <div class="division-scope-info">
+                            <span class="division-scope-badge" id="badge-projects">
+                                <span class="scope-dot"></span>
+                                <span id="badge-text-projects">CONSTRUCTION DIVISION</span>
+                            </span>
+                            <span class="division-scope-desc" id="desc-projects">
+                                Managing luxury villas, architectural homes, and turnkey structural buildings.
+                            </span>
+                        </div>
+                        <button type="button" class="division-scope-switch-btn" id="switch-btn-projects" onclick="toggleDivisionQuickly()">
+                            <span>Switch to Interior Studio</span>
+                            <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>
                         </button>
                     </div>
 
@@ -1696,15 +1797,23 @@
                             <h2 class="panel-header-title" id="title-packages"><i class="fa-solid fa-cubes" style="margin-right:8px;color:var(--navy-900);"></i> Construction & Interior Packages</h2>
                             <p class="panel-header-sub" id="sub-packages">Manage per sq.ft pricing & specification details for Residential, Commercial & Interior packages.</p>
                         </div>
-                        <button class="btn-gold-pill" onclick="openUploadModal('package')"><i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Package</button>
+                        <button class="btn-gold-pill" id="action-btn-packages" onclick="openUploadModal('package')"><i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Package</button>
                     </div>
 
-                    <div class="division-sub-toggle" style="margin:16px 0 20px 0;">
-                        <button type="button" class="sub-toggle-btn active" data-division="construction" onclick="setAdminDivision('construction')">
-                            <i class="fa-solid fa-building"></i> Construction Packages
-                        </button>
-                        <button type="button" class="sub-toggle-btn" data-division="interior" onclick="setAdminDivision('interior')">
-                            <i class="fa-solid fa-couch"></i> Interior Packages
+                    <!-- Division Scope Banner -->
+                    <div class="division-scope-banner" id="banner-packages">
+                        <div class="division-scope-info">
+                            <span class="division-scope-badge" id="badge-packages">
+                                <span class="scope-dot"></span>
+                                <span id="badge-text-packages">CONSTRUCTION DIVISION</span>
+                            </span>
+                            <span class="division-scope-desc" id="desc-packages">
+                                Managing building packages, structural rates, and material specification tiers.
+                            </span>
+                        </div>
+                        <button type="button" class="division-scope-switch-btn" id="switch-btn-packages" onclick="toggleDivisionQuickly()">
+                            <span>Switch to Interior Studio</span>
+                            <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>
                         </button>
                     </div>
 
@@ -1827,12 +1936,20 @@
                         </div>
                     </div>
 
-                    <div class="division-sub-toggle" style="margin-bottom:16px;">
-                        <button type="button" class="sub-toggle-btn active" data-division="construction" onclick="setAdminDivision('construction')">
-                            <i class="fa-solid fa-building"></i> Construction Leads
-                        </button>
-                        <button type="button" class="sub-toggle-btn" data-division="interior" onclick="setAdminDivision('interior')">
-                            <i class="fa-solid fa-couch"></i> Interior Consultations
+                    <!-- Division Scope Banner -->
+                    <div class="division-scope-banner" id="banner-quotes">
+                        <div class="division-scope-info">
+                            <span class="division-scope-badge" id="badge-quotes">
+                                <span class="scope-dot"></span>
+                                <span id="badge-text-quotes">CONSTRUCTION DIVISION</span>
+                            </span>
+                            <span class="division-scope-desc" id="desc-quotes">
+                                Showing incoming inquiries for home construction, villas, and building estimates.
+                            </span>
+                        </div>
+                        <button type="button" class="division-scope-switch-btn" id="switch-btn-quotes" onclick="toggleDivisionQuickly()">
+                            <span>Switch to Interior Studio</span>
+                            <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>
                         </button>
                     </div>
                     <!-- Drag & Scroll Control Bar for Leads Table -->
@@ -3741,8 +3858,13 @@ function switchAdminTab(tabKey, linkEl) {
     } catch(e) {}
 }
 
-// ── DIVISION SWITCHER ENGINE (CONSTRUCTION VS INTERIOR) ──────────
+// ── DIVISION WORKSPACE ENGINE (CONSTRUCTION VS INTERIOR SEPARATION) ──
 let currentDivision = localStorage.getItem('maha_admin_division') || 'construction';
+
+function toggleDivisionQuickly() {
+    const nextDiv = currentDivision === 'construction' ? 'interior' : 'construction';
+    setAdminDivision(nextDiv);
+}
 
 function setAdminDivision(division) {
     currentDivision = division;
@@ -3750,55 +3872,80 @@ function setAdminDivision(division) {
         localStorage.setItem('maha_admin_division', division);
     } catch(e) {}
 
-    // Toggle division body theme class
-    document.body.classList.remove('theme-construction', 'theme-interior');
-    document.body.classList.add('theme-' + division);
+    const isInt = division === 'interior';
 
-    // Toggle header division switcher buttons
+    // 1. Update Header division buttons
     const btnConst = document.getElementById('btnDivConstruction');
     const btnInt = document.getElementById('btnDivInterior');
     if (btnConst && btnInt) {
-        btnConst.classList.toggle('active', division === 'construction');
-        btnInt.classList.toggle('active', division === 'interior');
+        btnConst.classList.toggle('active', !isInt);
+        btnInt.classList.toggle('active', isInt);
     }
 
-    // Synchronize all tab sub-toggle buttons
-    document.querySelectorAll('.sub-toggle-btn').forEach(b => {
-        b.classList.toggle('active', b.getAttribute('data-division') === division);
-    });
+    // 2. Update Sidebar workspace buttons & indicator
+    const sideConst = document.getElementById('sideDivConst');
+    const sideInt = document.getElementById('sideDivInt');
+    const sideInd = document.getElementById('sidebarActiveDivisionIndicator');
+    if (sideConst && sideInt) {
+        if (isInt) {
+            sideConst.style.background = 'transparent';
+            sideConst.style.color = 'var(--slate-400)';
+            sideConst.style.boxShadow = 'none';
+            if (sideConst.querySelector('i')) sideConst.querySelector('i').style.color = 'var(--slate-400)';
 
-    // Filter cards across Reviews, Projects, Packages, and Services
+            sideInt.style.background = '#FFFFFF';
+            sideInt.style.color = 'var(--navy-900)';
+            sideInt.style.boxShadow = '0 1px 4px rgba(0,0,0,0.15)';
+            if (sideInt.querySelector('i')) sideInt.querySelector('i').style.color = 'var(--navy-900)';
+        } else {
+            sideConst.style.background = '#FFFFFF';
+            sideConst.style.color = 'var(--navy-900)';
+            sideConst.style.boxShadow = '0 1px 4px rgba(0,0,0,0.15)';
+            if (sideConst.querySelector('i')) sideConst.querySelector('i').style.color = 'var(--navy-900)';
+
+            sideInt.style.background = 'transparent';
+            sideInt.style.color = 'var(--slate-400)';
+            sideInt.style.boxShadow = 'none';
+            if (sideInt.querySelector('i')) sideInt.querySelector('i').style.color = 'var(--slate-400)';
+        }
+    }
+    if (sideInd) {
+        sideInd.innerHTML = isInt ? '<span style="color:#C8952B;">● INTERIOR</span>' : '<span style="color:#10B981;">● CONST</span>';
+    }
+
+    // 3. Filter all cards across Reviews, Projects, Packages, and Quotes
     document.querySelectorAll('.division-filterable').forEach(el => {
         const itemType = el.getAttribute('data-business-type') || 'construction';
         if (itemType === division) {
             el.style.display = '';
+            el.style.animation = 'cardEnterCascade 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards';
         } else {
             el.style.display = 'none';
         }
     });
 
-    // Update empty states
+    // 4. Update empty states
     checkEmptyStates();
 
-    // Update panel titles & descriptions for selected division
+    // 5. Update panel titles, banners, action buttons, and descriptions
     updatePanelTitlesForDivision(division);
 
-    // Update sidebar badge counts dynamically
+    // 6. Update sidebar navigation labels & dynamic badge counts
     updateSidebarCountsForDivision(division);
 
-    // Update live website link button in top header
+    // 7. Update top header live site link
     const liveLink = document.getElementById('adminLiveWebsiteLink');
     if (liveLink) {
-        if (division === 'interior') {
+        if (isInt) {
             liveLink.href = '{{ route("interior") }}';
-            liveLink.innerHTML = '<i class="fas fa-couch" style="margin-right:6px;"></i> LIVE INTERIOR';
+            liveLink.innerHTML = '<i class="fas fa-couch" style="margin-right:6px;"></i> Live Interior Site';
         } else {
             liveLink.href = '{{ route("home") }}';
-            liveLink.innerHTML = '<i class="fas fa-building" style="margin-right:6px;"></i> LIVE CONSTRUCTION';
+            liveLink.innerHTML = '<i class="fas fa-building" style="margin-right:6px;"></i> Live Construction Site';
         }
     }
 
-    // Also sync YouTube management sub-tab if available
+    // 8. Sync YouTube sub-tab if active
     if (typeof switchYtDivision === 'function') {
         switchYtDivision(division);
     }
@@ -3807,41 +3954,96 @@ function setAdminDivision(division) {
 function updatePanelTitlesForDivision(division) {
     const isInt = division === 'interior';
     
-    // Header Panel Badge in Sidebar
+    // Sidebar Header Brand Sub-badge
     const subBadge = document.getElementById('adminSidebarSubBadge');
     if (subBadge) {
-        subBadge.textContent = isInt ? 'MAHA INTERIOR CONSOLE' : 'MAHA CONSTRUCTION CONSOLE';
+        subBadge.textContent = isInt ? 'INTERIOR STUDIO WORKSPACE' : 'CONSTRUCTION WORKSPACE';
     }
 
     // Top Header Subtitle
     const headerSub = document.getElementById('adminHeaderConsoleSub');
     if (headerSub) {
-        headerSub.textContent = isInt ? 'Luxury Interior Design & Execution Division' : 'Home Building & Commercial Construction Division';
+        headerSub.textContent = isInt ? 'Maha Interior — Bespoke Design & Turnkey Fitouts' : 'Maha Construction — Luxury Villas & Structural Building';
     }
 
-    // Reviews Tab Title
+    // Sidebar Section Header
+    const sbSecOps = document.getElementById('sidebarSectionOperations');
+    if (sbSecOps) {
+        sbSecOps.textContent = isInt ? 'INTERIOR OPERATIONS' : 'CONSTRUCTION OPERATIONS';
+    }
+
+    // Sidebar Navigation Labels
+    const sbLblAnalytics = document.getElementById('sidebarLabelAnalytics');
+    if (sbLblAnalytics) sbLblAnalytics.textContent = isInt ? 'Interior Analytics' : 'Construction Analytics';
+
+    const sbLblReviews = document.getElementById('sidebarLabelReviews');
+    if (sbLblReviews) sbLblReviews.textContent = isInt ? 'Interior Video Reviews' : 'Homeowner Testimonials';
+
+    const sbLblProjects = document.getElementById('sidebarLabelProjects');
+    if (sbLblProjects) sbLblProjects.textContent = isInt ? 'Interior Projects' : 'Completed Buildings';
+
+    const sbLblPackages = document.getElementById('sidebarLabelPackages');
+    if (sbLblPackages) sbLblPackages.textContent = isInt ? 'Interior Packages' : 'Building Packages';
+
+    const sbLblQuotes = document.getElementById('sidebarLabelQuotes');
+    if (sbLblQuotes) sbLblQuotes.textContent = isInt ? 'Design Consultations' : 'Building Inquiries';
+
+    // ── Scope Banners & Action Buttons in Tabs ──
+    const targetSwitchText = isInt ? 'Switch to Construction Division' : 'Switch to Interior Studio';
+
+    // Reviews Tab
     const rTitle = document.getElementById('title-reviews');
     const rSub = document.getElementById('sub-reviews');
-    if (rTitle) rTitle.innerHTML = isInt ? '<i class="fa-solid fa-couch" style="margin-right:8px;color:#D97706;"></i> Luxury Interior Video Reviews' : '<i class="fa-solid fa-video" style="margin-right:8px;color:var(--navy-900);"></i> Construction Video Testimonials';
-    if (rSub) rSub.textContent = isInt ? 'Manage client video reviews for luxury home interior projects.' : 'Manage client video testimonials from verified construction homeowners.';
+    const rBtn = document.getElementById('action-btn-reviews');
+    const rBText = document.getElementById('badge-text-reviews');
+    const rBDesc = document.getElementById('desc-reviews');
+    const rBSwitch = document.getElementById('switch-btn-reviews');
+    if (rTitle) rTitle.innerHTML = isInt ? '<i class="fa-solid fa-couch" style="margin-right:8px;color:var(--navy-900);"></i> Luxury Interior Video Reviews' : '<i class="fa-solid fa-video" style="margin-right:8px;color:var(--navy-900);"></i> Construction Video Testimonials';
+    if (rSub) rSub.textContent = isInt ? 'Manage walkthrough and testimonial videos from luxury interior clients.' : 'Manage client video testimonials from verified villa and home construction homeowners.';
+    if (rBtn) rBtn.innerHTML = isInt ? '<i class="fa-solid fa-plus" style="margin-right:6px;"></i> Upload Interior Review' : '<i class="fa-solid fa-plus" style="margin-right:6px;"></i> Upload Construction Review';
+    if (rBText) rBText.textContent = isInt ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS';
+    if (rBDesc) rBDesc.textContent = isInt ? 'Showing video reviews from interior clients across Tamil Nadu.' : 'Showing video testimonials from verified residential and villa homeowners.';
+    if (rBSwitch) rBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;
 
-    // Projects Tab Title
+    // Projects Tab
     const pTitle = document.getElementById('title-projects');
     const pSub = document.getElementById('sub-projects');
-    if (pTitle) pTitle.innerHTML = isInt ? '<i class="fa-solid fa-couch" style="margin-right:8px;color:#D97706;"></i> Luxury Interior Design Projects' : '<i class="fa-solid fa-building-circle-check" style="margin-right:8px;color:var(--navy-900);"></i> Construction Completed Projects';
-    if (pSub) pSub.textContent = isInt ? 'Showcase living rooms, modular kitchens, bedrooms, and commercial interior spaces.' : 'Showcase luxury villas, commercial hubs, and structural building projects.';
+    const pBtn = document.getElementById('action-btn-projects');
+    const pBText = document.getElementById('badge-text-projects');
+    const pBDesc = document.getElementById('desc-projects');
+    const pBSwitch = document.getElementById('switch-btn-projects');
+    if (pTitle) pTitle.innerHTML = isInt ? '<i class="fa-solid fa-couch" style="margin-right:8px;color:var(--navy-900);"></i> Luxury Interior Design Projects' : '<i class="fa-solid fa-building-circle-check" style="margin-right:8px;color:var(--navy-900);"></i> Completed Construction Projects';
+    if (pSub) pSub.textContent = isInt ? 'Showcase modular kitchens, living spaces, bedrooms, and commercial interior fitouts.' : 'Showcase luxury villas, commercial complexes, and turnkey structural buildings.';
+    if (pBtn) pBtn.innerHTML = isInt ? '<i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Interior Project' : '<i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Construction Project';
+    if (pBText) pBText.textContent = isInt ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS';
+    if (pBDesc) pBDesc.textContent = isInt ? 'Managing modular kitchens, bespoke living rooms, wardrobes, and commercial spaces.' : 'Managing completed villas, residences, and architectural homes.';
+    if (pBSwitch) pBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;
 
-    // Packages Tab Title
+    // Packages Tab
     const pkTitle = document.getElementById('title-packages');
     const pkSub = document.getElementById('sub-packages');
-    if (pkTitle) pkTitle.innerHTML = isInt ? '<i class="fa-solid fa-couch" style="margin-right:8px;color:#D97706;"></i> Luxury Interior Packages & Pricing' : '<i class="fa-solid fa-cubes" style="margin-right:8px;color:var(--navy-900);"></i> Home Construction Packages & Pricing';
-    if (pkSub) pkSub.textContent = isInt ? 'Manage turnkey interior packages, modular kitchen specs, and pricing per sq.ft.' : 'Manage per sq.ft rates for Residential & Commercial building construction packages.';
+    const pkBtn = document.getElementById('action-btn-packages');
+    const pkBText = document.getElementById('badge-text-packages');
+    const pkBDesc = document.getElementById('desc-packages');
+    const pkBSwitch = document.getElementById('switch-btn-packages');
+    if (pkTitle) pkTitle.innerHTML = isInt ? '<i class="fa-solid fa-couch" style="margin-right:8px;color:var(--navy-900);"></i> Luxury Interior Packages & Pricing' : '<i class="fa-solid fa-cubes" style="margin-right:8px;color:var(--navy-900);"></i> Building Construction Packages & Pricing';
+    if (pkSub) pkSub.textContent = isInt ? 'Manage turnkey interior packages, modular kitchen tiers, and per sq.ft estimates.' : 'Manage per sq.ft rates for Residential & Commercial building construction packages.';
+    if (pkBtn) pkBtn.innerHTML = isInt ? '<i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Interior Package' : '<i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Construction Package';
+    if (pkBText) pkBText.textContent = isInt ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS';
+    if (pkBDesc) pkBDesc.textContent = isInt ? 'Managing modular kitchen packages, bedroom woodwork, and turnkey interior rates.' : 'Managing building packages, structural rates, and material specification tiers.';
+    if (pkBSwitch) pkBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;
 
-    // Quotes / Leads Tab Title
+    // Quotes Tab
     const qTitle = document.getElementById('title-quotes');
     const qSub = document.getElementById('sub-quotes');
-    if (qTitle) qTitle.innerHTML = isInt ? '<i class="fa-solid fa-couch" style="margin-right:8px;color:#D97706;"></i> Luxury Interior Design Consultation Leads' : '<i class="fa-solid fa-file-invoice-dollar" style="margin-right:8px;color:var(--navy-800);"></i> Construction Inquiries & Estimate Leads';
-    if (qSub) qSub.textContent = isInt ? 'Live record of inquiries for interior design consultations and space planning.' : 'Live record of inquiries for house building estimates, floor plans, and turnkey construction.';
+    const qBText = document.getElementById('badge-text-quotes');
+    const qBDesc = document.getElementById('desc-quotes');
+    const qBSwitch = document.getElementById('switch-btn-quotes');
+    if (qTitle) qTitle.innerHTML = isInt ? '<i class="fa-solid fa-couch" style="margin-right:8px;color:var(--navy-900);"></i> Interior Consultation Requests' : '<i class="fa-solid fa-file-invoice-dollar" style="margin-right:8px;color:var(--navy-800);"></i> Construction Inquiries & Estimates';
+    if (qSub) qSub.textContent = isInt ? 'Live record of interior consultation requests and space planning inquiries.' : 'Live record of inquiries for house building estimates, floor plans, and turnkey construction.';
+    if (qBText) qBText.textContent = isInt ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS';
+    if (qBDesc) qBDesc.textContent = isInt ? 'Showing incoming consultation requests submitted via the Maha Interior studio page.' : 'Showing incoming building estimate requests submitted via the Maha Construction website.';
+    if (qBSwitch) qBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;
 }
 
 function updateSidebarCountsForDivision(division) {
@@ -3850,10 +4052,18 @@ function updateSidebarCountsForDivision(division) {
     const pkgCount = document.querySelectorAll('#tab-packages .division-filterable:not([style*="display: none"])').length;
     const quoteCount = document.querySelectorAll('#tab-quotes .division-filterable:not([style*="display: none"])').length;
 
-    const sbRev = document.getElementById('sidebarReviewsCount'); if (sbRev) sbRev.textContent = revCount;
-    const sbProj = document.getElementById('sidebarProjectsCount'); if (sbProj) sbProj.textContent = projCount;
-    const sbPkg = document.getElementById('sidebarPackagesCount'); if (sbPkg) sbPkg.textContent = pkgCount;
-    const sbQuotes = document.getElementById('sidebarQuotesCount'); if (sbQuotes) sbQuotes.textContent = quoteCount;
+    const animateCount = (el, val) => {
+        if (!el) return;
+        el.textContent = val;
+        el.style.animation = 'none';
+        void el.offsetWidth; // trigger reflow
+        el.style.animation = 'badgeBounce 0.35s ease';
+    };
+
+    animateCount(document.getElementById('sidebarReviewsCount'), revCount);
+    animateCount(document.getElementById('sidebarProjectsCount'), projCount);
+    animateCount(document.getElementById('sidebarPackagesCount'), pkgCount);
+    animateCount(document.getElementById('sidebarQuotesCount'), quoteCount);
 }
 
 function checkEmptyStates() {
@@ -4239,10 +4449,31 @@ function openUploadModal(type) {
     const modal = document.getElementById('uploadModal');
     modal.style.display = 'flex';
 
+    const curDiv = (typeof currentDivision !== 'undefined' && currentDivision) ? currentDivision : 'construction';
+    const isInt = curDiv === 'interior';
+
     const titles = {
-        testimonial: ['UPLOAD NEW VIDEO REVIEW', 'Add a client testimonial video & auto-captured cover image', 'formTestimonial', 'btnSubmitTestimonial', 'SAVE VIDEO REVIEW'],
-        project:     ['UPLOAD COMPLETED PROJECT', 'Add a luxury project walkthrough video & multi-photo gallery', 'formProject', 'btnSubmitProject', 'SAVE PROJECT'],
-        package:     ['ADD NEW PACKAGE', 'Create a per sq.ft package for Construction or Interior', 'formPackage', 'btnSubmitPackage', 'SAVE PACKAGE'],
+        testimonial: [
+            isInt ? 'UPLOAD INTERIOR VIDEO REVIEW' : 'UPLOAD HOMEOWNER TESTIMONIAL',
+            isInt ? 'Add a luxury interior walkthrough & client review' : 'Add a verified homeowner building testimonial video',
+            'formTestimonial',
+            'btnSubmitTestimonial',
+            isInt ? 'SAVE INTERIOR REVIEW' : 'SAVE CONSTRUCTION TESTIMONIAL'
+        ],
+        project: [
+            isInt ? 'ADD COMPLETED INTERIOR PROJECT' : 'ADD COMPLETED BUILDING PROJECT',
+            isInt ? 'Showcase modular kitchen, living space, bedroom, or turnkey interior' : 'Add a luxury villa, residence, or commercial building walkthrough',
+            'formProject',
+            'btnSubmitProject',
+            isInt ? 'SAVE INTERIOR PROJECT' : 'SAVE CONSTRUCTION PROJECT'
+        ],
+        package: [
+            isInt ? 'ADD NEW INTERIOR PACKAGE' : 'ADD NEW BUILDING PACKAGE',
+            isInt ? 'Create a turnkey modular kitchen or interior package tier' : 'Create a residential or commercial building construction package',
+            'formPackage',
+            'btnSubmitPackage',
+            isInt ? 'SAVE INTERIOR PACKAGE' : 'SAVE CONSTRUCTION PACKAGE'
+        ],
         partner:     ['ADD NEW PARTNER / VENDOR', 'Add a banking partner for loans or a certified material vendor', 'formPartner', 'btnSubmitPartner', 'SAVE PARTNER'],
         service:     ['ADD NEW SERVICE', 'Create a new service offering for Construction or Interior', 'formService', 'btnSubmitService', 'SAVE SERVICE'],
     };
@@ -4257,7 +4488,6 @@ function openUploadModal(type) {
     }
 
     // Default division dropdown to current active division
-    const curDiv = (typeof currentDivision !== 'undefined' && currentDivision) ? currentDivision : 'construction';
     if (document.getElementById('t_business_type')) document.getElementById('t_business_type').value = curDiv;
     if (document.getElementById('p_business_type')) document.getElementById('p_business_type').value = curDiv;
     if (document.getElementById('pk_business_type')) document.getElementById('pk_business_type').value = curDiv;

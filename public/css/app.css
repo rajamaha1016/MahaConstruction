@@ -543,13 +543,20 @@ input, select, textarea { font-family: var(--font-body); font-weight: 400; outli
   font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
 }
 
-/* ─── MOBILE TOGGLE ───────────────────────────────── */
-.nav-mobile-toggle {
-  display: none; flex-direction: column; gap: 5px; background: none;
-  border: 1px solid var(--border-gold); padding: 9px 12px; border-radius: 8px;
+.division-switch-pill {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
-.nav-mobile-toggle span { width: 20px; height: 2px; background: var(--gold); display: block; }
-@media (max-width: 992px) { .nav-mobile-toggle { display: flex; } }
+.division-switch-pill:hover {
+  transform: translateY(-2px) !important;
+}
+.mobile-only-link {
+  display: none !important;
+}
+@media (max-width: 992px) {
+  .nav-mobile-toggle { display: flex; }
+  .mobile-only-link { display: block !important; }
+  .division-switch-pill { display: none !important; }
+}
 
 /* ─── TABLE RESPONSIVE WRAPPER ───────────────────── */
 .table-responsive { overflow-x: auto; width: 100%; }

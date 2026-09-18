@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->trustProxies(at: '*');
         $middleware->alias([
             'admin.auth' => \App\Http\Middleware\AdminAuthenticated::class,
             'admin.api.session' => \App\Http\Middleware\AdminApiSession::class,
