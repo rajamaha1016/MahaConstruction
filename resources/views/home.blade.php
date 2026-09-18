@@ -4,81 +4,94 @@
 
 @section('content')
 
-<!-- HERO SECTION -->
-<section class="hero-section">
-    <div class="container">
-        <div class="hero-grid">
-            <div class="hero-text-col">
-                <div class="pill-badge hero-marquee-badge">
-                    <span class="pulse-dot" style="flex-shrink:0;"></span>
-                    <div class="hero-marquee-track-container">
-                        <div class="hero-marquee-track">
-                            <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
-                            <span class="marquee-sep">•</span>
-                            <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
-                            <span class="marquee-sep">•</span>
-                            <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
-                            <span class="marquee-sep">•</span>
-                            <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
-                            <span class="marquee-sep">•</span>
+<!-- SCROLL-DRIVEN CONSTRUCTION TIMELAPSE HERO (KP CONSTRUCTIONS STYLE) -->
+<section class="construction-scroll-hero-section" id="constructionScrollHero">
+    <div class="construction-hero-sticky" id="constructionHeroSticky">
+        <!-- High-Performance Construction Timelapse Canvas -->
+        <canvas id="constructionHeroCanvas" class="construction-hero-canvas"></canvas>
+
+        <!-- Luxury Dark Vignette Overlay & Blueprint Grid -->
+        <div class="construction-hero-overlay-dark" id="heroOverlayDark"></div>
+        <div class="construction-hero-blueprint-grid" id="heroBlueprintGrid"></div>
+
+        <!-- Full Interactive Content Layer (Always 100% visible) -->
+        <div class="construction-hero-content-layer" id="constructionHeroContent">
+            <div class="container" style="width:100%;">
+                <div class="hero-grid">
+                    <div class="hero-text-col">
+                        <div class="pill-badge hero-marquee-badge">
+                            <span class="pulse-dot" style="flex-shrink:0;"></span>
+                            <div class="hero-marquee-track-container">
+                                <div class="hero-marquee-track">
+                                    <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                                    <span class="marquee-sep">•</span>
+                                    <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                                    <span class="marquee-sep">•</span>
+                                    <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                                    <span class="marquee-sep">•</span>
+                                    <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                                    <span class="marquee-sep">•</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h1 class="hero-title">
+                            {{ $hero_title }}
+                        </h1>
+                        <p class="hero-subtitle">
+                            {{ $hero_subtitle }}
+                        </p>
+                        <div class="hero-checklist">
+                            @if($hero_check1)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check1 }}</span>@endif
+                            @if($hero_check2)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check2 }}</span>@endif
+                            @if($hero_check3)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check3 }}</span>@endif
+                            @if($hero_check4)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check4 }}</span>@endif
+                            @if($hero_check5)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check5 }}</span>@endif
+                        </div>
+                        <div class="hero-cta-group">
+                            <button class="btn-gold-pill" data-open-quote>
+                                {{ $hero_cta_primary }}
+                            </button>
+                            <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20Dream%20home." target="_blank" class="btn-whatsapp-outline">
+                                <i class="fab fa-whatsapp" style="font-size:18px;"></i>
+                                WHATSAPP DIRECT
+                            </a>
                         </div>
                     </div>
-                </div>
-                <h1 class="hero-title">
-                    {{ $hero_title }}
-                </h1>
-                <p class="hero-subtitle">
-                    {{ $hero_subtitle }}
-                </p>
-                <div class="hero-checklist">
-                    @if($hero_check1)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check1 }}</span>@endif
-                    @if($hero_check2)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check2 }}</span>@endif
-                    @if($hero_check3)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check3 }}</span>@endif
-                    @if($hero_check4)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check4 }}</span>@endif
-                    @if($hero_check5)<span class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> {{ $hero_check5 }}</span>@endif
-                </div>
-                <div class="hero-cta-group">
-                    <button class="btn-gold-pill" data-open-quote>
-                        {{ $hero_cta_primary }}
-                    </button>
-                    <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20want%20to%20consult%20for%20my%20Dream%20home." target="_blank" class="btn-whatsapp-outline">
-                        <i class="fab fa-whatsapp" style="font-size:18px;"></i>
-                        WHATSAPP DIRECT
-                    </a>
-                </div>
-            </div>
 
-            <div class="hero-image-col">
-                <div style="text-align:center;position:relative;">
-                    <img src="{{ asset('maha-rajan.png') }}" alt="Er. Maha Rajan" class="engineer-hero-float" style="width:100%;max-width:420px;height:auto;object-fit:cover;display:block;margin:0 auto;position:relative;z-index:1;">
+                    <div class="hero-image-col">
+                        <div style="text-align:center;position:relative;">
+                            <img src="{{ asset('maha-rajan.png') }}" alt="Er. Maha Rajan" class="engineer-hero-float" style="width:100%;max-width:420px;height:auto;object-fit:contain;object-position:top center;display:block;margin:0 auto;position:relative;z-index:1;">
 
-                    <!-- Engineer Name Card (Overlapping bottom of image with 0 gap) -->
-                    <div class="engineer-namecard-glow" style="margin-top:-65px;position:relative;z-index:5;max-width:380px;margin-left:auto;margin-right:auto;padding:15px 18px 14px;background:linear-gradient(135deg,rgba(11,19,43,0.96),rgba(5,11,20,0.98));backdrop-filter:blur(10px);border:1.5px solid rgba(212,175,55,0.6);border-radius:18px;box-shadow:0 0 35px rgba(212,175,55,0.25),0 12px 35px rgba(0,0,0,0.7);overflow:hidden;">
-                        <!-- Glow top line -->
-                        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#D4AF37,#FFD700,#D4AF37,transparent);"></div>
+                            <!-- Engineer Name Card (Overlapping bottom of image with 0 gap) -->
+                            <div class="engineer-namecard-glow" style="margin-top:-65px;position:relative;z-index:5;max-width:380px;margin-left:auto;margin-right:auto;padding:15px 18px 14px;background:linear-gradient(135deg,rgba(11,19,43,0.96),rgba(5,11,20,0.98));backdrop-filter:blur(10px);border:1.5px solid rgba(212,175,55,0.6);border-radius:18px;box-shadow:0 0 35px rgba(212,175,55,0.25),0 12px 35px rgba(0,0,0,0.7);overflow:hidden;">
+                                <!-- Glow top line -->
+                                <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#D4AF37,#FFD700,#D4AF37,transparent);"></div>
 
-                        <!-- ER. prefix -->
-                        <div style="font-size:0.68rem;font-weight:800;letter-spacing:0.25em;color:#D4AF37;text-transform:uppercase;margin-bottom:3px;opacity:0.9;">— GOVERNMENT REGISTERED ENGINEER —</div>
+                                <!-- ER. prefix -->
+                                <div style="font-size:0.68rem;font-weight:800;letter-spacing:0.25em;color:#D4AF37;text-transform:uppercase;margin-bottom:3px;opacity:0.9;">— GOVERNMENT REGISTERED ENGINEER —</div>
 
-                        <!-- Name with gradient -->
-                        <div style="font-size:1.65rem;font-weight:900;letter-spacing:0.04em;line-height:1.1;background:linear-gradient(135deg,#FFD700 0%,#D4AF37 40%,#FFF8DC 60%,#D4AF37 80%,#B8960C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(212,175,55,0.4));">Er. MAHA RAJAN</div>
+                                <!-- Name with gradient -->
+                                <div style="font-size:1.65rem;font-weight:900;letter-spacing:0.04em;line-height:1.1;background:linear-gradient(135deg,#FFD700 0%,#D4AF37 40%,#FFF8DC 60%,#D4AF37 80%,#B8960C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(212,175,55,0.4));">Er. MAHA RAJAN</div>
 
-                        <!-- Decorative divider -->
-                        <div style="display:flex;align-items:center;gap:8px;margin:8px 0 8px;">
-                            <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(212,175,55,0.6));"></div>
-                            <div style="width:5px;height:5px;background:#D4AF37;border-radius:50%;box-shadow:0 0 8px #D4AF37;"></div>
-                            <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,rgba(212,175,55,0.6));"></div>
+                                <!-- Decorative divider -->
+                                <div style="display:flex;align-items:center;gap:8px;margin:8px 0 8px;">
+                                    <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(212,175,55,0.6));"></div>
+                                    <div style="width:5px;height:5px;background:#D4AF37;border-radius:50%;box-shadow:0 0 8px #D4AF37;"></div>
+                                    <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,rgba(212,175,55,0.6));"></div>
+                                </div>
+
+                                <!-- Role -->
+                                <div style="font-size:0.85rem;font-weight:700;color:#F0EBE0;letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;">CEO OF MAHA CONSTRUCTIONS</div>
+
+                                <!-- Glow bottom line -->
+                                <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#D4AF37,#FFD700,#D4AF37,transparent);"></div>
+                            </div>
                         </div>
-
-                        <!-- Role -->
-                        <div style="font-size:0.85rem;font-weight:700;color:#F0EBE0;letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;">CEO OF MAHA CONSTRUCTIONS</div>
-
-                        <!-- Glow bottom line -->
-                        <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#D4AF37,#FFD700,#D4AF37,transparent);"></div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
@@ -1334,6 +1347,10 @@
 </section>
 
 @push('scripts')
+<!-- GSAP 3 & ScrollTrigger for Cinematic Construction Timelapse Pin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // ── Architectural Construction Scroll Reveal Observer ──
@@ -1358,23 +1375,204 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ── Smooth Scroll Parallax for Engineer Hero Column ──
-    const heroImgCol = document.querySelector('.hero-image-col');
-    if (heroImgCol && window.innerWidth > 768) {
-        let ticking = false;
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-                    if (scrollY < 700) {
-                        heroImgCol.style.transform = `translate3d(0, ${scrollY * 0.10}px, 0)`;
-                    }
-                    ticking = false;
-                });
-                ticking = true;
+    // ── SCROLL-DRIVEN PINNED CONSTRUCTION TIMELAPSE HERO (KP CONSTRUCTIONS STYLE) ──
+    (function initConstructionScrollHero() {
+        const heroSection = document.getElementById('constructionScrollHero');
+        const heroCanvas = document.getElementById('constructionHeroCanvas');
+        const contentLayer = document.getElementById('constructionHeroContent');
+
+        if (!heroSection || !heroCanvas) return;
+
+        const ctx = heroCanvas.getContext('2d');
+        if (!ctx) return;
+
+        const isMobile = window.innerWidth <= 768;
+        const totalFrames = isMobile ? 146 : 127;
+        const primaryFolder = isMobile ? '{{ asset("images/scroll-construction/mobile") }}' : '{{ asset("images/scroll-construction") }}';
+        const fallbackFolder = isMobile ? '{{ asset("frames-mobile") }}' : '{{ asset("frames") }}';
+
+        const images = new Array(totalFrames);
+        let loadedFrames = 0;
+        let lastRenderedImg = null;
+        let currentFrameIndex = 0;
+
+        function getPrimarySrc(index) {
+            const num = String(index + 1).padStart(3, '0');
+            return primaryFolder + '/' + num + '.jpg';
+        }
+
+        function getFallbackSrc(index) {
+            const num = String(index + 1).padStart(4, '0');
+            return fallbackFolder + '/frame_' + num + '.jpg';
+        }
+
+        function drawCover(img) {
+            if (!img || !img.naturalWidth || !img.naturalHeight) return;
+            const cw = heroCanvas.width;
+            const ch = heroCanvas.height;
+            if (!cw || !ch) return;
+
+            const imgRatio = img.naturalWidth / img.naturalHeight;
+            const canvasRatio = cw / ch;
+            let dw, dh, dx, dy;
+
+            if (canvasRatio > imgRatio) {
+                dw = cw;
+                dh = cw / imgRatio;
+            } else {
+                dh = ch;
+                dw = ch * imgRatio;
             }
-        }, { passive: true });
-    }
+
+            dx = (cw - dw) / 2;
+            dy = (ch - dh) / 2;
+
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.fillStyle = '#050B14';
+            ctx.fillRect(0, 0, cw, ch);
+            ctx.drawImage(img, Math.round(dx), Math.round(dy), Math.round(dw), Math.round(dh));
+        }
+
+        function renderFrame(index) {
+            const safeIndex = Math.max(0, Math.min(totalFrames - 1, index));
+            currentFrameIndex = safeIndex;
+            const img = images[safeIndex];
+
+            if (img && img.complete && img.naturalWidth > 0) {
+                lastRenderedImg = img;
+                drawCover(img);
+                return;
+            }
+
+            // Find nearest loaded frame to ensure zero blank screen
+            let nearest = null;
+            let minDiff = Infinity;
+            for (let j = 0; j < totalFrames; j++) {
+                if (images[j] && images[j].complete && images[j].naturalWidth > 0) {
+                    const diff = Math.abs(j - safeIndex);
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        nearest = images[j];
+                    }
+                }
+            }
+
+            if (nearest) {
+                lastRenderedImg = nearest;
+                drawCover(nearest);
+            } else if (lastRenderedImg) {
+                drawCover(lastRenderedImg);
+            }
+        }
+
+        function resizeCanvas() {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            const w = heroSection.offsetWidth || window.innerWidth;
+            const h = heroSection.offsetHeight || window.innerHeight;
+
+            heroCanvas.width = Math.round(w * dpr);
+            heroCanvas.height = Math.round(h * dpr);
+            heroCanvas.style.width = '100%';
+            heroCanvas.style.height = '100%';
+
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+            if (lastRenderedImg) {
+                drawCover(lastRenderedImg);
+            } else {
+                renderFrame(currentFrameIndex);
+            }
+        }
+
+        function loadFrame(i) {
+            const img = new Image();
+            img.onload = function() {
+                images[i] = img;
+                loadedFrames++;
+                if (i === 0 && currentFrameIndex === 0) {
+                    renderFrame(0);
+                } else if (i === currentFrameIndex) {
+                    renderFrame(i);
+                }
+            };
+            img.onerror = function() {
+                // Secondary fallback path
+                const fallbackImg = new Image();
+                fallbackImg.onload = function() {
+                    images[i] = fallbackImg;
+                    loadedFrames++;
+                    if (i === currentFrameIndex) renderFrame(i);
+                };
+                fallbackImg.src = getFallbackSrc(i);
+            };
+            img.src = getPrimarySrc(i);
+        }
+
+        // Immediately load key frames for instant first paint & final state
+        loadFrame(0);
+        loadFrame(totalFrames - 1);
+
+        // Preload rest of the sequence
+        for (let i = 1; i < totalFrames - 1; i++) {
+            loadFrame(i);
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas, { passive: true });
+
+        // Reduced Motion: just render last frame and exit
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            renderFrame(totalFrames - 1);
+            return;
+        }
+
+        function handleProgress(p) {
+            // Scrub construction frames across full scroll duration (0-100%)
+            const targetFrame = Math.min(totalFrames - 1, Math.floor(p * (totalFrames - 1)));
+            renderFrame(targetFrame);
+
+            // Content layer always stays fully visible — never hidden
+            if (contentLayer) {
+                contentLayer.style.opacity = '1';
+                contentLayer.style.transform = 'none';
+                contentLayer.style.pointerEvents = 'auto';
+            }
+        }
+
+        // Initialize GSAP ScrollTrigger — works on ALL screen sizes including mobile
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+
+            const isMobileScreen = window.innerWidth <= 768;
+            // Desktop: 300% scroll distance | Mobile: 200% (shorter for better UX)
+            const scrollDistance = isMobileScreen ? '+=200%' : '+=300%';
+
+            ScrollTrigger.create({
+                trigger: '#constructionScrollHero',
+                start: 'top top',
+                end: scrollDistance,
+                pin: true,
+                scrub: 0.5,
+                anticipatePin: 1,
+                onUpdate: (self) => {
+                    handleProgress(self.progress);
+                }
+            });
+
+            // Initial render
+            handleProgress(0);
+        } else {
+            // Native scroll fallback for all screen sizes
+            window.addEventListener('scroll', function() {
+                const rect = heroSection.getBoundingClientRect();
+                const totalH = window.innerHeight * (window.innerWidth <= 768 ? 2 : 3);
+                const scrolled = -rect.top;
+                const p = Math.min(1, Math.max(0, scrolled / totalH));
+                handleProgress(p);
+            }, { passive: true });
+            handleProgress(0);
+        }
+    })();
 });
 </script>
 @endpush
