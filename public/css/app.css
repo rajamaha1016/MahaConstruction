@@ -7063,431 +7063,574 @@ body.interior-body .floating-actions-bar {
   }
 }
 
-
-/* ========================================================================
-   MAHA CONSTRUCTION — PRODUCTION HERO ALIGNMENT PATCH
-   ------------------------------------------------------------------------
+/* =========================================================
+   MAHA CONSTRUCTIONS — FINAL PRODUCTION HERO STABILITY FIX
+   ---------------------------------------------------------
    Purpose:
-   - Keep the existing hero content and design.
-   - Prevent production-only clipping caused by rigid hero sizing,
-     breakpoint shifts, overflow, and fragile button/image widths.
-   - Make the hero stable across desktop, tablet, and mobile.
-   - Apply this block LAST so it safely wins the existing cascade.
-   ======================================================================== */
+   - Keep the existing hero content unchanged
+   - Prevent production-only vertical clipping
+   - Allow the hero to grow when dynamic/admin content is taller
+   - Keep the two-column desktop layout stable
+   - Make CTA buttons and engineer card consistent
+   - Improve short-viewport / responsive behavior
+   - Do not affect other page sections
+   ========================================================= */
 
-/* ---------- Shared layout safety ---------- */
-html,
-body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-.hero-section {
-  position: relative;
-  width: 100%;
-  min-width: 0;
-  height: auto;
-  min-height: 560px;
-  overflow: visible;
-  display: flex;
-  align-items: center;
-  isolation: isolate;
-  padding: clamp(48px, 5vw, 72px) 0 clamp(52px, 6vw, 84px);
-}
-
-.hero-section>.container {
-  width: 100%;
-  min-width: 0;
-}
-
-.hero-grid {
-  width: 100%;
-  min-width: 0;
-  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
-  align-items: center;
-  gap: clamp(28px, 3vw, 48px);
-}
-
-.hero-text-col,
-.hero-image-col {
-  min-width: 0;
-  width: 100%;
-}
-
-.hero-text-col {
-  overflow: visible;
-}
-
-.hero-title,
-.hero-subtitle,
-.hero-checklist,
-.hero-cta-group {
-  min-width: 0;
-}
-
-.hero-title {
-  width: 100%;
-  max-width: 780px;
-  text-wrap: balance;
-}
-
-.hero-subtitle {
-  width: 100%;
-  max-width: 620px;
-}
-
-/* ---------- Marquee: never force the hero wider than the viewport ---------- */
-.hero-marquee-badge {
-  width: min(480px, 100%);
-  max-width: 100%;
-  min-width: 0;
-}
-
-.hero-marquee-track-container {
-  min-width: 0;
-  max-width: 100%;
-  flex: 1 1 auto;
-}
-
-.hero-marquee-track {
-  width: max-content;
-  max-width: none;
-}
-
-/* ---------- CTA row: stable button dimensions ---------- */
-.hero-cta-group {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 16px;
-  width: 100%;
-  min-width: 0;
-}
-
-.hero-cta-group .btn-gold-pill,
-.hero-cta-group .btn-whatsapp-outline {
-  min-height: 56px;
-  height: 56px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  width: auto;
-  max-width: 100%;
-  padding: 0 26px;
-  line-height: 1;
-  white-space: nowrap;
+/* ---- Global safety for replaced media ---- */
+.hero-section,
+.hero-section * {
   box-sizing: border-box;
 }
 
-.hero-cta-group .btn-gold-pill {
+.hero-section {
+  /*
+   * IMPORTANT:
+   * Do not use a fixed hero height.
+   * The hero must be at least one viewport tall, but it must be
+   * allowed to grow when the admin-controlled title/subtitle/checklist
+   * becomes taller on production.
+   */
+  min-height: calc(100vh - 83px);
+  min-height: calc(100svh - 83px);
+  height: auto !important;
+
+  display: flex;
+  align-items: center;
+
+  /*
+   * Responsive vertical spacing. The previous fixed padding could
+   * consume too much vertical space on short production viewports.
+   */
+  padding: clamp(28px, 4.5vh, 64px) 0 clamp(40px, 5vh, 72px) !important;
+
   overflow: hidden;
+  isolation: isolate;
 }
 
-.hero-cta-group .btn-whatsapp-outline {
-  overflow: hidden;
-}
-
-/* ---------- Engineer image/card: stable sizing across browsers ---------- */
-.hero-image-col>div {
+/* Make the inner container participate in the full-height hero,
+   while still allowing content-driven growth. */
+.hero-section>.container {
   width: 100%;
   min-width: 0;
+  display: flex;
+  align-items: center;
 }
 
-.hero-image-col .engineer-hero-float {
-  display: block;
-  width: min(420px, 100%) !important;
+/* ---- Stable desktop grid ---- */
+.hero-section .hero-grid {
+  width: 100%;
+  min-width: 0;
+
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.16fr) minmax(360px, 0.84fr) !important;
+
+  align-items: center !important;
+  gap: clamp(24px, 2.2vw, 40px) !important;
+
+  margin: 0;
+}
+
+/* Prevent long admin-controlled text from forcing the grid wider. */
+.hero-section .hero-text-col,
+.hero-section .hero-image-col {
+  min-width: 0;
+  width: 100%;
+}
+
+/* ---- Text column ---- */
+.hero-section .hero-text-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.hero-section .hero-marquee-badge {
+  max-width: min(100%, 520px);
+}
+
+.hero-section .hero-title {
+  width: 100%;
+  max-width: 760px;
+
+  /*
+   * Slightly more adaptive than the old fixed clamp.
+   * This prevents very tall titles at production viewport heights.
+   */
+  font-size: clamp(2.15rem, 3.45vw, 3.55rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.025em;
+  margin-bottom: clamp(14px, 2vh, 22px) !important;
+
+  overflow-wrap: anywhere;
+  word-break: normal;
+  text-wrap: balance;
+}
+
+.hero-section .hero-subtitle {
+  width: 100%;
+  max-width: 700px;
+
+  font-size: clamp(0.95rem, 1.05vw, 1.08rem) !important;
+  line-height: 1.65 !important;
+  margin-bottom: clamp(20px, 2.8vh, 30px) !important;
+}
+
+/* ---- Checklist ---- */
+.hero-section .hero-checklist {
+  width: 100%;
+  max-width: 760px;
+
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+
+  gap: 10px 22px !important;
+  margin-bottom: clamp(20px, 3vh, 32px) !important;
+}
+
+.hero-section .check-item {
+  min-width: 0;
+  display: inline-flex !important;
+  align-items: center;
+  line-height: 1.4 !important;
+}
+
+/* ---- CTA row ---- */
+.hero-section .hero-cta-group {
+  width: 100%;
+
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+
+  gap: 14px !important;
+  margin: 0 !important;
+}
+
+.hero-section .hero-cta-group>.btn-gold-pill,
+.hero-section .hero-cta-group>.btn-whatsapp-outline {
+  min-height: 56px !important;
+  height: 56px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 0 24px !important;
+
+  line-height: 1 !important;
+  white-space: nowrap;
+
+  flex: 0 0 auto;
+}
+
+/* Prevent one button from becoming tiny because of text width. */
+.hero-section .hero-cta-group>.btn-gold-pill {
+  min-width: 250px;
+}
+
+.hero-section .hero-cta-group>.btn-whatsapp-outline {
+  min-width: 250px;
+}
+
+/* ---- Engineer / right column ---- */
+.hero-section .hero-image-col {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.hero-section .hero-image-col>div {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/*
+ * The HTML contains inline width/max-width rules.
+ * These !important constraints make the production result predictable
+ * without changing the Blade content.
+ */
+.hero-section .engineer-hero-float {
+  display: block !important;
+  width: min(100%, 420px) !important;
   max-width: 420px !important;
+
   height: auto !important;
+  max-height: min(62vh, 620px) !important;
+
   object-fit: contain !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+  object-position: center bottom !important;
+
+  margin: 0 auto !important;
 }
 
-.hero-image-col .engineer-namecard-glow {
+/* Stable engineer card sizing. */
+.hero-section .engineer-namecard-glow {
   width: min(380px, calc(100% - 20px)) !important;
   max-width: 380px !important;
-  box-sizing: border-box !important;
+
   margin-left: auto !important;
   margin-right: auto !important;
+
+  /*
+   * Keep the intended overlap, but do not push the card outside
+   * the hero on short screens.
+   */
+  margin-top: clamp(-62px, -6vh, -38px) !important;
+
+  padding: 15px 18px 14px !important;
 }
 
-/* ---------- 1200px and below: keep a controlled two-column desktop/tablet
-   landscape layout until the content really needs to stack. ---------- */
-@media (min-width: 1025px) and (max-width: 1200px) {
-  .hero-grid {
-    grid-template-columns: minmax(0, 1.05fr) minmax(330px, 0.95fr) !important;
-    gap: 30px !important;
+/* ---- Prevent hero animation from moving layout unexpectedly ---- */
+.hero-section .hero-image-col,
+.hero-section .hero-image-col .engineer-hero-float,
+.hero-section .hero-image-col .engineer-namecard-glow {
+  transform-origin: center center;
+}
+
+/* =========================================================
+   SHORT DESKTOP HEIGHT
+   e.g. 1366x768 / 1440x800 / laptop screens
+   ========================================================= */
+@media (min-width: 1201px) and (max-height: 900px) {
+  .hero-section {
+    padding-top: 22px !important;
+    padding-bottom: 36px !important;
   }
 
-  .hero-title {
-    font-size: clamp(2.15rem, 4.1vw, 3rem) !important;
+  .hero-section .hero-grid {
+    gap: 24px !important;
   }
 
-  .hero-subtitle {
-    font-size: 1rem !important;
-    line-height: 1.65 !important;
+  .hero-section .hero-title {
+    font-size: clamp(1.95rem, 3.15vw, 3rem) !important;
+    line-height: 1.06 !important;
+    margin-bottom: 12px !important;
   }
 
-  .hero-checklist {
-    gap: 13px 18px !important;
-    margin-bottom: 28px !important;
+  .hero-section .hero-subtitle {
+    font-size: 0.97rem !important;
+    line-height: 1.55 !important;
+    margin-bottom: 18px !important;
   }
 
-  .hero-cta-group {
+  .hero-section .hero-checklist {
+    gap: 8px 18px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .hero-section .hero-cta-group {
     gap: 12px !important;
   }
 
-  .hero-cta-group .btn-gold-pill,
-  .hero-cta-group .btn-whatsapp-outline {
-    min-height: 54px !important;
-    height: 54px !important;
-    padding-left: 22px !important;
-    padding-right: 22px !important;
-    font-size: 0.78rem !important;
+  .hero-section .hero-cta-group>.btn-gold-pill,
+  .hero-section .hero-cta-group>.btn-whatsapp-outline {
+    min-height: 52px !important;
+    height: 52px !important;
+    padding: 0 21px !important;
   }
 
-  .hero-image-col .engineer-hero-float {
-    max-width: 390px !important;
+  .hero-section .engineer-hero-float {
+    max-height: 58vh !important;
   }
 
-  .hero-image-col .engineer-namecard-glow {
-    width: min(360px, calc(100% - 14px)) !important;
+  .hero-section .engineer-namecard-glow {
+    margin-top: -48px !important;
+    padding: 13px 16px 12px !important;
   }
 }
 
-/* ---------- 769px–1024px: one controlled column, no clipped content ---------- */
-@media (min-width: 769px) and (max-width: 1024px) {
+/* =========================================================
+   VERY SHORT DESKTOP HEIGHT
+   ========================================================= */
+@media (min-width: 1201px) and (max-height: 760px) {
   .hero-section {
-    min-height: auto;
-    padding: 56px 0 72px !important;
-    overflow: visible !important;
+    padding-top: 14px !important;
+    padding-bottom: 26px !important;
   }
 
-  .hero-grid {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 34px !important;
-    text-align: center;
+  .hero-section .hero-title {
+    font-size: clamp(1.78rem, 2.85vw, 2.65rem) !important;
+    line-height: 1.04 !important;
+    margin-bottom: 10px !important;
   }
 
-  .hero-text-col {
-    align-items: center;
-    text-align: center;
-    max-width: 820px;
-    margin: 0 auto;
+  .hero-section .hero-subtitle {
+    font-size: 0.91rem !important;
+    line-height: 1.48 !important;
+    margin-bottom: 15px !important;
   }
 
-  .hero-subtitle {
-    margin-left: auto !important;
-    margin-right: auto !important;
+  .hero-section .hero-checklist {
+    gap: 6px 14px !important;
+    margin-bottom: 16px !important;
   }
 
-  .hero-checklist {
-    justify-content: center !important;
+  .hero-section .check-item {
+    font-size: 0.84rem !important;
   }
 
-  .hero-cta-group {
-    justify-content: center !important;
+  .hero-section .hero-cta-group>.btn-gold-pill,
+  .hero-section .hero-cta-group>.btn-whatsapp-outline {
+    min-height: 48px !important;
+    height: 48px !important;
+    font-size: 0.76rem !important;
+    padding: 0 18px !important;
   }
 
-  .hero-image-col {
-    max-width: 460px !important;
-    margin: 0 auto !important;
+  .hero-section .hero-cta-group>.btn-gold-pill,
+  .hero-section .hero-cta-group>.btn-whatsapp-outline {
+    min-width: 220px;
+  }
+
+  .hero-section .engineer-hero-float {
+    max-height: 52vh !important;
+  }
+
+  .hero-section .engineer-namecard-glow {
+    margin-top: -42px !important;
+    padding: 11px 14px 10px !important;
   }
 }
 
-/* ---------- Mobile: let the hero grow naturally instead of clipping ---------- */
-@media (max-width: 768px) {
-  body {
-    padding-top: 70px !important;
+/* =========================================================
+   LARGE TABLET / SMALL LAPTOP
+   Keep two columns longer than the old 1024 rule when possible.
+   ========================================================= */
+@media (min-width: 993px) and (max-width: 1200px) {
+  .hero-section {
+    min-height: calc(100vh - 83px);
+    min-height: calc(100svh - 83px);
+    padding-top: 34px !important;
+    padding-bottom: 46px !important;
   }
 
+  .hero-section .hero-grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr) !important;
+    gap: 24px !important;
+  }
+
+  .hero-section .hero-title {
+    font-size: clamp(1.95rem, 3.7vw, 2.75rem) !important;
+    line-height: 1.08 !important;
+  }
+
+  .hero-section .hero-subtitle {
+    font-size: 0.95rem !important;
+  }
+
+  .hero-section .hero-checklist {
+    gap: 9px 16px !important;
+  }
+
+  .hero-section .hero-cta-group>.btn-gold-pill,
+  .hero-section .hero-cta-group>.btn-whatsapp-outline {
+    min-width: 0;
+    min-height: 52px !important;
+    height: 52px !important;
+    padding: 0 18px !important;
+    font-size: 0.77rem !important;
+  }
+
+  .hero-section .engineer-hero-float {
+    max-height: 55vh !important;
+  }
+
+  .hero-section .engineer-namecard-glow {
+    width: min(350px, calc(100% - 16px)) !important;
+    margin-top: -48px !important;
+  }
+}
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
+@media (max-width: 992px) {
   .hero-section {
     min-height: auto !important;
     height: auto !important;
-    overflow: visible !important;
-    padding: 34px 0 86px !important;
+    padding-top: 32px !important;
+    padding-bottom: 52px !important;
+    overflow: hidden !important;
   }
 
   .hero-section>.container {
-    width: 100% !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
+    min-height: 0;
   }
 
-  .hero-grid {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 24px !important;
+  .hero-section .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
     align-items: center !important;
   }
 
-  .hero-text-col {
+  .hero-section .hero-text-col {
     width: 100% !important;
-    max-width: 760px !important;
-    margin: 0 auto !important;
-    overflow: visible !important;
+    align-items: center !important;
     text-align: center !important;
-    align-items: center !important;
   }
 
-  .hero-title {
-    width: 100% !important;
-    max-width: 760px !important;
-    font-size: clamp(1.45rem, 7vw, 2.05rem) !important;
-    line-height: 1.18 !important;
-    margin-bottom: 14px !important;
-    text-wrap: balance;
+  .hero-section .hero-title {
+    max-width: 900px !important;
+    text-align: center !important;
   }
 
-  .hero-subtitle {
-    width: 100% !important;
-    max-width: 680px !important;
-    font-size: 0.9rem !important;
-    line-height: 1.55 !important;
-    margin: 0 auto 18px !important;
+  .hero-section .hero-subtitle {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
   }
 
-  .hero-checklist {
-    width: 100% !important;
+  .hero-section .hero-checklist {
     justify-content: center !important;
+  }
+
+  .hero-section .hero-cta-group {
+    justify-content: center !important;
+  }
+
+  .hero-section .hero-image-col {
+    width: 100% !important;
+    max-width: 520px !important;
+    margin: 0 auto !important;
+  }
+
+  .hero-section .engineer-hero-float {
+    width: min(100%, 390px) !important;
+    max-width: 390px !important;
+    max-height: 520px !important;
+  }
+
+  .hero-section .engineer-namecard-glow {
+    width: min(380px, calc(100% - 20px)) !important;
+    max-width: 380px !important;
+    margin-top: -52px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding-top: 24px !important;
+    padding-bottom: 42px !important;
+  }
+
+  .hero-section .hero-grid {
+    gap: 24px !important;
+  }
+
+  .hero-section .hero-title {
+    font-size: clamp(1.45rem, 6.2vw, 2.05rem) !important;
+    line-height: 1.16 !important;
+    margin-bottom: 12px !important;
+  }
+
+  .hero-section .hero-subtitle {
+    font-size: 0.86rem !important;
+    line-height: 1.55 !important;
+    margin-bottom: 16px !important;
+  }
+
+  .hero-section .hero-checklist {
+    width: 100% !important;
     gap: 8px 12px !important;
     margin-bottom: 20px !important;
   }
 
-  .check-item {
-    min-width: 0 !important;
+  .hero-section .check-item {
     font-size: 0.76rem !important;
   }
 
-  .hero-cta-group {
+  .hero-section .hero-cta-group {
     width: 100% !important;
     max-width: 340px !important;
-    margin: 0 auto 12px !important;
     flex-direction: column !important;
-    align-items: stretch !important;
-    justify-content: center !important;
     gap: 10px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
-  .hero-cta-group .btn-gold-pill,
-  .hero-cta-group .btn-whatsapp-outline {
+  .hero-section .hero-cta-group>.btn-gold-pill,
+  .hero-section .hero-cta-group>.btn-whatsapp-outline {
     width: 100% !important;
-    max-width: 340px !important;
+    min-width: 0 !important;
     min-height: 48px !important;
     height: 48px !important;
     padding: 0 16px !important;
     font-size: 0.78rem !important;
-    white-space: nowrap !important;
   }
 
-  .hero-image-col {
-    width: 100% !important;
-    max-width: 330px !important;
-    margin: 0 auto !important;
+  .hero-section .hero-image-col {
+    max-width: 360px !important;
   }
 
-  .hero-image-col .engineer-hero-float {
-    width: min(280px, 100%) !important;
+  .hero-section .engineer-hero-float {
+    width: min(100%, 280px) !important;
     max-width: 280px !important;
-    height: auto !important;
+    max-height: 380px !important;
   }
 
-  .hero-image-col .engineer-namecard-glow {
-    width: min(290px, calc(100% - 10px)) !important;
-    max-width: 290px !important;
-    margin-top: -44px !important;
-    padding: 11px 12px !important;
+  .hero-section .engineer-namecard-glow {
+    width: min(320px, calc(100% - 16px)) !important;
+    max-width: 320px !important;
+    margin-top: -42px !important;
+    padding: 11px 12px 10px !important;
   }
 }
 
 @media (max-width: 480px) {
   .hero-section {
-    padding-top: 28px !important;
-    padding-bottom: 82px !important;
+    padding-top: 18px !important;
+    padding-bottom: 36px !important;
   }
 
-  .hero-section>.container {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-  }
-
-  .hero-grid {
-    gap: 20px !important;
-  }
-
-  .hero-title {
-    font-size: 1.32rem !important;
+  .hero-section .hero-title {
+    font-size: clamp(1.25rem, 6vw, 1.65rem) !important;
     line-height: 1.18 !important;
   }
 
-  .hero-subtitle {
+  .hero-section .hero-subtitle {
     font-size: 0.78rem !important;
+    line-height: 1.5 !important;
   }
 
-  .check-item {
+  .hero-section .hero-checklist {
+    gap: 7px 10px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .hero-section .check-item {
     font-size: 0.72rem !important;
   }
 
-  .hero-cta-group {
-    max-width: 310px !important;
+  .hero-section .engineer-hero-float {
+    width: min(100%, 240px) !important;
+    max-width: 240px !important;
+    max-height: 330px !important;
   }
 
-  .hero-cta-group .btn-gold-pill,
-  .hero-cta-group .btn-whatsapp-outline {
-    max-width: 310px !important;
-    min-height: 46px !important;
-    height: 46px !important;
-    padding: 0 14px !important;
-    font-size: 0.74rem !important;
-  }
-
-  .hero-image-col .engineer-hero-float {
-    max-width: 235px !important;
-  }
-
-  .hero-image-col .engineer-namecard-glow {
-    width: min(245px, calc(100% - 10px)) !important;
-    max-width: 245px !important;
-    margin-top: -40px !important;
+  .hero-section .engineer-namecard-glow {
+    width: min(290px, calc(100% - 12px)) !important;
+    max-width: 290px !important;
+    margin-top: -36px !important;
+    padding: 9px 10px 9px !important;
   }
 }
 
-/* ---------- Accessibility ---------- */
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
 @media (prefers-reduced-motion: reduce) {
-
-  .hero-section,
-  .hero-section .hero-marquee-badge,
-  .hero-section .hero-title,
-  .hero-section .hero-subtitle,
-  .hero-section .hero-checklist .check-item,
-  .hero-section .hero-cta-group,
-  .hero-section .hero-image-col,
-  .hero-image-col .engineer-hero-float,
-  .hero-image-col .engineer-namecard-glow {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-/* ---------- Production-safe image loading ---------- */
-.hero-section img {
-  max-width: 100%;
-}
-
-.hero-image-col img {
-  transform-origin: center center;
-}
-
-/* ---------- Prevent the hero from being visually cut by a browser that
-   temporarily reports a very short viewport height. The content remains
-   content-driven instead of depending on 100vh. ---------- */
-@media (max-height: 700px) and (min-width: 769px) {
   .hero-section {
-    min-height: auto !important;
-    padding-top: 42px !important;
-    padding-bottom: 56px !important;
+    animation: none !important;
+  }
+
+  .hero-section .hero-image-col,
+  .hero-section .engineer-hero-float,
+  .hero-section .engineer-namecard-glow {
+    animation: none !important;
   }
 }
