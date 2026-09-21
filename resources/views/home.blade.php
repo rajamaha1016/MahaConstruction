@@ -96,26 +96,26 @@
 </section>
 
 <!-- 5 STATS METRICS BAR -->
-<section class="stats-metrics-bar construct-reveal">
+<section class="stats-metrics-bar" id="statsMetricsBar">
     <div class="container">
         <div class="stats-grid-5">
-            <div class="metric-card construct-reveal-scale stagger-1">
+            <div class="metric-card">
                 <div class="metric-number">12+</div>
                 <div class="metric-label">Years Experience</div>
             </div>
-            <div class="metric-card construct-reveal-scale stagger-2">
+            <div class="metric-card">
                 <div class="metric-number">150+</div>
                 <div class="metric-label">Happy Families</div>
             </div>
-            <div class="metric-card construct-reveal-scale stagger-3">
+            <div class="metric-card">
                 <div class="metric-number">100+</div>
                 <div class="metric-label">Completed Projects</div>
             </div>
-            <div class="metric-card construct-reveal-scale stagger-4">
+            <div class="metric-card">
                 <div class="metric-number">15-Yr</div>
                 <div class="metric-label">Structural Warranty</div>
             </div>
-            <div class="metric-card construct-reveal-scale stagger-5">
+            <div class="metric-card">
                 <div class="metric-number">100%</div>
                 <div class="metric-label">Quality Audit Guarantee</div>
             </div>
@@ -124,9 +124,9 @@
 </section>
 
 <!-- HOMES WE'VE PROUDLY DELIVERED (AUTO-SCROLLING PORTFOLIO CAROUSEL — HIREANDBUILD MODEL) -->
-<section class="section-pad construct-reveal" id="delivered-homes-section">
+<section class="section-pad" id="delivered-homes-section">
     <div class="container">
-        <div style="text-align:center;" class="construct-reveal">
+        <div style="text-align:center;">
             <span class="pill-badge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-size:0.75rem;padding:6px 16px;letter-spacing:0.15em;">
                 OUR COMPLETED PROJECTS
             </span>
@@ -138,7 +138,7 @@
             </p>
         </div>
 
-        <div class="projects-carousel-wrap construct-reveal" style="position:relative;margin-top:36px;">
+        <div class="projects-carousel-wrap" style="position:relative;margin-top:36px;">
             <!-- Auto-Scrolling Track -->
             <div class="projects-track" id="projectsTrack" style="display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;padding:16px 8px 32px;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
                 @forelse($projects as $i => $project)
@@ -1359,11 +1359,12 @@ document.addEventListener('DOMContentLoaded', function() {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
+                    constructObserver.unobserve(entry.target);
                 }
             });
         }, {
-            threshold: 0.08,
-            rootMargin: '0px 0px -40px 0px'
+            threshold: 0.01,
+            rootMargin: '120px 0px 120px 0px'
         });
 
         document.querySelectorAll('.construct-reveal, .construct-reveal-left, .construct-reveal-right, .construct-reveal-scale').forEach(el => {
@@ -1544,15 +1545,15 @@ document.addEventListener('DOMContentLoaded', function() {
             gsap.registerPlugin(ScrollTrigger);
 
             const isMobileScreen = window.innerWidth <= 768;
-            // Desktop: 300% scroll distance | Mobile: 200% (shorter for better UX)
-            const scrollDistance = isMobileScreen ? '+=200%' : '+=300%';
+            // Snappy, fluid scroll distance without dead empty space
+            const scrollDistance = isMobileScreen ? '+=120%' : '+=160%';
 
             ScrollTrigger.create({
                 trigger: '#constructionScrollHero',
                 start: 'top top',
                 end: scrollDistance,
                 pin: true,
-                scrub: 0.5,
+                scrub: 0.3,
                 anticipatePin: 1,
                 onUpdate: (self) => {
                     handleProgress(self.progress);
@@ -1561,11 +1562,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Initial render
             handleProgress(0);
+
+            // Re-calculate accurate pin heights once page resources are settled
+            window.addEventListener('load', () => {
+                ScrollTrigger.refresh();
+            });
+            setTimeout(() => {
+                ScrollTrigger.refresh();
+            }, 600);
         } else {
             // Native scroll fallback for all screen sizes
             window.addEventListener('scroll', function() {
                 const rect = heroSection.getBoundingClientRect();
-                const totalH = window.innerHeight * (window.innerWidth <= 768 ? 2 : 3);
+                const totalH = window.innerHeight * (window.innerWidth <= 768 ? 1.5 : 2);
                 const scrolled = -rect.top;
                 const p = Math.min(1, Math.max(0, scrolled / totalH));
                 handleProgress(p);
