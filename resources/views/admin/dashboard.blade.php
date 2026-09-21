@@ -1229,53 +1229,53 @@
         <div style="padding:12px 16px 10px;border-bottom:1px solid var(--navy-800);">
             <div style="font-size:0.62rem;font-weight:800;color:var(--slate-400);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
                 <span>ACTIVE WORKSPACE</span>
-                <span id="sidebarActiveDivisionIndicator" style="color:#10B981;font-size:0.6rem;font-weight:700;">● CONST</span>
+                <span id="sidebarActiveDivisionIndicator" style="color:{{ $activeDivision === 'interior' ? '#D97706' : '#10B981' }};font-size:0.6rem;font-weight:700;">● {{ $activeDivision === 'interior' ? 'INTERIOR' : 'CONST' }}</span>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;background:rgba(15,23,42,0.9);padding:3px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);">
-                <button type="button" id="sideDivConst" onclick="setAdminDivision('construction')" style="border:none;background:#FFFFFF;color:var(--navy-900);padding:6px 8px;font-size:0.72rem;font-weight:800;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s cubic-bezier(0.16,1,0.3,1);box-shadow:0 1px 4px rgba(0,0,0,0.15);">
-                    <i class="fa-solid fa-building" style="color:var(--navy-900);"></i> <span>Const.</span>
-                </button>
-                <button type="button" id="sideDivInt" onclick="setAdminDivision('interior')" style="border:none;background:transparent;color:var(--slate-400);padding:6px 8px;font-size:0.72rem;font-weight:800;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s cubic-bezier(0.16,1,0.3,1);">
-                    <i class="fa-solid fa-couch" style="color:var(--slate-400);"></i> <span>Interior</span>
-                </button>
+                <a href="{{ route('admin.construction') }}" id="sideDivConst" style="text-decoration:none;border:none;background:{{ $activeDivision === 'construction' ? '#FFFFFF' : 'transparent' }};color:{{ $activeDivision === 'construction' ? 'var(--navy-900)' : 'var(--slate-400)' }};padding:6px 8px;font-size:0.72rem;font-weight:800;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s cubic-bezier(0.16,1,0.3,1);box-shadow:{{ $activeDivision === 'construction' ? '0 1px 4px rgba(0,0,0,0.15)' : 'none' }};">
+                    <i class="fa-solid fa-building" style="color:{{ $activeDivision === 'construction' ? 'var(--navy-900)' : 'var(--slate-400)' }};"></i> <span>Const.</span>
+                </a>
+                <a href="{{ route('admin.interior') }}" id="sideDivInt" style="text-decoration:none;border:none;background:{{ $activeDivision === 'interior' ? '#FFFFFF' : 'transparent' }};color:{{ $activeDivision === 'interior' ? 'var(--navy-900)' : 'var(--slate-400)' }};padding:6px 8px;font-size:0.72rem;font-weight:800;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s cubic-bezier(0.16,1,0.3,1);box-shadow:{{ $activeDivision === 'interior' ? '0 1px 4px rgba(0,0,0,0.15)' : 'none' }};">
+                    <i class="fa-solid fa-couch" style="color:{{ $activeDivision === 'interior' ? 'var(--navy-900)' : 'var(--slate-400)' }};"></i> <span>Interior</span>
+                </a>
             </div>
         </div>
 
         <ul class="sidebar-nav-list">
-            <li class="sidebar-section-title" id="sidebarSectionOperations">CONSTRUCTION OPERATIONS</li>
+            <li class="sidebar-section-title" id="sidebarSectionOperations">{{ $activeDivision === 'interior' ? 'INTERIOR OPERATIONS' : 'CONSTRUCTION OPERATIONS' }}</li>
             <li>
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('analytics', this)">
                     <i class="fa-solid fa-chart-line nav-icon icon-analytics"></i>
-                    <span id="sidebarLabelAnalytics">Analytics</span>
+                    <span id="sidebarLabelAnalytics">{{ $activeDivision === 'interior' ? 'Interior Analytics' : 'Construction Analytics' }}</span>
                     <span class="badge-count live-pill">LIVE</span>
                 </a>
             </li>
             <li>
                 <a href="#" class="sidebar-nav-link active" onclick="switchAdminTab('reviews', this)">
                     <i class="fa-solid fa-video nav-icon icon-video"></i>
-                    <span id="sidebarLabelReviews">Video Reviews</span>
-                    <span class="badge-count bc-rose" id="sidebarReviewsCount">{{ \App\Models\Testimonial::count() }}</span>
+                    <span id="sidebarLabelReviews">{{ $activeDivision === 'interior' ? 'Interior Video Reviews' : 'Homeowner Testimonials' }}</span>
+                    <span class="badge-count bc-rose" id="sidebarReviewsCount">{{ $stats['reviews'] }}</span>
                 </a>
             </li>
             <li>
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('projects', this)">
                     <i class="fa-solid fa-building-circle-check nav-icon icon-projects"></i>
-                    <span id="sidebarLabelProjects">Completed Projects</span>
-                    <span class="badge-count bc-blue" id="sidebarProjectsCount">{{ \App\Models\Project::count() }}</span>
+                    <span id="sidebarLabelProjects">{{ $activeDivision === 'interior' ? 'Interior Projects' : 'Completed Buildings' }}</span>
+                    <span class="badge-count bc-blue" id="sidebarProjectsCount">{{ $stats['projects'] }}</span>
                 </a>
             </li>
             <li>
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('packages', this)">
                     <i class="fa-solid fa-cubes nav-icon icon-packages"></i>
-                    <span id="sidebarLabelPackages">Packages &amp; Pricing</span>
-                    <span class="badge-count bc-violet" id="sidebarPackagesCount">{{ \App\Models\PackageDetail::count() }}</span>
+                    <span id="sidebarLabelPackages">{{ $activeDivision === 'interior' ? 'Interior Packages' : 'Building Packages' }}</span>
+                    <span class="badge-count bc-violet" id="sidebarPackagesCount">{{ $stats['packages'] }}</span>
                 </a>
             </li>
             <li>
                 <a href="#" class="sidebar-nav-link" onclick="switchAdminTab('quotes', this)">
                     <i class="fa-solid fa-inbox nav-icon icon-leads"></i>
-                    <span id="sidebarLabelQuotes">Consultations &amp; Leads</span>
-                    <span class="badge-count bc-amber" id="sidebarQuotesCount">{{ \App\Models\QuoteRequest::count() }}</span>
+                    <span id="sidebarLabelQuotes">{{ $activeDivision === 'interior' ? 'Design Consultations' : 'Building Inquiries' }}</span>
+                    <span class="badge-count bc-amber" id="sidebarQuotesCount">{{ $stats['quotes'] }}</span>
                 </a>
             </li>
 
@@ -1334,23 +1334,23 @@
                 </button>
                 <div>
                     <div class="admin-panel-title">Operations Console</div>
-                    <div class="admin-panel-sub" id="adminHeaderConsoleSub">Construction &amp; Luxury Interior Management</div>
+                    <div class="admin-panel-sub" id="adminHeaderConsoleSub">{{ $activeDivision === 'interior' ? 'Maha Interior — Bespoke Design & Turnkey Fitouts' : 'Maha Construction — Luxury Villas & Structural Building' }}</div>
                 </div>
             </div>
 
             <!-- Division Switcher Bar -->
             <div class="division-switcher">
-                <button type="button" id="btnDivConstruction" onclick="setAdminDivision('construction')" class="division-btn active">
+                <a href="{{ route('admin.construction') }}" id="btnDivConstruction" class="division-btn {{ $activeDivision === 'construction' ? 'active' : '' }}" style="text-decoration:none;">
                     <i class="fa-solid fa-building" style="margin-right:6px;"></i> CONSTRUCTION
-                </button>
-                <button type="button" id="btnDivInterior" onclick="setAdminDivision('interior')" class="division-btn">
+                </a>
+                <a href="{{ route('admin.interior') }}" id="btnDivInterior" class="division-btn {{ $activeDivision === 'interior' ? 'active' : '' }}" style="text-decoration:none;">
                     <i class="fa-solid fa-couch" style="margin-right:6px;"></i> INTERIOR
-                </button>
+                </a>
             </div>
 
             <div style="display:flex;gap:10px;align-items:center;">
-                <a id="adminLiveWebsiteLink" href="{{ route('home') }}" target="_blank" class="btn-whatsapp-outline" style="font-size:0.78rem;padding:7px 14px;">
-                    <i class="fa-solid fa-arrow-up-right-from-square" style="margin-right:5px;font-size:0.75rem;"></i> Live Site
+                <a id="adminLiveWebsiteLink" href="{{ $activeDivision === 'interior' ? route('interior') : route('home') }}" target="_blank" class="btn-whatsapp-outline" style="font-size:0.78rem;padding:7px 14px;">
+                    <i class="{{ $activeDivision === 'interior' ? 'fa-solid fa-couch' : 'fa-solid fa-building' }}" style="margin-right:5px;font-size:0.75rem;"></i> Live {{ $activeDivision === 'interior' ? 'Interior Site' : 'Construction Site' }}
                 </a>
                 <form method="POST" action="{{ route('admin.logout') }}" style="margin:0;">
                     @csrf
@@ -1381,14 +1381,14 @@
                         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
                             <!-- Division Selector -->
                             <div class="analytics-pill-group" id="analyticsDivisionGroup">
-                                <button type="button" class="analytics-pill-btn active" onclick="setAnalyticsDivision('all')" id="btnDivAll">
-                                    ALL
-                                </button>
-                                <button type="button" class="analytics-pill-btn" onclick="setAnalyticsDivision('construction')" id="btnDivConst">
+                                <button type="button" class="analytics-pill-btn {{ $activeDivision === 'construction' ? 'active' : '' }}" onclick="setAnalyticsDivision('construction')" id="btnDivConst">
                                     <i class="fa-solid fa-building" style="margin-right:4px;"></i> Construction
                                 </button>
-                                <button type="button" class="analytics-pill-btn" onclick="setAnalyticsDivision('interior')" id="btnDivInt">
+                                <button type="button" class="analytics-pill-btn {{ $activeDivision === 'interior' ? 'active' : '' }}" onclick="setAnalyticsDivision('interior')" id="btnDivInt">
                                     <i class="fa-solid fa-couch" style="margin-right:4px;"></i> Interior
+                                </button>
+                                <button type="button" class="analytics-pill-btn" onclick="setAnalyticsDivision('all')" id="btnDivAll">
+                                    ALL
                                 </button>
                             </div>
 
@@ -1670,10 +1670,10 @@
                 <div class="card-dark-panel">
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
                         <div>
-                            <h2 class="panel-header-title" id="title-reviews"><i class="fa-solid fa-video" style="margin-right:8px;color:var(--navy-900);"></i> Client Video Testimonials</h2>
-                            <p class="panel-header-sub" id="sub-reviews">Upload video files or video links from verified homeowners.</p>
+                            <h2 class="panel-header-title" id="title-reviews"><i class="{{ $activeDivision === 'interior' ? 'fa-solid fa-couch' : 'fa-solid fa-video' }}" style="margin-right:8px;color:var(--navy-900);"></i> {{ $activeDivision === 'interior' ? 'Luxury Interior Video Reviews' : 'Client Video Testimonials' }}</h2>
+                            <p class="panel-header-sub" id="sub-reviews">{{ $activeDivision === 'interior' ? 'Manage walkthrough and testimonial videos from luxury interior clients.' : 'Upload video files or video links from verified homeowners.' }}</p>
                         </div>
-                        <button class="btn-gold-pill" id="action-btn-reviews" onclick="openUploadModal('testimonial')"><i class="fa-solid fa-plus" style="margin-right:6px;"></i> Upload Video Review</button>
+                        <button class="btn-gold-pill" id="action-btn-reviews" onclick="openUploadModal('testimonial')"><i class="fa-solid fa-plus" style="margin-right:6px;"></i> {{ $activeDivision === 'interior' ? 'Upload Interior Review' : 'Upload Video Review' }}</button>
                     </div>
 
                     <!-- Division Scope Banner -->
@@ -1681,20 +1681,20 @@
                         <div class="division-scope-info">
                             <span class="division-scope-badge" id="badge-reviews">
                                 <span class="scope-dot"></span>
-                                <span id="badge-text-reviews">CONSTRUCTION DIVISION</span>
+                                <span id="badge-text-reviews">{{ $activeDivision === 'interior' ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS' }}</span>
                             </span>
                             <span class="division-scope-desc" id="desc-reviews">
-                                Showing video reviews from verified home building clients.
+                                {{ $activeDivision === 'interior' ? 'Showing video reviews from verified interior clients across Tamil Nadu.' : 'Showing video testimonials from verified home building clients.' }}
                             </span>
                         </div>
-                        <button type="button" class="division-scope-switch-btn" id="switch-btn-reviews" onclick="toggleDivisionQuickly()">
-                            <span>Switch to Interior Studio</span>
+                        <a href="{{ $activeDivision === 'interior' ? route('admin.construction') : route('admin.interior') }}" class="division-scope-switch-btn" id="switch-btn-reviews" style="text-decoration:none;">
+                            <span>{{ $activeDivision === 'interior' ? 'Switch to Construction Division' : 'Switch to Interior Studio' }}</span>
                             <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>
-                        </button>
+                        </a>
                     </div>
 
                     <div class="projects-grid-2">
-                        @foreach(\App\Models\Testimonial::all() as $item)
+                        @foreach($testimonials as $item)
                         <div class="project-video-card division-filterable" data-business-type="{{ $item->business_type ?? 'construction' }}">
                             <div class="video-thumb-frame" style="height:200px;position:relative;">
                                 <img src="{{ $item->image_url ?? 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80' }}" style="width:100%;height:100%;object-fit:cover;" alt="Review">
@@ -1708,7 +1708,7 @@
                             <div class="project-card-info" style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;">
                                 <div>
                                     <h4 style="color:var(--navy-900);font-size:0.92rem;font-weight:700;margin:0 0 3px 0;">{{ $item->client_name }}</h4>
-                                    <span style="font-size:0.78rem;color:var(--slate-500);">{{ $item->project_name ?? 'Maha Construction' }}</span>
+                                    <span style="font-size:0.78rem;color:var(--slate-500);">{{ $item->project_name ?? 'Maha Group' }}</span>
                                 </div>
                                 <div style="display:flex;gap:6px;">
                                     <button type="button" class="action-edit-btn" onclick='openEditModal("testimonial", @json($item))' title="Edit Review"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -1718,7 +1718,7 @@
                         </div>
                         @endforeach
                     </div>
-                    <div id="reviewsEmptyState" class="empty-division-state" style="display:none;padding:40px;text-align:center;color:var(--slate-500);">No video testimonials found for the selected division.</div>
+                    <div id="reviewsEmptyState" class="empty-division-state" style="{{ $testimonials->isEmpty() ? 'display:block;' : 'display:none;' }}padding:40px;text-align:center;color:var(--slate-500);">No video testimonials found for the {{ $activeDivision }} division.</div>
                 </div>
             </div>
 
@@ -1727,10 +1727,10 @@
                 <div class="card-dark-panel">
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
                         <div>
-                            <h2 class="panel-header-title" id="title-projects"><i class="fa-solid fa-building-circle-check" style="margin-right:8px;color:var(--navy-900);"></i> Completed Projects Walkthroughs</h2>
-                            <p class="panel-header-sub" id="sub-projects">Manage walkthrough videos, full-resolution photos & project specifications.</p>
+                            <h2 class="panel-header-title" id="title-projects"><i class="{{ $activeDivision === 'interior' ? 'fa-solid fa-couch' : 'fa-solid fa-building-circle-check' }}" style="margin-right:8px;color:var(--navy-900);"></i> {{ $activeDivision === 'interior' ? 'Luxury Interior Design Projects' : 'Completed Projects Walkthroughs' }}</h2>
+                            <p class="panel-header-sub" id="sub-projects">{{ $activeDivision === 'interior' ? 'Showcase modular kitchens, living spaces, bedrooms, and commercial interior fitouts.' : 'Manage walkthrough videos, full-resolution photos & project specifications.' }}</p>
                         </div>
-                        <button class="btn-gold-pill" id="action-btn-projects" onclick="openUploadModal('project')"><i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Completed Project</button>
+                        <button class="btn-gold-pill" id="action-btn-projects" onclick="openUploadModal('project')"><i class="fa-solid fa-plus" style="margin-right:6px;"></i> {{ $activeDivision === 'interior' ? 'Add Interior Project' : 'Add Completed Project' }}</button>
                     </div>
 
                     <!-- Division Scope Banner -->
@@ -1738,20 +1738,20 @@
                         <div class="division-scope-info">
                             <span class="division-scope-badge" id="badge-projects">
                                 <span class="scope-dot"></span>
-                                <span id="badge-text-projects">CONSTRUCTION DIVISION</span>
+                                <span id="badge-text-projects">{{ $activeDivision === 'interior' ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS' }}</span>
                             </span>
                             <span class="division-scope-desc" id="desc-projects">
-                                Managing luxury villas, architectural homes, and turnkey structural buildings.
+                                {{ $activeDivision === 'interior' ? 'Managing modular kitchens, bespoke living rooms, wardrobes, and commercial spaces.' : 'Managing luxury villas, architectural homes, and turnkey structural buildings.' }}
                             </span>
                         </div>
-                        <button type="button" class="division-scope-switch-btn" id="switch-btn-projects" onclick="toggleDivisionQuickly()">
-                            <span>Switch to Interior Studio</span>
+                        <a href="{{ $activeDivision === 'interior' ? route('admin.construction') : route('admin.interior') }}" class="division-scope-switch-btn" id="switch-btn-projects" style="text-decoration:none;">
+                            <span>{{ $activeDivision === 'interior' ? 'Switch to Construction Division' : 'Switch to Interior Studio' }}</span>
                             <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>
-                        </button>
+                        </a>
                     </div>
 
                     <div class="projects-grid-2">
-                        @foreach(\App\Models\Project::all() as $project)
+                        @foreach($projects as $project)
                         <div class="project-video-card division-filterable" data-business-type="{{ $project->business_type ?? 'construction' }}">
                             <div class="video-thumb-frame" style="height:200px;position:relative;">
                                 <img src="{{ ($project->image_urls && count($project->image_urls)>0) ? $project->image_urls[0] : 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80' }}" style="width:100%;height:100%;object-fit:cover;" alt="Project">
@@ -1785,7 +1785,7 @@
                         </div>
                         @endforeach
                     </div>
-                    <div id="projectsEmptyState" class="empty-division-state" style="display:none;padding:40px;text-align:center;color:var(--slate-500);">No completed projects found for the selected division.</div>
+                    <div id="projectsEmptyState" class="empty-division-state" style="{{ $projects->isEmpty() ? 'display:block;' : 'display:none;' }}padding:40px;text-align:center;color:var(--slate-500);">No completed projects found for the {{ $activeDivision }} division.</div>
                 </div>
             </div>
 
@@ -1794,10 +1794,10 @@
                 <div class="card-dark-panel">
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
                         <div>
-                            <h2 class="panel-header-title" id="title-packages"><i class="fa-solid fa-cubes" style="margin-right:8px;color:var(--navy-900);"></i> Construction & Interior Packages</h2>
-                            <p class="panel-header-sub" id="sub-packages">Manage per sq.ft pricing & specification details for Residential, Commercial & Interior packages.</p>
+                            <h2 class="panel-header-title" id="title-packages"><i class="{{ $activeDivision === 'interior' ? 'fa-solid fa-couch' : 'fa-solid fa-cubes' }}" style="margin-right:8px;color:var(--navy-900);"></i> {{ $activeDivision === 'interior' ? 'Luxury Interior Packages & Pricing' : 'Building Construction Packages & Pricing' }}</h2>
+                            <p class="panel-header-sub" id="sub-packages">{{ $activeDivision === 'interior' ? 'Manage turnkey interior packages, modular kitchen tiers, and per sq.ft estimates.' : 'Manage per sq.ft pricing & specification details for Residential & Commercial packages.' }}</p>
                         </div>
-                        <button class="btn-gold-pill" id="action-btn-packages" onclick="openUploadModal('package')"><i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Package</button>
+                        <button class="btn-gold-pill" id="action-btn-packages" onclick="openUploadModal('package')"><i class="fa-solid fa-plus" style="margin-right:6px;"></i> {{ $activeDivision === 'interior' ? 'Add Interior Package' : 'Add Construction Package' }}</button>
                     </div>
 
                     <!-- Division Scope Banner -->
@@ -1805,20 +1805,20 @@
                         <div class="division-scope-info">
                             <span class="division-scope-badge" id="badge-packages">
                                 <span class="scope-dot"></span>
-                                <span id="badge-text-packages">CONSTRUCTION DIVISION</span>
+                                <span id="badge-text-packages">{{ $activeDivision === 'interior' ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS' }}</span>
                             </span>
                             <span class="division-scope-desc" id="desc-packages">
-                                Managing building packages, structural rates, and material specification tiers.
+                                {{ $activeDivision === 'interior' ? 'Managing modular kitchen packages, bedroom woodwork, and turnkey interior rates.' : 'Managing building packages, structural rates, and material specification tiers.' }}
                             </span>
                         </div>
-                        <button type="button" class="division-scope-switch-btn" id="switch-btn-packages" onclick="toggleDivisionQuickly()">
-                            <span>Switch to Interior Studio</span>
+                        <a href="{{ $activeDivision === 'interior' ? route('admin.construction') : route('admin.interior') }}" class="division-scope-switch-btn" id="switch-btn-packages" style="text-decoration:none;">
+                            <span>{{ $activeDivision === 'interior' ? 'Switch to Construction Division' : 'Switch to Interior Studio' }}</span>
                             <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>
-                        </button>
+                        </a>
                     </div>
 
                     <div class="pricing-grid-3">
-                        @foreach(\App\Models\PackageDetail::all() as $package)
+                        @foreach($packages as $package)
                         <div class="package-card division-filterable" data-business-type="{{ $package->business_type ?? 'construction' }}" style="padding:18px 20px;">
                             <div style="display:flex;justify-content:space-between;align-items:center;">
                                 <span class="plan-tier-label">{{ strtoupper($package->division) }} • {{ strtoupper($package->tier) }}</span>
@@ -1851,9 +1851,10 @@
                         </div>
                         @endforeach
                     </div>
-                    <div id="packagesEmptyState" class="empty-division-state" style="display:none;padding:40px;text-align:center;color:var(--slate-500);">No packages found for the selected division.</div>
+                    <div id="packagesEmptyState" class="empty-division-state" style="{{ $packages->isEmpty() ? 'display:block;' : 'display:none;' }}padding:40px;text-align:center;color:var(--slate-500);">No packages found for the {{ $activeDivision }} division.</div>
                 </div>
 
+                @if($activeDivision === 'construction')
                 <!-- 3B. CONSTRUCTION PACKAGES COMPARISON MATRIX / SPEC TABLE EDITOR -->
                 <div class="card-dark-panel division-filterable" data-business-type="construction" style="margin-top:24px;">
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
@@ -1919,6 +1920,7 @@
                         </button>
                     </div>
                 </div>
+                @endif
             </div>
 
             <!-- CONSULTATIONS & ESTIMATE LEADS TAB -->
@@ -1926,12 +1928,12 @@
                 <div class="card-dark-panel">
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px;">
                         <div>
-                            <h2 class="panel-header-title" id="title-quotes"><i class="fa-solid fa-file-invoice-dollar" style="margin-right:8px;color:var(--navy-800);"></i> CONSULTATIONS & ESTIMATE LEADS</h2>
-                            <p class="panel-header-sub" id="sub-quotes">Live inquiries submitted via the website for Free Consultations, Estimates, and Floor Plan Reviews.</p>
+                            <h2 class="panel-header-title" id="title-quotes"><i class="{{ $activeDivision === 'interior' ? 'fa-solid fa-couch' : 'fa-solid fa-file-invoice-dollar' }}" style="margin-right:8px;color:var(--navy-800);"></i> {{ $activeDivision === 'interior' ? 'INTERIOR CONSULTATION REQUESTS' : 'CONSTRUCTION INQUIRIES & ESTIMATES' }}</h2>
+                            <p class="panel-header-sub" id="sub-quotes">{{ $activeDivision === 'interior' ? 'Live record of interior consultation requests and space planning inquiries.' : 'Live inquiries submitted via the website for Free Consultations, Estimates, and Floor Plan Reviews.' }}</p>
                         </div>
                         <div style="display:flex;gap:10px;align-items:center;">
                             <span class="badge-count" id="quotesHeaderTotalBadge" style="padding:6px 14px;font-size:0.82rem;">
-                                {{ \App\Models\QuoteRequest::count() }} Total Leads
+                                {{ $stats['quotes'] }} Total Leads
                             </span>
                         </div>
                     </div>
@@ -1941,16 +1943,16 @@
                         <div class="division-scope-info">
                             <span class="division-scope-badge" id="badge-quotes">
                                 <span class="scope-dot"></span>
-                                <span id="badge-text-quotes">CONSTRUCTION DIVISION</span>
+                                <span id="badge-text-quotes">{{ $activeDivision === 'interior' ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS' }}</span>
                             </span>
                             <span class="division-scope-desc" id="desc-quotes">
-                                Showing incoming inquiries for home construction, villas, and building estimates.
+                                {{ $activeDivision === 'interior' ? 'Showing incoming consultation requests submitted via the Maha Interior studio page.' : 'Showing incoming inquiries for home construction, villas, and building estimates.' }}
                             </span>
                         </div>
-                        <button type="button" class="division-scope-switch-btn" id="switch-btn-quotes" onclick="toggleDivisionQuickly()">
-                            <span>Switch to Interior Studio</span>
+                        <a href="{{ $activeDivision === 'interior' ? route('admin.construction') : route('admin.interior') }}" class="division-scope-switch-btn" id="switch-btn-quotes" style="text-decoration:none;">
+                            <span>{{ $activeDivision === 'interior' ? 'Switch to Construction Division' : 'Switch to Interior Studio' }}</span>
                             <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>
-                        </button>
+                        </a>
                     </div>
                     <!-- Drag & Scroll Control Bar for Leads Table -->
                     <div class="admin-table-drag-bar">
@@ -1987,7 +1989,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse(\App\Models\QuoteRequest::orderBy('id', 'desc')->get() as $i => $quote)
+                                @forelse($quotes as $i => $quote)
                                 <tr class="division-filterable" data-business-type="{{ $quote->business_type ?? 'construction' }}">
                                     <td>{{ $i + 1 }}</td>
                                     <td>
@@ -2043,13 +2045,13 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="11" style="text-align:center;padding:32px;color:var(--slate-500);">No consultation leads received yet.</td>
+                                    <td colspan="11" style="text-align:center;padding:32px;color:var(--slate-500);">No consultation leads received yet for {{ $activeDivision }}.</td>
                                 </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
-                    <div id="quotesEmptyState" class="empty-division-state" style="display:none;padding:40px;text-align:center;color:var(--slate-500);">No consultation leads found for the selected division.</div>
+                    <div id="quotesEmptyState" class="empty-division-state" style="{{ $quotes->isEmpty() ? 'display:block;' : 'display:none;' }}padding:40px;text-align:center;color:var(--slate-500);">No consultation leads found for the {{ $activeDivision }} division.</div>
                 </div>
             </div>
 
@@ -2239,10 +2241,10 @@
                             <i class="fa-brands fa-youtube" style="color:#DC2626;margin-right:6px;font-size:1rem;"></i> MANAGE CHANNEL:
                         </span>
                         <div class="division-switcher" style="background:#F1F5F9;border:1px solid var(--slate-200);border-radius:9999px;padding:4px;display:inline-flex;gap:4px;">
-                            <button type="button" id="btnYtDivConst" onclick="switchYtDivision('construction')" class="division-btn active" style="padding:7px 20px;border-radius:9999px;font-size:0.8rem;font-weight:700;letter-spacing:0.04em;transition:all 0.2s;cursor:pointer;">
+                            <button type="button" id="btnYtDivConst" onclick="switchYtDivision('construction')" class="division-btn {{ $activeDivision === 'construction' ? 'active' : '' }}" style="padding:7px 20px;border-radius:9999px;font-size:0.8rem;font-weight:700;letter-spacing:0.04em;transition:all 0.2s;cursor:pointer;">
                                 <i class="fa-solid fa-building" style="margin-right:6px;"></i> CONSTRUCTION YOUTUBE
                             </button>
-                            <button type="button" id="btnYtDivInt" onclick="switchYtDivision('interior')" class="division-btn" style="padding:7px 20px;border-radius:9999px;font-size:0.8rem;font-weight:700;letter-spacing:0.04em;transition:all 0.2s;cursor:pointer;">
+                            <button type="button" id="btnYtDivInt" onclick="switchYtDivision('interior')" class="division-btn {{ $activeDivision === 'interior' ? 'active' : '' }}" style="padding:7px 20px;border-radius:9999px;font-size:0.8rem;font-weight:700;letter-spacing:0.04em;transition:all 0.2s;cursor:pointer;">
                                 <i class="fa-solid fa-couch" style="margin-right:6px;"></i> INTERIOR YOUTUBE
                             </button>
                         </div>
@@ -2255,7 +2257,7 @@
                 <!-- ========================================================= -->
                 <!-- PANE 1: CONSTRUCTION YOUTUBE CHANNEL                      -->
                 <!-- ========================================================= -->
-                <div id="yt-pane-construction" class="yt-division-pane" style="display:block;">
+                <div id="yt-pane-construction" class="yt-division-pane" style="display:{{ $activeDivision === 'construction' ? 'block' : 'none' }};">
                     <div class="card-dark-panel">
                         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
                             <div>
@@ -2417,7 +2419,7 @@
                 <!-- ========================================================= -->
                 <!-- PANE 2: INTERIOR YOUTUBE CHANNEL                          -->
                 <!-- ========================================================= -->
-                <div id="yt-pane-interior" class="yt-division-pane" style="display:none;">
+                <div id="yt-pane-interior" class="yt-division-pane" style="display:{{ $activeDivision === 'interior' ? 'block' : 'none' }};">
                     <div class="card-dark-panel">
                         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
                             <div>
@@ -2891,8 +2893,8 @@
                 <div>
                     <label style="font-size:0.72rem;font-weight:700;color:var(--slate-700);text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
                     <select id="t_business_type" class="input-dark" style="width:100%;">
-                        <option value="construction">Maha Construction</option>
-                        <option value="interior">Maha Interior</option>
+                        <option value="construction" {{ $activeDivision === 'construction' ? 'selected' : '' }}>Maha Construction</option>
+                        <option value="interior" {{ $activeDivision === 'interior' ? 'selected' : '' }}>Maha Interior</option>
                     </select>
                 </div>
                 <div>
@@ -2954,8 +2956,8 @@
                 <div>
                     <label style="font-size:0.72rem;font-weight:700;color:var(--slate-700);text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
                     <select id="p_business_type" class="input-dark" style="width:100%;" onchange="onProjectDivisionChanged(this.value)">
-                        <option value="construction">Maha Construction</option>
-                        <option value="interior">Maha Interior</option>
+                        <option value="construction" {{ $activeDivision === 'construction' ? 'selected' : '' }}>Maha Construction</option>
+                        <option value="interior" {{ $activeDivision === 'interior' ? 'selected' : '' }}>Maha Interior</option>
                     </select>
                 </div>
                 <div>
@@ -3064,8 +3066,8 @@
                 <div>
                     <label style="font-size:0.72rem;font-weight:700;color:var(--slate-700);text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
                     <select id="pk_business_type" class="input-dark" style="width:100%;" onchange="onPackageDivisionChanged(this.value)">
-                        <option value="construction">Maha Construction</option>
-                        <option value="interior">Maha Interior</option>
+                        <option value="construction" {{ $activeDivision === 'construction' ? 'selected' : '' }}>Maha Construction</option>
+                        <option value="interior" {{ $activeDivision === 'interior' ? 'selected' : '' }}>Maha Interior</option>
                     </select>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -3207,8 +3209,8 @@ Landscaping" class="input-dark" style="width:100%;box-sizing:border-box;resize:v
                 <div>
                     <label style="font-size:0.72rem;font-weight:700;color:var(--slate-700);text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
                     <select id="s_business_type" class="input-dark" style="width:100%;">
-                        <option value="construction">Maha Construction</option>
-                        <option value="interior">Maha Interior</option>
+                        <option value="construction" {{ $activeDivision === 'construction' ? 'selected' : '' }}>Maha Construction</option>
+                        <option value="interior" {{ $activeDivision === 'interior' ? 'selected' : '' }}>Maha Interior</option>
                     </select>
                 </div>
                 <div>
@@ -3406,7 +3408,7 @@ function showSecurityAlert(message, type) {
 }
 
 // ─── ADMIN WEBSITE & LEAD ANALYTICS JAVASCRIPT ENGINE ───────────
-let analyticsDivision = 'all';
+let analyticsDivision = '{{ $activeDivision }}';
 let analyticsPeriod = '30days';
 let chartInstances = {};
 
@@ -3859,15 +3861,18 @@ function switchAdminTab(tabKey, linkEl) {
 }
 
 // ── DIVISION WORKSPACE ENGINE (CONSTRUCTION VS INTERIOR SEPARATION) ──
-let currentDivision = localStorage.getItem('maha_admin_division') || 'construction';
+let currentDivision = '{{ $activeDivision }}';
 
 function toggleDivisionQuickly() {
     const nextDiv = currentDivision === 'construction' ? 'interior' : 'construction';
-    setAdminDivision(nextDiv);
+    window.location.href = nextDiv === 'interior' ? '{{ route("admin.interior") }}' : '{{ route("admin.construction") }}';
 }
 
 function setAdminDivision(division) {
-    currentDivision = division;
+    if (division !== currentDivision) {
+        window.location.href = division === 'interior' ? '{{ route("admin.interior") }}' : '{{ route("admin.construction") }}';
+        return;
+    }
     try {
         localStorage.setItem('maha_admin_division', division);
     } catch(e) {}
@@ -3990,6 +3995,7 @@ function updatePanelTitlesForDivision(division) {
 
     // ── Scope Banners & Action Buttons in Tabs ──
     const targetSwitchText = isInt ? 'Switch to Construction Division' : 'Switch to Interior Studio';
+    const targetSwitchUrl  = isInt ? '{{ route("admin.construction") }}' : '{{ route("admin.interior") }}';
 
     // Reviews Tab
     const rTitle = document.getElementById('title-reviews');
@@ -4003,7 +4009,10 @@ function updatePanelTitlesForDivision(division) {
     if (rBtn) rBtn.innerHTML = isInt ? '<i class="fa-solid fa-plus" style="margin-right:6px;"></i> Upload Interior Review' : '<i class="fa-solid fa-plus" style="margin-right:6px;"></i> Upload Construction Review';
     if (rBText) rBText.textContent = isInt ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS';
     if (rBDesc) rBDesc.textContent = isInt ? 'Showing video reviews from interior clients across Tamil Nadu.' : 'Showing video testimonials from verified residential and villa homeowners.';
-    if (rBSwitch) rBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;
+    if (rBSwitch) {
+        rBSwitch.href = targetSwitchUrl;
+        rBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;
+    }
 
     // Projects Tab
     const pTitle = document.getElementById('title-projects');
@@ -4017,7 +4026,10 @@ function updatePanelTitlesForDivision(division) {
     if (pBtn) pBtn.innerHTML = isInt ? '<i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Interior Project' : '<i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Construction Project';
     if (pBText) pBText.textContent = isInt ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS';
     if (pBDesc) pBDesc.textContent = isInt ? 'Managing modular kitchens, bespoke living rooms, wardrobes, and commercial spaces.' : 'Managing completed villas, residences, and architectural homes.';
-    if (pBSwitch) pBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;
+    if (pBSwitch) {
+        pBSwitch.href = targetSwitchUrl;
+        pBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;
+    }
 
     // Packages Tab
     const pkTitle = document.getElementById('title-packages');
@@ -4031,7 +4043,10 @@ function updatePanelTitlesForDivision(division) {
     if (pkBtn) pkBtn.innerHTML = isInt ? '<i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Interior Package' : '<i class="fa-solid fa-plus" style="margin-right:6px;"></i> Add Construction Package';
     if (pkBText) pkBText.textContent = isInt ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS';
     if (pkBDesc) pkBDesc.textContent = isInt ? 'Managing modular kitchen packages, bedroom woodwork, and turnkey interior rates.' : 'Managing building packages, structural rates, and material specification tiers.';
-    if (pkBSwitch) pkBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;
+    if (pkBSwitch) {
+        pkBSwitch.href = targetSwitchUrl;
+        pkBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;
+    }
 
     // Quotes Tab
     const qTitle = document.getElementById('title-quotes');
@@ -4043,7 +4058,10 @@ function updatePanelTitlesForDivision(division) {
     if (qSub) qSub.textContent = isInt ? 'Live record of interior consultation requests and space planning inquiries.' : 'Live record of inquiries for house building estimates, floor plans, and turnkey construction.';
     if (qBText) qBText.textContent = isInt ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS';
     if (qBDesc) qBDesc.textContent = isInt ? 'Showing incoming consultation requests submitted via the Maha Interior studio page.' : 'Showing incoming building estimate requests submitted via the Maha Construction website.';
-    if (qBSwitch) qBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;
+    if (qBSwitch) {
+        qBSwitch.href = targetSwitchUrl;
+        qBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;
+    }
 }
 
 function updateSidebarCountsForDivision(division) {
@@ -5517,7 +5535,7 @@ async function submitPartner(e) {
 }
 
 // ── YOUTUBE LIVE SYNC & SETTINGS (CONSTRUCTION & INTERIOR) ───────
-let currentYtDivision = 'construction';
+let currentYtDivision = '{{ $activeDivision }}';
 
 function switchYtDivision(division) {
     currentYtDivision = division === 'interior' ? 'interior' : 'construction';
@@ -6173,6 +6191,7 @@ function previewIntroVideo() {
     }
 }
 
+@if($activeDivision === 'construction')
 // ══════════════════════════════════════════════════════════════════════════════
 // ── CONSTRUCTION PACKAGES COMPARISON MATRIX EDITOR ───────────────────────────
 // ══════════════════════════════════════════════════════════════════════════════
@@ -6546,6 +6565,7 @@ function hideMatrixAlert() {
 document.addEventListener('DOMContentLoaded', function() {
     renderMatrixEditorTable();
 });
+@endif
 
 // ── LEADS TABLE DRAG & SCROLL CONTROL ─────────────────────────
 function scrollQuotesTable(offset) {

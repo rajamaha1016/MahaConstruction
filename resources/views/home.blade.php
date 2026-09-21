@@ -10,11 +10,7 @@
         <!-- High-Performance Construction Timelapse Canvas -->
         <canvas id="constructionHeroCanvas" class="construction-hero-canvas"></canvas>
 
-        <!-- Luxury Dark Vignette Overlay & Blueprint Grid -->
-        <div class="construction-hero-overlay-dark" id="heroOverlayDark"></div>
-        <div class="construction-hero-blueprint-grid" id="heroBlueprintGrid"></div>
-
-        <!-- Full Interactive Content Layer (Always 100% visible) -->
+        <!-- Full Interactive Content Layer (Revealed smoothly after timelapse animation completes) -->
         <div class="construction-hero-content-layer" id="constructionHeroContent">
             <div class="container" style="width:100%;">
                 <div class="hero-grid">
@@ -92,6 +88,13 @@
             </div>
         </div>
 
+        <!-- Scroll To Build Indicator (visible initially, fades out smoothly on scroll) -->
+        <div class="hero-scroll-prompt" id="heroScrollPrompt">
+            <div class="scroll-prompt-mouse">
+                <div class="scroll-prompt-wheel"></div>
+            </div>
+            <span class="scroll-prompt-text">SCROLL TO BUILD</span>
+        </div>
     </div>
 </section>
 
@@ -1381,6 +1384,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const heroSection = document.getElementById('constructionScrollHero');
         const heroCanvas = document.getElementById('constructionHeroCanvas');
         const contentLayer = document.getElementById('constructionHeroContent');
+        const scrollPrompt = document.getElementById('heroScrollPrompt');
 
         if (!heroSection || !heroCanvas) return;
 
@@ -1521,22 +1525,58 @@ document.addEventListener('DOMContentLoaded', function() {
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas, { passive: true });
 
-        // Reduced Motion: just render last frame and exit
+        // Reduced Motion: render last frame and keep content fully visible
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             renderFrame(totalFrames - 1);
-            return;
-        }
-
-        function handleProgress(p) {
-            // Scrub construction frames across full scroll duration (0-100%)
-            const targetFrame = Math.min(totalFrames - 1, Math.floor(p * (totalFrames - 1)));
-            renderFrame(targetFrame);
-
-            // Content layer always stays fully visible — never hidden
             if (contentLayer) {
                 contentLayer.style.opacity = '1';
                 contentLayer.style.transform = 'none';
                 contentLayer.style.pointerEvents = 'auto';
+                contentLayer.style.visibility = 'visible';
+            }
+            if (scrollPrompt) scrollPrompt.style.display = 'none';
+            return;
+        }
+
+        function handleProgress(p) {
+            // 1. Scrub construction frames across 0% - 72% of scroll progress
+            // User experiences the full building timelapse first
+            const frameProgress = Math.min(1, Math.max(0, p / 0.72));
+            const targetFrame = Math.min(totalFrames - 1, Math.floor(frameProgress * (totalFrames - 1)));
+            renderFrame(targetFrame);
+
+            // 2. Initial scroll prompt: visible at start (p=0), fades out immediately as scrolling begins
+            if (scrollPrompt) {
+                if (p < 0.10) {
+                    const promptOpacity = Math.max(0, 1 - (p / 0.10));
+                    scrollPrompt.style.opacity = promptOpacity.toFixed(2);
+                    scrollPrompt.style.display = 'flex';
+                } else {
+                    scrollPrompt.style.opacity = '0';
+                    scrollPrompt.style.display = 'none';
+                }
+            }
+
+            // 3. Content layer (Title, subtitle, checklist, CTA buttons, engineer card):
+            // Revealed only after the timelapse animation completes (p >= 0.70 to 0.90)
+            if (contentLayer) {
+                if (p < 0.70) {
+                    contentLayer.style.opacity = '0';
+                    contentLayer.style.transform = 'translateY(25px)';
+                    contentLayer.style.pointerEvents = 'none';
+                    contentLayer.style.visibility = 'hidden';
+                } else if (p >= 0.70 && p < 0.90) {
+                    const revealRatio = (p - 0.70) / 0.20; // 0 to 1
+                    contentLayer.style.visibility = 'visible';
+                    contentLayer.style.opacity = revealRatio.toFixed(3);
+                    contentLayer.style.transform = 'translateY(' + ((1 - revealRatio) * 25).toFixed(1) + 'px)';
+                    contentLayer.style.pointerEvents = revealRatio > 0.6 ? 'auto' : 'none';
+                } else {
+                    contentLayer.style.visibility = 'visible';
+                    contentLayer.style.opacity = '1';
+                    contentLayer.style.transform = 'translateY(0)';
+                    contentLayer.style.pointerEvents = 'auto';
+                }
             }
         }
 
@@ -1545,15 +1585,15 @@ document.addEventListener('DOMContentLoaded', function() {
             gsap.registerPlugin(ScrollTrigger);
 
             const isMobileScreen = window.innerWidth <= 768;
-            // Snappy, fluid scroll distance without dead empty space
-            const scrollDistance = isMobileScreen ? '+=120%' : '+=160%';
+            // Snappy, fluid scroll distance with ample room for both animation & viewing revealed content
+            const scrollDistance = isMobileScreen ? '+=150%' : '+=200%';
 
             ScrollTrigger.create({
                 trigger: '#constructionScrollHero',
                 start: 'top top',
                 end: scrollDistance,
                 pin: true,
-                scrub: 0.3,
+                scrub: 0.35,
                 anticipatePin: 1,
                 onUpdate: (self) => {
                     handleProgress(self.progress);
@@ -1574,7 +1614,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Native scroll fallback for all screen sizes
             window.addEventListener('scroll', function() {
                 const rect = heroSection.getBoundingClientRect();
-                const totalH = window.innerHeight * (window.innerWidth <= 768 ? 1.5 : 2);
+                const totalH = window.innerHeight * (window.innerWidth <= 768 ? 1.8 : 2.5);
                 const scrolled = -rect.top;
                 const p = Math.min(1, Math.max(0, scrolled / totalH));
                 handleProgress(p);

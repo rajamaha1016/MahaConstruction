@@ -19,55 +19,80 @@ use App\Models\User;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function redirectDashboard(Request $request)
     {
-        $stats = [
-            'projects'                  => Project::count(),
-            'projects_construction'     => Project::where('business_type', 'construction')->count(),
-            'projects_interior'         => Project::where('business_type', 'interior')->count(),
-            'services'                  => Service::count(),
-            'services_construction'     => Service::where('business_type', 'construction')->count(),
-            'services_interior'         => Service::where('business_type', 'interior')->count(),
-            'testimonials'              => Testimonial::count(),
-            'testimonials_construction' => Testimonial::where('business_type', 'construction')->count(),
-            'testimonials_interior'     => Testimonial::where('business_type', 'interior')->count(),
-            'packages'                  => PackageDetail::count(),
-            'packages_construction'     => PackageDetail::where('business_type', 'construction')->count(),
-            'packages_interior'         => PackageDetail::where('business_type', 'interior')->count(),
-            'contacts'                  => ContactRequest::count(),
-            'quotes'                    => QuoteRequest::count(),
-            'quotes_construction'       => QuoteRequest::where('business_type', 'construction')->count(),
-            'quotes_interior'           => QuoteRequest::where('business_type', 'interior')->count(),
-            'blogs'                     => BlogPost::count(),
-            'gallery'                   => GalleryItem::count(),
-            'partners'                  => Partner::count(),
-            'newsletter'                => NewsletterSubscriber::where('is_active', true)->count(),
-            'unread_contacts'           => ContactRequest::where('is_read', false)->count(),
-            'unread_quotes'             => QuoteRequest::where('is_read', false)->count(),
-        ];
+        $preferredDivision = session('maha_admin_division', 'construction');
+        if ($preferredDivision === 'interior') {
+            return redirect()->route('admin.interior');
+        }
+        return redirect()->route('admin.construction');
+    }
 
-        $projects     = Project::orderBy('id', 'desc')->get();
-        $services     = Service::all();
-        $gallery      = GalleryItem::orderBy('id', 'desc')->get();
-        $blogs        = BlogPost::orderBy('id', 'desc')->get();
-        $testimonials = Testimonial::orderBy('id', 'desc')->get();
-        $faqs         = FAQItem::all();
-        $contacts     = ContactRequest::orderBy('id', 'desc')->get();
-        $quotes       = QuoteRequest::orderBy('id', 'desc')->get();
-        $packages     = PackageDetail::all();
+    public function dashboard(Request $request)
+    {
+        return $this->redirectDashboard($request);
+    }
+
+    public function constructionDashboard(Request $request)
+    {
+        session(['maha_admin_division' => 'construction']);
+        return $this->renderDivisionDashboard('construction');
+    }
+
+    public function interiorDashboard(Request $request)
+    {
+        session(['maha_admin_division' => 'interior']);
+        return $this->renderDivisionDashboard('interior');
+    }
+
+    protected function renderDivisionDashboard(string $division)
+    {
+        $activeDivision = $division;
+
+        // Division-specific content — strictly isolated
+        $projects     = Project::where('business_type', $division)->orderBy('id', 'desc')->get();
+        $services     = Service::where('business_type', $division)->orderBy('id', 'desc')->get();
+        $gallery      = GalleryItem::where('business_type', $division)->orderBy('id', 'desc')->get();
+        $testimonials = Testimonial::where('business_type', $division)->orderBy('id', 'desc')->get();
+        $packages     = PackageDetail::where('business_type', $division)->orderBy('id', 'desc')->get();
+        $quotes       = QuoteRequest::where('business_type', $division)->orderBy('id', 'desc')->get();
+
+        // Common / Shared content accessible on both pages
         $partners     = Partner::all();
+        $contacts     = ContactRequest::orderBy('id', 'desc')->get();
         $newsletter   = NewsletterSubscriber::orderBy('id', 'desc')->get();
         $settings     = Setting::all()->keyBy('key');
+        $blogs        = BlogPost::orderBy('id', 'desc')->get();
+        $faqs         = FAQItem::all();
 
-        $adminUser    = User::where('email', session('admin_email'))->first()
+        $stats = [
+            'division'        => $division,
+            'projects'        => $projects->count(),
+            'services'        => $services->count(),
+            'testimonials'    => $testimonials->count(),
+            'reviews'         => $testimonials->count(),
+            'packages'        => $packages->count(),
+            'quotes'          => $quotes->count(),
+            'unread_quotes'   => $quotes->where('is_read', false)->count(),
+            'gallery'         => $gallery->count(),
+            // Shared stats
+            'contacts'        => $contacts->count(),
+            'unread_contacts' => $contacts->where('is_read', false)->count(),
+            'partners'        => $partners->count(),
+            'newsletter'      => $newsletter->where('is_active', true)->count(),
+            'blogs'           => $blogs->count(),
+        ];
+
+        $adminUser = User::where('email', session('admin_email'))->first()
             ?? User::where('role', 'admin')->first()
             ?? User::first();
 
         return view('admin.dashboard', compact(
-            'stats', 'projects', 'services', 'gallery', 'blogs',
+            'activeDivision', 'stats', 'projects', 'services', 'gallery', 'blogs',
             'testimonials', 'faqs', 'contacts', 'quotes',
             'packages', 'partners', 'newsletter', 'settings', 'adminUser'
         ));
     }
 }
+
 

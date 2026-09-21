@@ -27,6 +27,9 @@ Route::post('/admin/logout',  [AuthController::class, 'adminLogout'])->name('adm
 
 // ─── ADMIN DASHBOARD (protected) ────────────────────────────────────────────
 Route::middleware('admin.auth')->group(function () {
-    Route::get('/admin',           [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
+    Route::get('/admin',                 [AdminController::class, 'redirectDashboard'])->name('admin.dashboard');
+    Route::get('/admin/dashboard',       [AdminController::class, 'redirectDashboard']);
+    Route::get('/admin/construction',    [AdminController::class, 'constructionDashboard'])->name('admin.construction');
+    Route::get('/admin/interior',        [AdminController::class, 'interiorDashboard'])->name('admin.interior');
 });
+
