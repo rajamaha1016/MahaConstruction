@@ -1334,7 +1334,7 @@
                 </button>
                 <div>
                     <div class="admin-panel-title">Operations Console</div>
-                    <div class="admin-panel-sub" id="adminHeaderConsoleSub">{{ $activeDivision === 'interior' ? 'Maha Interior — Bespoke Design & Turnkey Fitouts' : 'Maha Construction — Luxury Villas & Structural Building' }}</div>
+                    <div class="admin-panel-sub" id="adminHeaderConsoleSub">{{ $activeDivision === 'interior' ? 'Maha Interiors — Bespoke Design & Turnkey Fitouts' : 'Maha Construction — Luxury Villas & Structural Building' }}</div>
                 </div>
             </div>
 
@@ -1344,13 +1344,13 @@
                     <i class="fa-solid fa-building" style="margin-right:6px;"></i> CONSTRUCTION
                 </a>
                 <a href="{{ route('admin.interior') }}" id="btnDivInterior" class="division-btn {{ $activeDivision === 'interior' ? 'active' : '' }}" style="text-decoration:none;">
-                    <i class="fa-solid fa-couch" style="margin-right:6px;"></i> INTERIOR
+                    <i class="fa-solid fa-couch" style="margin-right:6px;"></i> INTERIORS
                 </a>
             </div>
 
             <div style="display:flex;gap:10px;align-items:center;">
                 <a id="adminLiveWebsiteLink" href="{{ $activeDivision === 'interior' ? route('interior') : route('home') }}" target="_blank" class="btn-whatsapp-outline" style="font-size:0.78rem;padding:7px 14px;">
-                    <i class="{{ $activeDivision === 'interior' ? 'fa-solid fa-couch' : 'fa-solid fa-building' }}" style="margin-right:5px;font-size:0.75rem;"></i> Live {{ $activeDivision === 'interior' ? 'Interior Site' : 'Construction Site' }}
+                    <i class="{{ $activeDivision === 'interior' ? 'fa-solid fa-couch' : 'fa-solid fa-building' }}" style="margin-right:5px;font-size:0.75rem;"></i> Live {{ $activeDivision === 'interior' ? 'Interiors Site' : 'Construction Site' }}
                 </a>
                 <form method="POST" action="{{ route('admin.logout') }}" style="margin:0;">
                     @csrf
@@ -1385,7 +1385,7 @@
                                     <i class="fa-solid fa-building" style="margin-right:4px;"></i> Construction
                                 </button>
                                 <button type="button" class="analytics-pill-btn {{ $activeDivision === 'interior' ? 'active' : '' }}" onclick="setAnalyticsDivision('interior')" id="btnDivInt">
-                                    <i class="fa-solid fa-couch" style="margin-right:4px;"></i> Interior
+                                    <i class="fa-solid fa-couch" style="margin-right:4px;"></i> Interiors
                                 </button>
                                 <button type="button" class="analytics-pill-btn" onclick="setAnalyticsDivision('all')" id="btnDivAll">
                                     ALL
@@ -1501,7 +1501,7 @@
                             <!-- Interior Column -->
                             <div style="background:var(--slate-50);border:1px solid var(--slate-200);border-radius:var(--radius-sm);padding:14px;">
                                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid var(--slate-200);padding-bottom:8px;">
-                                    <span style="font-weight:700;font-size:0.82rem;color:var(--navy-900);"><i class="fa-solid fa-couch" style="margin-right:6px;color:var(--navy-800);"></i> Maha Interior</span>
+                                    <span style="font-weight:700;font-size:0.82rem;color:var(--navy-900);"><i class="fa-solid fa-couch" style="margin-right:6px;color:var(--navy-800);"></i> Maha Interiors</span>
                                     <span style="font-size:0.72rem;color:var(--slate-600);font-weight:700;">CONV: <b id="intConvRate" style="color:var(--navy-900);">0.00%</b></span>
                                 </div>
                                 <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:8px;text-align:center;">
@@ -1946,11 +1946,11 @@
                                 <span id="badge-text-quotes">{{ $activeDivision === 'interior' ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS' }}</span>
                             </span>
                             <span class="division-scope-desc" id="desc-quotes">
-                                {{ $activeDivision === 'interior' ? 'Showing incoming consultation requests submitted via the Maha Interior studio page.' : 'Showing incoming inquiries for home construction, villas, and building estimates.' }}
+                                {{ $activeDivision === 'interior' ? 'Showing incoming consultation requests submitted via the Maha Interiors studio page.' : 'Showing incoming inquiries for home construction, villas, and building estimates.' }}
                             </span>
                         </div>
                         <a href="{{ $activeDivision === 'interior' ? route('admin.construction') : route('admin.interior') }}" class="division-scope-switch-btn" id="switch-btn-quotes" style="text-decoration:none;">
-                            <span>{{ $activeDivision === 'interior' ? 'Switch to Construction Division' : 'Switch to Interior Studio' }}</span>
+                            <span>{{ $activeDivision === 'interior' ? 'Switch to Construction Division' : 'Switch to Interiors Studio' }}</span>
                             <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>
                         </a>
                     </div>
@@ -2894,7 +2894,7 @@
                     <label style="font-size:0.72rem;font-weight:700;color:var(--slate-700);text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
                     <select id="t_business_type" class="input-dark" style="width:100%;">
                         <option value="construction" {{ $activeDivision === 'construction' ? 'selected' : '' }}>Maha Construction</option>
-                        <option value="interior" {{ $activeDivision === 'interior' ? 'selected' : '' }}>Maha Interior</option>
+                        <option value="interior" {{ $activeDivision === 'interior' ? 'selected' : '' }}>Maha Interiors</option>
                     </select>
                 </div>
                 <div>
@@ -2957,7 +2957,7 @@
                     <label style="font-size:0.72rem;font-weight:700;color:var(--slate-700);text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
                     <select id="p_business_type" class="input-dark" style="width:100%;" onchange="onProjectDivisionChanged(this.value)">
                         <option value="construction" {{ $activeDivision === 'construction' ? 'selected' : '' }}>Maha Construction</option>
-                        <option value="interior" {{ $activeDivision === 'interior' ? 'selected' : '' }}>Maha Interior</option>
+                        <option value="interior" {{ $activeDivision === 'interior' ? 'selected' : '' }}>Maha Interiors</option>
                     </select>
                 </div>
                 <div>
@@ -2968,7 +2968,7 @@
                     <div>
                         <label style="font-size:0.72rem;font-weight:700;color:var(--slate-700);text-transform:uppercase;display:block;margin-bottom:5px;">CATEGORY / SPACE *</label>
                         <select id="p_category" class="input-dark" style="width:100%;">
-                            <optgroup label="Interior Spaces (Maha Interior)" id="optgroupInteriorCats">
+                            <optgroup label="Interior Spaces (Maha Interiors)" id="optgroupInteriorCats">
                                 <option value="living-room">Living Room</option>
                                 <option value="modular-kitchen">Modular Kitchen</option>
                                 <option value="bedroom">Bedroom</option>
@@ -3067,7 +3067,7 @@
                     <label style="font-size:0.72rem;font-weight:700;color:var(--slate-700);text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
                     <select id="pk_business_type" class="input-dark" style="width:100%;" onchange="onPackageDivisionChanged(this.value)">
                         <option value="construction" {{ $activeDivision === 'construction' ? 'selected' : '' }}>Maha Construction</option>
-                        <option value="interior" {{ $activeDivision === 'interior' ? 'selected' : '' }}>Maha Interior</option>
+                        <option value="interior" {{ $activeDivision === 'interior' ? 'selected' : '' }}>Maha Interiors</option>
                     </select>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -3210,7 +3210,7 @@ Landscaping" class="input-dark" style="width:100%;box-sizing:border-box;resize:v
                     <label style="font-size:0.72rem;font-weight:700;color:var(--slate-700);text-transform:uppercase;display:block;margin-bottom:5px;">BUSINESS DIVISION *</label>
                     <select id="s_business_type" class="input-dark" style="width:100%;">
                         <option value="construction" {{ $activeDivision === 'construction' ? 'selected' : '' }}>Maha Construction</option>
-                        <option value="interior" {{ $activeDivision === 'interior' ? 'selected' : '' }}>Maha Interior</option>
+                        <option value="interior" {{ $activeDivision === 'interior' ? 'selected' : '' }}>Maha Interiors</option>
                     </select>
                 </div>
                 <div>
@@ -3968,7 +3968,7 @@ function updatePanelTitlesForDivision(division) {
     // Top Header Subtitle
     const headerSub = document.getElementById('adminHeaderConsoleSub');
     if (headerSub) {
-        headerSub.textContent = isInt ? 'Maha Interior — Bespoke Design & Turnkey Fitouts' : 'Maha Construction — Luxury Villas & Structural Building';
+        headerSub.textContent = isInt ? 'Maha Interiors — Bespoke Design & Turnkey Fitouts' : 'Maha Construction — Luxury Villas & Structural Building';
     }
 
     // Sidebar Section Header
@@ -4054,10 +4054,10 @@ function updatePanelTitlesForDivision(division) {
     const qBText = document.getElementById('badge-text-quotes');
     const qBDesc = document.getElementById('desc-quotes');
     const qBSwitch = document.getElementById('switch-btn-quotes');
-    if (qTitle) qTitle.innerHTML = isInt ? '<i class="fa-solid fa-couch" style="margin-right:8px;color:var(--navy-900);"></i> Interior Consultation Requests' : '<i class="fa-solid fa-file-invoice-dollar" style="margin-right:8px;color:var(--navy-800);"></i> Construction Inquiries & Estimates';
+    if (qTitle) qTitle.innerHTML = isInt ? '<i class="fa-solid fa-couch" style="margin-right:8px;color:var(--navy-900);"></i> Interiors Consultation Requests' : '<i class="fa-solid fa-file-invoice-dollar" style="margin-right:8px;color:var(--navy-800);"></i> Construction Inquiries & Estimates';
     if (qSub) qSub.textContent = isInt ? 'Live record of interior consultation requests and space planning inquiries.' : 'Live record of inquiries for house building estimates, floor plans, and turnkey construction.';
     if (qBText) qBText.textContent = isInt ? 'INTERIOR STUDIO RECORDS' : 'CONSTRUCTION DIVISION RECORDS';
-    if (qBDesc) qBDesc.textContent = isInt ? 'Showing incoming consultation requests submitted via the Maha Interior studio page.' : 'Showing incoming building estimate requests submitted via the Maha Construction website.';
+    if (qBDesc) qBDesc.textContent = isInt ? 'Showing incoming consultation requests submitted via the Maha Interiors studio page.' : 'Showing incoming building estimate requests submitted via the Maha Construction website.';
     if (qBSwitch) {
         qBSwitch.href = targetSwitchUrl;
         qBSwitch.innerHTML = `<span>${targetSwitchText}</span> <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;"></i>`;

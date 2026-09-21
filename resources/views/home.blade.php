@@ -855,6 +855,12 @@
     </div>
 </section>
 
+<!-- =======================================================
+     CROSS-NAVIGATION BRIDGE: EXPLORE MAHA INTERIOR
+     Placed immediately after LEARN BEFORE YOU BUILD — SITE TOURS
+======================================================= -->
+@include('components.cross-nav-bridge', ['target' => 'interior'])
+
 @push('scripts')
 <script>
 (function() {

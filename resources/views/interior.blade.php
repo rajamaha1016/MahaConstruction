@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Maha Interior | Designing Beautiful Living | Luxury Interior Design & Turnkey Execution')
-@section('description', 'Maha Interior is Tamil Nadu\'s premier interior design and execution studio. Delivering bespoke modular kitchens, luxury wardrobes, living spaces, and turnkey interior fitouts.')
+@section('title', 'Maha Interiors | Designing Beautiful Living | Luxury Interiors Design & Turnkey Execution')
+@section('description', 'Maha Interiors is Tamil Nadu\'s premier interior design and execution studio. Delivering bespoke modular kitchens, luxury wardrobes, living spaces, and turnkey interior fitouts.')
 
 @push('styles')
 <style>
@@ -34,6 +34,14 @@ body.interior-body {
     color: var(--int-charcoal) !important;
     font-family: var(--font-body);
     overflow-x: hidden;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+body.interior-body main {
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block;
 }
 
 /* ─── BRIGHT FROSTED NAVBAR OVERRIDE ───────────────────────── */
@@ -98,50 +106,83 @@ body.interior-body .nav-mobile-toggle span {
 body.interior-body .int-hero-section {
     background: #080E0B !important;
     color: #FFFFFF !important;
-    position: relative;
+    position: relative !important;
+    top: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
     min-height: 100vh;
+    min-height: 100svh;
     display: flex;
     align-items: center;
-    padding: 130px 0 70px !important;
-    overflow: hidden;
+    padding: 125px 0 70px !important;
+    overflow: hidden !important;
 }
 
 /* Full-screen video container */
 body.interior-body .int-hero-video-wrap {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    overflow: hidden;
+    position: absolute !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
 }
-body.interior-body .int-hero-video-wrap video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(var(--int-hero-scale, 1)) translateY(var(--int-hero-shift, 0px));
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: cover;
+body.interior-body .int-hero-video-wrap video,
+body.interior-body .int-hero-bg-video {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
     filter: brightness(0.88) contrast(1.02) saturate(1.08);
-    transition: filter 0.5s ease;
-    will-change: transform;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    will-change: auto !important;
 }
 /* Fallback poster img when video fails */
 body.interior-body .int-hero-video-wrap img.int-hero-poster {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+    position: absolute !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
     filter: brightness(0.85) contrast(1.02);
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
 }
 
-/* Cinematic dark overlay — subtle left-weighted for text legibility while revealing the room */
+/* Cinematic dark overlay — seamless top-to-bottom coverage */
 body.interior-body .int-hero-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
     background: linear-gradient(
         105deg,
         rgba(6, 12, 9, 0.78) 0%,
@@ -157,6 +198,10 @@ body.interior-body .int-hero-overlay {
     ) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    z-index: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
 }
 /* Bottom vignette into next section */
 body.interior-body .int-hero-bottom-fade {
@@ -210,6 +255,9 @@ body.interior-body .int-tag-dot {
     border-radius: 50%;
     display: inline-block;
     animation: luxDotPulse 2s ease-in-out infinite;
+}
+body.interior-body .hero-marquee-badge {
+    margin-bottom: clamp(14px, 2vh, 22px) !important;
 }
 
 /* Main hero headline — refined Title Case, high contrast */
@@ -421,13 +469,81 @@ body.interior-body .int-hero-stat-label {
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
+    body.interior-body {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
+    body.interior-body main {
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
+    }
     body.interior-body .int-hero-section {
-        padding: 110px 0 50px !important;
-        min-height: auto !important;
+        padding: 95px 0 45px !important;
+        min-height: 100vh !important;
+        min-height: 100svh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        position: relative !important;
+        top: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        overflow: hidden !important;
+    }
+    body.interior-body .int-hero-video-wrap {
+        position: absolute !important;
+        inset: 0 !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        pointer-events: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+    body.interior-body .int-hero-video-wrap video,
+    body.interior-body .int-hero-bg-video {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 100% !important;
+        min-height: 100% !important;
+        object-fit: cover !important;
+        object-position: center center !important;
+        transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        will-change: auto !important;
+    }
+    body.interior-body .int-hero-overlay {
+        position: absolute !important;
+        inset: 0 !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
     }
     body.interior-body .int-hero-content-outer {
         padding-left: 20px !important;
         padding-right: 20px !important;
+        position: relative !important;
+        z-index: 4 !important;
+        transform: none !important;
+        opacity: 1 !important;
     }
     body.interior-body .int-hero-stats-grid {
         grid-template-columns: 1fr !important;
@@ -1907,6 +2023,7 @@ body.interior-body .int-yt-dot.active {
     <div class="int-hero-video-wrap">
         <video
             id="intHeroBgVideo"
+            class="int-hero-bg-video"
             autoplay
             muted
             loop
@@ -1915,7 +2032,6 @@ body.interior-body .int-yt-dot.active {
             x5-playsinline
             preload="auto"
             poster="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85"
-            style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;"
         >
             @if(!empty($interior_hero_video_url))
                 <source src="{{ $interior_hero_video_url }}" type="video/mp4">
@@ -1923,9 +2039,6 @@ body.interior-body .int-yt-dot.active {
             <source src="{{ asset('videos/interior-luxury-living.mp4') }}" type="video/mp4">
             <source src="/videos/interior-luxury-living.mp4" type="video/mp4">
             <source src="{{ url('videos/interior-luxury-living.mp4') }}" type="video/mp4">
-            <source src="{{ asset('videos/interior-hero.mp4') }}" type="video/mp4">
-            <source src="/videos/interior-hero.mp4" type="video/mp4">
-            <source src="{{ url('videos/interior-hero.mp4') }}" type="video/mp4">
         </video>
         {{-- High-resolution architectural living room fallback poster --}}
         <img
@@ -1945,10 +2058,21 @@ body.interior-body .int-yt-dot.active {
     <!-- Content -->
     <div class="int-hero-content-outer">
         <div class="lux-reveal">
-            <!-- Studio Label -->
-            <div class="int-tag-pill">
-                <span class="int-tag-dot"></span>
-                <span>MAHA INTERIORS &bull; ARCHITECTURAL STUDIO</span>
+            <!-- Golden Running Marquee Bar (Exact construction hero style & content) -->
+            <div class="pill-badge hero-marquee-badge">
+                <span class="pulse-dot" style="flex-shrink:0;"></span>
+                <div class="hero-marquee-track-container">
+                    <div class="hero-marquee-track">
+                        <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                        <span class="marquee-sep">•</span>
+                        <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                        <span class="marquee-sep">•</span>
+                        <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                        <span class="marquee-sep">•</span>
+                        <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                        <span class="marquee-sep">•</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Primary Headline -->
@@ -2258,7 +2382,7 @@ body.interior-body .int-yt-dot.active {
                         <div class="int-video-card-title">{{ $t->client_name }}</div>
                         <div class="int-video-card-sub">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>{{ $t->project_name ?? 'Maha Interior' }}</span>
+                            <span>{{ $t->project_name ?? 'Maha Interiors' }}</span>
                         </div>
                         <div class="int-video-card-stars">
                             @for($s = 0; $s < ($t->rating ?? 5); $s++)
@@ -2420,7 +2544,7 @@ body.interior-body .int-yt-dot.active {
                     'id'              => 7,
                     'division'        => 'interior',
                     'tier'            => 'essential',
-                    'title'           => 'Essential Interior',
+                    'title'           => 'Essential Interiors',
                     'subtitle'        => 'Elegant & Smart Turnkey Solution',
                     'price_per_sqft'  => 1250,
                     'is_highlighted'  => false,
@@ -2457,7 +2581,7 @@ body.interior-body .int-yt-dot.active {
                     'id'              => 8,
                     'division'        => 'interior',
                     'tier'            => 'premium',
-                    'title'           => 'Premium Interior',
+                    'title'           => 'Premium Interiors',
                     'subtitle'        => 'Elevated Aesthetics & Soft-Close Luxury',
                     'price_per_sqft'  => 1750,
                     'is_highlighted'  => true,
@@ -2494,7 +2618,7 @@ body.interior-body .int-yt-dot.active {
                     'id'              => 9,
                     'division'        => 'interior',
                     'tier'            => 'luxury',
-                    'title'           => 'Luxury Interior',
+                    'title'           => 'Luxury Interiors',
                     'subtitle'        => 'Bespoke Architectural Grandeur',
                     'price_per_sqft'  => 2450,
                     'is_highlighted'  => false,
@@ -2647,7 +2771,7 @@ body.interior-body .int-yt-dot.active {
 
                                 <div class="int-yt-tag-badge">
                                     <i class="fab fa-youtube" style="color:#FF0000;margin-right:4px;"></i>
-                                    <span>MAHA INTERIOR</span>
+                                    <span>MAHA INTERIORS</span>
                                 </div>
 
                                 <div class="int-yt-play-overlay">
@@ -2727,6 +2851,12 @@ body.interior-body .int-yt-dot.active {
     </div>
 </section>
 
+<!-- =======================================================
+     CROSS-NAVIGATION BRIDGE: EXPLORE MAHA CONSTRUCTION
+     Placed immediately after 05 — YOUTUBE MASTERCLASSES & SITE TOURS
+======================================================= -->
+@include('components.cross-nav-bridge', ['target' => 'construction'])
+
 
 <!-- Section 2: Services anchor (hidden stub to maintain isolation and test contracts) -->
 <div id="interior-services" style="display:none;" aria-hidden="true">
@@ -2804,14 +2934,14 @@ body.interior-body .int-yt-dot.active {
                     <div>
                         <label class="int-form-label">SERVICE / SPACE</label>
                         <select name="project_type" id="interiorFormService" class="int-form-select">
-                            <option value="Full Home Interior">Full Home Turnkey Interior</option>
+                            <option value="Full Home Interior">Full Home Turnkey Interiors</option>
                             <option value="Modular Kitchen">Modular Kitchen</option>
                             <option value="Wardrobe Design">Wardrobe & Closet Systems</option>
                             <option value="Living Room Interiors">Living Room & TV Entertainment Console</option>
                             <option value="Bedroom Interiors">Master Bedroom Suite</option>
                             <option value="False Ceiling & Lighting">False Ceiling & Architectural Lighting</option>
                             <option value="Interior Renovation & Remodeling">Renovation & Remodeling</option>
-                            <option value="Commercial / Office Interior">Commercial / Office Interior</option>
+                            <option value="Commercial / Office Interior">Commercial / Office Interiors</option>
                         </select>
                     </div>
                     <div>
@@ -2839,7 +2969,7 @@ body.interior-body .int-yt-dot.active {
                 <!-- Success Box -->
                 <div id="interiorSuccessMessage" class="form-success-box" style="display:none;background:rgba(37,211,102,0.15);border:1px solid #25D366;color:#16A34A;padding:16px;border-radius:6px;text-align:center;font-weight:700;margin-top:16px;">
                     <i class="fas fa-circle-check" style="margin-right:6px;color:#25D366;"></i>
-                    Interior Consultation Request Submitted! Er. Maha Rajan's interior studio will contact you within 24 hours.
+                    Interiors Consultation Request Submitted! Er. Maha Rajan's interiors studio will contact you within 24 hours.
                 </div>
             </form>
         </div>
@@ -3226,7 +3356,7 @@ body.interior-body .int-yt-dot.active {
         const modal = document.getElementById('interiorPackageDetailsModal');
         if (!modal) return;
 
-        document.getElementById('intModalPkgTierLabel').textContent = 'MAHA INTERIOR • ' + (pkg.tier || 'PLAN').toUpperCase();
+        document.getElementById('intModalPkgTierLabel').textContent = 'MAHA INTERIORS • ' + (pkg.tier || 'PLAN').toUpperCase();
         document.getElementById('intModalPkgTitle').textContent = pkg.title;
         document.getElementById('intModalPkgSubtitle').textContent = pkg.subtitle || '';
         document.getElementById('intModalPkgPrice').innerHTML = '₹' + Number(pkg.price_per_sqft).toLocaleString() + ' <span>/ sq.ft</span>';
@@ -3838,9 +3968,10 @@ body.interior-body .int-yt-dot.active {
             const v = document.getElementById('intHeroBgVideo');
             const p = document.getElementById('intHeroPoster');
             if (v) {
-                // Ensure strict autoplay attributes
+                // Ensure strict mute and autoplay attributes
                 v.muted = true;
                 v.defaultMuted = true;
+                v.volume = 0;
                 v.playsInline = true;
                 v.setAttribute('muted', '');
                 v.setAttribute('playsinline', '');
@@ -3858,6 +3989,7 @@ body.interior-body .int-yt-dot.active {
 
                 const tryPlay = () => {
                     v.muted = true;
+                    v.volume = 0;
                     const prom = v.play();
                     if (prom !== undefined) {
                         prom.then(() => {
@@ -3868,6 +4000,7 @@ body.interior-body .int-yt-dot.active {
                                 interactionBound = true;
                                 const triggerPlay = () => {
                                     v.muted = true;
+                                    v.volume = 0;
                                     v.play().then(() => {
                                         onVideoPlaying();
                                     }).catch(() => {});
@@ -3934,15 +4067,8 @@ body.interior-body .int-yt-dot.active {
                             const heroH = heroSection.offsetHeight || 800;
                             if (scrollY <= heroH + 100) {
                                 const progress = Math.min(1, Math.max(0, scrollY / heroH));
-                                if (heroBgVideo) {
-                                    // Smooth scale from 1.0 to 1.14 with downward parallax glide
-                                    const scale = (1 + (progress * 0.14)).toFixed(4);
-                                    const shift = (scrollY * 0.28).toFixed(1);
-                                    heroBgVideo.style.setProperty('--int-hero-scale', scale);
-                                    heroBgVideo.style.setProperty('--int-hero-shift', `${shift}px`);
-                                }
+                                // Video remains stationary in the background with zero gap
                                 if (heroOuter && window.innerWidth > 768) {
-                                    // Subtle lift & soft fade on hero text during scroll
                                     heroOuter.style.transform = `translate3d(0, ${(scrollY * 0.16).toFixed(1)}px, 0)`;
                                     heroOuter.style.opacity = Math.max(0.12, 1 - (progress * 1.25)).toFixed(3);
                                 }

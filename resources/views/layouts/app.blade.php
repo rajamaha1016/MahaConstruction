@@ -27,7 +27,7 @@
                          class="interior-logo-img">
                 </div>
                 <div class="interior-logo-text">
-                    <span class="interior-brand-title">MAHA INTERIOR</span>
+                    <span class="interior-brand-title">MAHA INTERIORS</span>
                     <span class="interior-brand-tagline">YOUR DREAM. OUR DESIGN.</span>
                 </div>
             </a>
@@ -70,7 +70,7 @@
                 <a href="{{ route('pricing') }}" class="nav-item {{ request()->routeIs('pricing') ? 'active' : '' }}">PACKAGES</a>
                 <a href="{{ route('projects') }}" class="nav-item {{ request()->routeIs('projects') ? 'active' : '' }}">PROJECTS</a>
                 <a href="{{ route('interior') }}" class="nav-item mobile-only-link" style="color:#FFD700!important;font-weight:800;border-top:1px solid rgba(212,175,55,0.25);margin-top:6px;padding-top:10px;">
-                    <i class="fas fa-couch" style="margin-right:6px;"></i> EXPLORE MAHA INTERIOR
+                    <i class="fas fa-couch" style="margin-right:6px;"></i> EXPLORE MAHA INTERIORS
                 </a>
             </div>
 
@@ -129,7 +129,7 @@
                             <img src="{{ asset('logo.jpg') }}" alt="Maha Interior Logo" class="interior-footer-logo-img">
                         </div>
                         <div class="logo-text-group">
-                            <span class="logo-brand interior-footer-brand-name">MAHA INTERIOR</span>
+                            <span class="logo-brand interior-footer-brand-name">MAHA INTERIORS</span>
                             <span class="logo-tagline interior-footer-tagline">YOUR DREAM. OUR DESIGN.</span>
                         </div>
                     </div>
@@ -150,7 +150,7 @@
                         <li><a href="#interior-projects">01 • Portfolio Showcase</a></li>
                         <li><a href="#interior-testimonials">02 • Client Stories</a></li>
                         <li><a href="#interior-engineer">03 • Engineered Interiors</a></li>
-                        <li><a href="#interior-packages">04 • Interior Packages</a></li>
+                        <li><a href="#interior-packages">04 • Interiors Packages</a></li>
                         <li><a href="#interior-enquiry">05 • Book Consultation</a></li>
                     </ul>
                 </div>
@@ -158,8 +158,8 @@
                 <div class="footer-links-col">
                     <h4 class="footer-heading interior-footer-heading">DESIGN CAPABILITIES</h4>
                     <ul class="footer-nav interior-footer-nav">
-                        <li>Interior Design & Planning</li>
-                        <li>Turnkey Interior Execution</li>
+                        <li>Interiors Design & Planning</li>
+                        <li>Turnkey Interiors Execution</li>
                         <li>Modular Kitchen Solutions</li>
                         <li>Wardrobe & Storage Systems</li>
                         <li>Living Room Interiors</li>
@@ -244,7 +244,7 @@
                         <li>Individual Villa & Apartment Constructions</li>
                         <li>Commercial Constructions</li>
                         <li>Architectural Design</li>
-                        <li>Interior Design & Execution</li>
+                        <li>Interiors Design & Execution</li>
                         <li>Renovation & Remodeling</li>
                         <li>Vastu Consultation</li>
                         <li>Building Plan Approval</li>
@@ -273,8 +273,8 @@
                         <span>{{ $company_address }}</span>
                     </div>
                     <div style="margin-top:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                        <a href="{{ route('interior') }}" class="division-switch-btn" title="Explore Maha Interior Showcase" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.08) 100%);color:#FFD700;border:1.5px solid #D4AF37;padding:8px 18px;border-radius:20px;font-size:0.75rem;font-weight:800;letter-spacing:0.08em;text-decoration:none;transition:all 0.3s ease;text-transform:uppercase;font-family:var(--font-heading);box-shadow:0 0 14px rgba(212,175,55,0.3);" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';this.style.boxShadow='0 0 20px rgba(212,175,55,0.6)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.08) 100%)';this.style.color='#FFD700';this.style.boxShadow='0 0 14px rgba(212,175,55,0.3)';">
-                            <i class="fas fa-couch" style="font-size:0.75rem;"></i> INTERIOR
+                        <a href="{{ route('interior') }}" class="division-switch-btn" title="Explore Maha Interiors Showcase" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.08) 100%);color:#FFD700;border:1.5px solid #D4AF37;padding:8px 18px;border-radius:20px;font-size:0.75rem;font-weight:800;letter-spacing:0.08em;text-decoration:none;transition:all 0.3s ease;text-transform:uppercase;font-family:var(--font-heading);box-shadow:0 0 14px rgba(212,175,55,0.3);" onmouseover="this.style.background='#D4AF37';this.style.color='#050B14';this.style.boxShadow='0 0 20px rgba(212,175,55,0.6)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.08) 100%)';this.style.color='#FFD700';this.style.boxShadow='0 0 14px rgba(212,175,55,0.3)';">
+                            <i class="fas fa-couch" style="font-size:0.75rem;"></i> INTERIORS
                         </a>
                     </div>
                 </div>
