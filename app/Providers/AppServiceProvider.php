@@ -64,6 +64,11 @@ class AppServiceProvider extends ServiceProvider
             $resMatrix = PackageMatrixService::parseMatrix($settingsList['spec_matrix_residential'] ?? null, 'residential');
             $comMatrix = PackageMatrixService::parseMatrix($settingsList['spec_matrix_commercial'] ?? null, 'commercial');
 
+            $rawBranches   = $mergedSettings['company_branches'] ?? 'KANYAKUMARI • TIRUNELVELI • CHENNAI';
+            $cleanBranches = trim(preg_replace('/\bEST[-.\s]*2013\b/i', '', $rawBranches));
+            $cleanBranches = rtrim($cleanBranches, " ,-|•");
+            $cleanBranches = $cleanBranches ?: 'KANYAKUMARI • TIRUNELVELI • CHENNAI';
+
             $view->with([
                 'site_settings'           => $mergedSettings,
                 'package_spec_matrix_res' => $resMatrix,
@@ -74,7 +79,8 @@ class AppServiceProvider extends ServiceProvider
                 'company_email'           => $mergedSettings['company_email'],
                 'company_address'         => $mergedSettings['company_address'],
                 'company_hours'           => $mergedSettings['company_hours'],
-                'company_branches'        => $mergedSettings['company_branches'],
+                'company_branches'        => $cleanBranches,
+                'company_est'             => 'EST. 2013',
                 'raw_phone'               => $rawPhone    ?: '919095929543',
                 'raw_whatsapp'            => $rawWhatsapp ?: '919095929543',
                 'hero_title'              => $mergedSettings['hero_title'],

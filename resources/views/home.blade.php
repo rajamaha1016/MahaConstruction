@@ -19,13 +19,33 @@
                             <span class="pulse-dot" style="flex-shrink:0;"></span>
                             <div class="hero-marquee-track-container">
                                 <div class="hero-marquee-track">
-                                    <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                                    <span class="hero-marquee-item">
+                                        <span class="marquee-branch-label">OUR BRANCHES:</span>
+                                        <span class="marquee-branch-text">{{ strtoupper($company_branches) }}</span>
+                                        <span class="marquee-divider">|</span>
+                                        <span class="marquee-est-badge">{{ $company_est ?? 'EST. 2013' }}</span>
+                                    </span>
                                     <span class="marquee-sep">•</span>
-                                    <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                                    <span class="hero-marquee-item">
+                                        <span class="marquee-branch-label">OUR BRANCHES:</span>
+                                        <span class="marquee-branch-text">{{ strtoupper($company_branches) }}</span>
+                                        <span class="marquee-divider">|</span>
+                                        <span class="marquee-est-badge">{{ $company_est ?? 'EST. 2013' }}</span>
+                                    </span>
                                     <span class="marquee-sep">•</span>
-                                    <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                                    <span class="hero-marquee-item">
+                                        <span class="marquee-branch-label">OUR BRANCHES:</span>
+                                        <span class="marquee-branch-text">{{ strtoupper($company_branches) }}</span>
+                                        <span class="marquee-divider">|</span>
+                                        <span class="marquee-est-badge">{{ $company_est ?? 'EST. 2013' }}</span>
+                                    </span>
                                     <span class="marquee-sep">•</span>
-                                    <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                                    <span class="hero-marquee-item">
+                                        <span class="marquee-branch-label">OUR BRANCHES:</span>
+                                        <span class="marquee-branch-text">{{ strtoupper($company_branches) }}</span>
+                                        <span class="marquee-divider">|</span>
+                                        <span class="marquee-est-badge">{{ $company_est ?? 'EST. 2013' }}</span>
+                                    </span>
                                     <span class="marquee-sep">•</span>
                                 </div>
                             </div>
@@ -77,7 +97,7 @@
                                 </div>
 
                                 <!-- Role -->
-                                <div style="font-size:0.85rem;font-weight:700;color:#F0EBE0;letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;">CEO OF MAHA CONSTRUCTIONS</div>
+                                <div style="font-size:0.85rem;font-weight:700;color:#F0EBE0;letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;">CEO OF MAHA GROUPS</div>
 
                                 <!-- Glow bottom line -->
                                 <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#D4AF37,#FFD700,#D4AF37,transparent);"></div>

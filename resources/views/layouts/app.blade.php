@@ -27,7 +27,10 @@
                          class="interior-logo-img">
                 </div>
                 <div class="interior-logo-text">
-                    <span class="interior-brand-title">MAHA INTERIORS</span>
+                    <span class="interior-brand-title">
+                        <span class="brand-maha">MAHA</span>
+                        <span class="brand-interiors">INTERIORS</span>
+                    </span>
                     <span class="interior-brand-tagline">YOUR DREAM. OUR DESIGN.</span>
                 </div>
             </a>
@@ -338,7 +341,7 @@
                 </div>
                 <div class="form-field">
                     <label>TELEPHONE *</label>
-                    <input type="tel" name="phone" required placeholder="+91 90959 29543">
+                    <input type="tel" name="phone" required placeholder="+91 9876543210">
                 </div>
                 <div class="form-field">
                     <label>PROJECT TYPE</label>

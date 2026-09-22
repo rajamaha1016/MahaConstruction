@@ -16,7 +16,7 @@
 
     $kicker = 'ONE VISION • TWO SPECIALITIES';
     $pretitle = $isToInterior
-        ? 'Building the structure is only the beginning.'
+        ? 'Your home should reflect the way you live, the way you feel, and the way you dream.'
         : 'Ready to build the foundation?';
     $heading = $isToInterior
         ? 'From Building to Beautiful Living'
@@ -28,16 +28,16 @@
         ? 'YOUR DREAM. OUR DESIGN.'
         : 'WE BUILD YOUR DREAM HOME';
     $description = $isToInterior
-        ? 'Design spaces that feel like home. Step inside our dedicated interior architecture atelier for bespoke modular kitchens, luxury wardrobes, acoustic living spaces, and precision turnkey fitouts.'
+        ? 'At MAHA Interiors, we understand your needs, lifestyle, taste, and budget before we design every space around you.'
         : 'Build your dream space with confidence. Certified structural engineering, premium architectural villas, end-to-end site supervision, and lifelong construction durability.';
     $imageSrc = $isToInterior
-        ? 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=85'
-        : 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85';
+        ? 'https://www.nakshastore.com/uploads/article/Luxury%20Modern%20Living%20Room%20Interior%20Design%20India_1765962562.jpg'
+        : 'https://static.vecteezy.com/system/resources/thumbnails/067/013/953/small/luxury-house-with-modern-landscape-free-photo.jpg';
     $imageAlt = $isToInterior
         ? 'Maha Luxury Interior Architectural Living Space'
         : 'Maha Constructions Luxury Architectural Villa Masterpiece';
     $badgeText = $isToInterior
-        ? 'ARCHITECTURAL INTERIOR ATELIER'
+        ? 'ARCHITECTURAL INTERIOR STUDIO'
         : 'CIVIL ENGINEERING & LUXURY VILLAS';
     $badgeIcon = $isToInterior
         ? 'fas fa-couch'
@@ -45,9 +45,9 @@
 
     $features = $isToInterior
         ? [
-            ['icon' => 'fas fa-compass-drafting', 'text' => 'Bespoke 3D Spatial Planning'],
-            ['icon' => 'fas fa-gem', 'text' => 'Modular Factory Precision'],
-            ['icon' => 'fas fa-shield-halved', 'text' => 'Civil Engineer Led Execution'],
+            ['icon' => 'fas fa-compass-drafting', 'text' => 'Understand & Plan'],
+            ['icon' => 'fas fa-gem', 'text' => 'Design & Visualise'],
+            ['icon' => 'fas fa-shield-halved', 'text' => 'Execute & Transform'],
         ]
         : [
             ['icon' => 'fas fa-drafting-compass', 'text' => 'Architectural Elevation Design'],
@@ -85,7 +85,15 @@
                     <span class="maha-bridge-pretitle">{{ $pretitle }}</span>
                     <h2 class="maha-bridge-title">{{ $heading }}</h2>
                     <div class="maha-bridge-brand-lockup">
-                        <span class="maha-bridge-brand-name">{{ $targetBrand }}</span>
+                        <div class="maha-bridge-brand-name">
+                            @if($isToInterior)
+                                <span class="brand-word-maha">MAHA</span>
+                                <span class="brand-word-highlight">INTERIORS</span>
+                            @else
+                                <span class="brand-word-maha">MAHA</span>
+                                <span class="brand-word-highlight">CONSTRUCTIONS</span>
+                            @endif
+                        </div>
                         <span class="maha-bridge-brand-tagline">{{ $targetTagline }}</span>
                     </div>
                 </div>
@@ -165,10 +173,23 @@
     background: linear-gradient(135deg, #FFFFFF 15%, #FFFDF0 45%, #FFD700 80%, #D4AF37 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.35));
+    filter: drop-shadow(0 2px 10px rgba(212, 175, 55, 0.45));
+}
+.maha-cross-nav-section.theme-to-interior .maha-bridge-brand-name .brand-word-maha {
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFFDF0 50%, #F5E6C8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9));
+}
+.maha-cross-nav-section.theme-to-interior .maha-bridge-brand-name .brand-word-highlight {
+    background: linear-gradient(135deg, #FFD700 0%, #FFF4B8 35%, #FFD700 65%, #D4AF37 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.65)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9));
 }
 .maha-cross-nav-section.theme-to-interior .maha-bridge-brand-tagline {
-    color: #D4AF37;
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 .maha-cross-nav-section.theme-to-interior .maha-bridge-desc {
     color: #CBD5E1;
@@ -224,8 +245,22 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+.maha-cross-nav-section.theme-to-construction .maha-bridge-brand-name .brand-word-maha {
+    color: #0A0F1D;
+    background: linear-gradient(135deg, #0A0F1D 0%, #162447 60%, #0F172A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+}
+.maha-cross-nav-section.theme-to-construction .maha-bridge-brand-name .brand-word-highlight {
+    background: linear-gradient(135deg, #A8741A 0%, #C8952B 28%, #FFD700 55%, #D4AF37 80%, #996F15 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 10px rgba(200, 149, 43, 0.45));
+}
 .maha-cross-nav-section.theme-to-construction .maha-bridge-brand-tagline {
-    color: #C8952B;
+    color: #B38222;
+    text-shadow: 0 0 8px rgba(179, 130, 34, 0.25);
 }
 .maha-cross-nav-section.theme-to-construction .maha-bridge-desc {
     color: #374151;
@@ -357,22 +392,28 @@
 }
 .maha-bridge-brand-lockup {
     display: flex;
-    align-items: baseline;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 4px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 .maha-bridge-brand-name {
     font-family: var(--font-heading, 'Montserrat', sans-serif);
-    font-size: clamp(1.2rem, 1.8vw, 1.55rem);
+    font-size: clamp(1.65rem, 2.7vw, 2.35rem);
     font-weight: 900;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.06em;
+    line-height: 1.15;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
 }
 .maha-bridge-brand-tagline {
     font-family: var(--font-heading, 'Montserrat', sans-serif);
-    font-size: 0.68rem;
+    font-size: 0.80rem;
     font-weight: 800;
-    letter-spacing: 0.20em;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
 }
 

@@ -58,15 +58,66 @@ body.interior-body .interior-navbar.is-scrolled {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08) !important;
     padding: 10px 0 !important;
 }
+body.interior-body .interior-logo-badge {
+    background: #FFFFFF !important;
+    padding: 6px 14px !important;
+    border-radius: 14px !important;
+    border: 2px solid #D4AF37 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 0 20px rgba(212, 175, 55, 0.35) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+body.interior-body .interior-nav-logo:hover .interior-logo-badge {
+    transform: scale(1.04) !important;
+    box-shadow: 0 6px 26px rgba(0, 0, 0, 0.08), 0 0 28px rgba(212, 175, 55, 0.55) !important;
+}
 body.interior-body .interior-brand-title {
-    color: #161922 !important;
+    font-size: 1.45rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.07em !important;
+    line-height: 1.15 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    text-transform: uppercase !important;
+    transition: all 0.3s ease !important;
+}
+body.interior-body .interior-brand-title .brand-maha {
+    font-family: var(--font-heading) !important;
     font-weight: 900 !important;
     letter-spacing: 0.06em !important;
+    color: #0A0F1D !important;
+    background: linear-gradient(135deg, #0A0F1D 0%, #162447 60%, #0F172A 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15)) !important;
+}
+body.interior-body .interior-brand-title .brand-interiors {
+    font-family: var(--font-heading) !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.08em !important;
+    background: linear-gradient(135deg, #A8741A 0%, #C8952B 28%, #FFD700 55%, #D4AF37 80%, #996F15 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    filter: drop-shadow(0 2px 8px rgba(200, 149, 43, 0.45)) !important;
+    position: relative !important;
+    display: inline-block !important;
+    transition: all 0.3s ease !important;
+}
+body.interior-body .interior-nav-logo:hover .brand-interiors {
+    filter: drop-shadow(0 2px 14px rgba(212, 175, 55, 0.75)) !important;
+    transform: translateY(-0.5px);
 }
 body.interior-body .interior-brand-tagline {
-    color: var(--int-gold) !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.2em !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.24em !important;
+    color: #B38222 !important;
+    text-transform: uppercase !important;
+    margin-top: 3px !important;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3) !important;
 }
 body.interior-body .interior-nav-item {
     color: #374151 !important;
@@ -2063,13 +2114,33 @@ body.interior-body .int-yt-dot.active {
                 <span class="pulse-dot" style="flex-shrink:0;"></span>
                 <div class="hero-marquee-track-container">
                     <div class="hero-marquee-track">
-                        <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                        <span class="hero-marquee-item">
+                            <span class="marquee-branch-label">OUR BRANCHES:</span>
+                            <span class="marquee-branch-text">{{ strtoupper($company_branches) }}</span>
+                            <span class="marquee-divider">|</span>
+                            <span class="marquee-est-badge">{{ $company_est ?? 'EST. 2013' }}</span>
+                        </span>
                         <span class="marquee-sep">•</span>
-                        <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                        <span class="hero-marquee-item">
+                            <span class="marquee-branch-label">OUR BRANCHES:</span>
+                            <span class="marquee-branch-text">{{ strtoupper($company_branches) }}</span>
+                            <span class="marquee-divider">|</span>
+                            <span class="marquee-est-badge">{{ $company_est ?? 'EST. 2013' }}</span>
+                        </span>
                         <span class="marquee-sep">•</span>
-                        <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                        <span class="hero-marquee-item">
+                            <span class="marquee-branch-label">OUR BRANCHES:</span>
+                            <span class="marquee-branch-text">{{ strtoupper($company_branches) }}</span>
+                            <span class="marquee-divider">|</span>
+                            <span class="marquee-est-badge">{{ $company_est ?? 'EST. 2013' }}</span>
+                        </span>
                         <span class="marquee-sep">•</span>
-                        <span>OUR BRANCHES ARE {{ strtoupper($company_branches) }}</span>
+                        <span class="hero-marquee-item">
+                            <span class="marquee-branch-label">OUR BRANCHES:</span>
+                            <span class="marquee-branch-text">{{ strtoupper($company_branches) }}</span>
+                            <span class="marquee-divider">|</span>
+                            <span class="marquee-est-badge">{{ $company_est ?? 'EST. 2013' }}</span>
+                        </span>
                         <span class="marquee-sep">•</span>
                     </div>
                 </div>
