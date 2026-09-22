@@ -64,7 +64,10 @@
             <div class="maha-bridge-media-col">
                 <img src="{{ $imageSrc }}" 
                      alt="{{ $imageAlt }}" 
+                     width="560" height="380"
+                     decoding="async"
                      loading="lazy"
+                     onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';this.classList.add('is-fallback-img');"
                      class="maha-bridge-img">
                 <div class="maha-bridge-media-badge">
                     <i class="{{ $badgeIcon }}" style="color:var(--gold, #D4AF37);"></i>

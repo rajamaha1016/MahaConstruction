@@ -224,13 +224,29 @@ document.addEventListener('DOMContentLoaded', function () {
   // --- Sticky Floating Navbar Scroll Effect ---
   const navbar = document.getElementById('navbar');
   if (navbar) {
-    window.addEventListener('scroll', function () {
-      if (window.scrollY > 20) {
+    const isInterior = document.body.classList.contains('interior-body');
+
+    function handleNavbarScroll() {
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+      let threshold = 20;
+      if (isInterior) {
+        const heroSection = document.getElementById('interior-intro');
+        if (heroSection) {
+          // Switch color when bottom of hero approaches navbar (leaving hero into other areas)
+          threshold = Math.max(120, heroSection.offsetHeight - 90);
+        }
+      }
+
+      if (scrollY > threshold) {
         navbar.classList.add('is-scrolled');
       } else {
         navbar.classList.remove('is-scrolled');
       }
-    }, { passive: true });
+    }
+
+    window.addEventListener('scroll', handleNavbarScroll, { passive: true });
+    window.addEventListener('resize', handleNavbarScroll, { passive: true });
+    handleNavbarScroll();
   }
 
   // --- Back to Top Floating Button ---
@@ -286,7 +302,8 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
 
-      fetch('/api/leads/quote', {
+      const netFetch = window.mahaFetch || fetch;
+      netFetch('/api/leads/quote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -294,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function () {
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
         },
         body: JSON.stringify(data)
-      })
+      }, 9000, 2)
       .then(res => res.json())
       .then(res => {
         if (quoteSubmitBtn) quoteSubmitBtn.innerText = 'SUBMIT PROPOSAL REQUEST';
@@ -307,8 +324,20 @@ document.addEventListener('DOMContentLoaded', function () {
       })
       .catch(err => {
         if (quoteSubmitBtn) quoteSubmitBtn.innerText = 'SUBMIT PROPOSAL REQUEST';
-        alert('Thank you! Your request has been logged.');
-        if (quoteModal) quoteModal.classList.remove('open');
+        // Provide resilient WhatsApp fallback if network connection failed
+        const fallbackPhone = window.companyWhatsappRaw || '919443156689';
+        const msg = encodeURIComponent(`Hello Er. Maha Rajan, I would like to request a construction proposal.\nName: ${data.name || ''}\nPhone: ${data.phone || ''}\nLocation: ${data.location || ''}`);
+        const fallbackCard = document.createElement('div');
+        fallbackCard.className = 'net-fallback-card';
+        fallbackCard.innerHTML = `
+          <div style="font-size:0.85rem;color:#FFD700;font-weight:700;margin-bottom:6px;"><i class="fas fa-wifi" style="margin-right:6px;"></i> Connection Interrupted</div>
+          <div style="font-size:0.8rem;color:#ccc;margin-bottom:10px;">We couldn't reach the server right now. Send your details instantly via WhatsApp:</div>
+          <a href="https://wa.me/${fallbackPhone}?text=${msg}" target="_blank" class="btn-whatsapp-outline" style="display:inline-flex;padding:8px 14px;font-size:0.78rem;">
+            <i class="fab fa-whatsapp" style="margin-right:6px;"></i> Send via WhatsApp
+          </a>
+        `;
+        quoteModalForm.prepend(fallbackCard);
+        setTimeout(() => fallbackCard.remove(), 8000);
       });
     });
   }
@@ -705,8 +734,9 @@ document.addEventListener('DOMContentLoaded', function () {
       const phone = guideBookForm.querySelector('input[name="phone"]')?.value || '';
       const email = guideBookForm.querySelector('input[name="email"]')?.value || '';
 
-      // 1. Submit lead to database and get dynamic PDF URL back
-      fetch('/api/leads/guidebook', {
+      // 1. Submit lead to database using resilient network fetch
+      const netFetch = window.mahaFetch || fetch;
+      netFetch('/api/leads/guidebook', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -714,7 +744,7 @@ document.addEventListener('DOMContentLoaded', function () {
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
         },
         body: JSON.stringify({ name, phone, email })
-      })
+      }, 9000, 2)
       .then(res => res.json())
       .then(data => {
         const pdfUrl = data.pdf_url || '/uploads/1785792673_new book.pdf';
@@ -960,7 +990,8 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
 
-      fetch('/api/leads/contact', {
+      const netFetch = window.mahaFetch || fetch;
+      netFetch('/api/leads/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -968,7 +999,7 @@ document.addEventListener('DOMContentLoaded', function () {
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
         },
         body: JSON.stringify(data)
-      })
+      }, 9000, 2)
       .then(() => {
         contactFormCore.reset();
         if (contactSuccessCore) contactSuccessCore.style.display = 'block';

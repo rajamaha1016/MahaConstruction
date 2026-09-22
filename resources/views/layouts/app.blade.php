@@ -6,11 +6,15 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Maha Constructions | Premium Luxury Architectural Masterpieces')</title>
     <meta name="description" content="@yield('description', 'Maha Construction is Tamil Nadu\'s premier government-registered engineering firm delivering custom luxury villas, residential residences, and architectural homes.')"/>
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ file_exists(public_path('css/app.css')) ? filemtime(public_path('css/app.css')) : time() }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="{{ asset('js/resilient-net.js') }}?v={{ file_exists(public_path('js/resilient-net.js')) ? filemtime(public_path('js/resilient-net.js')) : time() }}"></script>
     @stack('styles')
 </head>
 <body class="dark-theme {{ request()->routeIs('interior') ? 'interior-body' : '' }}">
@@ -22,15 +26,23 @@
             <!-- INTERIOR LOGO & BRAND (ARCHITECTURAL LUXURY) -->
             <a href="{{ route('interior') }}" class="nav-logo interior-nav-logo" style="display:inline-flex;align-items:center;gap:14px;text-decoration:none;">
                 <div class="interior-logo-badge">
-                    <img src="{{ asset('logo.jpg') }}"
-                         alt="Maha Interior Logo"
-                         class="interior-logo-img">
+                    <picture>
+                        <source srcset="{{ asset('logo.webp') }}" type="image/webp">
+                        <img src="{{ asset('logo.jpg') }}"
+                             alt="Maha Interior Logo"
+                             width="44" height="44"
+                             loading="eager"
+                             fetchpriority="high"
+                             decoding="async"
+                             onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';"
+                             class="interior-logo-img">
+                    </picture>
                 </div>
                 <div class="interior-logo-text">
-                    <span class="interior-brand-title">
+                    <div class="interior-brand-title">
                         <span class="brand-maha">MAHA</span>
                         <span class="brand-interiors">INTERIORS</span>
-                    </span>
+                    </div>
                     <span class="interior-brand-tagline">YOUR DREAM. OUR DESIGN.</span>
                 </div>
             </a>
@@ -58,9 +70,17 @@
             <!-- CONSTRUCTION LOGO & BRAND -->
             <a href="{{ route('home') }}" class="nav-logo" style="display:inline-flex;align-items:center;gap:16px;text-decoration:none;">
                 <div style="background:#FFFFFF;padding:6px 14px;border-radius:14px;border:2px solid #D4AF37;box-shadow:0 4px 22px rgba(0,0,0,0.5),0 0 25px rgba(212,175,55,0.45);display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);" onmouseover="this.style.boxShadow='0 6px 28px rgba(212,175,55,0.7),0 0 30px rgba(212,175,55,0.6)';this.style.transform='scale(1.04)';" onmouseout="this.style.boxShadow='0 4px 22px rgba(0,0,0,0.5),0 0 25px rgba(212,175,55,0.45)';this.style.transform='scale(1)';">
-                    <img src="{{ asset('logo.jpg') }}"
-                         alt="Maha Constructions Logo"
-                         style="height:54px;width:auto;object-fit:contain;display:block;">
+                    <picture>
+                        <source srcset="{{ asset('logo.webp') }}" type="image/webp">
+                        <img src="{{ asset('logo.jpg') }}"
+                             alt="Maha Constructions Logo"
+                             width="54" height="54"
+                             loading="eager"
+                             fetchpriority="high"
+                             decoding="async"
+                             onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';"
+                             style="height:54px;width:auto;object-fit:contain;display:block;">
+                    </picture>
                 </div>
                 <div style="display:flex;flex-direction:column;justify-content:center;">
                     <span style="font-size:1.35rem;font-weight:900;letter-spacing:0.07em;line-height:1.15;font-family:var(--font-heading);background:linear-gradient(135deg,#FFFFFF 15%,#FFFDF0 45%,#FFD700 80%,#D4AF37 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 8px rgba(212,175,55,0.35));">MAHA CONSTRUCTIONS</span>
@@ -129,7 +149,10 @@
                 <div class="footer-brand-col interior-footer-brand">
                     <div class="footer-logo">
                         <div class="logo-badge interior-footer-badge">
-                            <img src="{{ asset('logo.jpg') }}" alt="Maha Interior Logo" class="interior-footer-logo-img">
+                            <picture>
+                                <source srcset="{{ asset('logo.webp') }}" type="image/webp">
+                                <img src="{{ asset('logo.jpg') }}" alt="Maha Interior Logo" width="36" height="36" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';" class="interior-footer-logo-img">
+                            </picture>
                         </div>
                         <div class="logo-text-group">
                             <span class="logo-brand interior-footer-brand-name">MAHA INTERIORS</span>
@@ -214,7 +237,10 @@
                 <div class="footer-brand-col">
                     <div class="footer-logo">
                         <div class="logo-badge" style="background:#FFFFFF;padding:4px 10px;border-radius:10px;border:1.5px solid #D4AF37;box-shadow:0 4px 14px rgba(0,0,0,0.4),0 0 12px rgba(212,175,55,0.25);">
-                            <img src="{{ asset('logo.jpg') }}" alt="Maha Constructions Logo" style="height:36px;width:auto;object-fit:contain;display:block;">
+                            <picture>
+                                <source srcset="{{ asset('logo.webp') }}" type="image/webp">
+                                <img src="{{ asset('logo.jpg') }}" alt="Maha Constructions Logo" width="36" height="36" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';" style="height:36px;width:auto;object-fit:contain;display:block;">
+                            </picture>
                         </div>
                         <div class="logo-text-group">
                             <span class="logo-brand">MAHA CONSTRUCTIONS</span>
@@ -538,7 +564,7 @@
         window.companyWhatsappRaw = '{{ $raw_whatsapp }}';
         window.companyPhoneRaw = '{{ $raw_phone }}';
     </script>
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}?v={{ file_exists(public_path('js/app.js')) ? filemtime(public_path('js/app.js')) : time() }}" defer></script>
     @stack('scripts')
 </body>
 </html>

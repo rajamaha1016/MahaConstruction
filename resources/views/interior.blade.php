@@ -44,94 +44,167 @@ body.interior-body main {
     display: block;
 }
 
-/* ─── BRIGHT FROSTED NAVBAR OVERRIDE ───────────────────────── */
+/* ─── DYNAMIC TRANSITIONING INTERIOR NAVBAR ───────────────────────── */
+/* State 1: In Hero Section (Over the clear video background) */
 body.interior-body .interior-navbar {
-    background: rgba(255, 255, 255, 0.94) !important;
+    background: rgba(8, 14, 26, 0.65) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.35) !important;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.35) !important;
+    padding: 15px 0 !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* State 2: Scrolled to other areas (Luminous Luxury Alabaster Bar) */
+body.interior-body .interior-navbar.is-scrolled {
+    background: rgba(255, 255, 255, 0.96) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
-    border-bottom: 1px solid rgba(179, 130, 34, 0.2) !important;
-    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04) !important;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-body.interior-body .interior-navbar.is-scrolled {
-    background: rgba(255, 255, 255, 0.98) !important;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08) !important;
+    border-bottom: 1.5px solid rgba(200, 149, 43, 0.28) !important;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08), 0 2px 10px rgba(200, 149, 43, 0.08) !important;
     padding: 10px 0 !important;
 }
+
 body.interior-body .interior-logo-badge {
     background: #FFFFFF !important;
-    padding: 6px 14px !important;
-    border-radius: 14px !important;
+    padding: 5px 12px !important;
+    border-radius: 12px !important;
     border: 2px solid #D4AF37 !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 0 20px rgba(212, 175, 55, 0.35) !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3), 0 0 18px rgba(212, 175, 55, 0.45) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 body.interior-body .interior-nav-logo:hover .interior-logo-badge {
     transform: scale(1.04) !important;
-    box-shadow: 0 6px 26px rgba(0, 0, 0, 0.08), 0 0 28px rgba(212, 175, 55, 0.55) !important;
+    box-shadow: 0 6px 26px rgba(0, 0, 0, 0.25), 0 0 26px rgba(212, 175, 55, 0.65) !important;
 }
+
+/* Brand Title & Equal Font Sizes for MAHA and INTERIORS */
 body.interior-body .interior-brand-title {
-    font-size: 1.45rem !important;
-    font-weight: 900 !important;
-    letter-spacing: 0.07em !important;
-    line-height: 1.15 !important;
     display: inline-flex !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 7px !important;
+    line-height: 1.15 !important;
     text-transform: uppercase !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+body.interior-body .interior-brand-title .brand-maha,
+body.interior-body .interior-brand-title .brand-interiors {
+    font-family: var(--font-heading) !important;
+    font-size: clamp(1.15rem, 3.8vw, 1.45rem) !important;
+    font-weight: 900 !important;
+    line-height: 1.15 !important;
+    letter-spacing: 0.06em !important;
+    display: inline-block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Hero Section State: High-contrast glowing brand titles over clear video */
+body.interior-body .interior-navbar .interior-brand-title .brand-maha {
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFFDF0 60%, #E2E8F0 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.45)) !important;
+}
+
+body.interior-body .interior-navbar .interior-brand-title .brand-interiors {
+    background: linear-gradient(135deg, #FFE885 0%, #FFD700 35%, #D4AF37 70%, #B8860B 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 16px rgba(212, 175, 55, 0.8)) !important;
+}
+
+body.interior-body .interior-navbar .interior-brand-tagline {
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.22em !important;
+    color: #FFD700 !important;
+    text-transform: uppercase !important;
+    margin-top: 3px !important;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.65) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+body.interior-body .interior-navbar .interior-nav-item {
+    color: #F8FAFC !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
     transition: all 0.3s ease !important;
 }
-body.interior-body .interior-brand-title .brand-maha {
-    font-family: var(--font-heading) !important;
-    font-weight: 900 !important;
-    letter-spacing: 0.06em !important;
+body.interior-body .interior-navbar .interior-nav-item:hover,
+body.interior-body .interior-navbar .interior-nav-item.active {
+    color: #FFD700 !important;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.75) !important;
+}
+body.interior-body .interior-navbar .interior-nav-item::after {
+    background: #FFD700 !important;
+}
+body.interior-body .interior-navbar .nav-search-btn {
+    color: #FFFFFF !important;
+    border: 1px solid rgba(212, 175, 55, 0.45) !important;
+    background: rgba(212, 175, 55, 0.15) !important;
+    transition: all 0.4s ease !important;
+}
+body.interior-body .interior-navbar .nav-mobile-toggle span {
+    background: #FFFFFF !important;
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.6) !important;
+    transition: all 0.4s ease !important;
+}
+
+/* Scrolled State: Transitions to deep charcoal & rich gold on white background */
+body.interior-body .interior-navbar.is-scrolled .interior-brand-title .brand-maha {
     color: #0A0F1D !important;
     background: linear-gradient(135deg, #0A0F1D 0%, #162447 60%, #0F172A 100%) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
-    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15)) !important;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2)) !important;
 }
-body.interior-body .interior-brand-title .brand-interiors {
-    font-family: var(--font-heading) !important;
-    font-weight: 900 !important;
-    letter-spacing: 0.08em !important;
+
+body.interior-body .interior-navbar.is-scrolled .interior-brand-title .brand-interiors {
     background: linear-gradient(135deg, #A8741A 0%, #C8952B 28%, #FFD700 55%, #D4AF37 80%, #996F15 100%) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     filter: drop-shadow(0 2px 8px rgba(200, 149, 43, 0.45)) !important;
-    position: relative !important;
-    display: inline-block !important;
-    transition: all 0.3s ease !important;
 }
-body.interior-body .interior-nav-logo:hover .brand-interiors {
-    filter: drop-shadow(0 2px 14px rgba(212, 175, 55, 0.75)) !important;
-    transform: translateY(-0.5px);
-}
-body.interior-body .interior-brand-tagline {
-    font-size: 0.68rem !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.24em !important;
+
+body.interior-body .interior-navbar.is-scrolled .interior-brand-tagline {
     color: #B38222 !important;
-    text-transform: uppercase !important;
-    margin-top: 3px !important;
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3) !important;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.25) !important;
 }
-body.interior-body .interior-nav-item {
+
+body.interior-body .interior-navbar.is-scrolled .interior-nav-item {
     color: #374151 !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.12em !important;
-    transition: color 0.25s ease !important;
+    text-shadow: none !important;
 }
-body.interior-body .interior-nav-item:hover,
-body.interior-body .interior-nav-item.active {
+body.interior-body .interior-navbar.is-scrolled .interior-nav-item:hover,
+body.interior-body .interior-navbar.is-scrolled .interior-nav-item.active {
     color: var(--int-gold) !important;
+    text-shadow: none !important;
 }
-body.interior-body .interior-nav-item::after {
+body.interior-body .interior-navbar.is-scrolled .interior-nav-item::after {
     background: var(--int-gold) !important;
 }
+body.interior-body .interior-navbar.is-scrolled .nav-search-btn {
+    color: #161922 !important;
+    border: 1px solid rgba(200, 149, 43, 0.3) !important;
+    background: rgba(200, 149, 43, 0.08) !important;
+}
+body.interior-body .interior-navbar.is-scrolled .nav-mobile-toggle span {
+    background: #0A0F1D !important;
+    box-shadow: none !important;
+}
+
 body.interior-body .interior-switch-btn {
     background: rgba(179, 130, 34, 0.08) !important;
     border: 1.5px solid var(--int-gold) !important;
@@ -146,12 +219,6 @@ body.interior-body .interior-switch-btn:hover {
     box-shadow: 0 4px 18px rgba(179, 130, 34, 0.35) !important;
     transform: translateY(-1px);
 }
-body.interior-body .nav-search-btn {
-    color: #161922 !important;
-}
-body.interior-body .nav-mobile-toggle span {
-    background: #161922 !important;
-}
 
 /* ─── SECTION 1: CINEMATIC FULL-SCREEN VIDEO HERO (#interior-intro) ──── */
 body.interior-body .int-hero-section {
@@ -161,12 +228,34 @@ body.interior-body .int-hero-section {
     top: 0 !important;
     margin-top: 0 !important;
     margin-bottom: 0 !important;
-    min-height: 100vh;
-    min-height: 100svh;
-    display: flex;
-    align-items: center;
-    padding: 125px 0 70px !important;
+    height: 100vh !important;
+    height: 100svh !important;
+    min-height: 100vh !important;
+    min-height: 100svh !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
     overflow: hidden !important;
+}
+
+/* Hero Stage: Centers hero content over pristine video in 100vh viewport */
+body.interior-body .int-hero-sticky-stage {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100vh !important;
+    min-height: 100svh !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 1 !important;
+    padding: 90px 0 40px !important;
 }
 
 /* Full-screen video container */
@@ -199,7 +288,8 @@ body.interior-body .int-hero-bg-video {
     min-height: 100% !important;
     object-fit: cover !important;
     object-position: center center !important;
-    filter: brightness(0.88) contrast(1.02) saturate(1.08);
+    filter: contrast(1.06) saturate(1.12) brightness(1.03) !important;
+    opacity: 1 !important;
     transform: none !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -218,55 +308,29 @@ body.interior-body .int-hero-video-wrap img.int-hero-poster {
     height: 100% !important;
     object-fit: cover !important;
     object-position: center center !important;
-    filter: brightness(0.85) contrast(1.02);
+    filter: contrast(1.06) saturate(1.12) brightness(1.03) !important;
+    opacity: 1 !important;
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
 }
 
-/* Cinematic dark overlay — seamless top-to-bottom coverage */
-body.interior-body .int-hero-overlay {
-    position: absolute !important;
-    inset: 0 !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    background: linear-gradient(
-        105deg,
-        rgba(6, 12, 9, 0.78) 0%,
-        rgba(8, 15, 12, 0.58) 45%,
-        rgba(8, 15, 12, 0.22) 100%
-    ),
-    linear-gradient(
-        to bottom,
-        rgba(6, 12, 9, 0.35) 0%,
-        transparent 35%,
-        rgba(6, 12, 9, 0.40) 75%,
-        #FAF8F5 100%
-    ) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    z-index: 1 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-}
-/* Bottom vignette into next section */
+/* Video Overlay & Vignettes COMPLETELY REMOVED for 100% Crystal-Clear View */
+body.interior-body .int-hero-overlay,
 body.interior-body .int-hero-bottom-fade {
-    background: linear-gradient(to bottom, transparent 40%, rgba(250, 248, 245, 0.85) 85%, #FAF8F5 100%) !important;
-    height: 180px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 2;
-    pointer-events: none;
+    display: none !important;
+    background: transparent !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
 }
 
-/* Content wrapper — centered with natural breathing room */
+/* Content wrapper — starts invisible at scroll 0, smoothly revealed on scroll */
 body.interior-body .int-hero-content-outer {
     position: relative;
     z-index: 4;
@@ -277,8 +341,17 @@ body.interior-body .int-hero-content-outer {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    opacity: 0;
+    transform: translateY(42px);
+    pointer-events: none;
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
 }
-
+body.interior-body .int-hero-content-outer.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+}
 /* Studio label pill — elegant champagne gold chip */
 body.interior-body .int-tag-pill {
     background: rgba(212, 175, 55, 0.14) !important;
@@ -308,36 +381,70 @@ body.interior-body .int-tag-dot {
     animation: luxDotPulse 2s ease-in-out infinite;
 }
 body.interior-body .hero-marquee-badge {
-    margin-bottom: clamp(14px, 2vh, 22px) !important;
+    margin-bottom: clamp(16px, 2.5vh, 24px) !important;
+    background: rgba(8, 14, 26, 0.65) !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.45) !important;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
 }
 
-/* Main hero headline — refined Title Case, high contrast */
+/* Main hero headline — high contrast bold Title Case */
 body.interior-body .int-hero-title {
     color: #FFFFFF !important;
     font-family: var(--font-heading) !important;
     font-size: clamp(2.4rem, 4.8vw, 4.4rem) !important;
-    font-weight: 800 !important;
+    font-weight: 900 !important;
     line-height: 1.12 !important;
     text-transform: none !important;
     letter-spacing: -0.02em !important;
-    margin-bottom: 16px !important;
-    text-shadow: 0 4px 28px rgba(0, 0, 0, 0.65) !important;
+    margin-bottom: 20px !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95), 0 6px 22px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 0, 0, 0.75) !important;
     max-width: 860px;
 }
 
-/* Gold serif italic emphasis line */
+/* Subtitle: Crystal-Clear, Radiant High-Contrast Typography (Zero Box, Video 100% Highlighted) */
 body.interior-body .int-hero-emphasis {
-    display: block;
-    font-family: var(--font-serif) !important;
-    font-style: italic !important;
-    font-weight: 500 !important;
-    font-size: clamp(1.2rem, 1.9vw, 1.8rem) !important;
-    color: #F5D38A !important;
-    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.6) !important;
-    letter-spacing: 0.01em !important;
-    line-height: 1.45 !important;
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    font-family: var(--font-heading) !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    font-size: clamp(1.22rem, 2.25vw, 1.72rem) !important;
+    color: #FFFFFF !important;
+    line-height: 1.58 !important;
+    letter-spacing: 0.015em !important;
     margin-bottom: 34px !important;
-    max-width: 740px;
+    max-width: 860px;
+    /* Clean, crisp dual-layer shadow: tight dark rim for 100% legibility on light video without dirty blur */
+    text-shadow: 
+        0 1px 2px rgba(0, 0, 0, 1),
+        0 2px 5px rgba(0, 0, 0, 0.95),
+        0 4px 12px rgba(0, 0, 0, 0.85) !important;
+}
+
+body.interior-body .int-hero-emphasis .hero-gold-keyword {
+    color: #FFE066 !important;
+    -webkit-text-fill-color: #FFE066 !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    filter: none !important;
+    font-weight: 800 !important;
+    display: inline !important;
+    letter-spacing: 0.015em !important;
+    /* Crisp dark rim + warm radiant golden glow (no muddy black shadow mask) */
+    text-shadow: 
+        0 1px 2px rgba(0, 0, 0, 1),
+        0 2px 5px rgba(0, 0, 0, 0.95),
+        0 4px 12px rgba(0, 0, 0, 0.85),
+        0 0 16px rgba(255, 224, 102, 0.6),
+        0 0 32px rgba(212, 175, 55, 0.35) !important;
 }
 
 body.interior-body .int-hero-desc {
@@ -421,50 +528,92 @@ body.interior-body .int-btn-outline:hover i {
     color: var(--int-gold) !important;
 }
 
-/* ─── SECONDARY OUTLINE BUTTON (HERO DARK VIDEO OVERRIDE) ── */
+/* ─── SECONDARY OUTLINE BUTTON (HERO HIGH CONTRAST OVERRIDE) ── */
 body.interior-body .int-hero-section .int-btn-outline {
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: rgba(10, 16, 26, 0.4) !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+    border: 1.5px solid #D4AF37 !important;
     color: #FFFFFF !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    font-weight: 800 !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 10px rgba(212, 175, 55, 0.2) !important;
 }
 body.interior-body .int-hero-section .int-btn-outline:hover {
-    background: rgba(255, 255, 255, 0.25) !important;
-    border-color: #FFFFFF !important;
-    color: #FFFFFF !important;
+    background: #D4AF37 !important;
+    border-color: #D4AF37 !important;
+    color: #0A0F1D !important;
     transform: translateY(-2px) !important;
-    box-shadow: 0 8px 26px rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.5) !important;
 }
 body.interior-body .int-hero-section .int-btn-outline:hover i {
-    color: var(--int-gold) !important;
+    color: #0A0F1D !important;
 }
 
-/* Scroll cue indicator at bottom */
+/* Floating Scroll Cue Pill (Visible at scroll 0 over pristine video, fades when content is revealed) */
 body.interior-body .int-hero-scroll-cue {
     position: absolute;
-    bottom: 24px;
+    bottom: 36px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 5;
-    display: flex;
-    flex-direction: column;
+    z-index: 8;
+    cursor: pointer;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.45s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+body.interior-body .int-hero-scroll-cue.is-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translateX(-50%) translateY(16px) !important;
+}
+body.interior-body .int-hero-cue-pill {
+    background: rgba(8, 14, 26, 0.78) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.55) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.35) !important;
+    border-radius: 50px;
+    padding: 12px 26px;
+    display: inline-flex;
     align-items: center;
-    gap: 4px;
-    color: rgba(255, 255, 255, 0.55);
-    font-size: 0.65rem;
+    gap: 12px;
+    color: #FFFFFF;
     font-family: var(--font-heading);
-    letter-spacing: 0.2em;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    animation: intScrollCueFade 2.5s ease-in-out infinite;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
-@keyframes intScrollCueFade {
-    0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
-    50%       { opacity: 1;   transform: translateX(-50%) translateY(5px); }
+body.interior-body .int-hero-scroll-cue:hover .int-hero-cue-pill {
+    background: rgba(14, 22, 38, 0.92) !important;
+    border-color: #FFD700 !important;
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.7), 0 0 28px rgba(212, 175, 55, 0.65) !important;
+    transform: translateY(-2px);
+    color: #FFF6BD;
 }
-body.interior-body .int-hero-scroll-cue i {
-    font-size: 0.95rem;
+body.interior-body .int-hero-cue-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #FFD700;
+    box-shadow: 0 0 10px #FFD700;
+    animation: luxDotPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+}
+body.interior-body .int-hero-cue-arrow {
+    color: #FFD700;
+    font-size: 0.85rem;
+    animation: cueBounce 2s infinite ease-in-out;
+}
+@keyframes cueBounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(5px); }
+    60% { transform: translateY(2px); }
 }
 
 /* Stats strip — slim architectural glass ribbon with proper spacing */
@@ -477,13 +626,13 @@ body.interior-body .int-hero-stats-strip {
     padding-top: 0 !important;
 }
 body.interior-body .int-hero-stats-grid {
-    background: rgba(8, 14, 11, 0.65) !important;
+    background: rgba(6, 12, 22, 0.8) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(212, 175, 55, 0.30) !important;
+    border: 1px solid rgba(212, 175, 55, 0.35) !important;
     border-radius: 12px !important;
     padding: 18px 28px !important;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
     display: grid;
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 20px;
@@ -499,20 +648,21 @@ body.interior-body .int-hero-stat-card:not(:last-child)::after {
     top: 15%;
     height: 70%;
     width: 1px;
-    background: rgba(212, 175, 55, 0.25) !important;
+    background: rgba(212, 175, 55, 0.35) !important;
 }
 body.interior-body .int-hero-stat-val {
-    color: #F7D488 !important;
-    text-shadow: 0 2px 16px rgba(212, 175, 55, 0.4) !important;
+    color: #FFD700 !important;
+    text-shadow: 0 2px 16px rgba(212, 175, 55, 0.5) !important;
     font-size: clamp(1.55rem, 2.2vw, 2.1rem);
-    font-weight: 800;
+    font-weight: 900;
     line-height: 1.1;
     margin-bottom: 3px;
 }
 body.interior-body .int-hero-stat-label {
-    color: rgba(255, 255, 255, 0.78) !important;
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
     font-size: 0.72rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     line-height: 1.35;
@@ -530,17 +680,29 @@ body.interior-body .int-hero-stat-label {
         display: block !important;
     }
     body.interior-body .int-hero-section {
-        padding: 95px 0 45px !important;
+        height: auto !important;
         min-height: 100vh !important;
         min-height: 100svh !important;
+        padding: 0 !important;
+        margin: 0 !important;
         display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
         position: relative !important;
         top: 0 !important;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-        overflow: hidden !important;
+    }
+    body.interior-body .int-hero-sticky-stage {
+        height: auto !important;
+        min-height: 100vh !important;
+        min-height: 100svh !important;
+        padding: 85px 0 25px !important;
+        justify-content: center !important;
+    }
+    body.interior-body .int-hero-scroll-cue {
+        bottom: 24px !important;
+    }
+    body.interior-body .int-hero-cue-pill {
+        padding: 9px 18px !important;
+        font-size: 0.68rem !important;
+        gap: 8px !important;
     }
     body.interior-body .int-hero-video-wrap {
         position: absolute !important;
@@ -576,25 +738,40 @@ body.interior-body .int-hero-stat-label {
         will-change: auto !important;
     }
     body.interior-body .int-hero-overlay {
-        position: absolute !important;
-        inset: 0 !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        background: transparent !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+    body.interior-body .interior-brand-title {
+        gap: 6px !important;
+    }
+    body.interior-body .interior-brand-title .brand-maha,
+    body.interior-body .interior-brand-title .brand-interiors {
+        font-size: clamp(1.05rem, 4.2vw, 1.25rem) !important;
+        letter-spacing: 0.04em !important;
+        line-height: 1.15 !important;
+    }
+    body.interior-body .interior-brand-tagline {
+        font-size: clamp(0.52rem, 2.2vw, 0.62rem) !important;
+        letter-spacing: 0.18em !important;
     }
     body.interior-body .int-hero-content-outer {
-        padding-left: 20px !important;
-        padding-right: 20px !important;
+        padding-left: 18px !important;
+        padding-right: 18px !important;
         position: relative !important;
         z-index: 4 !important;
-        transform: none !important;
+        opacity: 0;
+        transform: translateY(28px);
+        pointer-events: none;
+        transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    body.interior-body .int-hero-content-outer.is-revealed {
         opacity: 1 !important;
+        transform: translateY(0) !important;
+        pointer-events: auto !important;
     }
     body.interior-body .int-hero-stats-grid {
         grid-template-columns: 1fr !important;
@@ -604,8 +781,47 @@ body.interior-body .int-hero-stat-label {
     body.interior-body .int-hero-stat-card:not(:last-child)::after {
         display: none !important;
     }
+    body.interior-body .int-hero-emphasis {
+        font-size: clamp(1.1rem, 3.8vw, 1.25rem) !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        margin-bottom: 26px !important;
+        display: block !important;
+        width: 100% !important;
+        line-height: 1.55 !important;
+    }
     body.interior-body .int-hero-actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
         margin-bottom: 32px !important;
+    }
+    body.interior-body .int-btn-gold,
+    body.interior-body .int-hero-section .int-btn-outline {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: 14px 20px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body.interior-body .interior-brand-title {
+        gap: 5px !important;
+    }
+    body.interior-body .interior-brand-title .brand-maha,
+    body.interior-body .interior-brand-title .brand-interiors {
+        font-size: 1.05rem !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.04em !important;
+        line-height: 1.15 !important;
+        display: inline-block !important;
+    }
+    body.interior-body .interior-brand-tagline {
+        font-size: 0.52rem !important;
+        letter-spacing: 0.16em !important;
     }
 }
 
@@ -2069,45 +2285,57 @@ body.interior-body .int-yt-dot.active {
      Full-Screen Luxury Interior Video Background
 ======================================================= -->
 <section class="int-hero-section" id="interior-intro">
+    <div class="int-hero-sticky-stage">
 
-    <!-- ── Cinematic Full-Screen Video Background ── -->
-    <div class="int-hero-video-wrap">
-        <video
-            id="intHeroBgVideo"
-            class="int-hero-bg-video"
-            autoplay
-            muted
-            loop
-            playsinline
-            webkit-playsinline
-            x5-playsinline
-            preload="auto"
-            poster="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85"
-        >
-            @if(!empty($interior_hero_video_url))
-                <source src="{{ $interior_hero_video_url }}" type="video/mp4">
-            @endif
-            <source src="{{ asset('videos/interior-luxury-living.mp4') }}" type="video/mp4">
-            <source src="/videos/interior-luxury-living.mp4" type="video/mp4">
-            <source src="{{ url('videos/interior-luxury-living.mp4') }}" type="video/mp4">
-        </video>
-        {{-- High-resolution architectural living room fallback poster --}}
-        <img
-            id="intHeroPoster"
-            class="int-hero-poster"
-            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85"
-            alt="Maha Luxury Interior Living Space"
-            style="display:none;"
-        >
-    </div>
+        <!-- ── Cinematic Full-Screen Video Background ── -->
+        <div class="int-hero-video-wrap">
+            <video
+                id="intHeroBgVideo"
+                class="int-hero-bg-video"
+                autoplay
+                muted
+                playsinline
+                webkit-playsinline
+                x5-playsinline
+                preload="metadata"
+                poster="{{ asset('images/interior-hero-poster.webp') }}"
+            >
+                @if(!empty($interior_hero_video_url))
+                    <source src="{{ $interior_hero_video_url }}" type="video/mp4">
+                @endif
+                <source src="{{ asset('videos/interior-luxury-living.mp4') }}" type="video/mp4">
+                <source src="/videos/interior-luxury-living.mp4" type="video/mp4">
+                <source src="{{ url('videos/interior-luxury-living.mp4') }}" type="video/mp4">
+            </video>
+            {{-- High-resolution architectural living room fallback poster --}}
+            <picture id="intHeroPosterPic">
+                <source srcset="{{ asset('images/interior-hero-poster.webp') }}" type="image/webp">
+                <img
+                    id="intHeroPoster"
+                    class="int-hero-poster"
+                    src="{{ asset('images/interior-hero-poster.jpg') }}"
+                    alt="Maha Luxury Interior Living Space"
+                    width="1920" height="1080"
+                    loading="eager"
+                    decoding="async"
+                    fetchpriority="high"
+                    onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';"
+                    style="display:none;width:100%;height:100%;object-fit:cover;"
+                >
+            </picture>
+        </div>
 
-    <!-- Cinematic dark gradient overlay -->
-    <div class="int-hero-overlay"></div>
-    <!-- Soft vignette into section below -->
-    <div class="int-hero-bottom-fade"></div>
+        <!-- Initial Pure-Video View: Floating Scroll Cue Pill -->
+        <div class="int-hero-scroll-cue" id="intHeroScrollCue" role="button" tabindex="0" aria-label="Scroll to discover Maha Interiors">
+            <div class="int-hero-cue-pill">
+                <span class="int-hero-cue-dot"></span>
+                <span class="int-hero-cue-text">SCROLL TO EXPLORE</span>
+                <i class="fas fa-arrow-down int-hero-cue-arrow"></i>
+            </div>
+        </div>
 
-    <!-- Content -->
-    <div class="int-hero-content-outer">
+        <!-- Content (Smoothly revealed when user scrolls) -->
+        <div class="int-hero-content-outer" id="intHeroContent">
         <div class="lux-reveal">
             <!-- Golden Running Marquee Bar (Exact construction hero style & content) -->
             <div class="pill-badge hero-marquee-badge">
@@ -2151,9 +2379,9 @@ body.interior-body .int-yt-dot.active {
                 We don’t just design spaces.
             </h1>
 
-            <!-- Gold Serif Emphasis Line -->
+            <!-- Hero Subtitle Line with Radiant Gold Highlighted Words -->
             <p class="int-hero-emphasis">
-                We understand you, design for you, and transform your space.
+                We <span class="hero-gold-keyword">understand you</span>, <span class="hero-gold-keyword">design for you</span>, and <span class="hero-gold-keyword">transform your space</span>.
             </p>
 
             <!-- Primary CTAs -->
@@ -2185,13 +2413,7 @@ body.interior-body .int-yt-dot.active {
             </div>
         </div>
     </div>
-
-    <!-- Scroll cue -->
-    <div class="int-hero-scroll-cue" aria-hidden="true">
-        <span>Scroll</span>
-        <i class="fas fa-chevron-down"></i>
     </div>
-
 </section>
 
 
@@ -2267,8 +2489,10 @@ body.interior-body .int-yt-dot.active {
                              alt="{{ $project->name }} - Photo {{ $imgIdx + 1 }}" 
                              class="int-card-slide-img {{ $imgIdx === 0 ? 'active' : '' }}" 
                              data-slide-index="{{ $imgIdx }}"
+                             width="380" height="260"
+                             decoding="async"
                              loading="lazy"
-                             onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80'">
+                             onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';this.classList.add('is-fallback-img');">
                         @endforeach
                     </div>
                     
@@ -2408,6 +2632,9 @@ body.interior-body .int-yt-dot.active {
             <div class="int-pullquote-author">
                 <img src="{{ $testimonials[0]->image_url ?: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80' }}"
                      alt="{{ $testimonials[0]->client_name }}"
+                     width="54" height="54"
+                     decoding="async"
+                     onerror="this.onerror=null;this.src='{{ asset('images/placeholder-avatar.svg') }}';"
                      class="int-pullquote-author-img">
                 <div>
                     <div class="int-author-name">{{ $testimonials[0]->client_name }}</div>
@@ -2427,6 +2654,9 @@ body.interior-body .int-yt-dot.active {
                     <!-- Background Photo -->
                     <img src="{{ $t->image_url ?: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80' }}"
                          alt="{{ $t->client_name }}"
+                         width="280" height="420"
+                         decoding="async"
+                         onerror="this.onerror=null;this.src='{{ asset('images/placeholder-avatar.svg') }}';this.classList.add('is-fallback-img');"
                          class="int-video-card-bg"
                          loading="lazy">
                     <div class="int-video-card-shade"></div>
@@ -2506,9 +2736,15 @@ body.interior-body .int-yt-dot.active {
             <!-- Left: Engineer Portrait & 60-Sec Intro Video Trigger -->
             <div class="int-eng-portrait-card lux-reveal">
                 <div class="int-eng-video-thumb" onclick="window.playVideoModal('{{ $intro_video_url }}', 'Er. Maha Rajan - 60-Second Video Introduction')">
-                    <img src="{{ asset('maha-rajan.png') }}"
-                         alt="Er. Maha Rajan"
-                         onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80'">
+                    <picture>
+                        <source srcset="{{ asset('maha-rajan.webp') }}" type="image/webp">
+                        <img src="{{ asset('maha-rajan.png') }}"
+                             alt="Er. Maha Rajan"
+                             width="320" height="240"
+                             loading="lazy"
+                             decoding="async"
+                             onerror="this.onerror=null;this.src='{{ asset('images/placeholder-avatar.svg') }}';">
+                    </picture>
                     <div class="int-eng-gradient"></div>
                     <span class="int-eng-play-badge"><i class="fas fa-play" style="font-size:0.55rem;margin-right:4px;"></i> 60-Sec Intro</span>
                     <div class="int-eng-play-btn">
@@ -2530,7 +2766,7 @@ body.interior-body .int-yt-dot.active {
                     <span style="color:var(--int-gold);">EXECUTED WITH CARE.</span>
                 </h2>
                 <div style="font-size:0.85rem;color:#16A34A;font-weight:800;letter-spacing:0.08em;margin-bottom:18px;">
-                    Er. Maha Rajan (B.E. MBA) • GOVERNMENT REGISTERED ENGINEER • 12+ YEARS STRUCTURAL EXCELLENCE
+                    Er. Maha Rajan (B.E. MBA) • GOVERNMENT REGISTERED ENGINEER • 12+ YEARS OF EXPERIENCE IN THIS FIELD.
                 </div>
 
                 <p style="font-size:0.95rem;color:#4B5563;line-height:1.75;margin-bottom:26px;">
@@ -2834,7 +3070,7 @@ body.interior-body .int-yt-dot.active {
                         <div class="int-yt-card">
                             <!-- Thumbnail Frame with Overlay -->
                             <div class="int-yt-thumb-box" onclick="window.playVideoModal('{{ $v['videoUrl'] }}', '{{ addslashes($v['title']) }}')">
-                                <img src="{{ $v['thumbnail'] }}" alt="{{ $v['title'] }}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/{{ $v['youtubeId'] }}/hqdefault.jpg'">
+                                <img src="{{ $v['thumbnail'] }}" alt="{{ $v['title'] }}" width="360" height="202" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/{{ $v['youtubeId'] }}/hqdefault.jpg';">
                                 
                                 <div class="int-yt-duration-badge">
                                     <i class="fas fa-play" style="font-size:0.55rem;margin-right:4px;color:var(--int-gold);"></i>{{ $v['duration'] ?? 'Masterclass' }}
@@ -3143,7 +3379,7 @@ body.interior-body .int-yt-dot.active {
 
         <!-- Main Photo Wrap -->
         <div class="int-lightbox-img-wrap">
-            <img id="intGalleryMainImg" src="" alt="Project Photo" class="int-lightbox-main-img">
+            <img id="intGalleryMainImg" src="" alt="Project Photo" class="int-lightbox-main-img" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';">
         </div>
 
         <!-- Next Arrow -->
@@ -3296,7 +3532,7 @@ body.interior-body .int-yt-dot.active {
                 <div class="int-lightbox-thumb ${i === currentGalleryPhotoIdx ? 'active' : ''}" 
                      onclick="window.setInteriorGallerySlide(${i})"
                      title="Photo ${i + 1}">
-                    <img src="${src}" alt="Thumb ${i + 1}" onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=300&q=80'">
+                    <img src="${src}" alt="Thumb ${i + 1}" width="80" height="54" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';">
                     <span class="int-lightbox-thumb-num">${i + 1}</span>
                 </div>
             `).join('');
@@ -3932,7 +4168,8 @@ body.interior-body .int-yt-dot.active {
                     Object.assign(data, window.MahaAnalytics.getAttribution());
                 }
 
-                fetch('/api/leads/interior/enquiry', {
+                const netFetch = window.mahaFetch || fetch;
+                netFetch('/api/leads/interior/enquiry', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -3940,7 +4177,7 @@ body.interior-body .int-yt-dot.active {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
                     },
                     body: JSON.stringify(data)
-                })
+                }, 9000, 2)
                 .then(res => res.json())
                 .then(res => {
                     if (interiorSubmitBtn) {
@@ -3962,8 +4199,19 @@ body.interior-body .int-yt-dot.active {
                         interiorSubmitBtn.disabled = false;
                         interiorSubmitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> SUBMIT INTERIOR CONSULTATION REQUEST';
                     }
-                    alert('Thank you! Your interior consultation request has been logged.');
-                    interiorForm.reset();
+                    const fallbackPhone = window.companyWhatsappRaw || '919443156689';
+                    const msg = encodeURIComponent(`Hello Er. Maha Rajan, I would like to request an interior consultation.\nName: ${data.name || ''}\nPhone: ${data.phone || ''}\nScope: ${data.scope || ''}\nCity: ${data.city || ''}`);
+                    const fallbackCard = document.createElement('div');
+                    fallbackCard.className = 'net-fallback-card';
+                    fallbackCard.innerHTML = `
+                        <div style="font-size:0.85rem;color:#FFD700;font-weight:700;margin-bottom:6px;"><i class="fas fa-wifi" style="margin-right:6px;"></i> Connection Interrupted</div>
+                        <div style="font-size:0.8rem;color:#ccc;margin-bottom:10px;">Network timed out. Tap to send your interior consultation request directly via WhatsApp:</div>
+                        <a href="https://wa.me/${fallbackPhone}?text=${msg}" target="_blank" class="btn-whatsapp-outline" style="display:inline-flex;padding:8px 14px;font-size:0.78rem;">
+                            <i class="fab fa-whatsapp" style="margin-right:6px;"></i> Send via WhatsApp
+                        </a>
+                    `;
+                    interiorForm.prepend(fallbackCard);
+                    setTimeout(() => fallbackCard.remove(), 8000);
                 });
             });
         }
@@ -4035,10 +4283,47 @@ body.interior-body .int-yt-dot.active {
                 });
             }
 
-            // ── Ultra-Robust Interior Hero Video Playback Controller ──
+            // ── Seamless First-Play Hero Video & Continuous Loop Controller ──
             const v = document.getElementById('intHeroBgVideo');
             const p = document.getElementById('intHeroPoster');
+            const heroSection = document.getElementById('interior-intro');
+            const heroContent = document.getElementById('intHeroContent');
+            const heroCue = document.getElementById('intHeroScrollCue');
+            const isSlowNet = window.isSlowNetwork || (navigator.connection && (navigator.connection.saveData || navigator.connection.effectiveType === 'slow-2g' || navigator.connection.effectiveType === '2g'));
+
+            let hasRevealed = false;
+
+            // Smoothly reveal hero content ONCE and keep visible at all times
+            const revealHeroContentOnce = () => {
+                if (hasRevealed) return;
+                hasRevealed = true;
+
+                if (heroContent) {
+                    heroContent.classList.add('is-revealed');
+                }
+                if (heroCue) {
+                    heroCue.classList.add('is-hidden');
+                }
+
+                // Enable continuous seamless looping for all subsequent cycles
+                if (v) {
+                    v.loop = true;
+                    if (v.paused) {
+                        v.play().catch(() => {});
+                    }
+                }
+            };
+
             if (v) {
+                // If on slow connection or data saver, don't auto-download the heavy video; show poster
+                if (isSlowNet) {
+                    v.preload = 'none';
+                    if (p) p.style.display = 'block';
+                    setTimeout(revealHeroContentOnce, 1200);
+                } else {
+                    v.preload = 'metadata';
+                }
+
                 // Ensure strict mute and autoplay attributes
                 v.muted = true;
                 v.defaultMuted = true;
@@ -4085,11 +4370,34 @@ body.interior-body .int-yt-dot.active {
                 };
 
                 v.addEventListener('playing', onVideoPlaying);
+
+                // 1) Video plays fully first: when it completes its first run, reveal content once and loop continuously
+                v.addEventListener('ended', () => {
+                    revealHeroContentOnce();
+                    v.loop = true;
+                    v.play().catch(() => {});
+                }, { once: true });
+
+                // 2) Monitor timeupdate: detect reaching near the end of video duration or spontaneous loop
+                let prevTime = 0;
                 v.addEventListener('timeupdate', () => {
                     if (v.currentTime > 0.1 && !isPlaying) {
                         onVideoPlaying();
                     }
+                    if (!hasRevealed) {
+                        if (v.duration && v.duration > 0 && v.currentTime >= (v.duration - 0.35)) {
+                            revealHeroContentOnce();
+                        } else if (v.currentTime < prevTime && prevTime > 1.2) {
+                            revealHeroContentOnce();
+                        }
+                        prevTime = v.currentTime;
+                    }
                 });
+
+                // Fail-safe safety timer: if video finishes or after max 8.5s, reveal smoothly once
+                setTimeout(() => {
+                    revealHeroContentOnce();
+                }, 8500);
 
                 // Attempt playback immediately and on metadata lifecycle
                 tryPlay();
@@ -4114,6 +4422,7 @@ body.interior-body .int-yt-dot.active {
                         if (failedSources >= sources.length) {
                             console.warn("All video sources failed to load. Falling back to architectural poster.");
                             if (p) p.style.display = 'block';
+                            revealHeroContentOnce();
                         }
                     });
                 });
@@ -4121,34 +4430,56 @@ body.interior-body .int-yt-dot.active {
                 v.addEventListener('error', function(e) {
                     console.warn("Video error event triggered", e);
                     if (p) p.style.display = 'block';
+                    revealHeroContentOnce();
+                });
+            } else {
+                revealHeroContentOnce();
+            }
+
+            // User interaction: If user scrolls or taps before video finishes, reveal immediately
+            const onInitialUserScroll = () => {
+                const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+                if (scrollY > 25) {
+                    revealHeroContentOnce();
+                }
+            };
+            window.addEventListener('scroll', onInitialUserScroll, { passive: true });
+
+            // Scroll Cue Pill: If clicked or tapped, reveal content once and scroll smoothly
+            if (heroCue) {
+                const handleCueClick = (e) => {
+                    e.preventDefault();
+                    revealHeroContentOnce();
+                    const projectsSec = document.getElementById('interior-projects');
+                    if (projectsSec) {
+                        projectsSec.scrollIntoView({ behavior: 'smooth' });
+                    }
+                };
+                heroCue.addEventListener('click', handleCueClick);
+                heroCue.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        handleCueClick(e);
+                    }
                 });
             }
 
-            // ── Livarta Interiors Video Background & Hero Content Scroll Parallax ──
-            const heroBgVideo = document.getElementById('intHeroBgVideo');
-            const heroOuter = document.querySelector('.int-hero-content-outer');
-            const heroSection = document.getElementById('interior-intro');
-
-            if (heroSection && (heroBgVideo || heroOuter)) {
-                let ticking = false;
-                window.addEventListener('scroll', () => {
-                    if (!ticking) {
-                        window.requestAnimationFrame(() => {
-                            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-                            const heroH = heroSection.offsetHeight || 800;
-                            if (scrollY <= heroH + 100) {
-                                const progress = Math.min(1, Math.max(0, scrollY / heroH));
-                                // Video remains stationary in the background with zero gap
-                                if (heroOuter && window.innerWidth > 768) {
-                                    heroOuter.style.transform = `translate3d(0, ${(scrollY * 0.16).toFixed(1)}px, 0)`;
-                                    heroOuter.style.opacity = Math.max(0.12, 1 - (progress * 1.25)).toFixed(3);
-                                }
-                            }
-                            ticking = false;
-                        });
-                        ticking = true;
+            // ── Dynamic Navbar Transition: Hero Mode vs Scrolled to Other Areas ──
+            const interiorNav = document.getElementById('navbar');
+            if (interiorNav && heroSection) {
+                const updateNavState = () => {
+                    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+                    const heroHeight = heroSection.offsetHeight || 700;
+                    // Transition to other area color when scrolling past hero section
+                    const switchPoint = Math.max(80, heroHeight - 80);
+                    if (scrollY > switchPoint) {
+                        interiorNav.classList.add('is-scrolled');
+                    } else {
+                        interiorNav.classList.remove('is-scrolled');
                     }
-                }, { passive: true });
+                };
+                window.addEventListener('scroll', updateNavState, { passive: true });
+                window.addEventListener('resize', updateNavState, { passive: true });
+                updateNavState();
             }
         })();
     });

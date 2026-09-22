@@ -33,7 +33,12 @@
             <div class="project-card fade-in" data-category="{{ $project->category }}" style="transition-delay:{{ $i*0.08 }}s">
                 <div class="project-img" @if($project->video_url) onclick="window.playVideoModal('{{ $project->video_url }}', '{{ addslashes($project->name) }}')" style="cursor:pointer;" @endif>
                     @if($project->image_urls && count($project->image_urls) > 0)
-                    <img src="{{ $project->image_urls[0] }}" alt="{{ $project->name }}" loading="lazy">
+                    <img src="{{ $project->image_urls[0] }}" 
+                         alt="{{ $project->name }}" 
+                         width="400" height="250"
+                         decoding="async"
+                         loading="lazy"
+                         onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';this.classList.add('is-fallback-img');">
                     @else
                     <div style="height:100%;background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--text-muted);">No Image</div>
                     @endif

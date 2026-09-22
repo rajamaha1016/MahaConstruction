@@ -38,7 +38,12 @@
             @foreach($testimonials as $i => $t)
                 @if($t->video_url)
                 <div class="story-card" data-video-url="{{ $t->video_url }}" onclick="window.playVideoModal('{{ $t->video_url }}', '{{ addslashes($t->client_name) }}')" style="cursor:pointer;">
-                    <img src="{{ $t->image_url ?? 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80' }}" alt="{{ $t->client_name }}">
+                    <img src="{{ $t->image_url ?? 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80' }}" 
+                         alt="{{ $t->client_name }}"
+                         width="280" height="420"
+                         decoding="async"
+                         loading="lazy"
+                         onerror="this.onerror=null;this.src='{{ asset('images/placeholder-avatar.svg') }}';this.classList.add('is-fallback-img');">
                     <div class="story-card-shade"></div>
                     <span class="story-card-tag">STORY {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
                     <div class="story-card-play"><i class="fas fa-play" style="margin-left:2px;"></i></div>
@@ -59,7 +64,7 @@
                     <div class="quote-project"><i class="fas fa-building" style="margin-right:4px;color:var(--gold);"></i> {{ $t->project_name }}</div>
                     @endif
                     <div class="quote-author">
-                        @if($t->image_url)<img src="{{ $t->image_url }}" alt="{{ $t->client_name }}" class="quote-avatar" loading="lazy">@endif
+                        @if($t->image_url)<img src="{{ $t->image_url }}" alt="{{ $t->client_name }}" class="quote-avatar" width="48" height="48" decoding="async" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('images/placeholder-avatar.svg') }}';">@endif
                         <div>
                             <div class="quote-name">{{ $t->client_name }}</div>
                             <div class="quote-role">{{ $t->client_role }}</div>

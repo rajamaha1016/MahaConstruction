@@ -76,7 +76,18 @@
 
                     <div class="hero-image-col">
                         <div style="text-align:center;position:relative;">
-                            <img src="{{ asset('maha-rajan.png') }}" alt="Er. Maha Rajan" class="engineer-hero-float" style="width:100%;max-width:420px;height:auto;object-fit:contain;object-position:top center;display:block;margin:0 auto;position:relative;z-index:1;">
+                            <picture>
+                                <source srcset="{{ asset('maha-rajan.webp') }}" type="image/webp">
+                                <img src="{{ asset('maha-rajan.png') }}"
+                                     alt="Er. Maha Rajan"
+                                     width="420" height="540"
+                                     fetchpriority="high"
+                                     loading="eager"
+                                     decoding="async"
+                                     onerror="this.onerror=null;this.src='{{ asset('images/placeholder-avatar.svg') }}';"
+                                     class="engineer-hero-float"
+                                     style="width:100%;max-width:420px;height:auto;aspect-ratio:420/540;object-fit:contain;object-position:top center;display:block;margin:0 auto;position:relative;z-index:1;">
+                            </picture>
 
                             <!-- Engineer Name Card (Overlapping bottom of image with 0 gap) -->
                             <div class="engineer-namecard-glow" style="margin-top:-65px;position:relative;z-index:5;max-width:380px;margin-left:auto;margin-right:auto;padding:15px 18px 14px;background:linear-gradient(135deg,rgba(11,19,43,0.96),rgba(5,11,20,0.98));backdrop-filter:blur(10px);border:1.5px solid rgba(212,175,55,0.6);border-radius:18px;box-shadow:0 0 35px rgba(212,175,55,0.25),0 12px 35px rgba(0,0,0,0.7);overflow:hidden;">
@@ -174,6 +185,9 @@
                     <div style="position:relative;height:230px;overflow:hidden;background:#050B14;">
                         <img src="{{ ($project->image_urls && count($project->image_urls)>0) ? $project->image_urls[0] : 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80' }}"
                              alt="{{ $project->name }}"
+                             width="340" height="230"
+                             decoding="async"
+                             onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';this.classList.add('is-fallback-img');"
                              style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;"
                              loading="lazy">
 
@@ -294,6 +308,9 @@
                     <!-- Photo Background -->
                     <img src="{{ $t->image_url ?? 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80' }}"
                          alt="{{ $t->client_name }}"
+                         width="240" height="400"
+                         decoding="async"
+                         onerror="this.onerror=null;this.src='{{ asset('images/placeholder-avatar.svg') }}';this.classList.add('is-fallback-img');"
                          style="width:100%;height:100%;object-fit:cover;display:block;"
                          loading="lazy">
 
@@ -559,10 +576,16 @@
                          style="width: 100%; max-width: 300px; aspect-ratio: 4/3; position: relative; border-radius: 18px; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.4); background: #050B14; box-shadow: 0 10px 25px rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s ease;">
 
                         <!-- Thumbnail Image -->
-                        <img src="{{ asset('maha-rajan.png') }}"
-                             style="width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.4s ease; display: block;"
-                             alt="Er. Maha Rajan"
-                             onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80'">
+                        <picture>
+                            <source srcset="{{ asset('maha-rajan.webp') }}" type="image/webp">
+                            <img src="{{ asset('maha-rajan.png') }}"
+                                 width="300" height="225"
+                                 loading="lazy"
+                                 decoding="async"
+                                 style="width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.4s ease; display: block;"
+                                 alt="Er. Maha Rajan"
+                                 onerror="this.onerror=null;this.src='{{ asset('images/placeholder-avatar.svg') }}';">
+                        </picture>
 
                         <!-- Dark Vignette Overlay -->
                         <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,11,20,0.15) 0%, rgba(5,11,20,0.05) 40%, rgba(5,11,20,0.88) 100%);"></div>
@@ -1166,7 +1189,7 @@
                 <a href="{{ $p->website_url ?? '#' }}" target="_blank" class="partner-card" title="{{ $p->name }}">
                     @if(!empty($p->logo_url))
                     <div class="partner-logo-frame">
-                        <img src="{{ asset($p->logo_url) }}" alt="{{ $p->name }}" class="partner-logo-img" onerror="this.style.display='none'">
+                        <img src="{{ asset($p->logo_url) }}" alt="{{ $p->name }}" width="120" height="48" loading="lazy" decoding="async" class="partner-logo-img" onerror="this.style.display='none'">
                     </div>
                     @else
                     <div class="partner-badge-circle" style="background:{{ \App\Support\BrandColor::for($p->name) }};">{{ \App\Support\BrandColor::initials($p->name) }}</div>
@@ -1191,7 +1214,7 @@
                 <a href="{{ $p->website_url ?? '#' }}" target="_blank" class="partner-card" title="{{ $p->name }}">
                     @if(!empty($p->logo_url))
                     <div class="partner-logo-frame">
-                        <img src="{{ asset($p->logo_url) }}" alt="{{ $p->name }}" class="partner-logo-img" onerror="this.style.display='none'">
+                        <img src="{{ asset($p->logo_url) }}" alt="{{ $p->name }}" width="120" height="48" loading="lazy" decoding="async" class="partner-logo-img" onerror="this.style.display='none'">
                     </div>
                     @else
                     <div class="partner-badge-circle" style="background:{{ \App\Support\BrandColor::for($p->name) }};">{{ \App\Support\BrandColor::initials($p->name) }}</div>
@@ -1264,7 +1287,10 @@
     <div class="container">
         <div class="guidebook-card-box">
             <div style="display:flex;justify-content:center;align-items:center;">
-                <img src="/images/guidebook-cover.jpg" alt="நம் கனவு இல்லம் - வீடு நமது அடையாளம் | Home Builder Guide Book" class="guidebook-img" style="border-radius:14px;box-shadow:0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(212,175,55,0.25);border:2px solid rgba(212,175,55,0.4);max-width:280px;width:100%;transition:transform 0.3s ease;">
+                <picture>
+                    <source srcset="{{ asset('images/guidebook-cover.webp') }}" type="image/webp">
+                    <img src="/images/guidebook-cover.jpg" alt="நம் கனவு இல்லம் - வீடு நமது அடையாளம் | Home Builder Guide Book" class="guidebook-img" width="280" height="395" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';" style="border-radius:14px;box-shadow:0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(212,175,55,0.25);border:2px solid rgba(212,175,55,0.4);max-width:280px;width:100%;height:auto;aspect-ratio:280/395;transition:transform 0.3s ease;">
+                </picture>
             </div>
             <div>
                 <span class="sec-tag">THE HOME BUILDER'S GUIDE</span>
@@ -1323,7 +1349,10 @@
 
                 <!-- Avatar with real Instagram Story Ring -->
                 <div class="social-avatar-ring" style="width:78px;height:78px;border-radius:50%;margin:0 auto 14px;position:relative;background:linear-gradient(45deg, #FFDC80 0%, #FCAF45 15%, #F77737 30%, #FD1D1D 50%, #E1306C 70%, #C13584 85%, #833AB4 100%);padding:3px;box-shadow:0 0 20px rgba(225,48,108,0.45);border:none;">
-                    <img src="{{ asset('logo.png') }}" alt="Maha Constructions on Instagram" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;border:2.5px solid var(--dark-card);">
+                    <picture>
+                        <source srcset="{{ asset('logo.webp') }}" type="image/webp">
+                        <img src="{{ asset('logo.png') }}" alt="Maha Constructions on Instagram" width="72" height="72" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;border:2.5px solid var(--dark-card);">
+                    </picture>
                     <div class="social-avatar-badge" style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;border-radius:50%;background:linear-gradient(45deg, #FCAF45 0%, #FD1D1D 50%, #833AB4 100%);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.85rem;border:2px solid var(--dark-card);box-shadow:0 2px 8px rgba(0,0,0,0.5);"><i class="fab fa-instagram"></i></div>
                 </div>
 
@@ -1348,7 +1377,10 @@
 
             <div class="social-card-v2" style="--social-color:#1877F2;">
                 <div class="social-avatar-ring">
-                    <img src="{{ asset('logo.png') }}" alt="Maha Constructions on Facebook">
+                    <picture>
+                        <source srcset="{{ asset('logo.webp') }}" type="image/webp">
+                        <img src="{{ asset('logo.png') }}" alt="Maha Constructions on Facebook" width="72" height="72" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';">
+                    </picture>
                     <div class="social-avatar-badge"><i class="fab fa-facebook-f"></i></div>
                 </div>
                 <span class="social-platform-label">Facebook</span>
@@ -1361,7 +1393,10 @@
 
             <div class="social-card-v2" style="--social-color:#FF0000;">
                 <div class="social-avatar-ring">
-                    <img src="{{ asset('logo.png') }}" alt="Maha Constructions on YouTube">
+                    <picture>
+                        <source srcset="{{ asset('logo.webp') }}" type="image/webp">
+                        <img src="{{ asset('logo.png') }}" alt="Maha Constructions on YouTube" width="72" height="72" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder-project.svg') }}';">
+                    </picture>
                     <div class="social-avatar-badge"><i class="fab fa-youtube"></i></div>
                 </div>
                 <span class="social-platform-label">YouTube</span>
@@ -1422,6 +1457,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const primaryFolder = isMobile ? '{{ asset("images/scroll-construction/mobile") }}' : '{{ asset("images/scroll-construction") }}';
         const fallbackFolder = isMobile ? '{{ asset("frames-mobile") }}' : '{{ asset("frames") }}';
 
+        const supportsWebp = (function() {
+            try {
+                const elem = document.createElement('canvas');
+                return !!(elem.getContext && elem.getContext('2d') && elem.toDataURL('image/webp').indexOf('data:image/webp') === 0);
+            } catch (e) {
+                return false;
+            }
+        })();
+
+        const isSlowNet = window.isSlowNetwork || (navigator.connection && (navigator.connection.saveData || navigator.connection.effectiveType === 'slow-2g' || navigator.connection.effectiveType === '2g'));
+
         const images = new Array(totalFrames);
         let loadedFrames = 0;
         let lastRenderedImg = null;
@@ -1429,12 +1475,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function getPrimarySrc(index) {
             const num = String(index + 1).padStart(3, '0');
-            return primaryFolder + '/' + num + '.jpg';
+            const ext = supportsWebp ? '.webp' : '.jpg';
+            return primaryFolder + '/' + num + ext;
         }
 
         function getFallbackSrc(index) {
-            const num = String(index + 1).padStart(4, '0');
-            return fallbackFolder + '/frame_' + num + '.jpg';
+            const num = String(index + 1).padStart(3, '0');
+            return primaryFolder + '/' + num + '.jpg';
         }
 
         function drawCover(img) {
@@ -1516,6 +1563,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function loadFrame(i) {
+            if (images[i]) return;
             const img = new Image();
             img.onload = function() {
                 images[i] = img;
@@ -1527,7 +1575,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             };
             img.onerror = function() {
-                // Secondary fallback path
+                // Secondary fallback path to jpg
                 const fallbackImg = new Image();
                 fallbackImg.onload = function() {
                     images[i] = fallbackImg;
@@ -1543,10 +1591,42 @@ document.addEventListener('DOMContentLoaded', function() {
         loadFrame(0);
         loadFrame(totalFrames - 1);
 
-        // Preload rest of the sequence
-        for (let i = 1; i < totalFrames - 1; i++) {
-            loadFrame(i);
+        // Preload rest with network awareness
+        if (isSlowNet) {
+            // Under slow or data-saver connections, only load sparse milestone frames
+            for (let i = 20; i < totalFrames - 1; i += 25) {
+                loadFrame(i);
+            }
+        } else {
+            // Load key milestones first
+            const step = isMobile ? 4 : 3;
+            for (let i = 1; i < totalFrames - 1; i += step) {
+                loadFrame(i);
+            }
+            // Preload remaining frames during idle time
+            const preloadRest = function() {
+                for (let i = 1; i < totalFrames - 1; i++) {
+                    if (!images[i]) loadFrame(i);
+                }
+            };
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(preloadRest, { timeout: 3500 });
+            } else {
+                setTimeout(preloadRest, 1200);
+            }
         }
+
+        // Fail-safe: ensure content layer is visible if slow connection or GSAP delays
+        setTimeout(function() {
+            if (contentLayer && (window.getComputedStyle(contentLayer).opacity === '0' || contentLayer.style.opacity === '0')) {
+                contentLayer.style.transition = 'opacity 0.6s ease';
+                contentLayer.style.visibility = 'visible';
+                contentLayer.style.opacity = '1';
+                contentLayer.style.pointerEvents = 'auto';
+                contentLayer.style.transform = 'none';
+                if (scrollPrompt) scrollPrompt.style.display = 'none';
+            }
+        }, 2500);
 
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas, { passive: true });

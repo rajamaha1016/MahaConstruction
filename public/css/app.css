@@ -3952,7 +3952,7 @@ table {
     width: auto !important;
   }
 
-  .nav-logo span:first-child {
+  .nav-logo:not(.interior-nav-logo) span:first-child {
     font-size: clamp(0.95rem, 4vw, 1.2rem) !important;
     font-weight: 900 !important;
     letter-spacing: 0.04em !important;
@@ -3962,7 +3962,7 @@ table {
     text-overflow: ellipsis !important;
   }
 
-  .nav-logo span:last-child {
+  .nav-logo:not(.interior-nav-logo) span:last-child {
     font-size: clamp(0.5rem, 2.2vw, 0.62rem) !important;
     font-weight: 800 !important;
     letter-spacing: 0.16em !important;
@@ -3970,6 +3970,22 @@ table {
     display: block !important;
     margin-top: 2px !important;
     white-space: nowrap !important;
+  }
+
+  .interior-brand-title {
+    gap: 6px !important;
+  }
+  .interior-brand-title .brand-maha,
+  .interior-brand-title .brand-interiors {
+    font-size: clamp(1.05rem, 4.2vw, 1.25rem) !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em !important;
+    line-height: 1.15 !important;
+    display: inline-block !important;
+  }
+  .interior-brand-tagline {
+    font-size: clamp(0.52rem, 2.2vw, 0.62rem) !important;
+    letter-spacing: 0.18em !important;
   }
 
   .btn-gold-pill {
@@ -4560,14 +4576,30 @@ table {
     height: 36px !important;
   }
 
-  .nav-logo span:first-child {
+  .nav-logo:not(.interior-nav-logo) span:first-child {
     font-size: 0.95rem !important;
     letter-spacing: 0.03em !important;
   }
 
-  .nav-logo span:last-child {
+  .nav-logo:not(.interior-nav-logo) span:last-child {
     font-size: 0.48rem !important;
     letter-spacing: 0.12em !important;
+  }
+
+  .interior-brand-title {
+    gap: 5px !important;
+  }
+  .interior-brand-title .brand-maha,
+  .interior-brand-title .brand-interiors {
+    font-size: 1.05rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em !important;
+    line-height: 1.15 !important;
+    display: inline-block !important;
+  }
+  .interior-brand-tagline {
+    font-size: 0.52rem !important;
+    letter-spacing: 0.16em !important;
   }
 
   .btn-gold-pill {
@@ -4856,30 +4888,39 @@ table {
 
 .interior-brand-title {
   font-family: var(--font-heading);
-  font-size: 1.35rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: #FFFFFF;
-  line-height: 1.15;
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.interior-brand-title .brand-maha,
+.interior-brand-title .brand-interiors {
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 3.8vw, 1.45rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
 }
 
 .interior-brand-title .brand-maha {
-  font-family: var(--font-heading);
-  font-weight: 900;
-  letter-spacing: 0.06em;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFFFFF 60%, #E2E8F0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.45));
 }
 
 .interior-brand-title .brand-interiors {
-  font-family: var(--font-heading);
-  font-weight: 900;
   letter-spacing: 0.08em;
-  background: linear-gradient(135deg, #B38222 0%, #D4AF37 30%, #FFD700 65%, #C8952B 100%);
+  background: linear-gradient(135deg, #FFE885 0%, #FFD700 35%, #D4AF37 70%, #B8860B 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.4));
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 16px rgba(212, 175, 55, 0.8));
 }
 
 .interior-brand-tagline {
@@ -4979,14 +5020,15 @@ table {
   object-fit: cover;
   object-position: center;
   display: block;
-  filter: brightness(0.8);
+  filter: none !important;
 }
 
 .int-hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(7, 26, 43, 0.95) 0%, rgba(7, 26, 43, 0.88) 50%, rgba(7, 26, 43, 0.68) 100%);
-  z-index: 2;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  background: transparent !important;
+  pointer-events: none !important;
 }
 
 .int-hero-bottom-fade {
@@ -7721,4 +7763,202 @@ body.interior-body .floating-actions-bar {
   .hero-section .engineer-namecard-glow {
     animation: none !important;
   }
+}
+
+/* =========================================================
+   NETWORK RESILIENCE & CLS PREVENTION (SLOW 3G / OFFLINE)
+   ========================================================= */
+
+/* Typography Stability & Font Fallback Normalization */
+body {
+  font-size-adjust: from-font;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-size-adjust: from-font;
+}
+
+/* Resilient Image Wrapper & Aspect Ratio Protections */
+.resilient-pic-wrap {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(17, 28, 56, 0.4);
+}
+
+.resilient-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease-in;
+}
+
+/* Skeleton Loading Shimmer for Images while fetching */
+.img-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, rgba(17, 28, 56, 0.6) 0%, rgba(26, 40, 75, 0.8) 50%, rgba(17, 28, 56, 0.6) 100%);
+  background-size: 200% 100%;
+  animation: mahaSkeletonShimmer 1.8s infinite ease-in-out;
+}
+
+@keyframes mahaSkeletonShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Fallback Image State */
+.is-fallback-img,
+.img-load-fallback {
+  object-fit: contain !important;
+  background: rgba(10, 15, 29, 0.95) !important;
+  border: 1px solid rgba(212, 175, 55, 0.3) !important;
+  padding: 12px;
+}
+
+/* Explicit aspect ratios for common card media */
+.project-img,
+.projects-carousel-card .project-thumb,
+.int-video-card-thumb-wrap {
+  aspect-ratio: 16 / 10;
+  position: relative;
+  overflow: hidden;
+  background-color: #0A0F1D;
+}
+
+.story-card,
+.testimonial-card-media {
+  aspect-ratio: 4 / 3;
+  position: relative;
+  overflow: hidden;
+  background-color: #0A0F1D;
+}
+
+.maha-bridge-media-col {
+  aspect-ratio: 16 / 10;
+}
+
+/* Offline Status Notification Banner */
+.maha-offline-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  z-index: 99999;
+  background: rgba(11, 19, 43, 0.96);
+  border: 1.5px solid #F59E0B;
+  color: #FDE68A;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(245, 158, 11, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.maha-offline-toast.is-visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.maha-offline-toast.is-warning {
+  border-color: #F59E0B;
+  color: #FEF3C7;
+}
+
+.maha-offline-toast.is-online {
+  border-color: #10B981;
+  color: #D1FAE5;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.maha-offline-toast .offline-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F59E0B;
+  display: inline-block;
+  animation: luxDotPulse 1.5s infinite ease-in-out;
+}
+
+.maha-offline-toast.is-online .offline-dot {
+  background: #10B981;
+}
+
+/* Slow Connection Adaptations */
+html.is-slow-connection * {
+  /* Throttle non-critical heavy animations */
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+html.is-slow-connection .hero-marquee-track {
+  animation: heroMarqueeScroll 35s linear infinite !important;
+}
+
+html.is-slow-connection .int-hero-bg-video {
+  display: none !important;
+}
+
+html.is-slow-connection .int-hero-poster {
+  display: block !important;
+  opacity: 1 !important;
+}
+
+/* Offline Lead Fallback Card */
+.net-fallback-card {
+  background: rgba(212, 175, 55, 0.12);
+  border: 1.5px solid #D4AF37;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.net-fallback-card p {
+  color: #F0EBE0;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.net-fallback-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #25D366;
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 0.84rem;
+  padding: 10px 20px;
+  border-radius: 24px;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.net-fallback-btn:hover {
+  transform: scale(1.03);
+}
+
+/* FontAwesome icon emergency fallback: prevent collapsing if CDN fails */
+i[class*="fa-"] {
+  display: inline-block;
+  min-width: 14px;
+  min-height: 14px;
+  text-align: center;
 }
