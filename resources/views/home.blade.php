@@ -13,7 +13,7 @@
         <!-- Full Interactive Content Layer (Revealed smoothly after timelapse animation completes) -->
         <div class="construction-hero-content-layer" id="constructionHeroContent">
             <div class="container" style="width:100%;">
-                <div class="hero-grid">
+                <div class="hero-grid hero-grid-single">
                     <div class="hero-text-col">
                         <div class="pill-badge hero-marquee-badge">
                             <span class="pulse-dot" style="flex-shrink:0;"></span>
@@ -73,48 +73,6 @@
                             </a>
                         </div>
                     </div>
-
-                    <div class="hero-image-col">
-                        <div style="text-align:center;position:relative;">
-                            <picture>
-                                <source srcset="{{ asset('maha-rajan.webp') }}" type="image/webp">
-                                <img src="{{ asset('maha-rajan.png') }}"
-                                     alt="Er. Maha Rajan"
-                                     width="420" height="540"
-                                     fetchpriority="high"
-                                     loading="eager"
-                                     decoding="async"
-                                     onerror="this.onerror=null;this.src='{{ asset('images/placeholder-avatar.svg') }}';"
-                                     class="engineer-hero-float"
-                                     style="width:100%;max-width:420px;height:auto;aspect-ratio:420/540;object-fit:contain;object-position:top center;display:block;margin:0 auto;position:relative;z-index:1;">
-                            </picture>
-
-                            <!-- Engineer Name Card (Overlapping bottom of image with 0 gap) -->
-                            <div class="engineer-namecard-glow" style="margin-top:-65px;position:relative;z-index:5;max-width:380px;margin-left:auto;margin-right:auto;padding:15px 18px 14px;background:linear-gradient(135deg,rgba(11,19,43,0.96),rgba(5,11,20,0.98));backdrop-filter:blur(10px);border:1.5px solid rgba(212,175,55,0.6);border-radius:18px;box-shadow:0 0 35px rgba(212,175,55,0.25),0 12px 35px rgba(0,0,0,0.7);overflow:hidden;">
-                                <!-- Glow top line -->
-                                <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#D4AF37,#FFD700,#D4AF37,transparent);"></div>
-
-                                <!-- ER. prefix -->
-                                <div style="font-size:0.68rem;font-weight:800;letter-spacing:0.25em;color:#D4AF37;text-transform:uppercase;margin-bottom:3px;opacity:0.9;">— GOVERNMENT REGISTERED ENGINEER —</div>
-
-                                <!-- Name with gradient -->
-                                <div style="font-size:1.65rem;font-weight:900;letter-spacing:0.04em;line-height:1.1;background:linear-gradient(135deg,#FFD700 0%,#D4AF37 40%,#FFF8DC 60%,#D4AF37 80%,#B8960C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(212,175,55,0.4));">Er. MAHA RAJAN</div>
-
-                                <!-- Decorative divider -->
-                                <div style="display:flex;align-items:center;gap:8px;margin:8px 0 8px;">
-                                    <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(212,175,55,0.6));"></div>
-                                    <div style="width:5px;height:5px;background:#D4AF37;border-radius:50%;box-shadow:0 0 8px #D4AF37;"></div>
-                                    <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,rgba(212,175,55,0.6));"></div>
-                                </div>
-
-                                <!-- Role -->
-                                <div style="font-size:0.85rem;font-weight:700;color:#F0EBE0;letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;">CEO OF MAHA GROUPS</div>
-
-                                <!-- Glow bottom line -->
-                                <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#D4AF37,#FFD700,#D4AF37,transparent);"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -125,6 +83,88 @@
                 <div class="scroll-prompt-wheel"></div>
             </div>
             <span class="scroll-prompt-text">SCROLL TO BUILD</span>
+        </div>
+    </div>
+</section>
+
+<!-- FOUNDER & PRINCIPAL ENGINEER SHOWCASE (UNDER HERO SECTION) -->
+<section class="founder-under-hero-section" id="founderUnderHero">
+    <div class="founder-under-hero-bg-glow"></div>
+    <div class="container">
+        <div class="founder-under-hero-wrap">
+            <!-- Left: Founder Portrait with Exact Overlapping Glowing Designation Card -->
+            <div class="founder-under-hero-media">
+                <div class="founder-portrait-halo">
+                    <picture>
+                        <source srcset="{{ asset('maha-rajan.webp') }}" type="image/webp">
+                        <img src="{{ asset('maha-rajan.png') }}"
+                             alt="Er. Maha Rajan - Government Registered Engineer & CEO"
+                             width="420" height="540"
+                             loading="lazy"
+                             decoding="async"
+                             onerror="this.onerror=null;this.src='{{ asset('images/placeholder-avatar.svg') }}';"
+                             class="founder-under-hero-portrait">
+                    </picture>
+
+                    <!-- Exact Glowing Designation Card from User Specification -->
+                    <div class="engineer-namecard-glow founder-under-hero-card-badge">
+                        <div class="badge-glow-line top"></div>
+                        <div class="badge-prefix">— GOVERNMENT REGISTERED ENGINEER —</div>
+                        <div class="badge-name">Er. MAHA RAJAN</div>
+                        <div class="badge-divider">
+                            <span class="line left"></span>
+                            <span class="dot"></span>
+                            <span class="line right"></span>
+                        </div>
+                        <div class="badge-role">CEO OF MAHA GROUPS</div>
+                        <div class="badge-glow-line bottom"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Executive Leadership Message & Trust Credentials -->
+            <div class="founder-under-hero-content">
+                <div class="founder-trust-tag">
+                    <i class="fas fa-certificate"></i> PRINCIPAL LEADERSHIP & TRUST
+                </div>
+                <h2 class="founder-trust-heading">
+                    ENGINEERING YOUR HOME WITH <span class="gold-text">ABSOLUTE INTEGRITY</span>
+                </h2>
+                <p class="founder-trust-quote">
+                    "Every home we construct is personally engineered, structurally audited, and executed with unwavering dedication to perfection — from deep soil foundation to final architectural finishing."
+                </p>
+
+                <!-- 3 Pillars of Trust -->
+                <div class="founder-pillars-grid">
+                    <div class="founder-pillar-item">
+                        <div class="founder-pillar-icon"><i class="fas fa-stamp"></i></div>
+                        <div class="founder-pillar-title">Govt. Registered Engineer</div>
+                        <div class="founder-pillar-desc">Municipal & state certified structural safety compliance.</div>
+                    </div>
+                    <div class="founder-pillar-item">
+                        <div class="founder-pillar-icon"><i class="fas fa-helmet-safety"></i></div>
+                        <div class="founder-pillar-title">100% Personal Site Audits</div>
+                        <div class="founder-pillar-desc">Direct inspection of every critical beam, column & slab casting.</div>
+                    </div>
+                    <div class="founder-pillar-item">
+                        <div class="founder-pillar-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="founder-pillar-title">Direct WhatsApp Access</div>
+                        <div class="founder-pillar-desc">1-on-1 direct engineering consultation with Er. Maha Rajan.</div>
+                    </div>
+                </div>
+
+                <!-- Action CTAs -->
+                <div class="founder-actions-group">
+                    <a href="https://wa.me/{{ $raw_whatsapp }}?text=Hello%20Er.%20Maha%20Rajan%2C%20I%20would%20like%20to%20consult%20directly%20for%20my%20construction%20project." target="_blank" class="btn-gold-pill">
+                        <i class="fab fa-whatsapp" style="font-size:18px;"></i>
+                        CONSULT WITH Er. MAHA RAJAN
+                    </a>
+                    <button class="btn-whatsapp-outline" data-open-quote>
+                        <i class="fas fa-calculator"></i>
+                        GET FREE ESTIMATE & 3D PLAN
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </section>
