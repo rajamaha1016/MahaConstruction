@@ -749,13 +749,14 @@ textarea {
 .founder-under-hero-card-badge .badge-glow-line.bottom { bottom: 0; }
 
 .founder-under-hero-card-badge .badge-prefix {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 800;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.12em;
   color: #D4AF37;
   text-transform: uppercase;
   margin-bottom: 4px;
   opacity: 0.92;
+  white-space: nowrap;
 }
 
 .founder-under-hero-card-badge .badge-name {
@@ -763,6 +764,7 @@ textarea {
   font-weight: 900;
   letter-spacing: 0.04em;
   line-height: 1.1;
+  white-space: nowrap;
   background: linear-gradient(135deg, #FFD700 0%, #D4AF37 40%, #FFF8DC 60%, #D4AF37 80%, #B8960C 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -803,8 +805,9 @@ textarea {
   font-size: 0.88rem;
   font-weight: 700;
   color: #F0EBE0;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 /* ── Content Column ── */
@@ -965,18 +968,25 @@ textarea {
   }
 
   .founder-under-hero-portrait {
-    max-width: 240px;
+    max-width: 280px;
     border-radius: 20px 20px 0 0;
   }
 
   .founder-under-hero-card-badge {
-    margin-top: -48px;
+    margin-top: -52px;
+    width: 280px;
     max-width: 280px;
-    padding: 12px 14px;
+    padding: 12px 16px;
+  }
+
+  .founder-under-hero-card-badge .badge-prefix {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
   }
 
   .founder-under-hero-card-badge .badge-name {
-    font-size: 1.35rem;
+    font-size: 1.4rem;
+    white-space: nowrap;
   }
 
   .founder-under-hero-content {
@@ -1020,25 +1030,54 @@ textarea {
 
 @media (max-width: 480px) {
   .founder-under-hero-portrait {
-    max-width: 200px;
+    max-width: 250px;
   }
 
   .founder-under-hero-card-badge {
-    max-width: 240px;
+    width: 250px;
+    max-width: 250px;
+    padding: 11px 14px;
+  }
+
+  .founder-under-hero-card-badge .badge-prefix {
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .founder-under-hero-card-badge .badge-name {
+    font-size: 1.3rem;
+    white-space: nowrap;
+  }
+
+  .founder-under-hero-card-badge .badge-role {
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 360px) {
+  .founder-under-hero-portrait {
+    max-width: 220px;
+  }
+
+  .founder-under-hero-card-badge {
+    width: 220px;
+    max-width: 220px;
     padding: 10px 12px;
   }
 
   .founder-under-hero-card-badge .badge-prefix {
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
+    font-size: 0.52rem;
+    letter-spacing: 0.06em;
   }
 
   .founder-under-hero-card-badge .badge-name {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
   }
 
   .founder-under-hero-card-badge .badge-role {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
   }
 }
 
