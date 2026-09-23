@@ -668,7 +668,7 @@
                     </h2>
                     
                     <div style="font-size: 0.78rem; color: #94A3B8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; display: flex; align-items: center; gap: 6px;">
-                        <i class="fas fa-shield-halved" style="color: #D4AF37;"></i> Government Registered Engineer • CEO
+                        <i class="fas fa-shield-halved" style="color: #D4AF37;"></i> CEO OF MAHA GROUPS
                     </div>
 
                     <blockquote style="font-size: 0.88rem; color: var(--text-cream); font-style: italic; line-height: 1.6; border-left: 3px solid var(--gold); padding: 6px 0 6px 14px; margin: 0 0 18px 0; background: rgba(5,11,20,0.3); border-radius: 0 8px 8px 0;">
