@@ -294,13 +294,16 @@ document.addEventListener('DOMContentLoaded', function () {
   if (quoteModalForm) {
     quoteModalForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (quoteSubmitBtn) quoteSubmitBtn.innerText = 'SUBMITTING...';
+      const originalText = quoteSubmitBtn ? quoteSubmitBtn.innerText : 'SUBMIT PROPOSAL REQUEST';
+      if (quoteSubmitBtn) {
+        quoteSubmitBtn.disabled = true;
+        quoteSubmitBtn.innerText = 'SUBMITTING...';
+      }
       const formData = new FormData(quoteModalForm);
       const data = Object.fromEntries(formData.entries());
       if (window.MahaAnalytics) {
         Object.assign(data, window.MahaAnalytics.getAttribution());
       }
-
 
       const netFetch = window.mahaFetch || fetch;
       netFetch('/api/leads/quote', {
@@ -312,9 +315,14 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         body: JSON.stringify(data)
       }, 9000, 2)
-      .then(res => res.json())
+      .then(async res => {
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(json.message || 'Validation error. Please verify your details.');
+        }
+        return json;
+      })
       .then(res => {
-        if (quoteSubmitBtn) quoteSubmitBtn.innerText = 'SUBMIT PROPOSAL REQUEST';
         if (quoteSuccessMessage) quoteSuccessMessage.style.display = 'block';
         quoteModalForm.reset();
         setTimeout(() => {
@@ -323,21 +331,26 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3000);
       })
       .catch(err => {
-        if (quoteSubmitBtn) quoteSubmitBtn.innerText = 'SUBMIT PROPOSAL REQUEST';
         // Provide resilient WhatsApp fallback if network connection failed
-        const fallbackPhone = window.companyWhatsappRaw || '919443156689';
+        const fallbackPhone = window.companyWhatsappRaw || '919095929543';
         const msg = encodeURIComponent(`Hello Er. Maha Rajan, I would like to request a construction proposal.\nName: ${data.name || ''}\nPhone: ${data.phone || ''}\nLocation: ${data.location || ''}`);
         const fallbackCard = document.createElement('div');
         fallbackCard.className = 'net-fallback-card';
         fallbackCard.innerHTML = `
-          <div style="font-size:0.85rem;color:#FFD700;font-weight:700;margin-bottom:6px;"><i class="fas fa-wifi" style="margin-right:6px;"></i> Connection Interrupted</div>
-          <div style="font-size:0.8rem;color:#ccc;margin-bottom:10px;">We couldn't reach the server right now. Send your details instantly via WhatsApp:</div>
+          <div style="font-size:0.85rem;color:#FFD700;font-weight:700;margin-bottom:6px;"><i class="fas fa-exclamation-circle" style="margin-right:6px;"></i> ${err.message || 'Connection Interrupted'}</div>
+          <div style="font-size:0.8rem;color:#ccc;margin-bottom:10px;">Send your proposal details instantly via WhatsApp:</div>
           <a href="https://wa.me/${fallbackPhone}?text=${msg}" target="_blank" class="btn-whatsapp-outline" style="display:inline-flex;padding:8px 14px;font-size:0.78rem;">
             <i class="fab fa-whatsapp" style="margin-right:6px;"></i> Send via WhatsApp
           </a>
         `;
         quoteModalForm.prepend(fallbackCard);
         setTimeout(() => fallbackCard.remove(), 8000);
+      })
+      .finally(() => {
+        if (quoteSubmitBtn) {
+          quoteSubmitBtn.disabled = false;
+          quoteSubmitBtn.innerText = originalText;
+        }
       });
     });
   }
@@ -730,6 +743,13 @@ document.addEventListener('DOMContentLoaded', function () {
   if (guideBookForm) {
     guideBookForm.addEventListener('submit', function (e) {
       e.preventDefault();
+      const submitBtn = guideBookForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.innerText : 'DOWNLOAD INSTANTLY';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'PREPARING...';
+      }
+
       const name = guideBookForm.querySelector('input[name="name"]')?.value || 'Guest';
       const phone = guideBookForm.querySelector('input[name="phone"]')?.value || '';
       const email = guideBookForm.querySelector('input[name="email"]')?.value || '';
@@ -745,7 +765,13 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         body: JSON.stringify({ name, phone, email })
       }, 9000, 2)
-      .then(res => res.json())
+      .then(async res => {
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(json.message || 'Validation error');
+        }
+        return json;
+      })
       .then(data => {
         const pdfUrl = data.pdf_url || '/uploads/1785792673_new book.pdf';
 
@@ -769,7 +795,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       })
       .catch(err => {
-        console.log('Guidebook lead logged locally', err);
+        console.warn('Guidebook download notice:', err);
         // fallback: still download
         const pdfUrl = '/uploads/1785792673_new book.pdf';
         const link = document.createElement('a');
@@ -780,6 +806,12 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.removeChild(link);
         guideBookForm.style.display = 'none';
         if (guideSuccessBox) guideSuccessBox.style.display = 'block';
+      })
+      .finally(() => {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerText = originalText;
+        }
       });
     });
   }
@@ -983,12 +1015,18 @@ document.addEventListener('DOMContentLoaded', function () {
   if (contactFormCore) {
     contactFormCore.addEventListener('submit', function (e) {
       e.preventDefault();
+      const submitBtn = contactFormCore.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SUBMITTING...';
+      }
+
       const formData = new FormData(contactFormCore);
       const data = Object.fromEntries(formData.entries());
       if (window.MahaAnalytics) {
         Object.assign(data, window.MahaAnalytics.getAttribution());
       }
-
 
       const netFetch = window.mahaFetch || fetch;
       netFetch('/api/leads/contact', {
@@ -1000,15 +1038,36 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         body: JSON.stringify(data)
       }, 9000, 2)
+      .then(async res => {
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(json.message || 'Submission error. Please check the details entered.');
+        }
+        return json;
+      })
       .then(() => {
         contactFormCore.reset();
-        if (contactSuccessCore) contactSuccessCore.style.display = 'block';
+        if (contactSuccessCore) {
+          contactSuccessCore.style.display = 'block';
+          contactSuccessCore.innerText = 'Thank you! Your message has been received. Our team will contact you shortly.';
+          contactSuccessCore.style.color = '#25D366';
+        }
         setTimeout(() => {
           if (contactSuccessCore) contactSuccessCore.style.display = 'none';
-        }, 4000);
+        }, 5000);
       })
-      .catch(() => {
-        if (contactSuccessCore) contactSuccessCore.style.display = 'block';
+      .catch(err => {
+        if (contactSuccessCore) {
+          contactSuccessCore.style.display = 'block';
+          contactSuccessCore.innerText = err.message || 'Unable to submit right now. Please call or WhatsApp us directly.';
+          contactSuccessCore.style.color = '#f87171';
+        }
+      })
+      .finally(() => {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
       });
     });
   }

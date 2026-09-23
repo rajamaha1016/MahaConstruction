@@ -4178,12 +4178,14 @@ body.interior-body .int-yt-dot.active {
                     },
                     body: JSON.stringify(data)
                 }, 9000, 2)
-                .then(res => res.json())
-                .then(res => {
-                    if (interiorSubmitBtn) {
-                        interiorSubmitBtn.disabled = false;
-                        interiorSubmitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> SUBMIT INTERIOR CONSULTATION REQUEST';
+                .then(async res => {
+                    const json = await res.json().catch(() => ({}));
+                    if (!res.ok) {
+                        throw new Error(json.message || 'Validation error. Please verify your details.');
                     }
+                    return json;
+                })
+                .then(res => {
                     if (interiorSuccessMessage) {
                         interiorSuccessMessage.style.display = 'block';
                     }
@@ -4195,23 +4197,25 @@ body.interior-body .int-yt-dot.active {
                     }, 5000);
                 })
                 .catch(err => {
-                    if (interiorSubmitBtn) {
-                        interiorSubmitBtn.disabled = false;
-                        interiorSubmitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> SUBMIT INTERIOR CONSULTATION REQUEST';
-                    }
-                    const fallbackPhone = window.companyWhatsappRaw || '919443156689';
+                    const fallbackPhone = window.companyWhatsappRaw || '919095929543';
                     const msg = encodeURIComponent(`Hello Er. Maha Rajan, I would like to request an interior consultation.\nName: ${data.name || ''}\nPhone: ${data.phone || ''}\nScope: ${data.scope || ''}\nCity: ${data.city || ''}`);
                     const fallbackCard = document.createElement('div');
                     fallbackCard.className = 'net-fallback-card';
                     fallbackCard.innerHTML = `
-                        <div style="font-size:0.85rem;color:#FFD700;font-weight:700;margin-bottom:6px;"><i class="fas fa-wifi" style="margin-right:6px;"></i> Connection Interrupted</div>
-                        <div style="font-size:0.8rem;color:#ccc;margin-bottom:10px;">Network timed out. Tap to send your interior consultation request directly via WhatsApp:</div>
+                        <div style="font-size:0.85rem;color:#FFD700;font-weight:700;margin-bottom:6px;"><i class="fas fa-exclamation-circle" style="margin-right:6px;"></i> ${err.message || 'Connection Interrupted'}</div>
+                        <div style="font-size:0.8rem;color:#ccc;margin-bottom:10px;">Tap to send your interior consultation request directly via WhatsApp:</div>
                         <a href="https://wa.me/${fallbackPhone}?text=${msg}" target="_blank" class="btn-whatsapp-outline" style="display:inline-flex;padding:8px 14px;font-size:0.78rem;">
                             <i class="fab fa-whatsapp" style="margin-right:6px;"></i> Send via WhatsApp
                         </a>
                     `;
                     interiorForm.prepend(fallbackCard);
                     setTimeout(() => fallbackCard.remove(), 8000);
+                })
+                .finally(() => {
+                    if (interiorSubmitBtn) {
+                        interiorSubmitBtn.disabled = false;
+                        interiorSubmitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> SUBMIT INTERIOR CONSULTATION REQUEST';
+                    }
                 });
             });
         }

@@ -19,6 +19,7 @@ use App\Models\GuidebookLead;
 use App\Services\YouTubeSyncService;
 use App\Services\PackageMatrixService;
 use App\Services\AnalyticsService;
+use Illuminate\Support\Facades\Cache;
 
 class ApiController extends Controller
 {
@@ -54,7 +55,18 @@ class ApiController extends Controller
     public function updateTestimonial(Request $request, $id)
     {
         $testimonial = Testimonial::findOrFail($id);
-        $testimonial->update($request->all());
+        $data = $request->validate([
+            'client_name'   => 'sometimes|required|string|max:255',
+            'client_role'   => 'nullable|string|max:255',
+            'rating'        => 'nullable|integer|min:1|max:5',
+            'feedback'      => 'sometimes|required|string',
+            'image_url'     => 'nullable|string|max:1024',
+            'video_url'     => 'nullable|string|max:1024',
+            'project_name'  => 'nullable|string|max:255',
+            'duration'      => 'nullable|string|max:100',
+            'business_type' => 'nullable|string|in:construction,interior',
+        ]);
+        $testimonial->update($data);
         return response()->json($testimonial);
     }
 
@@ -105,7 +117,22 @@ class ApiController extends Controller
     public function updateProject(Request $request, $id)
     {
         $project = Project::findOrFail($id);
-        $project->update($request->all());
+        $data = $request->validate([
+            'name'               => 'sometimes|required|string|max:255',
+            'client'             => 'nullable|string|max:255',
+            'location'           => 'nullable|string|max:255',
+            'budget'             => 'nullable|string|max:100',
+            'completion_date'    => 'nullable|string|max:100',
+            'duration'           => 'nullable|string|max:100',
+            'architecture_style' => 'nullable|string|max:255',
+            'description'        => 'nullable|string',
+            'image_urls'         => 'nullable|array',
+            'video_url'          => 'nullable|string|max:1024',
+            'category'           => 'nullable|string|max:100',
+            'is_featured'        => 'nullable|boolean',
+            'business_type'      => 'nullable|string|in:construction,interior',
+        ]);
+        $project->update($data);
         return response()->json($project);
     }
 
@@ -151,7 +178,17 @@ class ApiController extends Controller
     public function updateService(Request $request, $id)
     {
         $service = Service::findOrFail($id);
-        $service->update($request->all());
+        $data = $request->validate([
+            'name'          => 'sometimes|required|string|max:255|unique:services,name,' . $service->id,
+            'slug'          => 'sometimes|required|string|max:255|unique:services,slug,' . $service->id,
+            'overview'      => 'nullable|string',
+            'benefits'      => 'nullable|array',
+            'process'       => 'nullable|array',
+            'image_url'     => 'nullable|string|max:1024',
+            'category'      => 'nullable|string|max:100',
+            'business_type' => 'nullable|string|in:construction,interior',
+        ]);
+        $service->update($data);
         return response()->json($service);
     }
 
@@ -191,7 +228,16 @@ class ApiController extends Controller
     public function updateGallery(Request $request, $id)
     {
         $item = GalleryItem::findOrFail($id);
-        $item->update($request->all());
+        $data = $request->validate([
+            'title'           => 'sometimes|required|string|max:255',
+            'category'        => 'sometimes|required|string|max:100',
+            'image_url'       => 'sometimes|required|string|max:1024',
+            'is_video'        => 'nullable|boolean',
+            'video_url'       => 'nullable|string|max:1024',
+            'three_sixty_url' => 'nullable|string|max:1024',
+            'business_type'   => 'nullable|string|in:construction,interior',
+        ]);
+        $item->update($data);
         return response()->json($item);
     }
 
@@ -230,7 +276,17 @@ class ApiController extends Controller
     public function updateBlog(Request $request, $id)
     {
         $blog = BlogPost::findOrFail($id);
-        $blog->update($request->all());
+        $data = $request->validate([
+            'title'     => 'sometimes|required|string|max:255',
+            'slug'      => 'sometimes|required|string|max:255|unique:blogs,slug,' . $blog->id,
+            'summary'   => 'nullable|string',
+            'content'   => 'nullable|string',
+            'author'    => 'nullable|string|max:255',
+            'category'  => 'nullable|string|max:100',
+            'tags'      => 'nullable|string|max:255',
+            'image_url' => 'nullable|string|max:1024',
+        ]);
+        $blog->update($data);
         return response()->json($blog);
     }
 
@@ -259,7 +315,12 @@ class ApiController extends Controller
     public function updateFaq(Request $request, $id)
     {
         $faq = FAQItem::findOrFail($id);
-        $faq->update($request->all());
+        $data = $request->validate([
+            'question' => 'sometimes|required|string',
+            'answer'   => 'sometimes|required|string',
+            'category' => 'nullable|string|max:100',
+        ]);
+        $faq->update($data);
         return response()->json($faq);
     }
 
@@ -281,7 +342,21 @@ class ApiController extends Controller
 
     public function createPackage(Request $request)
     {
-        $data = $request->all();
+        $data = $request->validate([
+            'title'           => 'required|string|max:255',
+            'subtitle'        => 'nullable|string|max:255',
+            'price_per_sqft'  => 'required|numeric|min:0',
+            'description'     => 'nullable|string',
+            'features'        => 'nullable|array',
+            'inclusions'      => 'nullable|array',
+            'exclusions'      => 'nullable|array',
+            'is_highlighted'  => 'nullable|boolean',
+            'warranty_years'  => 'nullable|integer|min:0',
+            'delivery_months' => 'nullable|integer|min:0',
+            'business_type'   => 'nullable|string|in:construction,interior',
+            'division'        => 'nullable|string|max:100',
+            'tier'            => 'nullable|string|max:100',
+        ]);
         if (empty($data['business_type'])) {
             $data['business_type'] = 'construction';
         }
@@ -291,7 +366,22 @@ class ApiController extends Controller
     public function updatePackage(Request $request, $id)
     {
         $pkg = PackageDetail::findOrFail($id);
-        $pkg->update($request->all());
+        $data = $request->validate([
+            'title'           => 'sometimes|required|string|max:255',
+            'subtitle'        => 'nullable|string|max:255',
+            'price_per_sqft'  => 'sometimes|required|numeric|min:0',
+            'description'     => 'nullable|string',
+            'features'        => 'nullable|array',
+            'inclusions'      => 'nullable|array',
+            'exclusions'      => 'nullable|array',
+            'is_highlighted'  => 'nullable|boolean',
+            'warranty_years'  => 'nullable|integer|min:0',
+            'delivery_months' => 'nullable|integer|min:0',
+            'business_type'   => 'nullable|string|in:construction,interior',
+            'division'        => 'nullable|string|max:100',
+            'tier'            => 'nullable|string|max:100',
+        ]);
+        $pkg->update($data);
         return response()->json($pkg);
     }
 
@@ -309,13 +399,27 @@ class ApiController extends Controller
 
     public function createPartner(Request $request)
     {
-        return response()->json(Partner::create($request->all()), 201);
+        $data = $request->validate([
+            'name'        => 'required|string|max:255',
+            'division'    => 'nullable|string|max:100',
+            'logo_url'    => 'nullable|string|max:1024',
+            'website_url' => 'nullable|string|max:1024',
+            'is_active'   => 'nullable|boolean',
+        ]);
+        return response()->json(Partner::create($data), 201);
     }
 
     public function updatePartner(Request $request, $id)
     {
         $partner = Partner::findOrFail($id);
-        $partner->update($request->all());
+        $data = $request->validate([
+            'name'        => 'sometimes|required|string|max:255',
+            'division'    => 'nullable|string|max:100',
+            'logo_url'    => 'nullable|string|max:1024',
+            'website_url' => 'nullable|string|max:1024',
+            'is_active'   => 'nullable|boolean',
+        ]);
+        $partner->update($data);
         return response()->json($partner);
     }
 
@@ -342,6 +446,7 @@ class ApiController extends Controller
     {
         $request->validate(['key' => 'required|string', 'value' => 'nullable|string']);
         $setting = Setting::updateOrCreate(['key' => $request->key], ['value' => $request->value]);
+        Cache::forget('site_settings_cache');
         return response()->json($setting);
     }
 
@@ -409,6 +514,8 @@ class ApiController extends Controller
                 );
             }
         }
+
+        Cache::forget('site_settings_cache');
 
         return response()->json([
             'success' => true,
@@ -741,6 +848,7 @@ class ApiController extends Controller
     {
         $request->validate(['url' => 'required|string']);
         $setting = Setting::updateOrCreate(['key' => 'guidebook_pdf_url'], ['value' => $request->url]);
+        Cache::forget('site_settings_cache');
         return response()->json([
             'success' => true,
             'message' => 'Guidebook PDF updated successfully',
@@ -751,6 +859,7 @@ class ApiController extends Controller
     public function deleteGuidebookPdf()
     {
         Setting::where('key', 'guidebook_pdf_url')->delete();
+        Cache::forget('site_settings_cache');
         return response()->json([
             'success' => true,
             'message' => 'Guidebook PDF removed successfully'
@@ -762,6 +871,7 @@ class ApiController extends Controller
     {
         $request->validate(['url' => 'required|string']);
         $setting = Setting::updateOrCreate(['key' => 'intro_video_url'], ['value' => $request->url]);
+        Cache::forget('site_settings_cache');
         return response()->json([
             'success' => true,
             'message' => 'Website Intro Video updated successfully',
@@ -772,6 +882,7 @@ class ApiController extends Controller
     public function deleteIntroVideo()
     {
         Setting::where('key', 'intro_video_url')->delete();
+        Cache::forget('site_settings_cache');
         return response()->json([
             'success' => true,
             'message' => 'Website Intro Video removed successfully'

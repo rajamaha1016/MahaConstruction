@@ -19,8 +19,8 @@ use App\Http\Controllers\MediaUploadController;
 */
 
 // ─── AUTH ────────────────────────────────────────────────────────────────────
-Route::post('/auth/register',        [AuthController::class, 'register']);
-Route::post('/auth/login',           [AuthController::class, 'login']);
+Route::post('/auth/register',        [AuthController::class, 'register'])->middleware('throttle:5,1');
+Route::post('/auth/login',           [AuthController::class, 'login'])->middleware('throttle:5,1');
 Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:10,1');
 Route::post('/auth/reset-password',  [AuthController::class, 'resetPassword'])->middleware('throttle:10,1');
 Route::get('/auth/me',               [AuthController::class, 'me'])->middleware('auth:sanctum');
@@ -44,11 +44,11 @@ Route::get('/stats',                 [ApiController::class, 'getStats']);
 Route::get('/youtube/channel-videos',[ApiController::class, 'getYoutubeVideos']);
 
 // ─── PUBLIC LEAD-CAPTURE FORMS (write, but anonymous by design) ─────────────
-Route::post('/leads/contact',          [ApiController::class, 'submitContact']);
-Route::post('/leads/quote',            [ApiController::class, 'submitQuote']);
-Route::post('/leads/interior/enquiry', [ApiController::class, 'submitInteriorEnquiry']);
-Route::post('/leads/guidebook',        [ApiController::class, 'submitGuidebookLead']);
-Route::post('/newsletter/subscribe',   [ApiController::class, 'subscribeNewsletter']);
+Route::post('/leads/contact',          [ApiController::class, 'submitContact'])->middleware('throttle:15,1');
+Route::post('/leads/quote',            [ApiController::class, 'submitQuote'])->middleware('throttle:15,1');
+Route::post('/leads/interior/enquiry', [ApiController::class, 'submitInteriorEnquiry'])->middleware('throttle:15,1');
+Route::post('/leads/guidebook',        [ApiController::class, 'submitGuidebookLead'])->middleware('throttle:15,1');
+Route::post('/newsletter/subscribe',   [ApiController::class, 'subscribeNewsletter'])->middleware('throttle:15,1');
 Route::post('/analytics/event',        [ApiController::class, 'recordAnalyticsEvent'])->middleware('throttle:120,1');
 
 

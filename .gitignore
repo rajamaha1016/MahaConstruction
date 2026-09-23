@@ -46,6 +46,7 @@
 # Runtime Uploads (Ignore newly uploaded runtime media, keep tracked baseline assets)
 /public/uploads/*
 !/public/uploads/.gitkeep
+!/public/uploads/.htaccess
 !/public/uploads/guidebook-cover.jpg
 !/public/uploads/1785792673_new book.pdf
 !/public/uploads/1785297043_new book.pdf

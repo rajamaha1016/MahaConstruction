@@ -24,9 +24,12 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $settingsList = [];
             try {
-                if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
-                    $settingsList = \App\Models\Setting::pluck('value', 'key')->toArray();
-                }
+                $settingsList = \Illuminate\Support\Facades\Cache::remember('site_settings_cache', 300, function () {
+                    if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                        return \App\Models\Setting::pluck('value', 'key')->toArray();
+                    }
+                    return [];
+                });
             } catch (\Throwable $e) {
                 $settingsList = [];
             }

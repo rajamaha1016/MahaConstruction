@@ -7,6 +7,7 @@ use App\Models\MediaItem;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class MediaUploadController extends Controller
 {
@@ -27,7 +28,7 @@ class MediaUploadController extends Controller
         $file         = $request->file('file');
         $originalName = $file->getClientOriginalName();
         $safeName     = preg_replace('/[^a-zA-Z0-9._-]/', '_', $originalName);
-        $filename     = time() . '_' . $safeName;
+        $filename     = time() . '_' . \Illuminate\Support\Str::random(8) . '_' . $safeName;
         $mimeType     = $file->getClientMimeType() ?: 'application/octet-stream';
 
         $disk = config('filesystems.default', 'public');
@@ -124,7 +125,21 @@ class MediaUploadController extends Controller
         $rawFilename = $request->input('filename');
         $totalChunks = (int) $request->input('total_chunks');
 
+        // Whitelist extension check before chunk assembly
+        $extension = strtolower(pathinfo($rawFilename, PATHINFO_EXTENSION));
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'mp4', 'mov', 'webm', 'mkv', 'avi', 'm4v', 'pdf'];
         $chunkDir = storage_path('app' . DIRECTORY_SEPARATOR . 'chunks' . DIRECTORY_SEPARATOR . $uploadId);
+
+        if (!in_array($extension, $allowedExtensions, true)) {
+            if (is_dir($chunkDir)) {
+                File::deleteDirectory($chunkDir);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid file extension. Allowed extensions: ' . implode(', ', $allowedExtensions),
+            ], 422);
+        }
+
         if (!is_dir($chunkDir)) {
             return response()->json(['success' => false, 'message' => 'Upload session not found or expired'], 404);
         }
@@ -145,9 +160,10 @@ class MediaUploadController extends Controller
             mkdir($uploadDir, 0755, true);
         }
 
-        // Sanitize final file name and preserve extension
-        $cleanName     = preg_replace('/[^a-zA-Z0-9._-]/', '_', $rawFilename);
-        $finalFilename = time() . '_' . $cleanName;
+        // Sanitize final file name and preserve extension with unique randomness
+        $rawBaseName   = pathinfo($rawFilename, PATHINFO_FILENAME);
+        $cleanBaseName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $rawBaseName);
+        $finalFilename = time() . '_' . Str::random(8) . '_' . $cleanBaseName . '.' . $extension;
         $finalPath     = $uploadDir . DIRECTORY_SEPARATOR . $finalFilename;
 
         // Open final destination stream
@@ -188,6 +204,19 @@ class MediaUploadController extends Controller
 
         $finalSize = file_exists($finalPath) ? filesize($finalPath) : 0;
         $mimeType  = @mime_content_type($finalPath) ?: 'application/octet-stream';
+
+        $dangerousMimes = [
+            'text/x-php', 'application/x-php', 'application/x-httpd-php',
+            'application/x-executable', 'application/x-msdownload', 'application/x-msdos-program',
+            'application/x-sh', 'application/x-csh', 'text/x-shellscript', 'text/x-perl', 'text/x-python'
+        ];
+        if (in_array(strtolower($mimeType), $dangerousMimes, true)) {
+            @unlink($finalPath);
+            return response()->json([
+                'success' => false,
+                'message' => 'Dangerous file contents detected.',
+            ], 422);
+        }
 
         $disk = config('filesystems.default', 'public');
         if ($disk === 's3') {

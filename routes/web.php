@@ -22,7 +22,7 @@ Route::get('/pricing',        [PageController::class, 'pricing'])->name('pricing
 
 // ─── ADMIN AUTHENTICATION ────────────────────────────────────────────────────
 Route::get('/admin/login',    [AuthController::class, 'adminLoginPage'])->name('admin.login');
-Route::post('/admin/login',   [AuthController::class, 'adminLoginPost'])->name('admin.login.post');
+Route::post('/admin/login',   [AuthController::class, 'adminLoginPost'])->middleware('throttle:5,1')->name('admin.login.post');
 Route::post('/admin/logout',  [AuthController::class, 'adminLogout'])->name('admin.logout');
 
 // ─── ADMIN DASHBOARD (protected) ────────────────────────────────────────────
