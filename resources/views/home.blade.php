@@ -107,7 +107,7 @@
                     </picture>
 
                     <!-- Exact Glowing Designation Card from User Specification -->
-                    <div class="engineer-namecard-glow founder-under-hero-card-badge">
+                    <div class="founder-under-hero-card-badge">
                         <div class="badge-glow-line top"></div>
                         <div class="badge-prefix">— GOVERNMENT REGISTERED ENGINEER —</div>
                         <div class="badge-name">Er. MAHA RAJAN</div>

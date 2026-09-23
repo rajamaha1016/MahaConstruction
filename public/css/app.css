@@ -698,14 +698,17 @@ textarea {
 
 .founder-portrait-halo {
   position: relative;
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
 }
 
 .founder-under-hero-portrait {
   width: 100%;
-  max-width: 340px;
+  max-width: min(330px, 86vw);
   height: auto;
   aspect-ratio: 420 / 540;
   object-fit: contain;
@@ -721,20 +724,25 @@ textarea {
 .founder-under-hero-card-badge {
   position: relative;
   z-index: 5;
-  margin-top: -60px;
+  margin-top: -54px;
   width: 100%;
   max-width: 340px;
-  padding: 14px 18px 14px;
+  box-sizing: border-box;
+  padding: 12px clamp(12px, 3.5vw, 18px);
   background: linear-gradient(135deg, rgba(11, 19, 43, 0.97), rgba(5, 11, 20, 0.99));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1.5px solid rgba(212, 175, 55, 0.65);
   border-radius: 18px;
   box-shadow:
-    0 0 40px rgba(212, 175, 55, 0.22),
+    0 0 35px rgba(212, 175, 55, 0.25),
     0 14px 40px rgba(0, 0, 0, 0.75);
   overflow: hidden;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .founder-under-hero-card-badge .badge-glow-line {
@@ -743,28 +751,33 @@ textarea {
   right: 0;
   height: 2px;
   background: linear-gradient(to right, transparent, #D4AF37, #FFD700, #D4AF37, transparent);
+  pointer-events: none;
 }
 
 .founder-under-hero-card-badge .badge-glow-line.top { top: 0; }
 .founder-under-hero-card-badge .badge-glow-line.bottom { bottom: 0; }
 
 .founder-under-hero-card-badge .badge-prefix {
-  font-size: 0.65rem;
+  font-size: clamp(0.48rem, 2.35vw, 0.64rem);
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: clamp(0.03em, 0.5vw, 0.08em);
   color: #D4AF37;
   text-transform: uppercase;
   margin-bottom: 4px;
-  opacity: 0.92;
+  opacity: 0.95;
   white-space: nowrap;
+  width: 100%;
+  text-align: center;
 }
 
 .founder-under-hero-card-badge .badge-name {
-  font-size: clamp(1.4rem, 3vw, 1.75rem);
+  font-size: clamp(1.2rem, 5.2vw, 1.72rem);
   font-weight: 900;
-  letter-spacing: 0.04em;
-  line-height: 1.1;
+  letter-spacing: clamp(0.01em, 0.3vw, 0.04em);
+  line-height: 1.15;
   white-space: nowrap;
+  width: 100%;
+  text-align: center;
   background: linear-gradient(135deg, #FFD700 0%, #D4AF37 40%, #FFF8DC 60%, #D4AF37 80%, #B8960C 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -775,8 +788,11 @@ textarea {
 .founder-under-hero-card-badge .badge-divider {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  margin: 8px 0;
+  margin: 6px auto;
+  width: 100%;
+  max-width: 220px;
 }
 
 .founder-under-hero-card-badge .badge-divider .line {
@@ -802,12 +818,14 @@ textarea {
 }
 
 .founder-under-hero-card-badge .badge-role {
-  font-size: 0.88rem;
+  font-size: clamp(0.72rem, 3.2vw, 0.88rem);
   font-weight: 700;
   color: #F0EBE0;
-  letter-spacing: 0.08em;
+  letter-spacing: clamp(0.04em, 0.5vw, 0.08em);
   text-transform: uppercase;
   white-space: nowrap;
+  width: 100%;
+  text-align: center;
 }
 
 /* ── Content Column ── */
@@ -961,32 +979,27 @@ textarea {
 
   .founder-under-hero-media {
     justify-content: center;
+    width: 100%;
+    padding: 0 8px;
   }
 
   .founder-portrait-halo {
     align-items: center;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
   }
 
   .founder-under-hero-portrait {
-    max-width: 280px;
+    max-width: min(310px, 82vw);
     border-radius: 20px 20px 0 0;
   }
 
   .founder-under-hero-card-badge {
-    margin-top: -52px;
-    width: 280px;
-    max-width: 280px;
-    padding: 12px 16px;
-  }
-
-  .founder-under-hero-card-badge .badge-prefix {
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-  }
-
-  .founder-under-hero-card-badge .badge-name {
-    font-size: 1.4rem;
-    white-space: nowrap;
+    margin-top: -48px;
+    width: 100%;
+    max-width: 340px;
+    padding: 12px 14px;
   }
 
   .founder-under-hero-content {
@@ -1030,54 +1043,27 @@ textarea {
 
 @media (max-width: 480px) {
   .founder-under-hero-portrait {
-    max-width: 250px;
+    max-width: min(290px, 82vw);
   }
 
   .founder-under-hero-card-badge {
-    width: 250px;
-    max-width: 250px;
-    padding: 11px 14px;
-  }
-
-  .founder-under-hero-card-badge .badge-prefix {
-    font-size: 0.58rem;
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-  }
-
-  .founder-under-hero-card-badge .badge-name {
-    font-size: 1.3rem;
-    white-space: nowrap;
-  }
-
-  .founder-under-hero-card-badge .badge-role {
-    font-size: 0.8rem;
-    white-space: nowrap;
+    margin-top: -44px;
+    width: 100%;
+    max-width: 330px;
+    padding: 10px 10px;
   }
 }
 
 @media (max-width: 360px) {
   .founder-under-hero-portrait {
-    max-width: 220px;
+    max-width: min(260px, 80vw);
   }
 
   .founder-under-hero-card-badge {
-    width: 220px;
-    max-width: 220px;
-    padding: 10px 12px;
-  }
-
-  .founder-under-hero-card-badge .badge-prefix {
-    font-size: 0.52rem;
-    letter-spacing: 0.06em;
-  }
-
-  .founder-under-hero-card-badge .badge-name {
-    font-size: 1.15rem;
-  }
-
-  .founder-under-hero-card-badge .badge-role {
-    font-size: 0.72rem;
+    margin-top: -38px;
+    width: 100%;
+    max-width: 300px;
+    padding: 9px 8px;
   }
 }
 
