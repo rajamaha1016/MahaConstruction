@@ -209,6 +209,13 @@
         </div>
         @endif
 
+        @if(session('success'))
+        <div class="alert-box alert-success" id="serverSuccessBox">
+            <i class="fas fa-check-circle"></i>
+            <span>{{ session('success') }}</span>
+        </div>
+        @endif
+
         <!-- Client dynamic alert boxes -->
         <div class="alert-box alert-danger" id="clientErrorBox" style="display:none;">
             <i class="fas fa-exclamation-circle"></i>
@@ -335,15 +342,15 @@
         <!-- ========================================== -->
         <div id="viewForgotStep3" style="display:none;">
             <p class="section-desc">
-                Create a strong new password (minimum 12 characters).
+                Create a strong new password (minimum 6 characters).
             </p>
 
             <form id="resetPwdForm" onsubmit="handleResetPassword(event)">
                 <div class="field-group">
                     <label class="field-label" for="newPassword">New Password</label>
                     <div class="input-wrapper">
-                        <input type="password" id="newPassword" class="field-input" required minlength="12"
-                               placeholder="Enter new password (min. 12 characters)" autocomplete="new-password"
+                        <input type="password" id="newPassword" class="field-input" required minlength="6"
+                               placeholder="Enter new password (min. 6 characters)" autocomplete="new-password"
                                oninput="updatePasswordStrength(this.value)">
                         <button type="button" class="btn-pwd-toggle" onclick="togglePwd('newPassword','newEyeIcon')"
                                 title="Show / Hide Password" aria-label="Show or hide password">
@@ -357,14 +364,14 @@
                             <div id="strengthBar3"></div>
                             <div id="strengthBar4"></div>
                         </div>
-                        <span class="field-hint" id="strengthHint">Min. 12 characters. Use uppercase, lowercase, numbers & symbols.</span>
+                        <span class="field-hint" id="strengthHint">Min. 6 characters. Use letters, numbers & symbols.</span>
                     </div>
                 </div>
 
                 <div class="field-group" style="margin-bottom:28px;">
                     <label class="field-label" for="confirmPassword">Confirm New Password</label>
                     <div class="input-wrapper">
-                        <input type="password" id="confirmPassword" class="field-input" required minlength="12"
+                        <input type="password" id="confirmPassword" class="field-input" required minlength="6"
                                placeholder="Re-enter new password" autocomplete="new-password">
                         <button type="button" class="btn-pwd-toggle" onclick="togglePwd('confirmPassword','confirmEyeIcon')"
                                 title="Show / Hide Password" aria-label="Show or hide password">
@@ -395,7 +402,7 @@ let activeResetEmail = '';
 let activeResetToken = '';
 let otpTimerInterval = null;
 let resendCooldownInterval = null;
-let otpSecondsRemaining = 600; // 10 minutes
+let otpSecondsRemaining = 900; // 15 minutes
 let resendSecondsRemaining = 0;
 
 // Password visibility toggle
@@ -671,20 +678,20 @@ function updatePasswordStrength(val) {
     });
 
     if (!val) {
-        hint.textContent = 'Min. 12 characters. Use uppercase, lowercase, numbers & symbols.';
+        hint.textContent = 'Min. 6 characters. Use letters, numbers & symbols.';
         hint.style.color = '#64748B';
         return;
     }
 
-    if (val.length < 12) {
+    if (val.length < 6) {
         bar1.style.background = '#FF6B6B';
-        hint.textContent = `Too short (${val.length}/12 characters minimum)`;
+        hint.textContent = `Too short (${val.length}/6 characters minimum)`;
         hint.style.color = '#FF6B6B';
         return;
     }
 
     let score = 0;
-    if (val.length >= 12) score++;
+    if (val.length >= 6) score++;
     if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
     if (/[0-9]/.test(val)) score++;
     if (/[^A-Za-z0-9]/.test(val)) score++;
@@ -719,8 +726,8 @@ async function handleResetPassword(e) {
     const newPwd = document.getElementById('newPassword').value;
     const confirmPwd = document.getElementById('confirmPassword').value;
 
-    if (!newPwd || newPwd.length < 12) {
-        showError('Password must be at least 12 characters long.');
+    if (!newPwd || newPwd.length < 6) {
+        showError('Password must be at least 6 characters long.');
         document.getElementById('newPassword').focus();
         return;
     }
@@ -880,6 +887,10 @@ function focusFirstOtp() {
 
 document.addEventListener('DOMContentLoaded', () => {
     setupOtpInputs();
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('reset') === 'success') {
+        showSuccess('Password reset successfully. Please login using your new password.');
+    }
 });
 </script>
 </body>

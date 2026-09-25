@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\PasswordResetChallenge;
+use App\Mail\AdminPasswordResetMail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -110,34 +111,31 @@ class AuthController extends Controller
             ->whereNull('used_at')
             ->update(['used_at' => now()]);
 
-        // Generate cryptographically secure 6-digit OTP
+        // Generate cryptographically secure 6-digit OTP and single-use reset authorization token
         $otp = random_int(100000, 999999);
+        $plainResetToken = Str::random(64);
+        $expiresAt = now()->addMinutes(15);
 
         $challenge = PasswordResetChallenge::create([
-            'admin_user_id' => $user->id,
-            'otp_hash'      => Hash::make((string)$otp),
-            'expires_at'    => now()->addMinutes(10),
-            'attempt_count' => 0,
-            'max_attempts'  => 5,
-            'last_sent_at'  => now(),
-            'request_ip'    => $request->ip(),
+            'admin_user_id'          => $user->id,
+            'otp_hash'               => Hash::make((string)$otp),
+            'expires_at'             => $expiresAt,
+            'attempt_count'          => 0,
+            'max_attempts'           => 5,
+            'last_sent_at'           => now(),
+            'request_ip'             => $request->ip(),
+            'reset_token_hash'       => hash('sha256', $plainResetToken),
+            'reset_token_expires_at' => $expiresAt,
         ]);
 
-        $mailBody = "Hello,\n\n"
-            . "A password reset was requested for your Maha Construction Admin account.\n\n"
-            . "Your 6-digit verification code is: {$otp}\n\n"
-            . "This code is valid for 10 minutes. If you did not request this, please ignore this email and ensure your account remains secure.\n\n"
-            . "SECURITY NOTICE: Maha Construction will never ask you to share your verification code or password.\n\n"
-            . "Regards,\nMaha Construction Admin Team";
+        $appUrl = config('app.url');
+        if (app()->isProduction() && !str_starts_with($appUrl, 'https://')) {
+            $appUrl = preg_replace('/^http:\/\//i', 'https://', $appUrl);
+        }
+        $resetUrl = rtrim($appUrl ?: url('/'), '/') . '/admin/reset-password/' . $plainResetToken;
 
         try {
-            Mail::raw($mailBody, function ($message) use ($email) {
-                $fromAddress = config('mail.from.address') ?: config('auth.admin_email');
-                $fromName    = config('mail.from.name') ?: 'Maha Construction';
-                $message->from($fromAddress, $fromName)
-                        ->to($email)
-                        ->subject('Maha Construction - Admin Password Reset Code');
-            });
+            Mail::to($email)->send(new AdminPasswordResetMail((string)$otp, $resetUrl));
         } catch (\Throwable $e) {
             Log::error('Password reset email could not be sent: ' . $e->getMessage());
             $challenge->delete();
@@ -220,10 +218,10 @@ class AuthController extends Controller
             // OTP verified! Invalidate OTP immediately (single-use)
             $challenge->used_at = now();
 
-            // Create short-lived, single-use reset authorization token (Requirement 2)
+            // Create short-lived, single-use reset authorization token (15 minutes)
             $plainResetToken = Str::random(64);
             $challenge->reset_token_hash = hash('sha256', $plainResetToken);
-            $challenge->reset_token_expires_at = now()->addMinutes(10);
+            $challenge->reset_token_expires_at = now()->addMinutes(15);
             $challenge->save();
 
             return response()->json([
@@ -234,17 +232,54 @@ class AuthController extends Controller
         });
     }
 
+    public function showResetPasswordForm(string $token)
+    {
+        $officialAdminEmail = strtolower(trim(config('auth.admin_email', 'mahaconstructions2013@gmail.com')));
+        $tokenHash = hash('sha256', trim($token));
+
+        $challenge = PasswordResetChallenge::where('reset_token_hash', $tokenHash)->first();
+
+        if (
+            !$challenge ||
+            is_null($challenge->reset_token_expires_at) ||
+            $challenge->reset_token_expires_at->isPast() ||
+            !is_null($challenge->reset_token_used_at)
+        ) {
+            return response()->view('admin.reset-password-invalid', [
+                'errorMessage' => 'This password reset link is invalid or has expired. Please request a new password reset.',
+            ], 400);
+        }
+
+        $adminUser = $challenge->adminUser;
+        if (
+            !$adminUser ||
+            !$adminUser->is_active ||
+            $adminUser->role !== 'admin' ||
+            strtolower(trim($adminUser->email)) !== $officialAdminEmail
+        ) {
+            return response()->view('admin.reset-password-invalid', [
+                'errorMessage' => 'This password reset link is invalid or has expired. Please request a new password reset.',
+            ], 400);
+        }
+
+        return view('admin.reset-password', [
+            'token' => $token,
+            'email' => $adminUser->email,
+        ]);
+    }
+
     public function resetPassword(Request $request)
     {
         $rules = [
             'email'        => 'required|email',
-            'new_password' => 'required|string|min:12',
+            'new_password' => 'required|string|min:6',
         ];
         if ($request->has('new_password_confirmation')) {
             $rules['new_password'] .= '|confirmed';
         }
         $request->validate($rules, [
-            'new_password.min'       => 'Password must be at least 12 characters long.',
+            'new_password.required'  => 'Please enter a new password.',
+            'new_password.min'       => 'Password must be at least 6 characters long.',
             'new_password.confirmed' => 'Passwords do not match.',
         ]);
 
@@ -253,17 +288,21 @@ class AuthController extends Controller
         $user               = User::where('email', $email)->first();
 
         if (!$user || $user->role !== 'admin' || !$user->is_active || $email !== $officialAdminEmail) {
-            return response()->json([
-                'detail'  => 'Invalid email address. Please enter the valid admin email to reset your password.',
-                'message' => 'Invalid email address. Please enter the valid admin email to reset your password.'
-            ], 422);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'detail'  => 'Invalid email address. Please enter the valid admin email to reset your password.',
+                    'message' => 'Invalid email address. Please enter the valid admin email to reset your password.'
+                ], 422);
+            }
+            return back()->withErrors(['email' => 'Invalid email address. Please enter the valid admin email to reset your password.']);
         }
 
         return DB::transaction(function () use ($request, $user) {
             $challenge = null;
+            $tokenParam = $request->input('reset_token') ?: $request->input('token');
 
-            if ($request->filled('reset_token')) {
-                $tokenHash = hash('sha256', trim((string)$request->reset_token));
+            if (!empty($tokenParam)) {
+                $tokenHash = hash('sha256', trim((string)$tokenParam));
                 $challenge = PasswordResetChallenge::where('admin_user_id', $user->id)
                     ->where('reset_token_hash', $tokenHash)
                     ->whereNull('reset_token_used_at')
@@ -287,14 +326,20 @@ class AuthController extends Controller
             }
 
             if (!$challenge) {
-                return response()->json([
-                    'detail'  => 'Invalid or expired reset authorization. Please request a new verification code.',
-                    'message' => 'Invalid or expired reset authorization. Please request a new verification code.'
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'detail'  => 'This password reset link is invalid or has expired. Please request a new password reset.',
+                        'message' => 'This password reset link is invalid or has expired. Please request a new password reset.'
+                    ], 400);
+                }
+                return response()->view('admin.reset-password-invalid', [
+                    'errorMessage' => 'This password reset link is invalid or has expired. Please request a new password reset.',
                 ], 400);
             }
 
-            // Invalidate the reset token immediately (single-use)
+            // Invalidate the reset token and OTP challenge immediately (single-use)
             $challenge->reset_token_used_at = now();
+            $challenge->used_at = now();
             $challenge->save();
 
             // Update password hash (bcrypt)
@@ -318,11 +363,20 @@ class AuthController extends Controller
                 $request->session()->regenerateToken();
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Password reset successfully. Please login using your new password.'
-            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Password reset successfully. Please login using your new password.'
+                ]);
+            }
+
+            return redirect()->route('admin.login')->with('success', 'Password reset successfully. Please login using your new password.');
         });
+    }
+
+    public function resetPasswordWeb(Request $request)
+    {
+        return $this->resetPassword($request);
     }
 
     // Admin web login

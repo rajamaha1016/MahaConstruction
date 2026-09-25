@@ -21,9 +21,11 @@ Route::redirect('/cost-calculator', '/pricing');
 Route::get('/pricing',        [PageController::class, 'pricing'])->name('pricing');
 
 // ─── ADMIN AUTHENTICATION ────────────────────────────────────────────────────
-Route::get('/admin/login',    [AuthController::class, 'adminLoginPage'])->name('admin.login');
-Route::post('/admin/login',   [AuthController::class, 'adminLoginPost'])->middleware('throttle:5,1')->name('admin.login.post');
-Route::post('/admin/logout',  [AuthController::class, 'adminLogout'])->name('admin.logout');
+Route::get('/admin/login',                 [AuthController::class, 'adminLoginPage'])->name('admin.login');
+Route::post('/admin/login',                [AuthController::class, 'adminLoginPost'])->middleware('throttle:5,1')->name('admin.login.post');
+Route::post('/admin/logout',               [AuthController::class, 'adminLogout'])->name('admin.logout');
+Route::get('/admin/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('admin.reset_password.show');
+Route::post('/admin/reset-password',       [AuthController::class, 'resetPasswordWeb'])->middleware('throttle:5,1')->name('admin.reset_password.post');
 
 // ─── ADMIN DASHBOARD (protected) ────────────────────────────────────────────
 Route::middleware('admin.auth')->group(function () {

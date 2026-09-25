@@ -385,12 +385,12 @@ class AdminAuthTest extends TestCase
         ]);
         $resMismatch->assertStatus(422);
 
-        // 2. Too short (< 12 chars) -> 422
+        // 2. Too short (< 6 chars) -> 422
         $resShort = $this->postJson('/api/auth/reset-password', [
             'email'                     => $admin->email,
             'reset_token'               => $plainToken,
-            'new_password'              => 'Short123!',
-            'new_password_confirmation' => 'Short123!',
+            'new_password'              => '12345',
+            'new_password_confirmation' => '12345',
         ]);
         $resShort->assertStatus(422);
 
@@ -614,12 +614,12 @@ class AdminAuthTest extends TestCase
         ]);
         $mismatchRes->assertStatus(422);
 
-        // 9. Create new password: confirm weak / short (<12 chars) password is rejected
+        // 9. Create new password: confirm weak / short (<6 chars) password is rejected
         $shortRes = $this->postJson('/api/auth/reset-password', [
             'email'                     => 'mahaconstructions2013@gmail.com',
             'reset_token'               => $resetToken,
-            'new_password'              => 'Short123!',
-            'new_password_confirmation' => 'Short123!',
+            'new_password'              => '12345',
+            'new_password_confirmation' => '12345',
         ]);
         $shortRes->assertStatus(422);
 
