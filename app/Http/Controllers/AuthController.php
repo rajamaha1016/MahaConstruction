@@ -128,11 +128,23 @@ class AuthController extends Controller
             'reset_token_expires_at' => $expiresAt,
         ]);
 
-        $appUrl = config('app.url');
-        if (app()->isProduction() && !str_starts_with($appUrl, 'https://')) {
-            $appUrl = preg_replace('/^http:\/\//i', 'https://', $appUrl);
+        $isLocalHost = in_array($request->getHost(), ['localhost', '127.0.0.1', '::1']) || app()->isLocal();
+
+        if ($isLocalHost) {
+            // Local development: point to the currently running application via named route
+            $resetUrl = route('admin.reset_password.show', ['token' => $plainResetToken]);
+            if (!$request->isSecure() && str_starts_with($resetUrl, 'https://')) {
+                $resetUrl = preg_replace('/^https:\/\//i', 'http://', $resetUrl);
+            }
+        } else {
+            // Production: generate using configured APP_URL via named route
+            $appUrl = rtrim(config('app.url') ?: url('/'), '/');
+            if (app()->isProduction() && !str_starts_with($appUrl, 'https://')) {
+                $appUrl = preg_replace('/^http:\/\//i', 'https://', $appUrl);
+            }
+            $resetPath = route('admin.reset_password.show', ['token' => $plainResetToken], false);
+            $resetUrl = $appUrl . $resetPath;
         }
-        $resetUrl = rtrim($appUrl ?: url('/'), '/') . '/admin/reset-password/' . $plainResetToken;
 
         try {
             Mail::to($email)->send(new AdminPasswordResetMail((string)$otp, $resetUrl));

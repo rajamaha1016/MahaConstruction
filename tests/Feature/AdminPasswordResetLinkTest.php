@@ -47,7 +47,47 @@ class AdminPasswordResetLinkTest extends TestCase
         $this->assertNotNull($challenge->reset_token_expires_at);
 
         Mail::assertSent(AdminPasswordResetMail::class, function (AdminPasswordResetMail $mail) use ($admin) {
-            return $mail->hasTo($admin->email) && $mail->hasSubject('Admin Password Reset');
+            return $mail->hasTo($admin->email) &&
+                   $mail->hasSubject('Admin Password Reset') &&
+                   str_contains($mail->resetUrl, '/admin/reset-password/');
+        });
+    }
+
+    public function test_local_request_generates_reset_url_pointing_to_local_application(): void
+    {
+        Mail::fake();
+
+        $admin = $this->createOfficialAdmin();
+
+        // Simulate local request coming into http://localhost:8000
+        $response = $this->postJson('http://localhost:8000/api/auth/forgot-password', [
+            'email' => $admin->email,
+        ]);
+
+        $response->assertOk();
+
+        Mail::assertSent(AdminPasswordResetMail::class, function (AdminPasswordResetMail $mail) {
+            return str_starts_with($mail->resetUrl, 'http://localhost:8000/admin/reset-password/') ||
+                   str_starts_with($mail->resetUrl, 'http://localhost/admin/reset-password/');
+        });
+    }
+
+    public function test_production_request_generates_reset_url_pointing_to_app_url(): void
+    {
+        Mail::fake();
+
+        $admin = $this->createOfficialAdmin();
+
+        // Simulate production request on Railway domain
+        $response = $this->postJson('https://web-production-8d2af.up.railway.app/api/auth/forgot-password', [
+            'email' => $admin->email,
+        ]);
+
+        $response->assertOk();
+
+        $expectedPrefix = rtrim(config('app.url'), '/') . '/admin/reset-password/';
+        Mail::assertSent(AdminPasswordResetMail::class, function (AdminPasswordResetMail $mail) use ($expectedPrefix) {
+            return str_starts_with($mail->resetUrl, $expectedPrefix);
         });
     }
 
