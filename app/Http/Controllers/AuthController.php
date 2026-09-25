@@ -128,7 +128,8 @@ class AuthController extends Controller
             'reset_token_expires_at' => $expiresAt,
         ]);
 
-        $isLocalHost = in_array($request->getHost(), ['localhost', '127.0.0.1', '::1']) || app()->isLocal();
+        $requestHost = $request->getHost();
+        $isLocalHost = in_array($requestHost, ['localhost', '127.0.0.1', '::1']);
 
         if ($isLocalHost) {
             // Local development: point to the currently running application via named route
@@ -137,13 +138,27 @@ class AuthController extends Controller
                 $resetUrl = preg_replace('/^https:\/\//i', 'http://', $resetUrl);
             }
         } else {
-            // Production: generate using configured APP_URL via named route
-            $appUrl = rtrim(config('app.url') ?: url('/'), '/');
-            if (app()->isProduction() && !str_starts_with($appUrl, 'https://')) {
-                $appUrl = preg_replace('/^http:\/\//i', 'https://', $appUrl);
+            // Production: determine base URL reliably without localhost fallback
+            $configuredUrl = rtrim((string) config('app.url'), '/');
+            $isConfiguredLocal = empty($configuredUrl) || preg_match('/localhost|127\.0\.0\.1|::1/i', $configuredUrl);
+
+            if (!$isConfiguredLocal) {
+                $baseUrl = $configuredUrl;
+            } elseif (!empty(env('RAILWAY_PUBLIC_DOMAIN'))) {
+                $baseUrl = 'https://' . rtrim(env('RAILWAY_PUBLIC_DOMAIN'), '/');
+            } elseif (!in_array($requestHost, ['localhost', '127.0.0.1', '::1'])) {
+                $scheme = ($request->isSecure() || $request->server('HTTP_X_FORWARDED_PROTO') === 'https') ? 'https' : 'http';
+                $baseUrl = $scheme . '://' . $request->getHttpHost();
+            } else {
+                $baseUrl = 'https://web-production-8d2af.up.railway.app';
             }
+
+            if (!str_starts_with($baseUrl, 'https://') && !in_array(parse_url($baseUrl, PHP_URL_HOST), ['localhost', '127.0.0.1', '::1'])) {
+                $baseUrl = preg_replace('/^http:\/\//i', 'https://', $baseUrl);
+            }
+
             $resetPath = route('admin.reset_password.show', ['token' => $plainResetToken], false);
-            $resetUrl = $appUrl . $resetPath;
+            $resetUrl = $baseUrl . $resetPath;
         }
 
         try {

@@ -20,6 +20,15 @@ if [ ! -f /var/www/html/.env ]; then
     fi
 fi
 
+# Auto-configure production APP_URL if empty or localhost on Railway
+if [ -n "${RAILWAY_PUBLIC_DOMAIN:-}" ]; then
+    export APP_URL="https://${RAILWAY_PUBLIC_DOMAIN}"
+    sed -i "s|^APP_URL=.*|APP_URL=https://${RAILWAY_PUBLIC_DOMAIN}|" /var/www/html/.env 2>/dev/null || true
+elif [ "${APP_URL:-http://localhost}" = "http://localhost" ]; then
+    export APP_URL="https://web-production-8d2af.up.railway.app"
+    sed -i "s|^APP_URL=http://localhost.*|APP_URL=https://web-production-8d2af.up.railway.app|" /var/www/html/.env 2>/dev/null || true
+fi
+
 # Auto-generate APP_KEY if missing in environment & .env
 if [ -z "${APP_KEY:-}" ]; then
     php artisan key:generate --force --no-interaction || true

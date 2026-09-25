@@ -85,7 +85,7 @@ class AdminPasswordResetLinkTest extends TestCase
 
         $response->assertOk();
 
-        $expectedPrefix = rtrim(config('app.url'), '/') . '/admin/reset-password/';
+        $expectedPrefix = 'https://web-production-8d2af.up.railway.app/admin/reset-password/';
         Mail::assertSent(AdminPasswordResetMail::class, function (AdminPasswordResetMail $mail) use ($expectedPrefix) {
             return str_starts_with($mail->resetUrl, $expectedPrefix);
         });
