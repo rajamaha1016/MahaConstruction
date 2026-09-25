@@ -169,6 +169,10 @@
             font-size: 0.75rem; color: #64748B; margin-top: 3px;
         }
 
+        .pwd-strength-container { margin-top: 6px; }
+        .pwd-strength-bar { display: flex; gap: 4px; height: 4px; margin-bottom: 5px; }
+        .pwd-strength-bar div { flex: 1; height: 100%; border-radius: 2px; background: rgba(255,255,255,0.1); transition: background 0.25s; }
+
         .spinner {
             display: inline-block; width: 16px; height: 16px;
             border: 2px solid rgba(5, 11, 20, 0.3); border-radius: 50%;
@@ -262,22 +266,22 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- VIEW 2: FORGOT PASSWORD - STEP 1 (EMAIL)  -->
+        <!-- VIEW 2: FORGOT PASSWORD (EMAIL)           -->
         <!-- ========================================== -->
         <div id="viewForgotStep1" style="display:none;">
             <p class="section-desc">
-                Enter your registered admin email address. We will send a 6-digit verification code to reset your password.
+                Enter your admin email address to receive a 6-digit verification code.
             </p>
 
             <form id="forgotEmailForm" onsubmit="handleSendOtp(event)">
                 <div class="field-group">
-                    <label class="field-label" for="forgotEmail">Registered Admin Email</label>
+                    <label class="field-label" for="forgotEmail">Admin Email</label>
                     <input type="email" id="forgotEmail" class="field-input" required
-                           placeholder="admin@example.com" autocomplete="email">
+                           placeholder="Enter your admin email" autocomplete="email">
                 </div>
 
                 <button type="submit" id="sendOtpBtn" class="btn-primary" style="margin-top:24px;">
-                    <span id="sendOtpBtnText">SEND VERIFICATION CODE</span>
+                    <span id="sendOtpBtnText">SEND OTP</span>
                     <i class="fas fa-paper-plane" id="sendOtpBtnIcon"></i>
                 </button>
             </form>
@@ -288,50 +292,79 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- VIEW 3: FORGOT PASSWORD - STEP 2 (OTP & PWD) -->
+        <!-- VIEW 3: VERIFY OTP                        -->
         <!-- ========================================== -->
         <div id="viewForgotStep2" style="display:none;">
             <p class="section-desc">
-                Enter the 6-digit verification code sent to <strong id="displayTargetEmail" style="color:#D4AF37;"></strong> and your new password.
+                Enter the 6-digit OTP sent to your registered email.
             </p>
 
-            <form id="resetPwdForm" onsubmit="handleResetPassword(event)">
+            <form id="verifyOtpForm" onsubmit="handleVerifyOtp(event)">
                 <div class="field-group" style="margin-bottom:12px;">
                     <label class="field-label">6-Digit Verification Code</label>
                     <div class="otp-container">
-                        <input type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="[0-9]" data-idx="0">
-                        <input type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="[0-9]" data-idx="1">
-                        <input type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="[0-9]" data-idx="2">
-                        <input type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="[0-9]" data-idx="3">
-                        <input type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="[0-9]" data-idx="4">
-                        <input type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="[0-9]" data-idx="5">
+                        <input type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="[0-9]" data-idx="0" aria-label="Digit 1">
+                        <input type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="[0-9]" data-idx="1" aria-label="Digit 2">
+                        <input type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="[0-9]" data-idx="2" aria-label="Digit 3">
+                        <input type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="[0-9]" data-idx="3" aria-label="Digit 4">
+                        <input type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="[0-9]" data-idx="4" aria-label="Digit 5">
+                        <input type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="[0-9]" data-idx="5" aria-label="Digit 6">
                     </div>
                 </div>
 
                 <div class="otp-helper">
                     <span>Code expires in: <span class="timer-badge" id="otpCountdown">10:00</span></span>
                     <button type="button" class="link-gold" id="resendOtpBtn" onclick="handleResendOtp()" style="font-size:0.8rem;">
-                        Resend Code
+                        Resend OTP
                     </button>
                 </div>
 
+                <button type="submit" id="verifyOtpBtn" class="btn-primary">
+                    <span id="verifyOtpBtnText">VERIFY OTP</span>
+                    <i class="fas fa-shield-alt" id="verifyOtpBtnIcon"></i>
+                </button>
+            </form>
+
+            <button type="button" class="btn-secondary" onclick="switchView('forgotStep1')">
+                <i class="fas fa-arrow-left"></i> Change Email
+            </button>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 4: CREATE NEW PASSWORD               -->
+        <!-- ========================================== -->
+        <div id="viewForgotStep3" style="display:none;">
+            <p class="section-desc">
+                Create a strong new password (minimum 12 characters).
+            </p>
+
+            <form id="resetPwdForm" onsubmit="handleResetPassword(event)">
                 <div class="field-group">
                     <label class="field-label" for="newPassword">New Password</label>
                     <div class="input-wrapper">
-                        <input type="password" id="newPassword" class="field-input" required minlength="8"
-                               placeholder="Enter new password (min. 8 characters)" autocomplete="new-password">
+                        <input type="password" id="newPassword" class="field-input" required minlength="12"
+                               placeholder="Enter new password (min. 12 characters)" autocomplete="new-password"
+                               oninput="updatePasswordStrength(this.value)">
                         <button type="button" class="btn-pwd-toggle" onclick="togglePwd('newPassword','newEyeIcon')"
                                 title="Show / Hide Password" aria-label="Show or hide password">
                             <i class="fas fa-eye" id="newEyeIcon"></i>
                         </button>
                     </div>
-                    <span class="field-hint">Must be at least 8 characters.</span>
+                    <div class="pwd-strength-container">
+                        <div class="pwd-strength-bar">
+                            <div id="strengthBar1"></div>
+                            <div id="strengthBar2"></div>
+                            <div id="strengthBar3"></div>
+                            <div id="strengthBar4"></div>
+                        </div>
+                        <span class="field-hint" id="strengthHint">Min. 12 characters. Use uppercase, lowercase, numbers & symbols.</span>
+                    </div>
                 </div>
 
                 <div class="field-group" style="margin-bottom:28px;">
                     <label class="field-label" for="confirmPassword">Confirm New Password</label>
                     <div class="input-wrapper">
-                        <input type="password" id="confirmPassword" class="field-input" required minlength="8"
+                        <input type="password" id="confirmPassword" class="field-input" required minlength="12"
                                placeholder="Re-enter new password" autocomplete="new-password">
                         <button type="button" class="btn-pwd-toggle" onclick="togglePwd('confirmPassword','confirmEyeIcon')"
                                 title="Show / Hide Password" aria-label="Show or hide password">
@@ -347,7 +380,7 @@
             </form>
 
             <button type="button" class="btn-secondary" onclick="switchView('login')">
-                <i class="fas fa-arrow-left"></i> Back to Sign In
+                <i class="fas fa-arrow-left"></i> Cancel
             </button>
         </div>
 
@@ -357,8 +390,9 @@
 </div>
 
 <script>
-// State variables
+// State variables (never written to localStorage or cookies)
 let activeResetEmail = '';
+let activeResetToken = '';
 let otpTimerInterval = null;
 let resendCooldownInterval = null;
 let otpSecondsRemaining = 600; // 10 minutes
@@ -414,37 +448,43 @@ function switchView(target) {
     const vLogin  = document.getElementById('viewLogin');
     const vStep1  = document.getElementById('viewForgotStep1');
     const vStep2  = document.getElementById('viewForgotStep2');
+    const vStep3  = document.getElementById('viewForgotStep3');
     const sub     = document.getElementById('cardSubtitle');
 
     vLogin.style.display = 'none';
     vStep1.style.display = 'none';
     vStep2.style.display = 'none';
+    vStep3.style.display = 'none';
 
     if (target === 'login') {
         vLogin.style.display = 'block';
         sub.textContent = 'Admin Control Panel';
     } else if (target === 'forgotStep1') {
         vStep1.style.display = 'block';
-        sub.textContent = 'Password Recovery';
+        sub.textContent = 'Forgot Password';
         const forgotInput = document.getElementById('forgotEmail');
         const loginEmail = document.getElementById('loginEmail');
-        if (loginEmail && loginEmail.value.trim()) {
+        if (loginEmail && loginEmail.value.trim() && !forgotInput.value) {
             forgotInput.value = loginEmail.value.trim();
         }
         forgotInput.focus();
     } else if (target === 'forgotStep2') {
         vStep2.style.display = 'block';
-        sub.textContent = 'Verify Verification Code';
-        document.getElementById('displayTargetEmail').textContent = activeResetEmail;
+        sub.textContent = 'Verify OTP';
         focusFirstOtp();
+    } else if (target === 'forgotStep3') {
+        vStep3.style.display = 'block';
+        sub.textContent = 'Create New Password';
+        const pwdInput = document.getElementById('newPassword');
+        if (pwdInput) pwdInput.focus();
     }
 }
 
 // Form submit loading state for web login
 function handleLoginSubmit(e) {
-    const btn  = document.getElementById('loginSubmitBtn');
-    const txt  = document.getElementById('loginBtnText');
-    const icon = document.getElementById('loginBtnIcon');
+    const btn   = document.getElementById('loginSubmitBtn');
+    const txt   = document.getElementById('loginBtnText');
+    const icon  = document.getElementById('loginBtnIcon');
     const email = document.getElementById('loginEmail').value.trim();
     const pwd   = document.getElementById('loginPassword').value;
 
@@ -459,13 +499,13 @@ function handleLoginSubmit(e) {
         return;
     }
 
-    // Set loading indicator
+    // Double-click protection & loading state
     btn.disabled = true;
     txt.textContent = 'SIGNING IN...';
     icon.className = 'spinner';
 }
 
-// Step 1: Send OTP via API
+// Step 1: Send OTP via backend API
 async function handleSendOtp(e) {
     if (e) e.preventDefault();
     clearAlerts();
@@ -484,7 +524,7 @@ async function handleSendOtp(e) {
     const icon = document.getElementById('sendOtpBtnIcon');
 
     btn.disabled = true;
-    txt.textContent = 'SENDING CODE...';
+    txt.textContent = 'SENDING OTP...';
     icon.className = 'spinner';
 
     try {
@@ -504,20 +544,20 @@ async function handleSendOtp(e) {
             startOtpCountdown();
             startResendCooldown(60);
             switchView('forgotStep2');
-            showSuccess('If that email is registered, an OTP has been sent to it.');
+            showSuccess('Verification code sent to your registered email address.');
         } else {
-            showError(data.detail || data.message || 'Something went wrong. Please try again.');
+            showError(data.message || data.detail || 'Invalid email address. Please enter the valid admin email to reset your password.');
         }
     } catch (err) {
-        showError('Something went wrong. Please try again.');
+        showError('Network error. Please check your connection and try again.');
     } finally {
         btn.disabled = false;
-        txt.textContent = 'SEND VERIFICATION CODE';
+        txt.textContent = 'SEND OTP';
         icon.className = 'fas fa-paper-plane';
     }
 }
 
-// Resend OTP
+// Resend OTP via backend API
 async function handleResendOtp() {
     if (resendSecondsRemaining > 0) return;
     clearAlerts();
@@ -527,7 +567,7 @@ async function handleResendOtp() {
     resendBtn.textContent = 'Sending...';
 
     try {
-        const res = await fetch('/api/auth/forgot-password', {
+        const res = await fetch('/api/auth/resend-reset-otp', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -541,20 +581,23 @@ async function handleResendOtp() {
             showSuccess('A fresh 6-digit verification code has been dispatched.');
             startOtpCountdown();
             startResendCooldown(60);
+            // Clear OTP inputs for new code
+            document.querySelectorAll('.otp-input').forEach(i => i.value = '');
+            focusFirstOtp();
         } else {
-            showError(data.detail || data.message || 'Something went wrong. Please try again.');
+            showError(data.message || data.detail || 'Something went wrong. Please try again.');
             resendBtn.disabled = false;
-            resendBtn.textContent = 'Resend Code';
+            resendBtn.textContent = 'Resend OTP';
         }
     } catch (err) {
-        showError('Something went wrong. Please try again.');
+        showError('Network error. Please check your connection and try again.');
         resendBtn.disabled = false;
-        resendBtn.textContent = 'Resend Code';
+        resendBtn.textContent = 'Resend OTP';
     }
 }
 
-// Step 2: Reset Password via API
-async function handleResetPassword(e) {
+// Step 2: Verify OTP via backend API
+async function handleVerifyOtp(e) {
     if (e) e.preventDefault();
     clearAlerts();
 
@@ -565,11 +608,119 @@ async function handleResetPassword(e) {
         return;
     }
 
+    const btn = document.getElementById('verifyOtpBtn');
+    const txt = document.getElementById('verifyOtpBtnText');
+    const icon = document.getElementById('verifyOtpBtnIcon');
+
+    btn.disabled = true;
+    txt.textContent = 'VERIFYING OTP...';
+    icon.className = 'spinner';
+
+    try {
+        const res = await fetch('/api/auth/verify-otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                email: activeResetEmail,
+                otp: otpDigits
+            })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            activeResetToken = data.reset_token || '';
+            switchView('forgotStep3');
+            showSuccess('Verification code confirmed. Please set your new password.');
+        } else {
+            showError(data.message || data.detail || 'Incorrect verification code.');
+            if (res.status === 429) {
+                // Lockout: disable button permanently for this OTP
+                btn.disabled = true;
+                txt.textContent = 'ATTEMPTS EXCEEDED';
+                icon.className = 'fas fa-lock';
+                return;
+            }
+            focusFirstOtp();
+        }
+    } catch (err) {
+        showError('Network error. Please check your connection and try again.');
+    } finally {
+        if (txt.textContent !== 'ATTEMPTS EXCEEDED') {
+            btn.disabled = false;
+            txt.textContent = 'VERIFY OTP';
+            icon.className = 'fas fa-shield-alt';
+        }
+    }
+}
+
+// Password strength indicator guidance
+function updatePasswordStrength(val) {
+    const hint = document.getElementById('strengthHint');
+    const bar1 = document.getElementById('strengthBar1');
+    const bar2 = document.getElementById('strengthBar2');
+    const bar3 = document.getElementById('strengthBar3');
+    const bar4 = document.getElementById('strengthBar4');
+    const bars = [bar1, bar2, bar3, bar4];
+
+    bars.forEach(b => {
+        b.style.background = 'rgba(255,255,255,0.1)';
+    });
+
+    if (!val) {
+        hint.textContent = 'Min. 12 characters. Use uppercase, lowercase, numbers & symbols.';
+        hint.style.color = '#64748B';
+        return;
+    }
+
+    if (val.length < 12) {
+        bar1.style.background = '#FF6B6B';
+        hint.textContent = `Too short (${val.length}/12 characters minimum)`;
+        hint.style.color = '#FF6B6B';
+        return;
+    }
+
+    let score = 0;
+    if (val.length >= 12) score++;
+    if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+    if (score <= 1) {
+        bar1.style.background = '#FF6B6B';
+        hint.textContent = 'Weak: Add numbers, uppercase and special characters.';
+        hint.style.color = '#FF6B6B';
+    } else if (score === 2) {
+        bar1.style.background = '#FFA500';
+        bar2.style.background = '#FFA500';
+        hint.textContent = 'Medium: Add special characters or more variety.';
+        hint.style.color = '#FFA500';
+    } else if (score === 3) {
+        bar1.style.background = '#D4AF37';
+        bar2.style.background = '#D4AF37';
+        bar3.style.background = '#D4AF37';
+        hint.textContent = 'Good password strength.';
+        hint.style.color = '#D4AF37';
+    } else {
+        bars.forEach(b => b.style.background = '#34C759');
+        hint.textContent = 'Strong password.';
+        hint.style.color = '#34C759';
+    }
+}
+
+// Step 3: Reset Password via backend API
+async function handleResetPassword(e) {
+    if (e) e.preventDefault();
+    clearAlerts();
+
     const newPwd = document.getElementById('newPassword').value;
     const confirmPwd = document.getElementById('confirmPassword').value;
 
-    if (!newPwd || newPwd.length < 8) {
-        showError('Password must be at least 8 characters.');
+    if (!newPwd || newPwd.length < 12) {
+        showError('Password must be at least 12 characters long.');
         document.getElementById('newPassword').focus();
         return;
     }
@@ -597,7 +748,7 @@ async function handleResetPassword(e) {
             },
             body: JSON.stringify({
                 email: activeResetEmail,
-                otp: otpDigits,
+                reset_token: activeResetToken,
                 new_password: newPwd,
                 new_password_confirmation: confirmPwd
             })
@@ -606,30 +757,30 @@ async function handleResetPassword(e) {
         const data = await res.json();
 
         if (res.ok) {
-            showSuccess('Password reset successfully! Redirecting to login...');
+            showSuccess('Password reset successfully. Please login using your new password.');
             clearInterval(otpTimerInterval);
             clearInterval(resendCooldownInterval);
 
-            // Pre-fill email on login form and clear password fields
-            document.getElementById('loginEmail').value = activeResetEmail;
-            document.getElementById('loginPassword').value = '';
+            // Clear sensitive fields from DOM and memory immediately
             document.getElementById('newPassword').value = '';
             document.getElementById('confirmPassword').value = '';
             document.querySelectorAll('.otp-input').forEach(i => i.value = '');
+            activeResetToken = '';
+
+            // Pre-fill email on login view and clear password
+            document.getElementById('loginEmail').value = activeResetEmail;
+            document.getElementById('loginPassword').value = '';
 
             setTimeout(() => {
                 switchView('login');
-                showSuccess('Password reset successfully. Please log in with your new password.');
+                showSuccess('Password reset successfully. Please login using your new password.');
                 document.getElementById('loginPassword').focus();
-            }, 1600);
+            }, 1800);
         } else {
-            showError(data.detail || data.message || 'Invalid or expired OTP.');
-            if ((data.detail || data.message || '').toLowerCase().includes('otp')) {
-                focusFirstOtp();
-            }
+            showError(data.detail || data.message || 'Unable to reset password. Please try again.');
         }
     } catch (err) {
-        showError('Something went wrong. Please try again.');
+        showError('Network error. Please check your connection and try again.');
     } finally {
         btn.disabled = false;
         txt.textContent = 'RESET PASSWORD';
@@ -655,7 +806,7 @@ function startOtpCountdown() {
         if (otpSecondsRemaining <= 0) {
             clearInterval(otpTimerInterval);
             badge.textContent = 'Expired';
-            showError('Invalid or expired OTP.');
+            showError('Verification code has expired. Please request a new code.');
         } else {
             updateDisplay();
         }
@@ -679,7 +830,7 @@ function startResendCooldown(seconds) {
         if (resendSecondsRemaining <= 0) {
             clearInterval(resendCooldownInterval);
             btn.disabled = false;
-            btn.textContent = 'Resend Code';
+            btn.textContent = 'Resend OTP';
         } else {
             updateBtn();
         }

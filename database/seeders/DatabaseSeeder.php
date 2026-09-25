@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 1. Admin User
-        $adminEmail = config('app.admin_email') ?: (env('ADMIN_EMAIL') ?: 'mahaconstructions2013@gmail.com');
+        $adminEmail = config('auth.admin_email') ?: (config('app.admin_email') ?: (env('ADMIN_EMAIL') ?: 'mahaconstructions2013@gmail.com'));
 
         if (! User::where('email', $adminEmail)->exists()) {
             $adminPassword = config('app.admin_password') ?: (env('ADMIN_PASSWORD') ?: 'Maha@2013');

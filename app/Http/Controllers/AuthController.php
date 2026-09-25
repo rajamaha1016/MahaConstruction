@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
+use App\Models\PasswordResetChallenge;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -62,101 +65,264 @@ class AuthController extends Controller
 
     public function forgotPassword(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
+        return $this->processOtpDispatch($request);
+    }
 
-        $email = strtolower(trim($request->email));
-        $user  = User::where('email', $email)->first();
+    public function resendResetOtp(Request $request)
+    {
+        return $this->processOtpDispatch($request);
+    }
 
-        // Admin-only & active check (Requirement 10)
-        // Always respond the same way whether or not the email exists or is an admin,
-        // so the endpoint cannot be used to enumerate registered admin accounts.
-        if ($user && $user->role === 'admin' && $user->is_active) {
-            $cooldownKey = 'otp_cd_' . $email;
-            if (!cache()->has($cooldownKey)) {
-                $otp = random_int(100000, 999999);
-                cache()->put('otp_' . $email, $otp, 600); // 10 minutes
-                cache()->put('otp_attempts_' . $email, 0, 600);
-                cache()->put($cooldownKey, true, 60); // 60s cooldown
+    protected function processOtpDispatch(Request $request)
+    {
+        $request->validate(['email' => 'required|email'], [
+            'email.required' => 'Please enter your admin email address.',
+            'email.email'    => 'Please enter a valid email address.',
+        ]);
 
-                $mailBody = "Hello,\n\n"
-                    . "A password reset was requested for your Maha Construction Admin account.\n\n"
-                    . "Your 6-digit verification code is: {$otp}\n\n"
-                    . "This code is valid for 10 minutes. If you did not request this, please ignore this email and ensure your account remains secure.\n\n"
-                    . "SECURITY NOTICE: Maha Construction will never ask you to share your verification code or password.\n\n"
-                    . "Regards,\nMaha Construction Admin Team";
+        $email              = strtolower(trim($request->email));
+        $officialAdminEmail = strtolower(trim(config('auth.admin_email', 'mahaconstructions2013@gmail.com')));
+        $user               = User::where('email', $email)->first();
 
-                try {
-                    Mail::raw($mailBody, function ($message) use ($email) {
-                        $fromAddress = config('mail.from.address') ?: 'mahaconstructions2013@gmail.com';
-                        $fromName    = config('mail.from.name') ?: 'Maha Construction';
-                        $message->from($fromAddress, $fromName)
-                                ->to($email)
-                                ->subject('Maha Construction - Admin Password Reset Code');
-                    });
-                } catch (\Throwable $e) {
-                    Log::error('Password reset email could not be sent: ' . $e->getMessage());
-                }
-            }
+        // The backend is the final authority. Only the official client admin account is allowed.
+        if (!$user || $user->role !== 'admin' || !$user->is_active || $email !== $officialAdminEmail) {
+            return response()->json([
+                'message' => 'Invalid email address. Please enter the valid admin email to reset your password.',
+                'detail'  => 'Invalid email address. Please enter the valid admin email to reset your password.'
+            ], 422);
         }
 
-        return response()->json(['message' => 'If that email is registered, an OTP has been sent to it.']);
+        // Database-backed cooldown: 60 seconds
+        $recentChallenge = PasswordResetChallenge::where('admin_user_id', $user->id)
+            ->where('last_sent_at', '>', now()->subSeconds(60))
+            ->latest('id')
+            ->first();
+
+        if ($recentChallenge) {
+            return response()->json([
+                'message' => 'Please wait before requesting another verification code.',
+                'detail'  => 'Please wait before requesting another verification code.'
+            ], 429);
+        }
+
+        // Invalidate any previous unused challenges atomically
+        PasswordResetChallenge::where('admin_user_id', $user->id)
+            ->whereNull('used_at')
+            ->update(['used_at' => now()]);
+
+        // Generate cryptographically secure 6-digit OTP
+        $otp = random_int(100000, 999999);
+
+        $challenge = PasswordResetChallenge::create([
+            'admin_user_id' => $user->id,
+            'otp_hash'      => Hash::make((string)$otp),
+            'expires_at'    => now()->addMinutes(10),
+            'attempt_count' => 0,
+            'max_attempts'  => 5,
+            'last_sent_at'  => now(),
+            'request_ip'    => $request->ip(),
+        ]);
+
+        $mailBody = "Hello,\n\n"
+            . "A password reset was requested for your Maha Construction Admin account.\n\n"
+            . "Your 6-digit verification code is: {$otp}\n\n"
+            . "This code is valid for 10 minutes. If you did not request this, please ignore this email and ensure your account remains secure.\n\n"
+            . "SECURITY NOTICE: Maha Construction will never ask you to share your verification code or password.\n\n"
+            . "Regards,\nMaha Construction Admin Team";
+
+        try {
+            Mail::raw($mailBody, function ($message) use ($email) {
+                $fromAddress = config('mail.from.address') ?: config('auth.admin_email');
+                $fromName    = config('mail.from.name') ?: 'Maha Construction';
+                $message->from($fromAddress, $fromName)
+                        ->to($email)
+                        ->subject('Maha Construction - Admin Password Reset Code');
+            });
+        } catch (\Throwable $e) {
+            Log::error('Password reset email could not be sent: ' . $e->getMessage());
+            $challenge->delete();
+            return response()->json([
+                'message' => 'Failed to deliver verification email. Please check server mail settings or try again later.',
+                'detail'  => 'Failed to deliver verification email. Please check server mail settings or try again later.'
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Verification code sent to your registered email address.'
+        ]);
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'otp'   => 'required|string',
+        ], [
+            'email.required' => 'Please enter your admin email address.',
+            'otp.required'   => 'Please enter the 6-digit verification code.',
+        ]);
+
+        $email              = strtolower(trim($request->email));
+        $officialAdminEmail = strtolower(trim(config('auth.admin_email', 'mahaconstructions2013@gmail.com')));
+        $user               = User::where('email', $email)->first();
+
+        if (!$user || $user->role !== 'admin' || !$user->is_active || $email !== $officialAdminEmail) {
+            return response()->json([
+                'message' => 'Invalid email address. Please enter the valid admin email to reset your password.',
+                'detail'  => 'Invalid email address. Please enter the valid admin email to reset your password.'
+            ], 422);
+        }
+
+        return DB::transaction(function () use ($request, $user) {
+            $challenge = PasswordResetChallenge::where('admin_user_id', $user->id)
+                ->whereNull('used_at')
+                ->latest('id')
+                ->lockForUpdate()
+                ->first();
+
+            if (!$challenge || $challenge->isExpired()) {
+                return response()->json([
+                    'message' => 'Verification code has expired or is invalid. Please request a new code.',
+                    'detail'  => 'Verification code has expired or is invalid. Please request a new code.'
+                ], 400);
+            }
+
+            if ($challenge->hasExceededAttempts()) {
+                $challenge->update(['used_at' => now()]);
+                return response()->json([
+                    'message' => 'Maximum verification attempts exceeded. Please request a new code.',
+                    'detail'  => 'Maximum verification attempts exceeded. Please request a new code.'
+                ], 429);
+            }
+
+            if (!Hash::check(trim((string)$request->otp), $challenge->otp_hash)) {
+                $newAttempts = $challenge->attempt_count + 1;
+                $challenge->attempt_count = $newAttempts;
+
+                if ($newAttempts >= $challenge->max_attempts) {
+                    $challenge->used_at = now();
+                    $challenge->save();
+                    return response()->json([
+                        'message' => 'Maximum verification attempts exceeded. Please request a new code.',
+                        'detail'  => 'Maximum verification attempts exceeded. Please request a new code.'
+                    ], 429);
+                }
+
+                $challenge->save();
+                $remaining = $challenge->max_attempts - $newAttempts;
+                return response()->json([
+                    'message' => "Incorrect verification code. {$remaining} attempts remaining.",
+                    'detail'  => "Incorrect verification code. {$remaining} attempts remaining."
+                ], 400);
+            }
+
+            // OTP verified! Invalidate OTP immediately (single-use)
+            $challenge->used_at = now();
+
+            // Create short-lived, single-use reset authorization token (Requirement 2)
+            $plainResetToken = Str::random(64);
+            $challenge->reset_token_hash = hash('sha256', $plainResetToken);
+            $challenge->reset_token_expires_at = now()->addMinutes(10);
+            $challenge->save();
+
+            return response()->json([
+                'success'     => true,
+                'message'     => 'Verification code verified successfully.',
+                'reset_token' => $plainResetToken,
+            ]);
+        });
     }
 
     public function resetPassword(Request $request)
     {
         $rules = [
             'email'        => 'required|email',
-            'otp'          => 'required|string',
-            'new_password' => 'required|string|min:8',
+            'new_password' => 'required|string|min:12',
         ];
         if ($request->has('new_password_confirmation')) {
             $rules['new_password'] .= '|confirmed';
         }
         $request->validate($rules, [
-            'new_password.min'       => 'Password must be at least 8 characters.',
+            'new_password.min'       => 'Password must be at least 12 characters long.',
             'new_password.confirmed' => 'Passwords do not match.',
         ]);
 
-        $email       = strtolower(trim($request->email));
-        $otpKey      = 'otp_' . $email;
-        $attemptsKey = 'otp_attempts_' . $email;
-        $cooldownKey = 'otp_cd_' . $email;
+        $email              = strtolower(trim($request->email));
+        $officialAdminEmail = strtolower(trim(config('auth.admin_email', 'mahaconstructions2013@gmail.com')));
+        $user               = User::where('email', $email)->first();
 
-        $cachedOtp = cache()->get($otpKey);
-        $attempts  = (int) cache()->get($attemptsKey, 0);
+        if (!$user || $user->role !== 'admin' || !$user->is_active || $email !== $officialAdminEmail) {
+            return response()->json([
+                'detail'  => 'Invalid email address. Please enter the valid admin email to reset your password.',
+                'message' => 'Invalid email address. Please enter the valid admin email to reset your password.'
+            ], 422);
+        }
 
-        if (!$cachedOtp || $attempts >= 5) {
-            if ($cachedOtp && $attempts >= 5) {
-                cache()->forget($otpKey);
-                cache()->forget($attemptsKey);
+        return DB::transaction(function () use ($request, $user) {
+            $challenge = null;
+
+            if ($request->filled('reset_token')) {
+                $tokenHash = hash('sha256', trim((string)$request->reset_token));
+                $challenge = PasswordResetChallenge::where('admin_user_id', $user->id)
+                    ->where('reset_token_hash', $tokenHash)
+                    ->whereNull('reset_token_used_at')
+                    ->where('reset_token_expires_at', '>', now())
+                    ->lockForUpdate()
+                    ->first();
+            } elseif ($request->filled('otp')) {
+                // Fallback direct OTP consumption support
+                $challenge = PasswordResetChallenge::where('admin_user_id', $user->id)
+                    ->whereNull('used_at')
+                    ->where('expires_at', '>', now())
+                    ->latest('id')
+                    ->lockForUpdate()
+                    ->first();
+
+                if ($challenge && Hash::check(trim((string)$request->otp), $challenge->otp_hash)) {
+                    $challenge->used_at = now();
+                } else {
+                    $challenge = null;
+                }
             }
-            return response()->json(['detail' => 'Invalid or expired OTP', 'message' => 'Invalid or expired OTP.'], 400);
-        }
 
-        if ((string)$cachedOtp !== trim((string)$request->otp)) {
-            cache()->put($attemptsKey, $attempts + 1, 600);
-            if ($attempts + 1 >= 5) {
-                cache()->forget($otpKey);
-                cache()->forget($attemptsKey);
+            if (!$challenge) {
+                return response()->json([
+                    'detail'  => 'Invalid or expired reset authorization. Please request a new verification code.',
+                    'message' => 'Invalid or expired reset authorization. Please request a new verification code.'
+                ], 400);
             }
-            return response()->json(['detail' => 'Invalid or expired OTP', 'message' => 'Invalid or expired OTP.'], 400);
-        }
 
-        $user = User::where('email', $email)->first();
-        if (!$user || $user->role !== 'admin' || !$user->is_active) {
-            cache()->forget($otpKey);
-            cache()->forget($attemptsKey);
-            return response()->json(['detail' => 'Invalid or expired OTP', 'message' => 'Invalid or expired OTP.'], 400);
-        }
+            // Invalidate the reset token immediately (single-use)
+            $challenge->reset_token_used_at = now();
+            $challenge->save();
 
-        $user->update(['password' => Hash::make($request->new_password)]);
+            // Update password hash (bcrypt)
+            $user->update(['password' => Hash::make($request->new_password)]);
 
-        // Invalidate OTP immediately after successful reset (single-use)
-        cache()->forget($otpKey);
-        cache()->forget($attemptsKey);
-        cache()->forget($cooldownKey);
+            // Invalidate all Sanctum API tokens for this admin
+            $user->tokens()->delete();
 
-        return response()->json(['message' => 'Password reset successfully.']);
+            // Invalidate any active admin sessions in database
+            try {
+                if (\Illuminate\Support\Facades\Schema::hasTable('sessions')) {
+                    \Illuminate\Support\Facades\DB::table('sessions')->where('user_id', $user->id)->delete();
+                }
+            } catch (\Throwable $e) {
+                // Ignore if sessions table not present or does not use user_id
+            }
+
+            // If the current request has an active session, invalidate it
+            if ($request->hasSession()) {
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Password reset successfully. Please login using your new password.'
+            ]);
+        });
     }
 
     // Admin web login

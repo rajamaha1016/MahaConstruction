@@ -112,4 +112,17 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Official Client Administrator
+    |--------------------------------------------------------------------------
+    |
+    | The official registered client admin email address. Only this account
+    | is eligible for admin password recovery OTP dispatch and administrative
+    | access.
+    |
+    */
+
+    'admin_email' => env('ADMIN_EMAIL', 'mahaconstructions2013@gmail.com'),
+
 ];

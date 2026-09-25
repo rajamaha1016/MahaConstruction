@@ -19,11 +19,13 @@ use App\Http\Controllers\MediaUploadController;
 */
 
 // ─── AUTH ────────────────────────────────────────────────────────────────────
-Route::post('/auth/register',        [AuthController::class, 'register'])->middleware('throttle:5,1');
-Route::post('/auth/login',           [AuthController::class, 'login'])->middleware('throttle:5,1');
-Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:10,1');
-Route::post('/auth/reset-password',  [AuthController::class, 'resetPassword'])->middleware('throttle:10,1');
-Route::get('/auth/me',               [AuthController::class, 'me'])->middleware('auth:sanctum');
+Route::post('/auth/register',         [AuthController::class, 'register'])->middleware('throttle:5,1');
+Route::post('/auth/login',            [AuthController::class, 'login'])->middleware('throttle:5,1');
+Route::post('/auth/forgot-password',  [AuthController::class, 'forgotPassword'])->middleware('throttle:5,1');
+Route::post('/auth/resend-reset-otp', [AuthController::class, 'resendResetOtp'])->middleware('throttle:5,1');
+Route::post('/auth/verify-otp',       [AuthController::class, 'verifyOtp'])->middleware('throttle:5,1');
+Route::post('/auth/reset-password',   [AuthController::class, 'resetPassword'])->middleware('throttle:5,1');
+Route::get('/auth/me',                [AuthController::class, 'me'])->middleware('auth:sanctum');
 
 // ─── PUBLIC READS ────────────────────────────────────────────────────────────
 Route::get('/testimonials',          [ApiController::class, 'getTestimonials']);
