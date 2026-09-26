@@ -182,7 +182,19 @@ class AuthController extends Controller
                 ]);
             }
         } catch (\Throwable $e) {
-            Log::error('Password reset email could not be sent: ' . $e->getMessage());
+            // Log safe diagnostics — NO credentials, NO OTP, NO reset tokens
+            Log::error('[MAIL FAILURE] Password reset email could not be sent.', [
+                'exception_class'   => get_class($e),
+                'exception_message' => $e->getMessage(),
+                'app_environment'   => app()->environment(),
+                'mail_mailer_used'  => $isProductionEnv ? 'smtp' : ($localMailer ?? 'log'),
+                'mail_host'         => config('mail.mailers.smtp.host', '(not set)'),
+                'mail_port'         => config('mail.mailers.smtp.port', '(not set)'),
+                'mail_encryption'   => config('mail.mailers.smtp.encryption', '(not set)'),
+                'mail_from_address' => config('mail.from.address', '(not set)'),
+                'mail_username_set' => !empty(config('mail.mailers.smtp.username')),
+                'mail_password_set' => !empty(config('mail.mailers.smtp.password')),
+            ]);
             $challenge->delete();
             return response()->json([
                 'message' => 'Failed to deliver verification email. Please check server mail settings or try again later.',

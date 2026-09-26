@@ -29,6 +29,52 @@ elif [ "${APP_URL:-http://localhost}" = "http://localhost" ]; then
     sed -i "s|^APP_URL=http://localhost.*|APP_URL=https://web-production-8d2af.up.railway.app|" /var/www/html/.env 2>/dev/null || true
 fi
 
+# ── Sync host-injected environment variables into .env ─────────────────────────
+# Railway / Render / Fly.io inject secrets as real OS env vars (not in the .env file).
+# Laravel's config:cache reads from the .env file at cache-build time, so we must
+# write these vars into .env BEFORE running config:cache, to guarantee the cached
+# config contains the real production values.
+# SECURITY: We write values via env-var reference only. No credential values are
+# echoed, logged, or printed by this script.
+
+_write_env_var() {
+    local KEY="$1"
+    local VAL="$2"
+    if [ -n "$VAL" ]; then
+        if grep -q "^${KEY}=" /var/www/html/.env 2>/dev/null; then
+            sed -i "s|^${KEY}=.*|${KEY}=${VAL}|" /var/www/html/.env 2>/dev/null || true
+        else
+            echo "${KEY}=${VAL}" >> /var/www/html/.env
+        fi
+    fi
+}
+
+# Sync critical runtime config into .env (values are from OS env — never printed here)
+_write_env_var "APP_ENV"          "${APP_ENV:-}"
+_write_env_var "APP_DEBUG"        "${APP_DEBUG:-}"
+_write_env_var "APP_KEY"          "${APP_KEY:-}"
+_write_env_var "MAIL_MAILER"      "${MAIL_MAILER:-}"
+_write_env_var "MAIL_HOST"        "${MAIL_HOST:-}"
+_write_env_var "MAIL_PORT"        "${MAIL_PORT:-}"
+_write_env_var "MAIL_ENCRYPTION"  "${MAIL_ENCRYPTION:-}"
+_write_env_var "MAIL_FROM_NAME"   "${MAIL_FROM_NAME:-}"
+
+# Credentials: write only if non-empty — value is never echoed
+if [ -n "${MAIL_USERNAME:-}" ]; then
+    _write_env_var "MAIL_USERNAME" "${MAIL_USERNAME}"
+fi
+if [ -n "${MAIL_PASSWORD:-}" ]; then
+    _write_env_var "MAIL_PASSWORD" "${MAIL_PASSWORD}"
+fi
+if [ -n "${MAIL_FROM_ADDRESS:-}" ]; then
+    _write_env_var "MAIL_FROM_ADDRESS" "${MAIL_FROM_ADDRESS}"
+fi
+if [ -n "${ADMIN_EMAIL:-}" ]; then
+    _write_env_var "ADMIN_EMAIL" "${ADMIN_EMAIL}"
+fi
+# ─────────────────────────────────────────────────────────────────────────────────
+
+
 # Auto-generate APP_KEY if missing in environment & .env
 if [ -z "${APP_KEY:-}" ]; then
     php artisan key:generate --force --no-interaction || true
