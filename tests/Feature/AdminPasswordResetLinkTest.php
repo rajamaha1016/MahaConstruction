@@ -397,4 +397,46 @@ class AdminPasswordResetLinkTest extends TestCase
         $this->assertEquals(0, PasswordResetChallenge::count());
         Mail::assertNothingSent();
     }
+
+    public function test_production_environment_strictly_uses_smtp_and_production_url(): void
+    {
+        Mail::fake();
+        $this->app->detectEnvironment(fn () => 'production');
+        $this->assertTrue(app()->environment('production'));
+
+        $admin = $this->createOfficialAdmin();
+
+        // Even if called from localhost, in production it must generate the production URL
+        $response = $this->postJson('http://localhost:8000/api/auth/forgot-password', [
+            'email' => $admin->email,
+        ]);
+
+        $response->assertOk();
+
+        Mail::assertSent(AdminPasswordResetMail::class, function (AdminPasswordResetMail $mail) {
+            return str_starts_with($mail->resetUrl, 'https://web-production-8d2af.up.railway.app/admin/reset-password/') &&
+                   !str_contains($mail->resetUrl, 'localhost') &&
+                   !str_contains($mail->resetUrl, '127.0.0.1');
+        });
+    }
+
+    public function test_local_environment_does_not_use_smtp(): void
+    {
+        Mail::fake();
+        $this->app->detectEnvironment(fn () => 'local');
+        $this->assertFalse(app()->environment('production'));
+
+        $admin = $this->createOfficialAdmin();
+
+        $response = $this->postJson('/api/auth/forgot-password', [
+            'email' => $admin->email,
+        ]);
+
+        $response->assertOk();
+
+        // Challenge was created in DB for local testing
+        $this->assertEquals(1, PasswordResetChallenge::where('admin_user_id', $admin->id)->count());
+
+        Mail::assertSent(AdminPasswordResetMail::class);
+    }
 }

@@ -128,41 +128,59 @@ class AuthController extends Controller
             'reset_token_expires_at' => $expiresAt,
         ]);
 
-        $requestHost = $request->getHost();
-        $isLocalHost = in_array($requestHost, ['localhost', '127.0.0.1', '::1']);
+        $requestHost     = $request->getHost();
+        $isLocalHost     = in_array($requestHost, ['localhost', '127.0.0.1', '::1']);
+        $isProductionEnv = app()->environment('production');
 
-        if ($isLocalHost) {
-            // Local development: point to the currently running application via named route
-            $resetUrl = route('admin.reset_password.show', ['token' => $plainResetToken]);
-            if (!$request->isSecure() && str_starts_with($resetUrl, 'https://')) {
-                $resetUrl = preg_replace('/^https:\/\//i', 'http://', $resetUrl);
-            }
-        } else {
-            // Production: determine base URL reliably without localhost fallback
-            $configuredUrl = rtrim((string) config('app.url'), '/');
+        if ($isProductionEnv || !$isLocalHost) {
+            // Production environment or explicit domain request:
+            // ALWAYS determine base URL reliably from production application URL configuration.
+            // Never allow localhost, 127.0.0.1, or local dev ports in production emails.
+            $configuredUrl     = rtrim((string) config('app.url'), '/');
             $isConfiguredLocal = empty($configuredUrl) || preg_match('/localhost|127\.0\.0\.1|::1/i', $configuredUrl);
 
             if (!$isConfiguredLocal) {
                 $baseUrl = $configuredUrl;
             } elseif (!empty(env('RAILWAY_PUBLIC_DOMAIN'))) {
                 $baseUrl = 'https://' . rtrim(env('RAILWAY_PUBLIC_DOMAIN'), '/');
-            } elseif (!in_array($requestHost, ['localhost', '127.0.0.1', '::1'])) {
-                $scheme = ($request->isSecure() || $request->server('HTTP_X_FORWARDED_PROTO') === 'https') ? 'https' : 'http';
+            } elseif (!$isLocalHost) {
+                $scheme  = ($request->isSecure() || $request->server('HTTP_X_FORWARDED_PROTO') === 'https') ? 'https' : 'http';
                 $baseUrl = $scheme . '://' . $request->getHttpHost();
             } else {
                 $baseUrl = 'https://web-production-8d2af.up.railway.app';
             }
 
-            if (!str_starts_with($baseUrl, 'https://') && !in_array(parse_url($baseUrl, PHP_URL_HOST), ['localhost', '127.0.0.1', '::1'])) {
+            if (!str_starts_with($baseUrl, 'https://') && !preg_match('/localhost|127\.0\.0\.1|::1/i', $baseUrl)) {
                 $baseUrl = preg_replace('/^http:\/\//i', 'https://', $baseUrl);
             }
 
             $resetPath = route('admin.reset_password.show', ['token' => $plainResetToken], false);
-            $resetUrl = $baseUrl . $resetPath;
+            $resetUrl  = $baseUrl . $resetPath;
+        } else {
+            // Local development: point to currently running application via named route for safe local testing
+            $resetUrl = route('admin.reset_password.show', ['token' => $plainResetToken]);
+            if (!$request->isSecure() && str_starts_with($resetUrl, 'https://')) {
+                $resetUrl = preg_replace('/^https:\/\//i', 'http://', $resetUrl);
+            }
         }
 
         try {
-            Mail::to($email)->send(new AdminPasswordResetMail((string)$otp, $resetUrl));
+            if ($isProductionEnv) {
+                // Production environment: send real verification email via configured Gmail SMTP
+                Mail::mailer('smtp')->to($email)->send(new AdminPasswordResetMail((string)$otp, $resetUrl));
+            } else {
+                // Local / Development environment safeguard:
+                // Do NOT send real emails to Gmail SMTP or contact the real admin account from local.
+                // Safely log the mailable to Laravel log (or array in tests) so the local UI and dev testing work seamlessly.
+                $localMailer = app()->environment('testing') ? (config('mail.default') === 'array' ? 'array' : 'log') : 'log';
+                Mail::mailer($localMailer)->to($email)->send(new AdminPasswordResetMail((string)$otp, $resetUrl));
+
+                Log::info('[LOCAL/DEV] Password reset OTP generated for local testing (No email sent to Gmail)', [
+                    'admin_email' => $email,
+                    'environment' => app()->environment(),
+                    'mailer'      => $localMailer,
+                ]);
+            }
         } catch (\Throwable $e) {
             Log::error('Password reset email could not be sent: ' . $e->getMessage());
             $challenge->delete();
