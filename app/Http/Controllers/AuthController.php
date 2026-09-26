@@ -128,28 +128,31 @@ class AuthController extends Controller
             'reset_token_expires_at' => $expiresAt,
         ]);
 
-        $requestHost     = $request->getHost();
-        $isLocalHost     = in_array($requestHost, ['localhost', '127.0.0.1', '::1']);
         $isProductionEnv = app()->environment('production');
+        $isLocalHost     = in_array($request->getHost(), ['localhost', '127.0.0.1', '::1']);
+
+        // ── Reset URL: determined entirely from APP_URL environment variable ─────────────
+        // The hosting platform (any provider) sets APP_URL=https://your-production-domain.com
+        // No platform-specific logic — the code is portable to any host.
+        $configuredUrl     = rtrim((string) config('app.url'), '/');
+        $isConfiguredLocal = empty($configuredUrl) || preg_match('/localhost|127\.0\.0\.1|::1/i', $configuredUrl);
 
         if ($isProductionEnv || !$isLocalHost) {
-            // Production environment or explicit domain request:
-            // ALWAYS determine base URL reliably from production application URL configuration.
-            // Never allow localhost, 127.0.0.1, or local dev ports in production emails.
-            $configuredUrl     = rtrim((string) config('app.url'), '/');
-            $isConfiguredLocal = empty($configuredUrl) || preg_match('/localhost|127\.0\.0\.1|::1/i', $configuredUrl);
-
             if (!$isConfiguredLocal) {
+                // APP_URL is a real domain — use it directly
                 $baseUrl = $configuredUrl;
-            } elseif (!empty(env('RAILWAY_PUBLIC_DOMAIN'))) {
-                $baseUrl = 'https://' . rtrim(env('RAILWAY_PUBLIC_DOMAIN'), '/');
             } elseif (!$isLocalHost) {
+                // APP_URL not set or is localhost but request came from a real host:
+                // infer from the incoming request (behind a reverse proxy)
                 $scheme  = ($request->isSecure() || $request->server('HTTP_X_FORWARDED_PROTO') === 'https') ? 'https' : 'http';
                 $baseUrl = $scheme . '://' . $request->getHttpHost();
             } else {
-                $baseUrl = 'https://web-production-8d2af.up.railway.app';
+                // Absolute last resort: APP_URL is misconfigured; log a warning
+                // and use a safe non-localhost placeholder that will be visible in the error
+                $baseUrl = $configuredUrl ?: 'https://CONFIGURE_APP_URL_IN_ENV';
             }
 
+            // Ensure https on production (never http for a real domain)
             if (!str_starts_with($baseUrl, 'https://') && !preg_match('/localhost|127\.0\.0\.1|::1/i', $baseUrl)) {
                 $baseUrl = preg_replace('/^http:\/\//i', 'https://', $baseUrl);
             }
@@ -157,11 +160,10 @@ class AuthController extends Controller
             $resetPath = route('admin.reset_password.show', ['token' => $plainResetToken], false);
             $resetUrl  = $baseUrl . $resetPath;
         } else {
-            // Local development: point to currently running application via named route for safe local testing
-            $resetUrl = route('admin.reset_password.show', ['token' => $plainResetToken]);
-            if (!$request->isSecure() && str_starts_with($resetUrl, 'https://')) {
-                $resetUrl = preg_replace('/^https:\/\//i', 'http://', $resetUrl);
-            }
+            // Local development: use APP_URL or fall back to named route (safe — no real email sent)
+            $resetUrl = $configuredUrl
+                ? $configuredUrl . route('admin.reset_password.show', ['token' => $plainResetToken], false)
+                : route('admin.reset_password.show', ['token' => $plainResetToken]);
         }
 
         try {

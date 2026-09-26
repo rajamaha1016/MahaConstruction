@@ -55,17 +55,22 @@ class AdminPasswordResetLinkTest extends TestCase
 
     public function test_local_request_generates_reset_url_pointing_to_local_application(): void
     {
+        // Force a local APP_URL in config — self-contained, independent of .env
+        // We do NOT use detectEnvironment here as it breaks Mail::fake() interception
+        $this->app['config']->set('app.url', 'http://localhost:8000');
+
         Mail::fake();
 
         $admin = $this->createOfficialAdmin();
 
-        // Simulate local request coming into http://localhost:8000
+        // Simulate local request coming into http://localhost:8000 (isLocalHost = true)
         $response = $this->postJson('http://localhost:8000/api/auth/forgot-password', [
             'email' => $admin->email,
         ]);
 
         $response->assertOk();
 
+        // Reset URL must use the configured local APP_URL
         Mail::assertSent(AdminPasswordResetMail::class, function (AdminPasswordResetMail $mail) {
             return str_starts_with($mail->resetUrl, 'http://localhost:8000/admin/reset-password/') ||
                    str_starts_with($mail->resetUrl, 'http://localhost/admin/reset-password/');
@@ -78,14 +83,16 @@ class AdminPasswordResetLinkTest extends TestCase
 
         $admin = $this->createOfficialAdmin();
 
-        // Simulate production request on Railway domain
-        $response = $this->postJson('https://web-production-8d2af.up.railway.app/api/auth/forgot-password', [
+        // Simulate a production request coming from the configured production domain
+        $productionUrl = rtrim(config('app.url', 'https://example.com'), '/');
+        $response = $this->postJson($productionUrl . '/api/auth/forgot-password', [
             'email' => $admin->email,
         ]);
 
         $response->assertOk();
 
-        $expectedPrefix = 'https://web-production-8d2af.up.railway.app/admin/reset-password/';
+        // Reset URL must start with APP_URL — never localhost, never any hardcoded domain
+        $expectedPrefix = $productionUrl . '/admin/reset-password/';
         Mail::assertSent(AdminPasswordResetMail::class, function (AdminPasswordResetMail $mail) use ($expectedPrefix) {
             return str_starts_with($mail->resetUrl, $expectedPrefix);
         });
@@ -406,15 +413,16 @@ class AdminPasswordResetLinkTest extends TestCase
 
         $admin = $this->createOfficialAdmin();
 
-        // Even if called from localhost, in production it must generate the production URL
+        // Even if called from localhost, in production it must generate the APP_URL-based URL
         $response = $this->postJson('http://localhost:8000/api/auth/forgot-password', [
             'email' => $admin->email,
         ]);
 
         $response->assertOk();
 
-        Mail::assertSent(AdminPasswordResetMail::class, function (AdminPasswordResetMail $mail) {
-            return str_starts_with($mail->resetUrl, 'https://web-production-8d2af.up.railway.app/admin/reset-password/') &&
+        $configuredUrl = rtrim(config('app.url', 'https://example.com'), '/');
+        Mail::assertSent(AdminPasswordResetMail::class, function (AdminPasswordResetMail $mail) use ($configuredUrl) {
+            return str_starts_with($mail->resetUrl, $configuredUrl . '/admin/reset-password/') &&
                    !str_contains($mail->resetUrl, 'localhost') &&
                    !str_contains($mail->resetUrl, '127.0.0.1');
         });

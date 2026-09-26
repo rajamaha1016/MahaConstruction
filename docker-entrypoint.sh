@@ -1,17 +1,17 @@
 #!/bin/sh
 set -eu
 
-# Bind Apache to dynamic PORT if provided (Render, Railway, Fly.io, Cloud Run)
+# ── 1. Bind Apache to dynamic PORT if provided (Render, Railway, Fly.io, Cloud Run) ─
 if [ -n "${PORT:-}" ]; then
     sed -ri "s/^Listen 80$/Listen ${PORT}/" /etc/apache2/ports.conf
-    sed -ri "s/<VirtualHost \\*:80>/<VirtualHost *:${PORT}>/" /etc/apache2/sites-available/000-default.conf
+    sed -ri "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/" /etc/apache2/sites-available/000-default.conf
 fi
 
 # Ensure only single mpm_prefork module is active
 rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* 2>/dev/null || true
 a2enmod mpm_prefork 2>/dev/null || true
 
-# Ensure .env file exists in container
+# ── 2. Ensure .env file exists ──────────────────────────────────────────────────────
 if [ ! -f /var/www/html/.env ]; then
     if [ -f /var/www/html/.env.example ]; then
         cp /var/www/html/.env.example /var/www/html/.env
@@ -20,50 +20,49 @@ if [ ! -f /var/www/html/.env ]; then
     fi
 fi
 
-# Auto-configure production APP_URL if empty or localhost on Railway
-if [ -n "${RAILWAY_PUBLIC_DOMAIN:-}" ]; then
-    export APP_URL="https://${RAILWAY_PUBLIC_DOMAIN}"
-    sed -i "s|^APP_URL=.*|APP_URL=https://${RAILWAY_PUBLIC_DOMAIN}|" /var/www/html/.env 2>/dev/null || true
-elif [ "${APP_URL:-http://localhost}" = "http://localhost" ]; then
-    export APP_URL="https://web-production-8d2af.up.railway.app"
-    sed -i "s|^APP_URL=http://localhost.*|APP_URL=https://web-production-8d2af.up.railway.app|" /var/www/html/.env 2>/dev/null || true
-fi
-
-# ── Sync host-injected environment variables into .env ─────────────────────────
-# Railway / Render / Fly.io inject secrets as real OS env vars (not in the .env file).
-# Laravel reads OS env vars directly AND from .env. However config:cache bakes values
-# from env() at cache-build time — OS env vars ARE read by env() even during caching,
-# so this sync is belt-and-suspenders to ensure values survive in both paths.
-# SECURITY: Values are written via double-quoted printf — never echoed/printed raw.
-
+# ── 3. _write_env_var: safely write key=value to .env ──────────────────────────────
+# Uses grep+printf (not sed) so values with spaces/pipes/backslashes are handled safely.
+# Values are always double-quoted so PHP's dotenv parser reads them correctly.
+# SECURITY: Values are referenced by variable name only — never echoed or printed.
 _write_env_var() {
     local KEY="$1"
     local VAL="$2"
     if [ -n "$VAL" ]; then
-<<<<<<< HEAD
         # Escape any embedded double-quotes in the value
         local ESCAPED_VAL
         ESCAPED_VAL=$(printf '%s' "$VAL" | sed 's/"/\\"/g')
-        # Remove existing line for this key (grep -v is safe with any value)
+        # Remove existing key line (grep -v is safe with any value, no sed special-char risks)
         local TMP_ENV
         TMP_ENV=$(grep -v "^${KEY}=" /var/www/html/.env 2>/dev/null || true)
-        # Write new line with value properly double-quoted (handles spaces, special chars)
+        # Write back file without old key, then append new key with double-quoted value
         printf '%s\n' "$TMP_ENV" > /var/www/html/.env
         printf '%s="%s"\n' "$KEY" "$ESCAPED_VAL" >> /var/www/html/.env
-=======
-        # Escape any double quotes in the value, then wrap the whole value in double quotes
-        local ESCAPED_VAL
-        ESCAPED_VAL=$(printf '%s' "$VAL" | sed 's/"/\\"/g')
-        if grep -q "^${KEY}=" /var/www/html/.env 2>/dev/null; then
-            sed -i "s|^${KEY}=.*|${KEY}=\"${ESCAPED_VAL}\"|" /var/www/html/.env 2>/dev/null || true
-        else
-            echo "${KEY}=\"${ESCAPED_VAL}\"" >> /var/www/html/.env
-        fi
->>>>>>> 3a5b8628052fc3ca266f69c544f2c4b9704a9915
     fi
 }
 
-# Sync critical runtime config into .env (values from OS env — never printed here)
+# ── 4. Auto-configure APP_URL from platform-injected domain variable ────────────────
+# Set APP_URL directly in your hosting platform's Variables panel.
+# If the platform also injects a domain variable, we auto-derive APP_URL from it.
+# Supports: PLATFORM_DOMAIN (generic), RAILWAY_PUBLIC_DOMAIN (Railway),
+#           RENDER_EXTERNAL_HOSTNAME (Render). Add more here as needed.
+# Application code reads ONLY APP_URL — it contains no platform-specific logic.
+_DETECTED_DOMAIN=""
+if   [ -n "${PLATFORM_DOMAIN:-}" ];            then _DETECTED_DOMAIN="${PLATFORM_DOMAIN}"
+elif [ -n "${RAILWAY_PUBLIC_DOMAIN:-}" ];       then _DETECTED_DOMAIN="${RAILWAY_PUBLIC_DOMAIN}"
+elif [ -n "${RENDER_EXTERNAL_HOSTNAME:-}" ];    then _DETECTED_DOMAIN="${RENDER_EXTERNAL_HOSTNAME}"
+fi
+
+if [ -n "${_DETECTED_DOMAIN}" ]; then
+    export APP_URL="https://${_DETECTED_DOMAIN}"
+    _write_env_var "APP_URL" "https://${_DETECTED_DOMAIN}"
+fi
+
+# ── 5. Sync platform-injected environment variables into .env ───────────────────────
+# Cloud platforms inject secrets as OS env vars (not inside .env).
+# config:cache reads env() which reads OS env vars first, then .env.
+# We also write them into .env as belt-and-suspenders so they survive config:cache.
+# SECURITY: Values referenced by variable name — never echoed or printed.
+
 _write_env_var "APP_ENV"         "${APP_ENV:-}"
 _write_env_var "APP_DEBUG"       "${APP_DEBUG:-}"
 _write_env_var "APP_KEY"         "${APP_KEY:-}"
@@ -74,19 +73,35 @@ _write_env_var "MAIL_ENCRYPTION" "${MAIL_ENCRYPTION:-}"
 _write_env_var "MAIL_FROM_NAME"  "${MAIL_FROM_NAME:-}"
 
 # Credentials — written only when non-empty; value is NEVER echoed or printed
-if [ -n "${MAIL_USERNAME:-}" ];    then _write_env_var "MAIL_USERNAME"    "${MAIL_USERNAME}";    fi
-if [ -n "${MAIL_PASSWORD:-}" ];    then _write_env_var "MAIL_PASSWORD"    "${MAIL_PASSWORD}";    fi
+if [ -n "${MAIL_USERNAME:-}" ];     then _write_env_var "MAIL_USERNAME"    "${MAIL_USERNAME}";     fi
+if [ -n "${MAIL_PASSWORD:-}" ];     then _write_env_var "MAIL_PASSWORD"    "${MAIL_PASSWORD}";     fi
 if [ -n "${MAIL_FROM_ADDRESS:-}" ]; then _write_env_var "MAIL_FROM_ADDRESS" "${MAIL_FROM_ADDRESS}"; fi
-if [ -n "${ADMIN_EMAIL:-}" ];      then _write_env_var "ADMIN_EMAIL"      "${ADMIN_EMAIL}";      fi
-# ─────────────────────────────────────────────────────────────────────────────────
+if [ -n "${ADMIN_EMAIL:-}" ];       then _write_env_var "ADMIN_EMAIL"      "${ADMIN_EMAIL}";       fi
 
+# S3-compatible object storage credentials (any provider: AWS, R2, DO Spaces, B2)
+if [ -n "${AWS_ACCESS_KEY_ID:-}" ];       then _write_env_var "AWS_ACCESS_KEY_ID"       "${AWS_ACCESS_KEY_ID}";       fi
+if [ -n "${AWS_SECRET_ACCESS_KEY:-}" ];   then _write_env_var "AWS_SECRET_ACCESS_KEY"   "${AWS_SECRET_ACCESS_KEY}";   fi
+if [ -n "${AWS_DEFAULT_REGION:-}" ];      then _write_env_var "AWS_DEFAULT_REGION"      "${AWS_DEFAULT_REGION}";      fi
+if [ -n "${AWS_BUCKET:-}" ];              then _write_env_var "AWS_BUCKET"              "${AWS_BUCKET}";              fi
+if [ -n "${AWS_ENDPOINT:-}" ];            then _write_env_var "AWS_ENDPOINT"            "${AWS_ENDPOINT}";            fi
+if [ -n "${AWS_URL:-}" ];                 then _write_env_var "AWS_URL"                 "${AWS_URL}";                 fi
+if [ -n "${FILESYSTEM_DISK:-}" ];         then _write_env_var "FILESYSTEM_DISK"         "${FILESYSTEM_DISK}";         fi
 
-# Auto-generate APP_KEY if missing in environment & .env
+# Database credentials
+if [ -n "${DB_CONNECTION:-}" ]; then _write_env_var "DB_CONNECTION" "${DB_CONNECTION}"; fi
+if [ -n "${DB_HOST:-}" ];       then _write_env_var "DB_HOST"       "${DB_HOST}";       fi
+if [ -n "${DB_PORT:-}" ];       then _write_env_var "DB_PORT"       "${DB_PORT}";       fi
+if [ -n "${DB_DATABASE:-}" ];   then _write_env_var "DB_DATABASE"   "${DB_DATABASE}";   fi
+if [ -n "${DB_USERNAME:-}" ];   then _write_env_var "DB_USERNAME"   "${DB_USERNAME}";   fi
+if [ -n "${DB_PASSWORD:-}" ];   then _write_env_var "DB_PASSWORD"   "${DB_PASSWORD}";   fi
+# ───────────────────────────────────────────────────────────────────────────────────
+
+# ── 6. Auto-generate APP_KEY if missing ────────────────────────────────────────────
 if [ -z "${APP_KEY:-}" ]; then
     php artisan key:generate --force --no-interaction || true
 fi
 
-# Ensure storage, database, and upload structures exist
+# ── 7. Ensure storage directory structures exist ────────────────────────────────────
 mkdir -p storage/framework/cache/data \
          storage/framework/sessions \
          storage/framework/views \
@@ -99,26 +114,23 @@ mkdir -p storage/framework/cache/data \
          bootstrap/cache \
          database
 
-# Baseline asset preservation: sync baseline assets to mounted persistent volume if missing
+# ── 8. Baseline asset preservation ─────────────────────────────────────────────────
 if [ -d "/var/www/html/public/uploads_baseline" ]; then
     cp -rn /var/www/html/public/uploads_baseline/* /var/www/html/public/uploads/ 2>/dev/null || true
 fi
 
-# Determine database persistence
+# ── 9. SQLite persistence: relocate DB to persistent volume if applicable ───────────
 DB_CONN="${DB_CONNECTION:-sqlite}"
 
 if [ "$DB_CONN" = "sqlite" ]; then
     DB_FILE="${DB_DATABASE:-/var/www/html/database/database.sqlite}"
 
     if [ "$DB_FILE" != ":memory:" ]; then
-        # Check if persistent uploads volume is mounted at /var/www/html/public/uploads
-        # If DB_FILE is inside the ephemeral /var/www/html/database/, relocate SQLite to persistent volume storage
         if [ "$DB_FILE" = "/var/www/html/database/database.sqlite" ] || [ "$DB_FILE" = "database/database.sqlite" ]; then
             PERSISTENT_DB_DIR="/var/www/html/public/uploads/.data"
             mkdir -p "$PERSISTENT_DB_DIR"
             PERSISTENT_DB_FILE="$PERSISTENT_DB_DIR/database.sqlite"
 
-            # If persistent DB does not exist yet, copy initial db or touch it
             if [ ! -f "$PERSISTENT_DB_FILE" ]; then
                 if [ -f "/var/www/html/database/database.sqlite" ] && [ -s "/var/www/html/database/database.sqlite" ] && [ ! -L "/var/www/html/database/database.sqlite" ]; then
                     cp "/var/www/html/database/database.sqlite" "$PERSISTENT_DB_FILE"
@@ -127,14 +139,12 @@ if [ "$DB_CONN" = "sqlite" ]; then
                 fi
             fi
 
-            # Symlink ephemeral path to persistent file
             mkdir -p /var/www/html/database
             rm -f /var/www/html/database/database.sqlite
             ln -sf "$PERSISTENT_DB_FILE" /var/www/html/database/database.sqlite
             chmod 777 "$PERSISTENT_DB_DIR" 2>/dev/null || true
             chmod 666 "$PERSISTENT_DB_FILE" 2>/dev/null || true
         else
-            # Custom DB_DATABASE path provided by user
             mkdir -p "$(dirname "$DB_FILE")"
             if [ ! -f "$DB_FILE" ]; then
                 touch "$DB_FILE"
@@ -145,32 +155,32 @@ if [ "$DB_CONN" = "sqlite" ]; then
     fi
 fi
 
-# Set broad read/write permissions for web server
+# ── 10. Set permissions ─────────────────────────────────────────────────────────────
 chown -R www-data:www-data storage bootstrap/cache public/uploads public/videos database 2>/dev/null || true
 chmod -R 777 storage bootstrap/cache public/uploads database 2>/dev/null || true
 chmod -R 755 public/videos 2>/dev/null || true
 
-# Link public storage
+# ── 11. Symlink public storage ──────────────────────────────────────────────────────
 php artisan storage:link --no-interaction || true
 
-# Run database migrations (safe and non-destructive for existing tables)
+# ── 12. Run safe database migrations ────────────────────────────────────────────────
+# NEVER runs migrate:fresh or migrate:refresh — safe for existing production data
 php artisan migrate --force --no-interaction || true
 
-# Run seeding only if explicitly enabled or if database is empty
-# Note: DB_SEED_ON_BOOT defaults to false on production redeployments to prevent unintended overwrites
+# ── 13. Seeding (disabled by default on production to protect real data) ─────────────
 DB_SEED="${DB_SEED_ON_BOOT:-false}"
 if [ "$DB_SEED" = "true" ]; then
     php artisan db:seed --force --no-interaction || true
 else
-    # Always ensure baseline admin account exists without altering custom content
+    # Always ensure baseline admin account exists without altering existing content
     php artisan db:seed --class=Database\\Seeders\\DatabaseSeeder --force --no-interaction || true
 fi
 
-# Optimize Laravel caches
+# ── 14. Laravel config/route/view cache ─────────────────────────────────────────────
 if [ "${APP_ENV:-production}" = "production" ]; then
     php artisan config:cache --no-interaction || true
-    php artisan route:cache --no-interaction || true
-    php artisan view:cache --no-interaction || true
+    php artisan route:cache  --no-interaction || true
+    php artisan view:cache   --no-interaction || true
 fi
 
 exec "$@"

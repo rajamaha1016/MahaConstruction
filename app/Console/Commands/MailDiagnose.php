@@ -86,8 +86,8 @@ class MailDiagnose extends Command
         $this->line("   Config cached = " . ($cacheExists ? "YES (built {$cacheAge}) ✅" : 'NO (reading live .env)'));
         $this->newLine();
 
-        // ── 6. OS Environment Check (what Railway actually injected) ────
-        $this->info('⑥ OS Environment (Railway-injected vars)');
+        // ── 6. OS Environment Check (what the hosting platform injected) ────
+        $this->info('⑥ OS Environment (platform-injected vars)');
         $this->line("   MAIL_MAILER     from OS = " . (getenv('MAIL_MAILER')     !== false ? getenv('MAIL_MAILER')         : '(not set in OS env)'));
         $this->line("   MAIL_HOST       from OS = " . (getenv('MAIL_HOST')       !== false ? getenv('MAIL_HOST')           : '(not set in OS env)'));
         $this->line("   MAIL_PORT       from OS = " . (getenv('MAIL_PORT')       !== false ? getenv('MAIL_PORT')           : '(not set in OS env)'));
@@ -195,17 +195,17 @@ class MailDiagnose extends Command
         } else {
             $this->error('  ❌ SOME CHECKS FAILED — Review items marked ❌ above');
             if (!$passSet) {
-                $this->warn('  ⚠️  MAIL_PASSWORD is not set — set it in Railway Variables panel');
+                $this->warn('  ⚠️  MAIL_PASSWORD is not set — add it in your hosting platform Variables panel');
             }
             if (!$userSet) {
-                $this->warn('  ⚠️  MAIL_USERNAME is not set — set it in Railway Variables panel');
+                $this->warn('  ⚠️  MAIL_USERNAME is not set — add it in your hosting platform Variables panel');
             }
             if (!$driverOk) {
-                $this->warn('  ⚠️  MAIL_MAILER is not smtp — set MAIL_MAILER=smtp in Railway Variables');
+                $this->warn('  ⚠️  MAIL_MAILER is not smtp — set MAIL_MAILER=smtp in your hosting platform Variables panel');
             }
             if (!$connected) {
-                $this->warn('  ⚠️  Cannot reach smtp.gmail.com:587 — Railway may block outbound SMTP (port 587)');
-                $this->warn('  ⚠️  Try switching to port 465 with ssl encryption, or use an SMTP relay');
+                $this->warn('  ⚠️  Cannot reach smtp.gmail.com:587 — your hosting platform may block outbound SMTP (port 587)');
+                $this->warn('  ⚠️  Try switching to port 465 with ssl encryption, or use an SMTP relay service');
             }
         }
         $this->line('═══════════════════════════════════════════════════════');
