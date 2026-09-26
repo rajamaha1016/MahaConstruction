@@ -41,10 +41,13 @@ _write_env_var() {
     local KEY="$1"
     local VAL="$2"
     if [ -n "$VAL" ]; then
+        # Escape any double quotes in the value, then wrap the whole value in double quotes
+        local ESCAPED_VAL
+        ESCAPED_VAL=$(printf '%s' "$VAL" | sed 's/"/\\"/g')
         if grep -q "^${KEY}=" /var/www/html/.env 2>/dev/null; then
-            sed -i "s|^${KEY}=.*|${KEY}=${VAL}|" /var/www/html/.env 2>/dev/null || true
+            sed -i "s|^${KEY}=.*|${KEY}=\"${ESCAPED_VAL}\"|" /var/www/html/.env 2>/dev/null || true
         else
-            echo "${KEY}=${VAL}" >> /var/www/html/.env
+            echo "${KEY}=\"${ESCAPED_VAL}\"" >> /var/www/html/.env
         fi
     fi
 }
